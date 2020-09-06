@@ -81,17 +81,19 @@ Dim Enable_remote As Boolean
 Dim Learnnew As Boolean
 Dim Clearall As Boolean
 
-Dim Remote_1(4) As Byte
-Dim Remote_2(4) As Byte
-Dim Remote_3(4) As Byte
-Dim Remote_4(4) As Byte
-Dim Remote_5(4) As Byte
-Dim Remote_6(4) As Byte
-Dim Remote_7(4) As Byte
-Dim Remote_8(4) As Byte
-Dim Remote_9(4) As Byte
-Dim Remote_10(4) As Byte
+
 Dim Remoteid(10) As Long
+Dim Code1(10) As Byte
+Dim Code2(10) As Byte
+Dim Code4(10) As Byte
+Dim Code8(10) As Byte
+
+Dim Code1s(10) As Byte
+Dim Code2s(10) As Byte
+Dim Code4s(10) As Byte
+Dim Code8s(10) As Byte
+
+
 Dim Remotecounter As Byte
 Dim Keylearnd As Byte
 Dim Wantidcode As Byte
@@ -101,6 +103,9 @@ Rxtx Alias Portd.7 : Config Portd.7 = Output
 Const Allid = 99
 Const Nonid = 0
 
+
+Const Tomaster = 242
+Const Toslave = 232
 
 
 
@@ -217,7 +222,7 @@ _read:
       End If
 Return
 '================================================================ keys  learning
-Sub Clear_remotes:
+Sub Clear_remotes
      Reset Rel1
      Reset Rel2
      Reset Rel3
@@ -240,8 +245,7 @@ Sub Clear_remotes:
                         Rnumber_e = Rnumber
                         Waitms 10
                         Set Buzz
-                        Wait 1
-                        Wait 1
+                        Waitms 750
                         Reset Buzz
                         Reset Led1
                         Reset Clearall
@@ -249,7 +253,7 @@ Sub Clear_remotes:
                         For I = 1 To 10
                             Remoteid(i) = 0
                         Next I
-                        Typ = 104 : Cmd = 185 : Id = 0
+                        Startbit = Tomaster : Typ = 104 : Cmd = 185 : Id = 0
                         Call Tx
                         Return
                         Exit While
@@ -277,7 +281,7 @@ Sub Do_learn:
                  Eevar(rnumber) = Ra
                  Waitms 10
                  Exit Do
-              Else                                              'address avalin khane baraye zakhire address remote
+              Else                                          'address avalin khane baraye zakhire address remote
                  For I = 1 To Rnumber
                      Ra = Eevar(i)
                      If Ra = Address Then                       'agar address remote tekrari bod yani ghablan learn shode
@@ -305,18 +309,17 @@ Sub Do_learn:
                     End If
                  End If
               End If
-              If Remotecounter < 10 Then
-                 Incr Remotecounter
-                 Remoteid(remotecounter) = Address
-                 Typ = 104 : Cmd = 184 : Id = Id
-                 Call Tx
-              End If
+
+
               Exit Do
            End If
          Okread = 0
          Reset Led1
 
     Loop
+    Incr Rnumber
+    Remoteid(rnumber) = Address
+
 End Sub
 Return
 '========================================================================= CHECK
@@ -336,24 +339,63 @@ Keycheck = 0
 Return
 '-------------------------------- Relay command
 Command:
-        Select Case Code
-               Case 1
-                    Toggle Rel1
 
-               Case 2
-                    Toggle Rel2
 
-               Case 4
-                    Toggle Rel3
 
-               Case 8
-                    Toggle Rel4
+        For I = 1 To rnumber
+            If Wantid = 1 Then
+                        Reset Isrequest
+                        If Remoteid(i) = Address Then
+                           Select Case Code
+                                  Case 1
+                                       Toggle Rel1
+                                       Code1(i) = Wantidcode
+                                  Case 2
+                                       Toggle Rel2
+                                       Code2(i) = Wantidcode
+                                  Case 4
+                                       Toggle Rel3
+                                       Code4(i) = Wantidcode
+                                  Case 8
+                                       Toggle Rel4
+                                       Code8(i) = Wantidcode
+                           End Select
+                           Startbit = Tomaster : Cmd = 180 : Id = Wantidcode
+                           Call Tx
 
-        End Select
+                        End If
+            End If
+            If Isrequest = 1 Then
+                        Reset Wantid
+                        If Remoteid(i) = Address Then
+                           Select Case Code
+                                  Case 1
+                                       Toggle Rel1
+                                       Id = Code1(i)
+                                       If Code1s(i) = 180 Then Code1s(i) = 181 Else Code1s(i) = 180
+                                       Cmd = Code1s(i)
+                                  Case 2
+                                       Toggle Rel2
+                                       Id = Code2(i)
+                                       If Code2s(i) = 180 Then Code2s(i) = 181 Else Code2s(i) = 180
+                                       Cmd = Code2s(i)
+                                  Case 4
+                                       Toggle Rel3
+                                       Id = Code4(i)
+                                       If Code4s(i) = 180 Then Code4s(i) = 181 Else Code4s(i) = 180
+                                       Cmd = Code4s(i)
+                                  Case 8
+                                       Toggle Rel4
+                                       Id = Code8(i)
+                                       If Code8s(i) = 180 Then Code8s(i) = 181 Else Code8s(i) = 180
+                                       Cmd = Code8s(i)
+                           End Select
+                           Startbit = Toslave
+                           Call Tx
+                        End If
 
-        If Wantid = 1 Then
-
-        End If
+            End If
+        Next I
 
 
         Waitms 200
@@ -375,6 +417,7 @@ Sub Findorder
 
                 Case 150
                   Set Isrequest
+                  Reset Rxtx
                   Set Isrequest_led
                   Reset Wantid_led
                 Case 151
@@ -404,11 +447,10 @@ End Sub
 
 Sub Tx:
     Set En
-    Set Portd.7
+    Toggle Rxtx
     Waitms 10
     Printbin Startbit ; Typ ; Cmd ; Id ; Endbit
     Waitms 50
-    Reset Portd.7
     Reset En
 
 

@@ -318,6 +318,7 @@ Sub Remote_menu:
                        Call Order
                   Case 3
                         Remotekeyid = 1
+                        Cls
                         Do
                           Lcdat 1 , 1 , "out " ; Remotekeyid
                           Call Readtouch
@@ -326,6 +327,7 @@ Sub Remote_menu:
                              Id = Remotekeyid
                              Findorder = Setoutput
                              Call Order
+                             Cls
                              Lcdat 1 , 1 , "out " ; Remotekeyid
                              Waitms 20
                              Findorder = Setremoteid
@@ -465,14 +467,12 @@ Sub Checkanswer:
                        Case 180
                             Cls
                             Lcdat 1 , 1 , "Key " ; Remotekeyid ; " is set"
-                            Incr Remotekeyid
                             Wait 1
                             Cls
                        Case 181
                             Cls
                             Lcdat 1 , 1 , "Key " ; Remotekeyid ; " is set"
                             Wait 1
-                            Incr Remotekeyid
                             Cls
                        Case 184
                             Cls

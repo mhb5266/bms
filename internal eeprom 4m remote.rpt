@@ -1,6 +1,6 @@
 Report       : internal eeprom 4m remote
 Date         : 09-06-2020
-Time         : 15:04:33
+Time         : 19:01:01
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : BD2 hex  -> Will fit into ROM
-ROMIMAGE     :  3026 dec
-FLASH USED   :  36  %
+ROMIMAGE     : EE4 hex  -> Will fit into ROM
+ROMIMAGE     :  3812 dec
+FLASH USED   :  46  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 8 hex
 S-Stackstart : 440 hex
 Framesize    : 18 hex
 Framestart   : 420 hex
-Space left   :  772  dec
+Space left   :  732  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -120,20 +120,18 @@ WANTID                           Bit [2]           00B5          181
 ENABLE_REMOTE                    Bit [1]           00B5          181 
 LEARNNEW                         Bit [0]           00B5          181 
 CLEARALL                         Bit [7]           00C7          199 
-REMOTE_1                         Byte(4)           00C8          200 
-REMOTE_2                         Byte(4)           00CC          204 
-REMOTE_3                         Byte(4)           00D0          208 
-REMOTE_4                         Byte(4)           00D4          212 
-REMOTE_5                         Byte(4)           00D8          216 
-REMOTE_6                         Byte(4)           00DC          220 
-REMOTE_7                         Byte(4)           00E0          224 
-REMOTE_8                         Byte(4)           00E4          228 
-REMOTE_9                         Byte(4)           00E8          232 
-REMOTE_10                        Byte(4)           00EC          236 
-REMOTEID                         Long(10)          00F0          240 
-REMOTECOUNTER                    Byte              0118          280 
-KEYLEARND                        Byte              0119          281 
-WANTIDCODE                       Byte              011A          282 
+REMOTEID                         Long(10)          00C8          200 
+CODE1                            Byte(10)          00F0          240 
+CODE2                            Byte(10)          00FA          250 
+CODE4                            Byte(10)          0104          260 
+CODE8                            Byte(10)          010E          270 
+CODE1S                           Byte(10)          0118          280 
+CODE2S                           Byte(10)          0122          290 
+CODE4S                           Byte(10)          012C          300 
+CODE8S                           Byte(10)          0136          310 
+REMOTECOUNTER                    Byte              0140          320 
+KEYLEARND                        Byte              0141          321 
+WANTIDCODE                       Byte              0142          322 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -506,6 +504,8 @@ EEWRITE                          160
 EEREAD                           161
 ALLID                            99
 NONID                            0
+TOMASTER                         242
+TOSLAVE                          232
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -572,15 +572,5 @@ PWM1B                            not used
 EADDRESS                         not used
 E_READ                           not used
 E_WRITE                          not used
-REMOTE_1                         not used
-REMOTE_2                         not used
-REMOTE_3                         not used
-REMOTE_4                         not used
-REMOTE_5                         not used
-REMOTE_6                         not used
-REMOTE_7                         not used
-REMOTE_8                         not used
-REMOTE_9                         not used
-REMOTE_10                        not used
 KEYLEARND                        not used
 
