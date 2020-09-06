@@ -339,21 +339,21 @@ Command:
         Select Case Code
                Case 1
                     Toggle Rel1
-                    'Id = 1 : Cmd = 180
+
                Case 2
                     Toggle Rel2
-                    ''Id = 2 : Cmd = 180
+
                Case 4
                     Toggle Rel3
-                    'Id = 3 : Cmd = 180
 
                Case 8
                     Toggle Rel4
-                    'Id = 4 : Cmd = 180
 
         End Select
-        'Call Tx
 
+        If Wantid = 1 Then
+
+        End If
 
 
         Waitms 200
