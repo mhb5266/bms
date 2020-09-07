@@ -200,7 +200,7 @@ Startup:
 Set Backlight
 'Lcdat 1 , 1 , "hi"
 'Waitms 500
-'Cls
+Cls
 Call Beep
 
 
@@ -320,16 +320,16 @@ Sub Remote_menu:
                         Remotekeyid = 1
                         Cls
                         Do
+                          If Remotekeyid > 8 Then Remotekeyid = 1
                           Lcdat 1 , 1 , "out " ; Remotekeyid
                           Call Readtouch
                           If Touch = 1 Then
                              Cls
                              Id = Remotekeyid
-                             Findorder = Setoutput
+                             Findorder = Outputblank
                              Call Order
                              Cls
                              Lcdat 1 , 1 , "out " ; Remotekeyid
-                             Waitms 20
                              Findorder = Setremoteid
                              Call Order
                           End If
@@ -432,8 +432,7 @@ Rx:
       If Maxin = 242 Then I = 1
 
       Din(i) = Maxin
-      If I = 5 Then I = 0
-      If Inok = 1 Then
+      If Inok = 1 And Din(1) = 242 Then
          I = 0
          Checkanswer
          Reset Inok
@@ -592,11 +591,11 @@ Sub Order
 
            Case Clearremote
 
-                Typ = 104 : Cmd = 162 : Id = Allid
+                Typ = 104 : Cmd = 162 : Id = 0
 
            Case Learnremote
 
-                Typ = 104 : Cmd = 161 : Id = Allid
+                Typ = 104 : Cmd = 161 : Id = 0
 
            Case Setremoteid
 
@@ -613,7 +612,7 @@ Sub Tx:
     Set Em
     Waitms 10
     Set Txled
-    Printbin Startbit ; Typ ; Cmd ; Id ; Endbit
+    Printbin 252 ; Typ ; Cmd ; Id ; 230
     Waitms 50
     Reset Em
     Reset Txled

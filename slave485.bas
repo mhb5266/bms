@@ -209,7 +209,7 @@ Ismax:
       Inputbin Maxin
 
 
-      If I = 5 And Maxin = 220 Then Set Inok
+      If I = 5 And Maxin = 230 Then Set Inok
       If Maxin = 252 Then I = 1
 
       Din(i) = Maxin

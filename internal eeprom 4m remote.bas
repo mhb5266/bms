@@ -59,7 +59,7 @@ Maxconfig:
 Enable Interrupts
 
 Enable Urxc
-On Urxc Ismax
+On Urxc rx
 
 En Alias Portd.6 : Config Portd.6 = Output
 Wantid_led Alias Portc.2 : Config Portc.2 = Output
@@ -71,7 +71,7 @@ Dim Typ As Byte : Typ = 104
 Dim Cmd As Byte
 Dim Id As Byte
 
-Dim Startbit As Byte : Startbit = 242
+Dim Startbit As Byte
 Dim Endbit As Byte : Endbit = 220
 
 Dim Inok As Boolean
@@ -83,6 +83,9 @@ Dim Clearall As Boolean
 
 
 Dim Remoteid(10) As Long
+Dim Codeid(10) As Byte
+Dim Codeids(10) As Byte
+
 Dim Code1(10) As Byte
 Dim Code2(10) As Byte
 Dim Code4(10) As Byte
@@ -97,7 +100,7 @@ Dim Code8s(10) As Byte
 Dim Remotecounter As Byte
 Dim Keylearnd As Byte
 Dim Wantidcode As Byte
-
+Dim Raw As Byte
 Rxtx Alias Portd.7 : Config Portd.7 = Output
 
 Const Allid = 99
@@ -113,6 +116,7 @@ Declare Sub Findorder
 Declare Sub Do_learn
 Declare Sub Clear_remotes
 Declare Sub Tx
+Declare Sub Getid
 
 Startup:
 '-------------------------- read rnumber index from eeprom
@@ -253,8 +257,6 @@ Sub Clear_remotes
                         For I = 1 To 10
                             Remoteid(i) = 0
                         Next I
-                        Startbit = Tomaster : Typ = 104 : Cmd = 185 : Id = 0
-                        Call Tx
                         Return
                         Exit While
                      End If
@@ -324,78 +326,59 @@ End Sub
 Return
 '========================================================================= CHECK
 Check:
-Okread = 1
-If Keycheck = 0 Then                                        'agar keycheck=1 bashad yani be releha farman nade
-For I = 1 To Rnumber
-Ra = Eevar(i)
-If Ra = Address Then                                        'code
-Gosub Command
-Gosub Beep
-Exit For
-End If
-Next
-End If
-Keycheck = 0
+      Okread = 1
+      If Keycheck = 0 Then                                        'agar keycheck=1 bashad yani be releha farman nade
+         For I = 1 To Rnumber
+             Ra = Eevar(i)
+             If Ra = Address Then                           'code
+                Gosub Command
+                Gosub Beep
+                Exit For
+             End If
+         Next
+      End If
+      Keycheck = 0
 Return
 '-------------------------------- Relay command
 Command:
 
+        Select Case Code
+               Case 1
+                    Toggle Rel1
 
+               Case 2
+                    Toggle Rel2
 
-        For I = 1 To rnumber
-            If Wantid = 1 Then
-                        Reset Isrequest
-                        If Remoteid(i) = Address Then
-                           Select Case Code
-                                  Case 1
-                                       Toggle Rel1
-                                       Code1(i) = Wantidcode
-                                  Case 2
-                                       Toggle Rel2
-                                       Code2(i) = Wantidcode
-                                  Case 4
-                                       Toggle Rel3
-                                       Code4(i) = Wantidcode
-                                  Case 8
-                                       Toggle Rel4
-                                       Code8(i) = Wantidcode
-                           End Select
-                           Startbit = Tomaster : Cmd = 180 : Id = Wantidcode
-                           Call Tx
+               Case 4
+                    Toggle Rel3
 
-                        End If
-            End If
-            If Isrequest = 1 Then
-                        Reset Wantid
-                        If Remoteid(i) = Address Then
-                           Select Case Code
-                                  Case 1
-                                       Toggle Rel1
-                                       Id = Code1(i)
-                                       If Code1s(i) = 180 Then Code1s(i) = 181 Else Code1s(i) = 180
-                                       Cmd = Code1s(i)
-                                  Case 2
-                                       Toggle Rel2
-                                       Id = Code2(i)
-                                       If Code2s(i) = 180 Then Code2s(i) = 181 Else Code2s(i) = 180
-                                       Cmd = Code2s(i)
-                                  Case 4
-                                       Toggle Rel3
-                                       Id = Code4(i)
-                                       If Code4s(i) = 180 Then Code4s(i) = 181 Else Code4s(i) = 180
-                                       Cmd = Code4s(i)
-                                  Case 8
-                                       Toggle Rel4
-                                       Id = Code8(i)
-                                       If Code8s(i) = 180 Then Code8s(i) = 181 Else Code8s(i) = 180
-                                       Cmd = Code8s(i)
-                           End Select
-                           Startbit = Toslave
-                           Call Tx
-                        End If
+               Case 8
+                    Toggle Rel4
 
-            End If
-        Next I
+        End Select
+
+        If Wantid = 1 Then
+           Remoteid(wantidcode) = Address
+           Codeid(wantidcode) = Code
+           Reset Wantid
+           Reset Wantid_led
+        End If
+
+        If Isrequest = 1 Then
+           For I = 1 To 10
+               If Remoteid(i) = Address Then
+                  If Codeid(i) = Code Then
+                                    id=i
+                                    If Codeids(i) = 180 Then Codeids(i) = 181 Else Codeids(i) = 180
+                                    Cmd = Codeids(i)
+                                    Startbit = Toslave
+                                    Call Tx
+                                    Exit For
+                  End If
+               End If
+           Next
+        End If
+
 
 
         Waitms 200
@@ -408,46 +391,71 @@ Reset Buzz
 Waitms 30
 Return
 
+Sub Getid
+
+
+End Sub
+
 Sub Findorder
 
     If Din(2) = Typ Then
-        If Din(4) = Id Or Din(4) = Allid Then
             Select Case Din(3)
 
 
                 Case 150
                   Set Isrequest
-                  Reset Rxtx
+                  Reset Learnnew
+                  Reset Clearall
                   Set Isrequest_led
                   Reset Wantid_led
                 Case 151
+                  Reset Learnnew
+                  Reset Clearall
                   Wantidcode = Din(4)
+                  Select Case Wantidcode
+                         Case 1
+                              Set Rel1
+                         Case 2
+                              Set Rel2
+                         Case 3
+                              Set Rel3
+                         Case 4
+                              Set Rel4
+                  End Select
                   Set Wantid
                   Reset Isrequest_led
                   Set Wantid_led
+                  'Call Getid
                 Case 156
+                  Reset Learnnew
+                  Reset Clearall
                   Set Enable_remote
                 Case 157
+                  Reset Learnnew
+                  Reset Clearall
                   Reset Enable_remote
                 Case 161
                   Set Learnnew
-                  Reset Isrequest
+                  Reset Clearall
                 Case 162
+                  Reset Learnnew
                   Set Clearall
 
             End Select
-        Elseif Id = Nonid Then
-               If Din(3) = 151 Then
-                  Set Wantid
-               End If
-        End If
+
+
     End If
+    Start Timer1
 End Sub
 
 
 Sub Tx:
+    If Startbit = Tomaster Then
+       Endbit = 220
+    Elseif Startbit = Toslave Then
+       Endbit = 210
+    End If
     Set En
-    Toggle Rxtx
     Waitms 10
     Printbin Startbit ; Typ ; Cmd ; Id ; Endbit
     Waitms 50
@@ -457,20 +465,20 @@ Sub Tx:
 
 End Sub
 
-Ismax:
-
+Rx:
+      Stop Timer1
       Incr I
       Inputbin Maxin
 
 
-      If I = 5 And Maxin = 220 Then Set Inok
+      If I = 5 And Maxin = 230 Then Set Inok
       If Maxin = 252 Then I = 1
 
       Din(i) = Maxin
 
       If Inok = 1 Then
         Toggle Rxtx
-        Id = Din(4)
+        Wantidcode = Din(4)
         If Din(2) = Typ Then Call Findorder
         I = 0
         Reset Inok

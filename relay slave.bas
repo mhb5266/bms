@@ -46,7 +46,7 @@ Dim Inok As Boolean
 Dim Light As Byte
 Dim Learnok As Boolean
 Dim Blank As Boolean : Reset Blank
-
+Dim Idblank As Byte
 
 Const D = 10
 Const Allid = 99
@@ -91,7 +91,10 @@ Main:
 
      Waitms 10
      Do
-
+       If Blank = 1 Then
+          Toggle Portc.idblank
+          Wait 1
+       End If
      Loop
 Gosub Main
 
@@ -110,7 +113,11 @@ Sub Findorder:
                    If Id = 99 Then Portc = 0
                    Reset Blank
                 End If
-                'If Din(3) = 183 Then Set Blank
+                If Din(3) = 183 Then
+                   Set Blank
+                   Idblank = Id
+                End If
+
 
            'Case Outpwm
 
@@ -121,12 +128,12 @@ End Sub
 Rx:
 
 
-      
+
 
       Incr I
       Inputbin Maxin
 
-      If I = 5 And Maxin = 220 Then Set Inok
+      If I = 5 And Maxin = 230 Or Maxin = 210 Then Set Inok
       If Maxin = 252 Or Maxin = 232 Then I = 1
 
       Din(i) = Maxin
