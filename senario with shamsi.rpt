@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 09-07-2020
-Time         : 15:51:44
+Date         : 09-09-2020
+Time         : 16:52:22
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,8 +8,8 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : 4BF0 hex  -> Will fit into ROM
-ROMIMAGE     :  19440 dec
+ROMIMAGE     : 4C44 hex  -> Will fit into ROM
+ROMIMAGE     :  19524 dec
 FLASH USED   :  14  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 10D8 hex
 Framesize    : 20 hex
 Framestart   : 10A8 hex
-Space left   :  3833  dec
+Space left   :  3832  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -174,11 +174,14 @@ REMOTEKEYID                      Byte              01A4          420
 DIN                              Byte(5)           01A5          421 
 INOK                             Bit [6]           0199          409 
 LEARNOK                          Bit [5]           0199          409 
-TOUCH                            Byte              01AA          426 
-NEXTDAY                          Bit [4]           0199          409 
-COUNT                            Byte              01AB          427 
-I                                Byte              01AC          428 
-J                                Byte              01AD          429 
+LEARNDONE                        Bit [4]           0199          409 
+CLEARDONE                        Byte              01AA          426 
+SETREMOTEDONE                    Bit [3]           0199          409 
+TOUCH                            Byte              01AB          427 
+NEXTDAY                          Bit [2]           0199          409 
+COUNT                            Byte              01AC          428 
+I                                Byte              01AD          429 
+J                                Byte              01AE          430 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -1021,6 +1024,7 @@ TEMP1                            not used
 TEMP2                            not used
 TEMP3                            not used
 MENU                             not used
+REMOTEID                         not used
 
 Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 

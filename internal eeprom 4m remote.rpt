@@ -1,6 +1,6 @@
 Report       : internal eeprom 4m remote
-Date         : 09-07-2020
-Time         : 16:00:01
+Date         : 09-09-2020
+Time         : 17:07:09
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : D3E hex  -> Will fit into ROM
-ROMIMAGE     :  3390 dec
-FLASH USED   :  41  %
+ROMIMAGE     : D78 hex  -> Will fit into ROM
+ROMIMAGE     :  3448 dec
+FLASH USED   :  42  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 8 hex
 S-Stackstart : 440 hex
 Framesize    : 18 hex
 Framestart   : 420 hex
-Space left   :  711  dec
+Space left   :  805  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -106,13 +106,13 @@ T                                Word              00B6          182
 EADDRESS                         Word              00B8          184 
 E_READ                           Byte              00BA          186 
 E_WRITE                          Byte              00BB          187 
-EEVAR                            EEPROM Long(100)  0001          1 
+EEVAR                            EEPROM Long(20)   0001          1 
 MAXIN                            Byte              00BC          188 
 DIN                              Byte(5)           00BD          189 
 TYP                              Byte              00C2          194 
 CMD                              Byte              00C3          195 
 ID                               Byte              00C4          196 
-STARTBIT                         Byte              00C5          197 
+DIRECT                           Byte              00C5          197 
 ENDBIT                           Byte              00C6          198 
 INOK                             Bit [4]           00B5          181 
 ISREQUEST                        Bit [3]           00B5          181 
@@ -120,21 +120,16 @@ WANTID                           Bit [2]           00B5          181
 ENABLE_REMOTE                    Bit [1]           00B5          181 
 LEARNNEW                         Bit [0]           00B5          181 
 CLEARALL                         Bit [7]           00C7          199 
-REMOTEID                         Long(10)          00C8          200 
-CODEID                           Byte(10)          00F0          240 
-CODEIDS                          Byte(10)          00FA          250 
-CODE1                            Byte(10)          0104          260 
-CODE2                            Byte(10)          010E          270 
-CODE4                            Byte(10)          0118          280 
-CODE8                            Byte(10)          0122          290 
-CODE1S                           Byte(10)          012C          300 
-CODE2S                           Byte(10)          0136          310 
-CODE4S                           Byte(10)          0140          320 
-CODE8S                           Byte(10)          014A          330 
-REMOTECOUNTER                    Byte              0154          340 
-KEYLEARND                        Byte              0155          341 
-WANTIDCODE                       Byte              0156          342 
-RAW                              Byte              0157          343 
+FINDORDER                        Byte              00C8          200 
+REMOTEID                         EEPROM Byte(40)   0051          81 
+CODEID                           EEPROM Byte(40)   0079          121 
+CODEIDS                          Byte(40)          00C9          201 
+RAW                              Byte              00F1          241 
+REMOTEAD                         Long              00F2          242 
+REMOTECODE                       Byte              00F6          246 
+REMOTECOUNTER                    Byte              00F7          247 
+KEYLEARND                        Byte              00F8          248 
+WIC                              Byte              00F9          249 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -509,6 +504,10 @@ ALLID                            99
 NONID                            0
 TOMASTER                         242
 TOSLAVE                          232
+LEARNDONE                        184
+CLEARDONE                        185
+KEYWASSET                        186
+SENDKEY                          150
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -575,14 +574,8 @@ PWM1B                            not used
 EADDRESS                         not used
 E_READ                           not used
 E_WRITE                          not used
-CODE1                            not used
-CODE2                            not used
-CODE4                            not used
-CODE8                            not used
-CODE1S                           not used
-CODE2S                           not used
-CODE4S                           not used
-CODE8S                           not used
+FINDORDER                        not used
+REMOTEAD                         not used
+REMOTECODE                       not used
 KEYLEARND                        not used
-RAW                              not used
 

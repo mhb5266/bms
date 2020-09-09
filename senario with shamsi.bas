@@ -124,6 +124,9 @@ Dim Din(5) As Byte
 Dim Inok As Boolean
 Dim Learnok As Boolean
 
+Dim Learndone As Boolean
+Dim Cleardone As Byte
+Dim Setremotedone As Boolean
 
 Const Keyin = 101
 Const Steps = 102
@@ -226,203 +229,8 @@ Main:
 Gosub Main
 
 
-Sub Main_menu:
-     Touch = 0
-     Do
-     Loop Until Touch1 = 0
-     Waitms 100
-     Cls
-     Count = 1
-     Do
-            Disable Urxc
-            If Touch = 2 Then
-                   touch = 0
-                   incr count
-                   If Count > Main_menu_counter Then Count = 1
-                   cls
-            endif
-            if touch = 3 then
-                   Touch = 0
-                   decr count
-                   If Count = 0 Then Count = Main_menu_counter
-                   Cls
-            endif
-            if touch = 4 then
-                   Touch = 0
-                   cls
-                   return
-            endif
-            Select Case Count
-                   case 1
-                        Showpic 50 , 20 , Setclockicon
-                   case 2
-                        Showpic 50 , 20 , Remoteicon
-                   case 3
-                        Showpic 50 , 20 , Planticon
-                   case 4
-                        Showpic 50 , 20 , Watersystemicon
-                   Case 5
-                        Showpic 50 , 20 , Lighticon
-                   case 6
-                        Showpic 50 , 20 , Jaccuziicon
-                   Case 7
-                        'Showpic 50 , 20 , Settingicon
-                        Lcdat 1 , 1 , "Setting"
-            End Select
-            if touch = 1 then
-                   Touch = 0
-                   Cls
-                   Select Case Count
-                          Case 1
-                               Call Clock_menu
-                          Case 2
-
-                               Call Remote_menu
-                          Case 3
-
-                          Case 4
-
-                          Case 5
-
-                          Case 6
-
-                          Case 7
-                               Call Input_menu
-
-
-                   End Select
-            End If
-            Call Readtouch
-     Loop
-End Sub
-
-
-Sub Remote_menu:
-    Count = 1
-    Cls
-    Do
-        Call Readtouch
-        If Touch = 4 Then
-           Cls
-           Return
-        End If
-
-        If Touch = 1 Then
-
-           Select Case Count
-                  Case 1
-                       Findorder = Clearremote
-                       Call Order
-                  Case 2
-                       Findorder = Learnremote
-                       Call Order
-                  Case 3
-                        Remotekeyid = 1
-                        Cls
-                        Do
-                          If Remotekeyid > 8 Then Remotekeyid = 1
-                          Lcdat 1 , 1 , "out " ; Remotekeyid
-                          Call Readtouch
-                          If Touch = 1 Then
-                             Cls
-                             Id = Remotekeyid
-                             Findorder = Outputblank
-                             Call Order
-                             Cls
-                             Lcdat 1 , 1 , "out " ; Remotekeyid
-                             Findorder = Setremoteid
-                             Call Order
-                          End If
-
-                          If Touch = 2 Then
-                             Incr Remotekeyid
-                          End If
-
-                          If Touch = 3 Then
-                             Decr Remotekeyid
-                          End If
-
-                          If Touch = 4 Then
-                             Findorder = Resetalloutput
-                             Call Order
-                             Findorder = Readallinput
-                             Call Order
-                             Findorder = Readremote
-                             Call Order
-                             Return
-                          End If
-                        Loop
-           End Select
-
-        End If
-
-        If Touch = 2 Then
-           Incr Count
-           If Count > 3 Then Count = 1
-           Cls
-        End If
-
-        If Touch = 3 Then
-           Decr Count
-           If Count = 0 Then Count = 3
-           Cls
-        End If
-
-        Select Case Count
-               Case 1
-                    Lcdat 1 , 1 , "Clear Remotes"
-               Case 2
-                    Lcdat 1 , 1 , "Learn New"
-               Case 3
-                    Lcdat 1 , 1 , "Config Remotes"
-        End Select
-    Loop
-End Sub
-
-Sub Input_menu:
-    Cls
-    Id = 0
-    Do
-      Call Readtouch
-      If Touch = 1 Then
-         Incr Id
-         Findorder = Setoutput
-         Call Order
-         Lcdat Id , 1 , "out" ; Id
-         Waitms 20
-         Findorder = Learnkey
-         Call Order
-      End If
-
-      If Touch = 2 Then
-
-
-      End If
-
-      If Touch = 3 Then
-
-      End If
-
-      If Touch = 4 Then
-         Findorder = Resetalloutput
-         Call Order
-         Findorder = Readallinput
-         Call Order
-         Findorder = Readremote
-         Call Order
-         Cls
-         Return
-      End If
-
-
-    Loop
-
-End Sub
-
 
 Rx:
-      'J = 0
-      'Do
 
       Incr J
       Incr I
@@ -436,479 +244,18 @@ Rx:
          I = 0
          Checkanswer
          Reset Inok
+         Cls
       End If
 
 Return
 
-Sub Checkanswer:
-    Select Case Din(2)
 
-           Case Keyin
-
-
-                If Din(4) = Id Then
-                   Lcdat Id , 1 ,"input " ;id;" connect"
-                End If
-                If Din(3) = 151 Then
-                   If Din(4) = Id Then
-                      Learnok = 1
-                   End If
-                End If
-                If Din(3) = 180 Then Set Portc.din(4)
-                If Din(3) = 181 Then Reset Portc.din(4)
-                If Din(3) = 182 Then
-                   Set Portc.id
-                   Wait 2
-                   Reset Portc.id
-                End If
-           Case Remote
-                Select Case Din(3)
-                       Case 180
-                            Cls
-                            Lcdat 1 , 1 , "Key " ; Remotekeyid ; " is set"
-                            Wait 1
-                            Cls
-                       Case 181
-                            Cls
-                            Lcdat 1 , 1 , "Key " ; Remotekeyid ; " is set"
-                            Wait 1
-                            Cls
-                       Case 184
-                            Cls
-                            Lcdat 1 , 1 , "learn Is Done"
-                            Lcdat 2 , 1 , Din(4)
-                            Incr Remoteid
-                            Wait 1
-                            Cls
-                       Case 185
-                            Cls
-                            Lcdat 1 , 1 , "Clear is Done"
-                            Wait 1
-                            Cls
-                End Select
-
-
-           Case Senario
-
-           Case Steps
-
-           Case Outlogic
-
-           Case Outpwm
-
-    End Select
-    'Call Sendqc
-    'Call Setout
-
-
-End Sub
-
-Sub Order
-
-    Select Case Findorder
-
-
-
-           Case Readallinput
-
-                Typ = 101 : Cmd = 150 : Id = 99
-
-           Case Read1input
-
-                Typ = 101 : Cmd = 150 : Id = Id
-
-           Case Learnkey
-
-                Typ = 101 : Cmd = 151 : Id = Id
-
-           Case Enablebuz
-
-                Typ = 101 : Cmd = 152 : Id = 99
-
-           Case Disablebuz
-
-                Typ = 101 : Cmd = 153 : Id = 99
-
-           Case Enablesensor
-
-                Typ = 101 : Cmd = 154 : Id = 99
-
-           Case Disablesensor
-
-                Typ = 101 : Cmd = 155 : Id = 99
-
-           Case Enableinput
-
-                Typ = 101 : Cmd = 156 : Id = 99
-
-           Case Disableinput
-
-                Typ = 101 : Cmd = 157 : Id = 99
-
-           Case Readsteps
-
-                Typ = 102 : Cmd = 150 : Id = 99
-
-           Case Learnsteps
-
-                Typ = 102 : Cmd = 151 : Id = Id
-
-           Case Enablestep
-
-                Typ = 102 : Cmd = 156 : Id = 99
-
-           Case Disablestep
-
-                Typ = 110 : Cmd = 157 : Id = 99
-
-           Case Readsenario
-
-                Typ = 103 : Cmd = 150 : Id = 99
-
-           Case Readremote
-
-                Typ = 104 : Cmd = 150 : Id = 99
-
-           Case Outputblank
-
-                Typ = 110 : Cmd = 183 : Id = Id
-
-           Case Resetoutput
-
-                Typ = 110 : Cmd = 181 : Id = Id
-
-           Case Resetalloutput
-
-                Typ = 110 : Cmd = 181 : Id = 99
-
-           Case Setoutput
-
-                Typ = 110 : Cmd = 180 : Id = Id
-
-           Case Clearid
-
-                Typ = 101 : Cmd = 167 : Id = Id
-
-           Case Clearremote
-
-                Typ = 104 : Cmd = 162 : Id = 0
-
-           Case Learnremote
-
-                Typ = 104 : Cmd = 161 : Id = 0
-
-           Case Setremoteid
-
-                Typ = 104 : Cmd = 151 : Id = Remotekeyid
-
-    End Select
-
-    Call Tx
-
-
-End Sub
-
-Sub Tx:
-    Set Em
-    Waitms 10
-    Set Txled
-    Printbin 252 ; Typ ; Cmd ; Id ; 230
-    Waitms 50
-    Reset Em
-    Reset Txled
-    Enable Urxc
-
-
-End Sub
-
-Sub Show:
-
-
-       Lcdat 4 , 1 , Sens1
-       Lcdat 4 , 90 , Sens2
-
-
-       If _hour > 9 Then
-          Lcdat 1 , 1 , _hour
-       Else
-          Lcdat 1 , 1 , "0" ; _hour
-       End If
-       A = _sec Mod 2
-       If A = 1 Then Lcdat 1 , 16 , " " Else Lcdat 1 , 16 , ":"
-       If _min > 9 Then
-          Lcdat 1 , 24 , _min
-       Else
-          Lcdat 1 , 24 , "0" ; _min
-       End If
-
-        Select Case Day
-           Case 1
-                S2 = "Sat"
-           Case 2
-                S2 = "Sun"
-           Case 3
-                S2 = "Mon"
-           Case 4
-                S2 = "Tue"
-           Case 5
-                S2 = "Wed"
-           Case 6
-                S2 = "Thu"
-           Case 7
-                S2 = "Fri"
-
-        End Select
-
-       Lcdat 1 , 96 , S2
-
-       Lcdat 2 , 1 , Sh_year ; "/"
-       If Sh_month < 10 Then
-          Lcdat 2 , 40 , "0" ; Sh_month ; "/"
-       Else
-           Lcdat 2 , 40 , Sh_month ; "/"
-       End If
-       If Sh_day < 10 Then
-          Lcdat 2 , 64 , "0" ; Sh_day
-       Else
-           Lcdat 2 , 64 , Sh_day
-       End If
-
-
-End Sub
-
-Sub Temp:
-
-   'reset watchdog
-   1wreset
-   1wwrite &HCC
-   1wwrite &H44
-   Waitms 30
-   1wreset
-   1wwrite &H55
-   1wverify Ds18b20_id_1(1)
-   1wwrite &HBE
-   Buffer_digital = 1wread(2)
-   Gosub Conversion
-   Sens1 = Temperature
-
-
-   Dahom = Buffer_digital
-   Do
-   Dahom = Dahom - 10
-   Loop Until Dahom < 10
-   Sahih = Buffer_digital - Dahom
-   Sahih = Sahih / 10
-
-
-
-
-   1wreset
-   1wwrite &H55
-   1wverify Ds18b20_id_2(1)
-   1wwrite &HBE
-   Buffer_digital = 1wread(2)
-   Gosub Conversion
-   Sens2 = Temperature
-End Sub
 
 Conversion:
    Buffer_digital = Buffer_digital * 10 : Buffer_digital = Buffer_digital \ 16
    Temperature = Str(buffer_digital) : Temperature = Format(temperature , "0.0")
 Return
 
-Sub Clock_menu:
- Call Beep
- Selection = 1
- Cls
- Do
-
-    Incr Timer_1
-    If Timer_1 > 5 Then
-     Timer_1 = 0
-     Toggle Blink_flag
-    End If
-
-    S1 = "TIME: "
-    '-----------------------------
-    If Selection = 1 And Blink_flag = 0 Then
-
-     S1 = S1 + "  "
-    Else
-
-     S = Str(_hour)
-     S = Format(s , "00")
-     S1 = S1 + S
-
-    End If
-    S1 = S1 + ":"
-    '------------------------------
-    If Selection = 2 And Blink_flag = 0 Then
-
-     S1 = S1 + "  "
-    Else
-
-     S = Str(_min)
-     S = Format(s , "00")
-     S1 = S1 + S
-
-    End If
-    S1 = S1 + ":"
-    '------------------------------
-    If Selection = 3 And Blink_flag = 0 Then
-
-     S1 = S1 + "  "
-    Else
-
-     S = Str(_sec)
-     S = Format(s , "00")
-     S1 = S1 + S
-
-    End If
-
-
-    Lcdat 1 , 1 , S1
-
-
-    S1 = "DATE: "
-    '--------------------------------
-    If Selection = 4 And Blink_flag = 0 Then
-
-     S1 = S1 + "    "
-    Else
-
-     S = Str(sh_year)
-     S = Format(s , "0000")
-     S1 = S1 + S
-
-    End If
-    S1 = S1 + "/"
-    '---------------------------------
-    If Selection = 5 And Blink_flag = 0 Then
-
-     S1 = S1 + "  "
-    Else
-
-     S = Str(sh_month)
-     S = Format(s , "00")
-     S1 = S1 + S
-
-    End If
-    S1 = S1 + "/"
-    '----------------------------------
-    If Selection = 6 And Blink_flag = 0 Then
-
-     S1 = S1 + "  "
-    Else
-
-     S = Str(sh_day)
-     S = Format(s , "00")
-     S1 = S1 + S
-
-    End If
-
-    If Selection = 7 And Blink_flag = 0 Then
-       S2 = "   "
-    Else
-        Select Case Day
-           Case 1
-                S2 = "Sat"
-           Case 2
-                S2 = "Sun"
-           Case 3
-                S2 = "Mon"
-           Case 4
-                S2 = "Tue"
-           Case 5
-                S2 = "Wed"
-           Case 6
-                S2 = "Thu"
-           Case 7
-                S2 = "Fri"
-
-        End Select
-
-    End If
-
-    Lcdat 2 , 1 , S1
-    Lcdat 3 , 1 , S2
-
-
-
-
-
-    Call Readtouch
-
-    If Touch = 1 Then
-       Incr Selection
-       Touch = 0
-    End If
-
-    If Touch = 4 Then
-       Cls
-       Touch = 0
-       Return
-    End If
-    '-----------------------------------
-    If Touch = 2 Then
-          If Selection = 1 Then Incr _hour
-          If Selection = 2 Then Incr _min
-          If Selection = 3 Then Incr _sec
-          If Selection = 4 Then Incr Sh_year
-          If Selection = 5 Then Incr Sh_month
-          If Selection = 6 Then Incr Sh_day
-          If Selection = 7 Then Incr Day
-          Touch = 0
-    End If
-    '------------------------------------
-    If Touch = 3 Then
-         If Selection = 1 Then Decr _hour
-         If Selection = 2 Then Decr _min
-         If Selection = 3 Then Decr _sec
-         If Selection = 4 Then Decr Sh_year
-         If Selection = 5 Then Decr Sh_month
-         If Selection = 6 Then Decr Sh_day
-         If Selection = 7 Then Decr Day
-         Touch = 0
-    End If
-
-    '--------------------------------------
-    If _hour > 100 Then _hour = 23
-    If _min > 100 Then _min = 59
-    If _sec > 100 Then _sec = 59
-
-    If _hour > 23 Then _hour = 0
-    If _min > 59 Then _min = 0
-    If _sec > 59 Then _sec = 0
-    If Sh_year > 1470 Then Sh_year = 1390
-    If Sh_month > 12 Then Sh_month = 1
-    If Sh_day > 31 Then Sh_day = 1
-
-
-
-    If Sh_year < 1390 Then Sh_year = 1470
-    If Sh_month < 1 Then Sh_month = 12
-    If Sh_day < 1 Then Sh_day = 31
-
-    If Day < 1 Then Day = 7
-    If Day > 7 Then Day = 1
-    '---------------------------------------
-
-
-    Waitms 40
-
-    If Selection > 7 Then Exit Do
-
- Loop
-
- Cls
- Lcdat 1 , 1 , " SAVEING"
- Wait 1
- Cls
- Gosub Sh_to_m
- Gosub Setdate
- Gosub Settime
-
-End Sub
 
 Read_date_time:
   I2cstart                                                  ' Generate start code
@@ -1124,6 +471,642 @@ M_day = Kole_roz_m
 Return
 
 
+Includes:
+
+$include "font32x32.font"
+$include "font16x16.font"
+$include "font8x8.font"
+Setclockicon:
+$bgf "clock.bgf"
+Remoteicon:
+$bgf "remote.bgf"
+Planticon:
+$bgf "plant.bgf"
+Lighticon:
+$bgf "light.bgf"
+Jaccuziicon:
+$bgf "jaccuzi.bgf"
+Watersystemicon:
+$bgf "watersystem.bgf"
+Kelidhaicon:
+$bgf "kelidha.bgf"
+Settingicon:
+$bgf "settingicon2.bgf"
+
+End
+
+Sub Remote_menu
+    Count = 1
+    Cls
+    Do
+        Call Readtouch
+        If Touch = 4 Then
+           Cls
+           Return
+        End If
+
+        If Touch = 1 Then
+           Enable Urxc
+           Select Case Count
+                  Case 1
+                       Findorder = Clearremote
+                       Call Order
+                  Case 2
+                       Findorder = Learnremote
+                       Call Order
+                  Case 3
+                        Remotekeyid = 1
+                        Cls
+                        Do
+                          Lcdat 1 , 1 , "out " ; Remotekeyid
+                          Call Readtouch
+                          If Touch = 1 Then
+                             Cls
+                             Id = Remotekeyid
+                             Findorder = Setoutput
+                             Call Order
+                             Cls
+                             Lcdat 1 , 1 , "out " ; Remotekeyid
+                             Findorder = Setremoteid
+                             Call Order
+                          End If
+
+                          If Touch = 2 Then
+                             Incr Remotekeyid
+                          End If
+
+                          If Touch = 3 Then
+                             Decr Remotekeyid
+                          End If
+
+                          If Touch = 4 Then
+                             Findorder = Resetalloutput
+                             Call Order
+                             Findorder = Readallinput
+                             Call Order
+                             Findorder = Readremote
+                             Call Order
+                             Return
+                          End If
+                        Loop
+           End Select
+
+        End If
+
+        If Cleardone = 1 Then
+
+                      Cls
+                      Lcdat 1 , 1 , "Clear is Done"
+                      Count = 2
+                      Wait 1
+                      Cls
+                      Reset Cleardone
+        End If
+
+        If Learndone = 1 Then
+
+                      Cls
+                      Lcdat 1 , 1 , "learn Is Done"
+                      Lcdat 2 , 1 , Din(4)
+                      Count = 3
+                      Wait 1
+                      Cls
+                      Reset Learndone
+        End If
+
+        If Setremotedone = 1 Then
+
+                      Cls
+                      Lcdat 1 , 1 , "key " ; Remotekeyid ; "  set"
+                      Wait 1
+                      Cls
+                      Incr Remotekeyid
+                      If Remotekeyid > 50 Then Remotekeyid = 1
+                      Reset Setremotedone
+        End If
+
+        If Touch = 2 Then
+           Incr Count
+           If Count > 3 Then Count = 1
+           Cls
+        End If
+
+        If Touch = 3 Then
+           Decr Count
+           If Count = 0 Then Count = 3
+           Cls
+        End If
+
+        Select Case Count
+               Case 1
+                    Lcdat 1 , 1 , "Clear Remotes "
+               Case 2
+                    Lcdat 1 , 1 , "Learn New     "
+               Case 3
+                    Lcdat 1 , 1 , "Config Remotes"
+        End Select
+    Loop
+End Sub
+
+Sub Input_menu
+    Cls
+    Id = 0
+    Do
+      Call Readtouch
+      If Touch = 1 Then
+         Incr Id
+         Findorder = Setoutput
+         Call Order
+         Lcdat Id , 1 , "out" ; Id
+         Waitms 20
+         Findorder = Learnkey
+         Call Order
+      End If
+
+      If Touch = 2 Then
+
+
+      End If
+
+      If Touch = 3 Then
+
+      End If
+
+      If Touch = 4 Then
+         Findorder = Resetalloutput
+         Call Order
+         Findorder = Readallinput
+         Call Order
+         Findorder = Readremote
+         Call Order
+         Cls
+         Return
+      End If
+
+
+    Loop
+
+End Sub
+
+Sub Checkanswer
+    Disable Urxc
+    Select Case Din(2)
+
+           Case Keyin
+
+
+                If Din(4) = Id Then
+                   Lcdat Id , 1 ,"input " ;id;" connect"
+                End If
+                If Din(3) = 151 Then
+                   If Din(4) = Id Then
+                      Learnok = 1
+                   End If
+                End If
+                If Din(3) = 180 Then Set Portc.din(4)
+                If Din(3) = 181 Then Reset Portc.din(4)
+                If Din(3) = 182 Then
+                   Set Portc.id
+                   Wait 2
+                   Reset Portc.id
+                End If
+           Case Remote
+                Select Case Din(3)
+                       Case 180
+
+                       Case 181
+
+                       Case 184
+                            Set Learndone
+
+                       Case 185
+                            Set Cleardone
+
+                       Case 186
+                            Set Setremotedone
+
+                End Select
+
+
+           Case Senario
+
+           Case Steps
+
+           Case Outlogic
+
+           Case Outpwm
+
+    End Select
+    Return
+End Sub
+
+
+Sub Order
+
+    Select Case Findorder
+
+
+
+           Case Readallinput
+
+                Typ = 101 : Cmd = 150 : Id = 99
+
+           Case Read1input
+
+                Typ = 101 : Cmd = 150 : Id = Id
+
+           Case Learnkey
+
+                Typ = 101 : Cmd = 151 : Id = Id
+
+           Case Enablebuz
+
+                Typ = 101 : Cmd = 152 : Id = 99
+
+           Case Disablebuz
+
+                Typ = 101 : Cmd = 153 : Id = 99
+
+           Case Enablesensor
+
+                Typ = 101 : Cmd = 154 : Id = 99
+
+           Case Disablesensor
+
+                Typ = 101 : Cmd = 155 : Id = 99
+
+           Case Enableinput
+
+                Typ = 101 : Cmd = 156 : Id = 99
+
+           Case Disableinput
+
+                Typ = 101 : Cmd = 157 : Id = 99
+
+           Case Readsteps
+
+                Typ = 102 : Cmd = 150 : Id = 99
+
+           Case Learnsteps
+
+                Typ = 102 : Cmd = 151 : Id = Id
+
+           Case Enablestep
+
+                Typ = 102 : Cmd = 156 : Id = 99
+
+           Case Disablestep
+
+                Typ = 110 : Cmd = 157 : Id = 99
+
+           Case Readsenario
+
+                Typ = 103 : Cmd = 150 : Id = 99
+
+           Case Readremote
+
+                Typ = 104 : Cmd = 150 : Id = 99
+
+           Case Outputblank
+
+                Typ = 110 : Cmd = 183 : Id = Id
+
+           Case Resetoutput
+
+                Typ = 110 : Cmd = 181 : Id = Id
+
+           Case Resetalloutput
+
+                Typ = 110 : Cmd = 181 : Id = 99
+
+           Case Setoutput
+
+                Typ = 110 : Cmd = 180 : Id = Id
+
+           Case Clearid
+
+                Typ = 101 : Cmd = 167 : Id = Id
+
+           Case Clearremote
+
+                Typ = 104 : Cmd = 162 : Id = 0
+
+           Case Learnremote
+
+                Typ = 104 : Cmd = 161 : Id = 0
+
+           Case Setremoteid
+
+                Typ = 104 : Cmd = 151 : Id = Remotekeyid
+
+    End Select
+
+    Call Tx
+
+
+End Sub
+
+
+
+Sub Tx
+    Set Em
+    Waitms 10
+    Set Txled
+    Printbin 252 ; Typ ; Cmd ; Id ; 230
+    Waitms 50
+    Reset Em
+    Reset Txled
+    Enable Urxc
+
+
+End Sub
+
+Sub Show
+
+
+       Lcdat 4 , 1 , Sens1
+       Lcdat 4 , 90 , Sens2
+
+
+       If _hour > 9 Then
+          Lcdat 1 , 1 , _hour
+       Else
+          Lcdat 1 , 1 , "0" ; _hour
+       End If
+       A = _sec Mod 2
+       If A = 1 Then Lcdat 1 , 16 , " " Else Lcdat 1 , 16 , ":"
+       If _min > 9 Then
+          Lcdat 1 , 24 , _min
+       Else
+          Lcdat 1 , 24 , "0" ; _min
+       End If
+
+        Select Case Day
+           Case 1
+                S2 = "Sat"
+           Case 2
+                S2 = "Sun"
+           Case 3
+                S2 = "Mon"
+           Case 4
+                S2 = "Tue"
+           Case 5
+                S2 = "Wed"
+           Case 6
+                S2 = "Thu"
+           Case 7
+                S2 = "Fri"
+
+        End Select
+
+       Lcdat 1 , 96 , S2
+
+       Lcdat 2 , 1 , Sh_year ; "/"
+       If Sh_month < 10 Then
+          Lcdat 2 , 40 , "0" ; Sh_month ; "/"
+       Else
+           Lcdat 2 , 40 , Sh_month ; "/"
+       End If
+       If Sh_day < 10 Then
+          Lcdat 2 , 64 , "0" ; Sh_day
+       Else
+           Lcdat 2 , 64 , Sh_day
+       End If
+
+
+End Sub
+
+
+Sub Temp
+
+   'reset watchdog
+   1wreset
+   1wwrite &HCC
+   1wwrite &H44
+   Waitms 30
+   1wreset
+   1wwrite &H55
+   1wverify Ds18b20_id_1(1)
+   1wwrite &HBE
+   Buffer_digital = 1wread(2)
+   Gosub Conversion
+   Sens1 = Temperature
+
+
+   Dahom = Buffer_digital
+   Do
+   Dahom = Dahom - 10
+   Loop Until Dahom < 10
+   Sahih = Buffer_digital - Dahom
+   Sahih = Sahih / 10
+
+
+
+
+   1wreset
+   1wwrite &H55
+   1wverify Ds18b20_id_2(1)
+   1wwrite &HBE
+   Buffer_digital = 1wread(2)
+   Gosub Conversion
+   Sens2 = Temperature
+End Sub
+
+
+Sub Clock_menu
+ Call Beep
+ Selection = 1
+ Cls
+ Do
+
+    Incr Timer_1
+    If Timer_1 > 5 Then
+     Timer_1 = 0
+     Toggle Blink_flag
+    End If
+
+    S1 = "TIME: "
+    '-----------------------------
+    If Selection = 1 And Blink_flag = 0 Then
+
+     S1 = S1 + "  "
+    Else
+
+     S = Str(_hour)
+     S = Format(s , "00")
+     S1 = S1 + S
+
+    End If
+    S1 = S1 + ":"
+    '------------------------------
+    If Selection = 2 And Blink_flag = 0 Then
+
+     S1 = S1 + "  "
+    Else
+
+     S = Str(_min)
+     S = Format(s , "00")
+     S1 = S1 + S
+
+    End If
+    S1 = S1 + ":"
+    '------------------------------
+    If Selection = 3 And Blink_flag = 0 Then
+
+     S1 = S1 + "  "
+    Else
+
+     S = Str(_sec)
+     S = Format(s , "00")
+     S1 = S1 + S
+
+    End If
+
+
+    Lcdat 1 , 1 , S1
+
+
+    S1 = "DATE: "
+    '--------------------------------
+    If Selection = 4 And Blink_flag = 0 Then
+
+     S1 = S1 + "    "
+    Else
+
+     S = Str(sh_year)
+     S = Format(s , "0000")
+     S1 = S1 + S
+
+    End If
+    S1 = S1 + "/"
+    '---------------------------------
+    If Selection = 5 And Blink_flag = 0 Then
+
+     S1 = S1 + "  "
+    Else
+
+     S = Str(sh_month)
+     S = Format(s , "00")
+     S1 = S1 + S
+
+    End If
+    S1 = S1 + "/"
+    '----------------------------------
+    If Selection = 6 And Blink_flag = 0 Then
+
+     S1 = S1 + "  "
+    Else
+
+     S = Str(sh_day)
+     S = Format(s , "00")
+     S1 = S1 + S
+
+    End If
+
+    If Selection = 7 And Blink_flag = 0 Then
+       S2 = "   "
+    Else
+        Select Case Day
+           Case 1
+                S2 = "Sat"
+           Case 2
+                S2 = "Sun"
+           Case 3
+                S2 = "Mon"
+           Case 4
+                S2 = "Tue"
+           Case 5
+                S2 = "Wed"
+           Case 6
+                S2 = "Thu"
+           Case 7
+                S2 = "Fri"
+
+        End Select
+
+    End If
+
+    Lcdat 2 , 1 , S1
+    Lcdat 3 , 1 , S2
+
+
+
+
+
+    Call Readtouch
+
+    If Touch = 1 Then
+       Incr Selection
+       Touch = 0
+    End If
+
+    If Touch = 4 Then
+       Cls
+       Touch = 0
+       Return
+    End If
+    '-----------------------------------
+    If Touch = 2 Then
+          If Selection = 1 Then Incr _hour
+          If Selection = 2 Then Incr _min
+          If Selection = 3 Then Incr _sec
+          If Selection = 4 Then Incr Sh_year
+          If Selection = 5 Then Incr Sh_month
+          If Selection = 6 Then Incr Sh_day
+          If Selection = 7 Then Incr Day
+          Touch = 0
+    End If
+    '------------------------------------
+    If Touch = 3 Then
+         If Selection = 1 Then Decr _hour
+         If Selection = 2 Then Decr _min
+         If Selection = 3 Then Decr _sec
+         If Selection = 4 Then Decr Sh_year
+         If Selection = 5 Then Decr Sh_month
+         If Selection = 6 Then Decr Sh_day
+         If Selection = 7 Then Decr Day
+         Touch = 0
+    End If
+
+    '--------------------------------------
+    If _hour > 100 Then _hour = 23
+    If _min > 100 Then _min = 59
+    If _sec > 100 Then _sec = 59
+
+    If _hour > 23 Then _hour = 0
+    If _min > 59 Then _min = 0
+    If _sec > 59 Then _sec = 0
+    If Sh_year > 1470 Then Sh_year = 1390
+    If Sh_month > 12 Then Sh_month = 1
+    If Sh_day > 31 Then Sh_day = 1
+
+
+
+    If Sh_year < 1390 Then Sh_year = 1470
+    If Sh_month < 1 Then Sh_month = 12
+    If Sh_day < 1 Then Sh_day = 31
+
+    If Day < 1 Then Day = 7
+    If Day > 7 Then Day = 1
+    '---------------------------------------
+
+
+    Waitms 40
+
+    If Selection > 7 Then Exit Do
+
+ Loop
+
+ Cls
+ Lcdat 1 , 1 , " SAVEING"
+ Wait 1
+ Cls
+ Gosub Sh_to_m
+ Gosub Setdate
+ Gosub Settime
+
+End Sub
+
 
 Function M_kabise(byref Sal As Word)as Byte
 
@@ -1171,14 +1154,14 @@ Function Sh_kabise(byref Sal As Word)as Byte
 
 End Function
 
-Sub Beep:
+
+Sub Beep
      'reset watchdog
      Set Buz
      Waitms 80
      Reset Buz
      Waitms 30
 End Sub
-Return
 
 Sub Errorbeep
 
@@ -1188,7 +1171,79 @@ Sub Errorbeep
 
 End Sub
 
+Sub Main_menu
+     Touch = 0
+     Do
+     Loop Until Touch1 = 0
+     Waitms 100
+     Cls
+     Count = 1
+     Do
+            Disable Urxc
+            If Touch = 2 Then
+                   touch = 0
+                   incr count
+                   If Count > Main_menu_counter Then Count = 1
+                   cls
+            endif
+            if touch = 3 then
+                   Touch = 0
+                   decr count
+                   If Count = 0 Then Count = Main_menu_counter
+                   Cls
+            endif
+            if touch = 4 then
+                   Findorder = Readallinput
+                   Call Order
+                   Findorder = Readremote
+                   Call Order
+                   Touch = 0
+                   cls
+                   Return
+            endif
+            Select Case Count
+                   case 1
+                        Showpic 50 , 20 , Setclockicon
+                   case 2
+                        Showpic 50 , 20 , Remoteicon
+                   case 3
+                        Showpic 50 , 20 , Planticon
+                   case 4
+                        Showpic 50 , 20 , Watersystemicon
+                   Case 5
+                        Showpic 50 , 20 , Lighticon
+                   case 6
+                        Showpic 50 , 20 , Jaccuziicon
+                   Case 7
+                        'Showpic 50 , 20 , Settingicon
+                        Lcdat 1 , 1 , "Setting"
+            End Select
+            if touch = 1 then
+                   Touch = 0
+                   Cls
+                   Select Case Count
+                          Case 1
+                               Call Clock_menu
+                          Case 2
 
+                               Call Remote_menu
+                          Case 3
+
+                          Case 4
+
+                          Case 5
+
+                          Case 6
+
+                          Case 7
+                               Call Input_menu
+
+
+                   End Select
+            End If
+            Call Readtouch
+     Loop
+End Sub
 
 Sub Readtouch
 
@@ -1221,26 +1276,3 @@ Touch = 0
 'loop until touch > 0
 End Sub
 
-Includes:
-
-$include "font32x32.font"
-$include "font16x16.font"
-$include "font8x8.font"
-Setclockicon:
-$bgf "clock.bgf"
-Remoteicon:
-$bgf "remote.bgf"
-Planticon:
-$bgf "plant.bgf"
-Lighticon:
-$bgf "light.bgf"
-Jaccuziicon:
-$bgf "jaccuzi.bgf"
-Watersystemicon:
-$bgf "watersystem.bgf"
-Kelidhaicon:
-$bgf "kelidha.bgf"
-Settingicon:
-$bgf "settingicon2.bgf"
-
-End

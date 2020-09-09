@@ -53,7 +53,7 @@ Keycheck = 0
 Dim Eaddress As Word                                        'eeprom address variable
 Dim E_read As Byte
 Dim E_write As Byte
-Dim Eevar(100) As Eram Long
+Dim Eevar(20) As Eram Long
 
 Maxconfig:
 Enable Interrupts
@@ -71,7 +71,7 @@ Dim Typ As Byte : Typ = 104
 Dim Cmd As Byte
 Dim Id As Byte
 
-Dim Startbit As Byte
+Dim direct As Byte
 Dim Endbit As Byte : Endbit = 220
 
 Dim Inok As Boolean
@@ -81,26 +81,20 @@ Dim Enable_remote As Boolean
 Dim Learnnew As Boolean
 Dim Clearall As Boolean
 
+Dim Findorder As Byte
 
-Dim Remoteid(10) As Long
-Dim Codeid(10) As Byte
-Dim Codeids(10) As Byte
-
-Dim Code1(10) As Byte
-Dim Code2(10) As Byte
-Dim Code4(10) As Byte
-Dim Code8(10) As Byte
-
-Dim Code1s(10) As Byte
-Dim Code2s(10) As Byte
-Dim Code4s(10) As Byte
-Dim Code8s(10) As Byte
+Dim Remoteid(40) As Eram Byte
+Dim Codeid(40) As Eram Byte
+Dim Codeids(40) As Byte
+Dim Raw As Byte
+Dim Remotead As Long
+Dim Remotecode As Byte
 
 
 Dim Remotecounter As Byte
 Dim Keylearnd As Byte
-Dim Wantidcode As Byte
-Dim Raw As Byte
+Dim wic As Byte
+
 Rxtx Alias Portd.7 : Config Portd.7 = Output
 
 Const Allid = 99
@@ -110,22 +104,29 @@ Const Nonid = 0
 Const Tomaster = 242
 Const Toslave = 232
 
+Const Learndone = 184
+Const Cleardone = 185
+Const Keywasset = 186
+Const Sendkey = 150
 
 
-Declare Sub Findorder
+Declare Sub checkanswer
 Declare Sub Do_learn
 Declare Sub Clear_remotes
 Declare Sub Tx
 Declare Sub Getid
+Declare Sub Order
 
 Startup:
 '-------------------------- read rnumber index from eeprom
 Rnumber = Rnumber_e
-If Rnumber > 100 Then
-Rnumber = 0
-Rnumber_e = Rnumber
-Waitms 10
+If Rnumber > 20 Then
+   Rnumber = 0
+   Rnumber_e = Rnumber
+   Waitms 10
 End If
+
+
 '------------------- startup
 Waitms 500
 Set Led1
@@ -138,6 +139,7 @@ Reset Rxtx
 
 
 Reset En
+Reset Clearall
 
 Main:
 'Start Watchdog
@@ -226,6 +228,120 @@ _read:
       End If
 Return
 '================================================================ keys  learning
+
+
+'========================================================================= CHECK
+Check:
+      Okread = 1
+      If Keycheck = 0 Then                                        'agar keycheck=1 bashad yani be releha farman nade
+         For I = 1 To Rnumber
+
+             Ra = Eevar(i)
+             If Ra = Address Then
+                Raw = I                                     'code
+                Gosub Command
+                Gosub Beep
+                Exit For
+             End If
+         Next
+      End If
+      Keycheck = 0
+Return
+'-------------------------------- Relay command
+Command:
+
+        Select Case Code
+               Case 1
+                    Toggle Rel1
+
+               Case 2
+                    Toggle Rel2
+
+               Case 4
+                    Toggle Rel3
+
+               Case 8
+                    Toggle Rel4
+
+        End Select
+
+        If Wantid = 1 Then
+
+           Remoteid(wic) = Raw
+           Codeid(wic) = Code
+
+
+
+           Direct = Tomaster
+           Cmd = 186 : Id = wic
+           Call Tx
+
+           Direct = Toslave
+           Cmd = 183 : Id = wic
+           Call Tx
+           Wait 2
+           Cmd = 181
+           Call Tx
+           Reset Wantid
+           Reset Wantid_led
+
+        End If
+
+        If Isrequest = 1 Then
+           For I = 1 To 40
+
+               If Remoteid(i) = Raw Then
+                  If Codeid(i) = Code Then
+                                    Id = I
+                                    If Codeids(i) = 180 Then Codeids(i) = 181 Else Codeids(i) = 180
+                                    Cmd = Codeids(i)
+                                    direct = Toslave
+                                    Call Tx
+                                    Exit For
+                  End If
+               End If
+
+           Next
+        End If
+
+
+
+        Waitms 200
+Return
+'-------------------------------------------------------------------------- BEEP
+Beep:
+Set Buzz
+Waitms 80
+Reset Buzz
+Waitms 30
+Return
+
+Rx:
+
+      Incr I
+      Inputbin Maxin
+
+
+      If I = 5 And Maxin = 230 Then Set Inok
+      If Maxin = 252 Then I = 1
+
+      Din(i) = Maxin
+
+      If Inok = 1 Then
+        Toggle Rxtx
+        Wic = Din(4)
+        If Din(2) = Typ Then Call Checkanswer
+        I = 0
+        Reset Inok
+      End If
+
+
+Return
+
+
+End
+
+
 Sub Clear_remotes
      Reset Rel1
      Reset Rel2
@@ -254,9 +370,14 @@ Sub Clear_remotes
                         Reset Led1
                         Reset Clearall
                         Remotecounter = 0
-                        For I = 1 To 10
+                        For I = 1 To 50
+
                             Remoteid(i) = 0
+
+                            Codeid(i) = 0
                         Next I
+                        Direct = Tomaster : Cmd = 185
+                        Call Tx
                         Return
                         Exit While
                      End If
@@ -269,6 +390,7 @@ Sub Clear_remotes
             End If
      Loop
 End Sub
+
 Sub Do_learn:
     Do
            Gosub _read
@@ -282,6 +404,8 @@ Sub Do_learn:
                  Ra = Address
                  Eevar(rnumber) = Ra
                  Waitms 10
+                 Direct = Tomaster : Cmd = 184 : Id = Rnumber
+                 Call Tx
                  Exit Do
               Else                                          'address avalin khane baraye zakhire address remote
                  For I = 1 To Rnumber
@@ -298,15 +422,17 @@ Sub Do_learn:
                  Next
                  If Error = 0 Then                              ' agar tekrari nabod
                     Incr Rnumber                                'be meghdare rnumber ke index tedade remote haye learn shode ast yek vahed ezafe kon
-                    If Rnumber > 100 Then                       'agar bishtar az 100 remote learn shavad
-                       Rnumber = 100
+                    If Rnumber > 20 Then                    'agar bishtar az 100 remote learn shavad
+                       Rnumber = 20
                        Set Buzz
                        Wait 5
                        Reset Buzz
                     Else                                    'agar kamtar az 100 remote bod
-                       Rnumber_e = Rnumber                      'meghdare rnumber ra dar eeprom zakhore mikonad
+                       Rnumber_e = Rnumber                  'meghdare rnumber ra dar eeprom zakhore mikonad
                        Ra = Address
                        Eevar(rnumber) = Ra
+                       Direct = Tomaster : Cmd = 184 : Id = Rnumber
+                       Call Tx
                        Waitms 10
                     End If
                  End If
@@ -320,83 +446,16 @@ Sub Do_learn:
 
     Loop
     Incr Rnumber
-    Remoteid(rnumber) = Address
+
 
 End Sub
-Return
-'========================================================================= CHECK
-Check:
-      Okread = 1
-      If Keycheck = 0 Then                                        'agar keycheck=1 bashad yani be releha farman nade
-         For I = 1 To Rnumber
-             Ra = Eevar(i)
-             If Ra = Address Then                           'code
-                Gosub Command
-                Gosub Beep
-                Exit For
-             End If
-         Next
-      End If
-      Keycheck = 0
-Return
-'-------------------------------- Relay command
-Command:
-
-        Select Case Code
-               Case 1
-                    Toggle Rel1
-
-               Case 2
-                    Toggle Rel2
-
-               Case 4
-                    Toggle Rel3
-
-               Case 8
-                    Toggle Rel4
-
-        End Select
-
-        If Wantid = 1 Then
-           Remoteid(wantidcode) = Address
-           Codeid(wantidcode) = Code
-           Reset Wantid
-           Reset Wantid_led
-        End If
-
-        If Isrequest = 1 Then
-           For I = 1 To 10
-               If Remoteid(i) = Address Then
-                  If Codeid(i) = Code Then
-                                    id=i
-                                    If Codeids(i) = 180 Then Codeids(i) = 181 Else Codeids(i) = 180
-                                    Cmd = Codeids(i)
-                                    Startbit = Toslave
-                                    Call Tx
-                                    Exit For
-                  End If
-               End If
-           Next
-        End If
-
-
-
-        Waitms 200
-Return
-'-------------------------------------------------------------------------- BEEP
-Beep:
-Set Buzz
-Waitms 80
-Reset Buzz
-Waitms 30
-Return
 
 Sub Getid
 
 
 End Sub
 
-Sub Findorder
+Sub Checkanswer
 
     If Din(2) = Typ Then
             Select Case Din(3)
@@ -411,8 +470,8 @@ Sub Findorder
                 Case 151
                   Reset Learnnew
                   Reset Clearall
-                  Wantidcode = Din(4)
-                  Select Case Wantidcode
+                  wic = Din(4)
+                  Select Case wic
                          Case 1
                               Set Rel1
                          Case 2
@@ -440,52 +499,31 @@ Sub Findorder
                 Case 162
                   Reset Learnnew
                   Set Clearall
-
             End Select
 
 
     End If
-    Start Timer1
 End Sub
 
+Sub Order
+
+
+
+End Sub
 
 Sub Tx:
-    If Startbit = Tomaster Then
+
+    If Direct = Tomaster Then
        Endbit = 220
-    Elseif Startbit = Toslave Then
+    Elseif Direct = Toslave Then
        Endbit = 210
     End If
+
     Set En
-    Waitms 10
-    Printbin Startbit ; Typ ; Cmd ; Id ; Endbit
+    Printbin Direct ; Typ ; Cmd ; Id ; Endbit
     Waitms 50
     Reset En
 
 
 
 End Sub
-
-Rx:
-      Stop Timer1
-      Incr I
-      Inputbin Maxin
-
-
-      If I = 5 And Maxin = 230 Then Set Inok
-      If Maxin = 252 Then I = 1
-
-      Din(i) = Maxin
-
-      If Inok = 1 Then
-        Toggle Rxtx
-        Wantidcode = Din(4)
-        If Din(2) = Typ Then Call Findorder
-        I = 0
-        Reset Inok
-      End If
-
-
-Return
-
-
-End

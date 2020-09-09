@@ -93,7 +93,7 @@ Main:
      Do
        If Blank = 1 Then
           Toggle Portc.idblank
-          Wait 1
+          Waitms 200
        End If
      Loop
 Gosub Main
