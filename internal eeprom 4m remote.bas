@@ -90,6 +90,8 @@ Dim Raw As Byte
 Dim Remotead As Long
 Dim Remotecode As Byte
 
+Dim Cmdid(40) As Eram Byte
+Dim Cmdcode As Byte
 
 Dim Remotecounter As Byte
 Dim Keylearnd As Byte
@@ -269,7 +271,7 @@ Command:
 
            Remoteid(wic) = Raw
            Codeid(wic) = Code
-
+           Cmdid(wic) = Cmdcode
 
 
            Direct = Tomaster
@@ -293,8 +295,7 @@ Command:
                If Remoteid(i) = Raw Then
                   If Codeid(i) = Code Then
                                     Id = I
-                                    If Codeids(i) = 180 Then Codeids(i) = 181 Else Codeids(i) = 180
-                                    Cmd = Codeids(i)
+                                    Cmd = Cmdid(i)
                                     direct = Toslave
                                     Call Tx
                                     Exit For
@@ -470,17 +471,8 @@ Sub Checkanswer
                 Case 151
                   Reset Learnnew
                   Reset Clearall
-                  wic = Din(4)
-                  Select Case wic
-                         Case 1
-                              Set Rel1
-                         Case 2
-                              Set Rel2
-                         Case 3
-                              Set Rel3
-                         Case 4
-                              Set Rel4
-                  End Select
+                  Wic = Din(4)
+                  Cmdcode = 180
                   Set Wantid
                   Reset Isrequest_led
                   Set Wantid_led
@@ -499,6 +491,22 @@ Sub Checkanswer
                 Case 162
                   Reset Learnnew
                   Set Clearall
+                Case 163
+                  Reset Learnnew
+                  Reset Clearall
+                  Wic = Din(4)
+                  Cmdcode = 163
+                  Set Wantid
+                  Reset Isrequest_led
+                  Set Wantid_led
+                Case 164
+                  Reset Learnnew
+                  Reset Clearall
+                  Wic = Din(4)
+                  Set Wantid
+                  Reset Isrequest_led
+                  Set Wantid_led
+                  Cmdcode = 164
             End Select
 
 

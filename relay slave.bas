@@ -140,7 +140,7 @@ Rx:
 
       If Inok = 1 Then
         Toggle Rxtx
-        If Din(2) = Keyin Or Din(2) = Outmoduls Or Din(2) = Remote Then Call Findorder
+        If Din(2) = Keyin Or Din(2) = Remote Then Call Findorder
         I = 0
         Reset Inok
       End If

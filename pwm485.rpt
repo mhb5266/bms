@@ -1,6 +1,6 @@
 Report       : pwm485
-Date         : 08-23-2020
-Time         : 12:21:54
+Date         : 09-11-2020
+Time         : 14:20:58
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 7C hex  -> Will fit into ROM
-ROMIMAGE     :  124 dec
-FLASH USED   :  1  %
+ROMIMAGE     : 3BE hex  -> Will fit into ROM
+ROMIMAGE     :  958 dec
+FLASH USED   :  11  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  935  dec
+Space left   :  876  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -90,6 +90,24 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
+TYP                              Byte              0060          96 
+CMD                              Byte              0061          97 
+ID                               Byte              0062          98 
+I                                Byte              0063          99 
+J                                Long              0064          100 
+MAXIN                            Byte              0068          104 
+A                                Byte              0069          105 
+REPLY                            Byte              006A          106 
+KEYIDS                           Byte              006B          107 
+EKEYIDS                          EEPROM Byte       0000          0 
+DIN                              Byte(5)           006C          108 
+TIMEOUT                          Bit [7]           0071          113 
+SENDOK                           Bit [6]           0071          113 
+INOK                             Bit [5]           0071          113 
+LEARNOK                          Bit [4]           0071          113 
+BLANK                            Bit [3]           0071          113 
+IDBLANK                          Byte              0072          114 
+LIGHT                            Word(20)          0073          115 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -458,6 +476,28 @@ _HWSTACK_LOW                     &H0437
 _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
+D                                10
+ALLID                            99
+READALLINPUT                     1
+READ1INPUT                       2
+LEARNKEY                         3
+ENABLEBUZ                        4
+DISABLEBUZ                       5
+ENABLESENSOR                     6
+DISABLESENSOR                    7
+ENABLEINPUT                      8
+DISABLEINPUT                     9
+READSTEPS                        10
+LEARNSTEPS                       11
+ENABLESTEP                       12
+DISABLESTEP                      13
+READSENARIO                      14
+READREMOTE                       15
+KEYIN                            101
+STEPS                            102
+SENARIO                          103
+REMOTE                           104
+OUTMODULS                        110
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -521,4 +561,12 @@ R31                              not used
 ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
+J                                not used
+A                                not used
+REPLY                            not used
+KEYIDS                           not used
+EKEYIDS                          not used
+TIMEOUT                          not used
+SENDOK                           not used
+LEARNOK                          not used
 
