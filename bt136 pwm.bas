@@ -6,8 +6,8 @@ configs:
         Config Timer1 = Timer , Prescale = 8
         Config Timer0 = Timer , Prescale = 1024
         Enable Interrupts
-        Enable Timer1
-        On Timer1 T1rutin
+        'Enable Timer1
+        'On Timer1 T1rutin
         Start Timer1
         Start Timer0
         Config Int1 = Rising
@@ -52,7 +52,7 @@ Main:
      Do
 
 
-       Waitms 50
+       If Timer1 > Light Then Set Led1 Else Reset Led1
 
        Debounce Key , 1 , Find
 
@@ -64,48 +64,40 @@ Gosub Main
 
 Find:
 
-Incr I
-If I > 6 Then I = 1
-Select Case I
-       Case 1
-            Light = 0
-       Case 2
-            Light = 100
-       Case 3
-            Light = 200
-       Case 4
-            Light = 300
-       Case 5
-            Light = 400
-       Case 6
-            Light = 500
-End Select
+
 
 Return
 
 
-T1rutin:
 
-Stop Timer1
-Timer1 = 65535 - Light
-
-
-Start Timer1
-Return
 
 Int1rutin:
-
           Stop Timer1
-
           Incr Test
-          If Test = 100 Then
+          
+          If Test = 300 Then
              Test = 0
              Toggle Blink_
+             Incr I
+             If I = 5 Then I = 1
+
+                Select Case I
+                       Case 1
+                            Light = 0
+                       Case 2
+                            Light = 8800
+                       Case 3
+                            Light = 12000
+                       Case 4
+                            Light = 65535
+
+                End Select
           End If
 
-          Set Led1
+          Reset Led1
+          Timer1 = 0
+          Start Timer1
 
-         Start Timer1
 Return
 
 End
