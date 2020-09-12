@@ -1,6 +1,6 @@
 Report       : bt136 pwm
 Date         : 09-12-2020
-Time         : 10:54:51
+Time         : 12:48:12
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,10 +8,10 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 24A hex  -> Will fit into ROM
-ROMIMAGE     :  586 dec
-FLASH USED   :  7  %
-BAUD         : 1200 Baud
+ROMIMAGE     : 352 hex  -> Will fit into ROM
+ROMIMAGE     :  850 dec
+FLASH USED   :  10  %
+BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
 
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  920  dec
+Space left   :  910  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -90,16 +90,23 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-TEST                             Word              0060          96 
-LIGHT                            Word              0062          98 
-PLUS                             Byte              0064          100 
-UPDOWN                           Bit [7]           0065          101 
-SECC                             Word              0066          102 
-TERM                             Byte              0068          104 
-PW                               Word              0069          105 
-STEPS                            Byte              006B          107 
-DELAY_                           Word              006C          108 
-I                                Byte              006E          110 
+DIN                              Byte(5)           0060          96 
+MAXIN                            Byte              0065          101 
+TYP                              Byte              0066          102 
+CMD                              Byte              0067          103 
+ID                               Byte              0068          104 
+INOK                             Bit [7]           0069          105 
+WIC                              Byte              006A          106 
+TEST                             Word              006B          107 
+LIGHT                            Word              006D          109 
+PLUS                             Byte              006F          111 
+UPDOWN                           Bit [6]           0069          105 
+SECC                             Word              0070          112 
+TERM                             Byte              0072          114 
+PW                               Word              0073          115 
+STEPS                            Byte              0075          117 
+DELAY_                           Word              0076          118 
+I                                Byte              0078          120 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -468,6 +475,11 @@ _HWSTACK_LOW                     &H0437
 _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
+MAXLIGHT                         0
+DARK                             65535
+MIDLIGHT                         8800
+MINLIGHT                         11800
+REMOTE                           104
 D                                0
 CBITINFINITY                     0
 CMBITINFINITY                    1
@@ -532,11 +544,13 @@ R31                              not used
 ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
+TYP                              not used
+ID                               not used
+TEST                             not used
 PLUS                             not used
 UPDOWN                           not used
 SECC                             not used
 TERM                             not used
 PW                               not used
-STEPS                            not used
 DELAY_                           not used
 

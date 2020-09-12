@@ -51,7 +51,7 @@ Config Scl = Portd.0
 
 Const Ds1307w = &HD0
 Const Ds1307r = &HD1
-
+Dim Eday As Eram Byte
 Dim Day As Byte
 Dim _sec As Byte
 Dim _min As Byte
@@ -491,7 +491,7 @@ $bgf "watersystem.bgf"
 Kelidhaicon:
 $bgf "kelidha.bgf"
 Settingicon:
-$bgf "settingicon2.bgf"
+$bgf "settingicon1.bgf"
 
 End
 
@@ -602,8 +602,8 @@ Sub Remote_menu
                     Lcdat 1 , 1 , "Clear Remotes "
                Case 2
                     Lcdat 1 , 1 , "Learn New     "
-               Case 3
-                    Lcdat 1 , 1 , "Config Remotes"
+               'Case 3
+                    'Lcdat 1 , 1 , "Config Remotes"
         End Select
     Loop
 End Sub
@@ -840,7 +840,7 @@ Sub Show
        Else
           Lcdat 1 , 24 , "0" ; _min
        End If
-
+        Day = Eday
         Select Case Day
            Case 1
                 S2 = "Sat"
@@ -1005,6 +1005,7 @@ Sub Clock_menu
 
     If Selection = 7 And Blink_flag = 0 Then
        S2 = "   "
+       Eday = Day
     Else
         Select Case Day
            Case 1
@@ -1088,6 +1089,7 @@ Sub Clock_menu
 
     If Day < 1 Then Day = 7
     If Day > 7 Then Day = 1
+
     '---------------------------------------
 
 
@@ -1215,8 +1217,8 @@ Sub Main_menu
                    case 6
                         Showpic 50 , 20 , Jaccuziicon
                    Case 7
-                        'Showpic 50 , 20 , Settingicon
-                        Lcdat 1 , 1 , "Setting"
+                        Showpic 50 , 20 , Settingicon
+                        'Lcdat 1 , 1 , "Setting"
             End Select
             if touch = 1 then
                    Touch = 0
@@ -1247,6 +1249,7 @@ End Sub
 
 Sub Readtouch
 
+
 Touch = 0
 'do
   reset watchdog
@@ -1275,4 +1278,9 @@ Touch = 0
  If Touch > 0 Then Call Beep
 'loop until touch > 0
 End Sub
+
+
+
+
+
 

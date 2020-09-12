@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 09-09-2020
-Time         : 16:52:22
+Date         : 09-12-2020
+Time         : 15:02:33
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,8 +8,8 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : 4C44 hex  -> Will fit into ROM
-ROMIMAGE     :  19524 dec
+ROMIMAGE     : 4C72 hex  -> Will fit into ROM
+ROMIMAGE     :  19570 dec
 FLASH USED   :  14  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
@@ -133,6 +133,7 @@ SENS2                            String * 6        012D          301
 DAHOM                            Word              0134          308 
 SAHIH                            Word              0136          310 
 BUFFER_DIGITAL                   Integer           0138          312 
+EDAY                             EEPROM Byte       0000          0 
 DAY                              Byte              0140          320 
 WEEKDAY                          Byte              0146          326 
 M_DAY                            Word              0147          327 
