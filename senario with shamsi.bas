@@ -476,6 +476,9 @@ Includes:
 $include "font32x32.font"
 $include "font16x16.font"
 $include "font8x8.font"
+
+Settingicon:
+$bgf "setting5.bgf"
 Setclockicon:
 $bgf "clock.bgf"
 Remoteicon:
@@ -488,10 +491,9 @@ Jaccuziicon:
 $bgf "jaccuzi.bgf"
 Watersystemicon:
 $bgf "watersystem.bgf"
-Kelidhaicon:
+Kelidha:
 $bgf "kelidha.bgf"
-Settingicon:
-$bgf "settingicon1.bgf"
+
 
 End
 
@@ -1278,7 +1280,6 @@ Touch = 0
  If Touch > 0 Then Call Beep
 'loop until touch > 0
 End Sub
-
 
 
 
