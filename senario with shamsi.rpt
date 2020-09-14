@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 09-12-2020
-Time         : 16:16:44
+Date         : 09-14-2020
+Time         : 17:07:26
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,9 +8,9 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : 4C8C hex  -> Will fit into ROM
-ROMIMAGE     :  19596 dec
-FLASH USED   :  14  %
+ROMIMAGE     : 4DE8 hex  -> Will fit into ROM
+ROMIMAGE     :  19944 dec
+FLASH USED   :  15  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -181,6 +181,8 @@ SETREMOTEDONE                    Bit [3]           0199          409
 TOUCH                            Byte              01AB          427 
 NEXTDAY                          Bit [2]           0199          409 
 COUNT                            Byte              01AC          428 
+RELAYMODULECOUNTER               EEPROM Byte       0001          1 
+PWMMODULECOUNTER                 EEPROM Byte       0002          2 
 I                                Byte              01AD          429 
 J                                Byte              01AE          430 
 
@@ -917,7 +919,9 @@ CLEARID                          20
 LEARNREMOTE                      21
 CLEARREMOTE                      22
 SETREMOTEID                      23
-MAIN_MENU_COUNTER                7
+SETRELAYMODULEID                 24
+SETPWMMODULEID                   25
+MAIN_MENU_COUNTER                6
 _SDA                             1
 _SCL                             0
 ___I2CDELAY                      5

@@ -261,11 +261,11 @@ Command:
 
                Case 4
                     Toggle Rel3
-                    Cmd = 163
+                   ' Cmd = 163
 
                Case 8
                     Toggle Rel4
-                    Cmd = 164
+                   ' Cmd = 164
 
         End Select
         Direct = Toslave
