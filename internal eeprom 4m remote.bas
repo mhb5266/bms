@@ -67,7 +67,7 @@ Isrequest_led Alias Portc.3 : Config Portc.3 = Output
 Dim Maxin As Byte
 
 Dim Din(5) As Byte
-Dim Typ As Byte : Typ = 104
+Dim Typ As Byte
 Dim Cmd As Byte
 Dim Id As Byte
 
@@ -85,15 +85,17 @@ Dim Findorder As Byte
 
 Dim Remoteid(40) As Eram Byte
 Dim Codeid(40) As Eram Byte
-Dim Codeids(40) As Byte
+Dim Setid(40) As Eram Byte
+
+
 Dim Raw As Byte
-Dim Remotead As Long
-Dim Remotecode As Byte
 
 Dim Cmdid(40) As Eram Byte
 Dim Cmdcode As Byte
 
-Dim Remotecounter As Byte
+Dim Ercounter As Eram Byte : If Ercounter = 255 Then Ercounter = 0
+Dim Rcounter As Byte : Rcounter = Ercounter
+
 Dim Keylearnd As Byte
 Dim wic As Byte
 
@@ -101,7 +103,7 @@ Rxtx Alias Portd.7 : Config Portd.7 = Output
 
 Const Allid = 99
 Const Nonid = 0
-
+Const Mytyp = 104 : : Typ = Mytyp
 
 Const Tomaster = 242
 Const Toslave = 232
@@ -271,24 +273,13 @@ Command:
         Direct = Toslave
         Call Tx
         If Wantid = 1 Then
+           Incr Rcounter
+           Ercounter = Rcounter
 
-           Remoteid(wic) = Raw
-           Codeid(wic) = Code
-           Cmdid(wic) = Cmdcode
+           Remoteid(rcounter) = Raw
+           Codeid(rcounter) = Code
+           Setid(rcounter) = Wic
 
-
-           Direct = Tomaster
-           Cmd = 186 : Id = wic
-           Call Tx
-
-           Direct = Toslave
-           Cmd = 183 : Id = wic
-           Call Tx
-           Wait 2
-           Cmd = 181
-           Call Tx
-           Reset Wantid
-           Reset Wantid_led
 
         End If
 
@@ -297,9 +288,9 @@ Command:
 
                If Remoteid(i) = Raw Then
                   If Codeid(i) = Code Then
-                                    Id = I
-                                    Cmd = Cmdid(i)
-                                    direct = Toslave
+                                    Id = Setid(i)
+                                    Cmd = 180
+                                    Direct = Toslave
                                     Call Tx
                                     Exit For
                   End If
@@ -373,7 +364,7 @@ Sub Clear_remotes
                         Reset Buzz
                         Reset Led1
                         Reset Clearall
-                        Remotecounter = 0
+                        Rcounter = 0
                         For I = 1 To 50
 
                             Remoteid(i) = 0
@@ -466,12 +457,15 @@ Sub Checkanswer
 
 
                 Case 150
+
                   Set Isrequest
                   Reset Learnnew
                   Reset Clearall
                   Set Isrequest_led
                   Reset Wantid_led
+
                 Case 151
+
                   Reset Learnnew
                   Reset Clearall
                   Wic = Din(4)
@@ -480,15 +474,29 @@ Sub Checkanswer
                   Reset Isrequest_led
                   Set Wantid_led
                   'Call Getid
+
                 Case 156
+
                   Reset Learnnew
                   Reset Clearall
                   Set Enable_remote
+
                 Case 157
+
                   Reset Learnnew
                   Reset Clearall
                   Reset Enable_remote
+
+                Case 158
+                     Ercounter = 0
+                     For I = 1 To 40
+                         Remoteid(i) = 0
+                         Codeid(i) = 0
+                         Setid(i) = 0
+                     Next
+
                 Case 161
+
                   Set Learnnew
                   Reset Clearall
                 Case 162

@@ -1,6 +1,6 @@
 Report       : relay slave
-Date         : 09-14-2020
-Time         : 17:19:51
+Date         : 09-16-2020
+Time         : 18:09:12
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M16
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : B70 hex  -> Will fit into ROM
-ROMIMAGE     :  2928 dec
-FLASH USED   :  17  %
+ROMIMAGE     : F96 hex  -> Will fit into ROM
+ROMIMAGE     :  3990 dec
+FLASH USED   :  24  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  882  dec
+Space left   :  794  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -98,6 +98,8 @@ MODULEID                         EEPROM Byte       001C          28
 STATUS                           Byte              007D          125 
 EFIRST                           EEPROM Byte       001D          29 
 TOGGLEKEY                        Bit [7]           007E          126 
+OUTSID                           EEPROM Byte(28)   001E          30 
+IDWASGOT                         Bit [6]           007E          126 
 TYP                              Byte              007F          127 
 CMD                              Byte              0080          128 
 ID                               Byte              0081          129 
@@ -107,19 +109,27 @@ MAXIN                            Byte              0087          135
 A                                Byte              0088          136 
 REPLY                            Byte              0089          137 
 KEYIDS                           Byte              008A          138 
-EKEYIDS                          EEPROM Byte       001E          30 
+EKEYIDS                          EEPROM Byte       003A          58 
 COUNTERID                        Byte              008B          139 
-BASEID                           EEPROM Byte       001F          31 
+BASEID                           EEPROM Byte       003B          59 
 MINID                            Byte              008C          140 
 MAXID                            Byte              008D          141 
-DIN                              Byte(5)           008E          142 
-TIMEOUT                          Bit [6]           007E          126 
-SENDOK                           Bit [5]           007E          126 
-INOK                             Bit [4]           007E          126 
-LIGHT                            Byte              0093          147 
-LEARNOK                          Bit [3]           007E          126 
-BLANK                            Bit [2]           007E          126 
-IDBLANK                          Byte              0094          148 
+TEMPONID                         Byte(28)          008E          142 
+TEMPONTIME                       Word(28)          00AA          170 
+TEMPON                           Bit [5]           007E          126 
+WANTID                           Bit [4]           007E          126 
+SYCID                            Bit [3]           007E          126 
+SETID                            Byte              00E2          226 
+DIN                              Byte(5)           00E3          227 
+TIMEOUT                          Bit [2]           007E          126 
+SENDOK                           Bit [1]           007E          126 
+INOK                             Bit [0]           007E          126 
+LIGHT                            Byte              00E8          232 
+LEARNOK                          Bit [7]           00E9          233 
+BLANK                            Bit [6]           00E9          233 
+IDBLANK                          Byte              00EA          234 
+DIRECT                           Byte              00EB          235 
+ENDBIT                           Byte              00EC          236 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -524,6 +534,8 @@ STOPALL                          1
 NORMAL                           2
 REFRESHALL                       3
 ALLID                            99
+TOSLAVE                          232
+TOMASTER                         242
 READALLINPUT                     1
 READ1INPUT                       2
 LEARNKEY                         3
@@ -544,6 +556,7 @@ STEPS                            102
 SENARIO                          103
 REMOTE                           104
 RELAYMODULES                     110
+MYTYP                            110
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -608,6 +621,8 @@ ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
 PWM0                             not used
+MODULEID                         not used
+IDWASGOT                         not used
 A                                not used
 REPLY                            not used
 KEYIDS                           not used

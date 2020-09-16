@@ -15,9 +15,6 @@ Configs:
         Enable Int1
         On Int1 Int1rutin
 
-
-
-
 Defports:
         'Config Portb.2 = Output : Blink_ Alias Portb.2
         Config Portc.5 = Output : Led1 Alias Portc.5
@@ -36,6 +33,13 @@ Maxconfig:
           Dim Typ As Byte
           Dim Cmd As Byte
           Dim Id As Byte
+          Dim Direct As Byte
+          Dim Endbit As Byte
+
+          Const Tomaster = 242
+          Const Toslave = 232
+
+
 
 
           Const Maxlight = 0
@@ -44,12 +48,11 @@ Maxconfig:
           Const Minlight = 11800
 
           Const Remote = 104
+          Const Pwmmodule = 111
+          Const Mytyp = 111
 
           Dim Inok As Boolean
           Dim Wic As Byte
-
-          Declare Sub Checkanswer
-
 
 Defvals:
         dim test as word
@@ -62,15 +65,24 @@ Defvals:
         Dim Pw As Word
         Dim Steps As Byte
         Dim Delay_ As Word
+        Dim Usdelay As Dword
         Dim I As Byte
+
+        Dim Idwasgot As Boolean
+        Dim Baseid As Eram Byte
+        Dim Minid As Byte
+        Dim Maxid As Byte
+        Dim Counterid As Byte : Counterid = 8
 
 
         const d = 0
 
+Subs:
 
-
-
-Start Timer0
+          Declare Sub Checkanswer
+          Declare Sub Getid
+          Declare Sub Tx
+          Declare Sub Refreshout
 
 Main:
 
@@ -78,6 +90,7 @@ Main:
 
 
        If Timer1 > Light Then Set Led1 Else Reset Led1
+
 
 
 
@@ -103,7 +116,7 @@ Rx:
       If Inok = 1 Then
         Toggle Rxtx
         Wic = Din(4)
-        If Din(2) = Remote Then Call Checkanswer
+        If Din(2) = Remote Or Din(2) = Pwmmodule Then Call Checkanswer
         I = 0
         Reset Inok
       End If
@@ -144,24 +157,87 @@ Return
 
 End
 
+Sub Tx
+    If Direct = Tomaster Then
+       Endbit = 220
+    Elseif Direct = Toslave Then
+           Endbit = 210
+    End If
+
+    Set En
+    Waitms 10
+    Printbin Direct ; Typ ; Cmd ; Id ; Endbit
+    Waitms 50
+    Reset En
+End Sub
+
+Sub Getid
+
+    Do
+        If Key = 1 Then
+           Set Idwasgot
+           Baseid = Id
+           Minid = Baseid + 1
+           Maxid = Counterid + Baseid
+           Typ = Mytyp : Cmd = 165 : Id = Maxid
+
+           Direct = Tomaster
+           Call Tx
+           Call Refreshout
+        End If
+    Loop Until Idwasgot = 1
+    Reset Idwasgot
+
+End Sub
+
+Sub Refreshout
+    Light = Dark
+    Do
+       If Timer1 > Light Then Set Led1 Else Reset Led1
+       Waitus 1
+       Incr Usdelay
+       If Usdelay > 1000000 Then
+          Incr Steps
+          Select Case Steps
+                 Case 1
+                      Light = Dark
+                 Case 2
+                      Light = Minlight
+                 Case 3
+                      Light = Midlight
+                 Case 4
+                      Light = Maxlight
+                 Case 5
+                      Light = Dark
+                      Steps = 0
+                      Exit Do
+          End Select
+       End If
+    Loop
+
+End Sub
+
 Sub Checkanswer
     Cmd = Din(3)
     Select Case Cmd
-           Case 163
-                Decr Steps
-           Case 164
+           Case 160
+                If Din(2) = Pwmmodule Then
+                   Id = Din(4)
+                   Call Getid
+                End If
+           Case 180
                 Incr Steps
+                If Steps > 4 Then Steps = 1
+           Case 159
     End Select
-    If Steps = 0 Then Steps = 1
-    If Steps > 4 Then Steps = 4
     Select Case Steps
-           Case 1
-                Light = Maxlight
-           Case 2
-                Light = Midlight
-           Case 3
-                Light = Minlight
            Case 4
+                Light = Maxlight
+           Case 3
+                Light = Midlight
+           Case 2
+                Light = Minlight
+           Case 1
                 Light = Dark
     End Select
 

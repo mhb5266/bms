@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 09-14-2020
-Time         : 17:07:26
+Date         : 09-16-2020
+Time         : 17:45:46
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,9 +8,9 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : 4DE8 hex  -> Will fit into ROM
-ROMIMAGE     :  19944 dec
-FLASH USED   :  15  %
+ROMIMAGE     : 51EC hex  -> Will fit into ROM
+ROMIMAGE     :  20972 dec
+FLASH USED   :  16  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 10D8 hex
 Framesize    : 20 hex
 Framestart   : 10A8 hex
-Space left   :  3832  dec
+Space left   :  3830  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -183,8 +183,11 @@ NEXTDAY                          Bit [2]           0199          409
 COUNT                            Byte              01AC          428 
 RELAYMODULECOUNTER               EEPROM Byte       0001          1 
 PWMMODULECOUNTER                 EEPROM Byte       0002          2 
-I                                Byte              01AD          429 
-J                                Byte              01AE          430 
+EINPUTCOUNTER                    EEPROM Byte       0003          3 
+INPUTCOUNTER                     Byte              01AD          429 
+CONFIGMODE                       Byte              01AE          430 
+I                                Byte              01AF          431 
+J                                Byte              01B0          432 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -892,10 +895,11 @@ KEYIN                            101
 STEPS                            102
 SENARIO                          103
 REMOTE                           104
-OUTLOGIC                         110
-OUTPWM                           111
+RELAYMODULE                      110
+PWMMODULE                        111
 OUTSTEP                          112
 ALLID                            99
+ALLTYP                           115
 READALLINPUT                     1
 READ1INPUT                       2
 LEARNKEY                         3
@@ -921,6 +925,8 @@ CLEARREMOTE                      22
 SETREMOTEID                      23
 SETRELAYMODULEID                 24
 SETPWMMODULEID                   25
+SETIDFORMODULES                  26
+CLEARALL                         27
 MAIN_MENU_COUNTER                6
 _SDA                             1
 _SCL                             0

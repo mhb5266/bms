@@ -13,7 +13,7 @@ Config Debounce = 30
 Enable Interrupts
 
 Enable Urxc
-On Urxc Ismax
+On Urxc Rx
 
 'Enable Utxc
 'On Utxc Issend
@@ -22,18 +22,26 @@ Config Portc = Output
 config portb=INPUT
 
 En Alias Portd.2 : Config Portd.2 = Output
-Key Alias Pind.4 : Config Pind.4 = Input
-Rt Alias Portb.0 : Config Portb.0 = Output
+
+Rt Alias Portc.5 : Config Portc.5 = Output
+
+Touch1 Alias Pind.7 : Config Portd.7 = Input
+Touch2 Alias Pinb.0 : Config Portb.0 = Input
+Touch3 Alias Pinb.1 : Config Portb.1 = Input
+Touch4 Alias Pinb.2 : Config Portb.2 = Input
+
+Sensor Alias Pinc.4 : Config Portc.4 = Input
+
+Led Alias Portc.2 : Config Portc.2 = Output
+Buz Alias Portc.3 : Config Portc.3 = Output
 
 
-
-Declare Sub Answer
 Declare Sub Findorder
 Declare Sub Keytouched
-Declare Sub Checkqc
-Declare Sub Clrbuf
-
-
+Declare Sub Tx
+Declare Sub Refreshkey
+Declare Sub Beep
+Declare Sub Errorbeep
 
 Dim Maxin As Byte
 
@@ -41,15 +49,28 @@ Dim Typ As Byte
 Dim Cmd As Byte
 Dim Id As Byte
 
-Typ = 104
+Dim Touchid1 As Eram Byte
+Dim Touchid2 As Eram Byte
+Dim Touchid3 As Eram Byte
+Dim Touchid4 As Eram Byte
+
+Dim S1 As Boolean
+Dim S2 As Boolean
+Dim S3 As Boolean
+Dim S4 As Boolean
+
+Typ = 101
 Cmd = 181
  'Id = 2
 
 
 Dim Eid As Eram Byte
 
-Dim Startbit As Byte
+Dim Direct As Byte
 Dim Endbit As Byte
+
+Const Tomaster = 242
+Const Toslave = 232
 
 Dim I As Byte
 Dim J As Long
@@ -57,7 +78,7 @@ Dim A As Byte
 Dim Reply As Byte
 
 Dim Inok As Boolean
-Dim Touch As Boolean
+Dim Touch As Byte
 Dim Sendok As Boolean
 Dim Isrequest As Boolean
 Dim Timeout As Boolean
@@ -71,7 +92,9 @@ Dim Backtyp As Byte : Dim Backcmd As Byte : Dim Backid As Byte
 Dim Din(5) As Byte
 
 Const Allid = 99
+Const Alltyp = 115
 Const Nonid = 0
+Const Mytyp = 101
 
 Reset En
 
@@ -83,7 +106,9 @@ Main:
 
        Do
 
-         Debounce Key , 1 , Keytouched , Sub
+         Call Refreshkey
+
+         If Touch > 0 Then Call Keytouched
        Loop
 
 
@@ -92,78 +117,129 @@ Main:
 
 Gosub Main
 
+Sub Beep
+    Set Buz
+    Waitms 80
+    Reset Buz
+End Sub
 
-Sub Clrbuf:
+Sub Errorbeep
+    Set Buz
+    Waitms 500
+    Reset Buz
+End Sub
 
-    For J = 1 To 3
-        Din(j) = 0
-    Next J
+Sub Refreshkey
 
+         Touch = 0
+         If Touch1 = 1 Then
+            Waitms 25
+            If Touch1 = 1 Then
+               Touch = 1
+            End If
+         End If
+         If Touch2 = 1 Then
+            Waitms 25
+            If Touch2 = 1 Then
+               Touch = 2
+            End If
+         End If
+         If Touch3 = 1 Then
+            Waitms 25
+            If Touch3 = 1 Then
+               Touch = 3
+            End If
+         End If
+         If Touch4 = 1 Then
+            Waitms 25
+            If Touch4 = 1 Then
+               Touch = 4
+            End If
+         End If
 
+         If Sensor = 1 Then
+            Touch = 5
+         End If
 
 End Sub
 
 Sub Keytouched:
-
-
           If Wantid = 1 Then
-
-             Startbit = 242 : Endbit = 220 : Typ = 101 : Cmd = 151 : Id = Din(4)
-             'Do
-               Call Answer
-             'Loop Until Sendok = 1
-             Reset Sendok
+             Select Case Touch
+                    Case 1
+                         Touchid1 = Id
+                    Case 2
+                         Touchid2 = Id
+                    Case 3
+                         Touchid3 = Id
+                    Case 4
+                         Touchid4 = Id
+             End Select
+             Call Beep
              Reset Wantid
-             Reset Isrequest
-             Return
           End If
 
-          Toggle Touch
+
           If Isrequest = 1 Then
-             If Touch = 1 Then
-                Cmd = 180
-                Set Portc.id
-             Else
-                 Cmd = 181
-                 Reset Portc.id
-             End If
-
-             'Do
-               Startbit = 232 : Endbit = 220
-               Call Answer
-             'Loop Until Sendok = 1
-             Reset Sendok
+             Call Beep
+             Select Case Touch
+                    Case 1
+                         Id = Touchid1
+                         Toggle S1
+                         If S1 = 1 Then Cmd = 180 Else Cmd = 181
+                    Case 2
+                         Id = Touchid2
+                         Toggle S2
+                         If S2 = 1 Then Cmd = 180 Else Cmd = 181
+                    Case 3
+                         Id = Touchid3
+                         Toggle S3
+                         If S3 = 1 Then Cmd = 180 Else Cmd = 181
+                    Case 4
+                         Id = Touchid4
+                         Toggle S4
+                         If S4 = 1 Then Cmd = 180 Else Cmd = 181
+                    Case 5
+                         Id = Touchid1
+                         Cmd = 159
+             End Select
+             Direct = Toslave
+             Call Tx
           End If
-          Do
-          Loop Until Key = 0
 
+          Do
+            Call Refreshkey
+          Loop Until Touch = 0
 End Sub
 
+Sub Tx
+    If Direct = Toslave Then Endbit = 210
+    If Direct = Tomaster Then Endbit = 220
 
-Sub Answer:
-    Call Clrbuf
-    Disable Urxc
     Set En
-    Backtyp = Typ : Backcmd = Cmd : Backid = Id
-    Printbin Startbit ; Typ ; Cmd ; Id ; Endbit
+    Waitms 10
+    Printbin Direct ; Typ ; Cmd ; Id ; Endbit
     Waitms 50
     Reset En
-    Enable Urxc
-    Waitms 100
-    'Call Checkqc
+
 End Sub
+
+
 
 Sub Findorder
 
-    If Din(2) = 101 Then
-        If Din(4) = Id Or Din(4) = Allid Then
-            Select Case Din(3)
+Cmd = Din(3)
+Id = Din(4)
 
+
+            Select Case Cmd
 
                 Case 150
                   Set Isrequest
+                   Reset Wantid
                 Case 151
-                  Id = Din(4)
+                  Set Wantid
+                  Reset Isrequest
                 Case 152
                   Set Enbuz
                 Case 153
@@ -176,23 +252,21 @@ Sub Findorder
                   Set Enkey
                 Case 157
                   Reset Enkey
+                Case 158
+                  Touchid1 = 0
+                  Waitms 2
+                  Touchid2 = 0
+                  Waitms 2
+                  Touchid3 = 0
+                  Waitms 2
+                  Touchid4 = 0
+                  Waitms 2
+                  Call Beep
             End Select
-        Elseif Id = Nonid Then
-               If Din(3) = 151 Then
-
-                  Set Wantid
-               End If
-        End If
-    End If
-End Sub
-
-
-Sub Checkqc:
-
-    If Backtyp = Din(2) And Backcmd = Din(3) And Backid = Din(4) Then Set Sendok
-
 
 End Sub
+
+
 
 Issend:
 
@@ -202,7 +276,7 @@ Issend:
 
 Return
 
-Ismax:
+Rx:
       Reset Rt
 
       Incr I
@@ -216,7 +290,8 @@ Ismax:
 
       If Inok = 1 Then
         Toggle Portc.5
-        If Din(2) = Typ Then Call Findorder
+        Typ = Din(2)
+        If Typ = Mytyp Or Typ = Alltyp Then Call Findorder
         I = 0
         Reset Inok
       End If

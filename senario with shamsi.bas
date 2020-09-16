@@ -128,12 +128,13 @@ Dim Learndone As Boolean
 Dim Cleardone As Byte
 Dim Setremotedone As Boolean
 
+
 Const Keyin = 101
 Const Steps = 102
 Const Senario = 103
 Const Remote = 104
-Const Outlogic = 110
-Const Outpwm = 111
+Const relaymodule = 110
+Const pwmmodule = 111
 Const Outstep = 112
 
 Defines:
@@ -142,9 +143,13 @@ Dim Touch As Byte
 Dim Nextday As Boolean
 Dim Count As Byte
 
+
 Dim Relaymodulecounter As Eram Byte : If Relaymodulecounter = 255 Then Relaymodulecounter = 0
 Dim Pwmmodulecounter As Eram Byte : If Pwmmodulecounter = 255 Then Pwmmodulecounter = 0
+Dim Einputcounter As Eram Byte : If Einputcounter = 255 Then Einputcounter = 0
+Dim Inputcounter As Byte
 
+Dim Configmode As Byte
 
 Dim I As Byte
 Dim J As Byte
@@ -152,6 +157,7 @@ Dim J As Byte
 Order_consts:
 
 Const Allid = 99
+Const Alltyp = 115
 Const Readallinput = 1
 Const Read1input = 2
 Const Learnkey = 3
@@ -177,6 +183,8 @@ Const Clearremote = 22
 Const Setremoteid = 23
 Const Setrelaymoduleid = 24
 Const Setpwmmoduleid = 25
+Const Setidformodules = 26
+Const Clearall = 27
 
 Consts:
 
@@ -184,6 +192,9 @@ Consts:
 Const Main_menu_counter = 6
 
 Subs:
+
+Declare Sub Ifcheck
+
 
 Declare Sub Clock_menu
 Declare Sub Jacuzi_menu
@@ -193,7 +204,10 @@ Declare Sub Plant_menu
 Declare Sub Remote_menu
 Declare Sub Setting_menu
 
+Declare Sub Setkeyid
+Declare Sub Set_id_modules
 Declare Sub Module_config
+
 Declare Sub Sync_io
 
 Declare Function M_kabise(byref Sal As Word)as Byte
@@ -218,6 +232,10 @@ Set Backlight
 'Waitms 500
 Cls
 Call Beep
+Showpic 32 , 1 , Logo
+Wait 3
+Cls
+
 
 Main:
 
@@ -232,6 +250,7 @@ Main:
        Call Readtouch
        If Touch = 1 Then Call Main_menu
 
+       Call Ifcheck
 
 
      Loop
@@ -251,6 +270,7 @@ Rx:
       Din(i) = Maxin
       If Inok = 1 And Din(1) = 242 Then
          I = 0
+         Typ = Din(2) : Cmd = Din(3) : Id = Din(4)
          Checkanswer
          Reset Inok
          Cls
@@ -485,6 +505,8 @@ $include "font32x32.font"
 $include "font16x16.font"
 $include "font8x8.font"
 
+Logo:
+$bgf "logo.bgf"
 Settingicon:
 $bgf "setting5.bgf"
  '$bgf "emtech1.bgf"
@@ -506,6 +528,81 @@ $bgf "kelidha.bgf"
 
 End
 
+Sub Main_menu
+     Touch = 0
+     Do
+     Loop Until Touch1 = 0
+     Waitms 100
+     Cls
+     Count = 1
+     Do
+            Disable Urxc
+            If Touch = 2 Then
+                   touch = 0
+                   incr count
+                   If Count > Main_menu_counter Then Count = 1
+                   cls
+            End If
+            if touch = 3 then
+                   Touch = 0
+                   decr count
+                   If Count = 0 Then Count = Main_menu_counter
+                   Cls
+            endif
+            If Touch = 4 Then
+                   Findorder = Readallinput
+                   Call Order
+                   Findorder = Readremote
+                   Call Order
+                   Touch = 0
+                   cls
+                   Return
+            endif
+            Select Case Count
+                   case 1
+                        Showpic 50 , 20 , Jaccuziicon
+                   case 2
+                        Showpic 50 , 20 , Planticon
+                   case 3
+                        Showpic 50 , 20 , Watersystemicon
+                   case 4
+                        Showpic 50 , 20 , Lighticon
+                   Case 5
+                        Showpic 50 , 20 , Setclockicon
+                   Case 6
+                        Showpic 50 , 20 , Settingicon
+                        'Lcdat 1 , 1 , "Setting"
+            End Select
+            If Touch = 1 Then
+                   Touch = 0
+                   Cls
+                   Select Case Count
+                          Case 1
+                               Call Jacuzi_menu
+                          Case 2
+                               Call Plant_menu
+                          Case 3
+                               Call Watersystem_menu
+                          Case 4
+                               Call Light_menu
+                          Case 5
+                               Call Clock_menu
+                          Case 6
+                               Call Setting_menu
+
+
+                   End Select
+            End If
+            Call Readtouch
+     Loop
+End Sub
+
+
+Sub Ifcheck
+
+End Sub
+
+
 Sub Setting_menu
     Touch = 0
     Count = 1
@@ -513,13 +610,28 @@ Sub Setting_menu
 
         Select Case Count
                Case 1
-                    Lcdat 1 , 1 , "Config Moduls "
+
+                    Lcdat 3 , 1 , "Config Remotes"
 
                Case 2
-                    Lcdat 1 , 1 , "Config Remotes"
+
+                    Lcdat 3 , 1 , "Clear All"
 
                Case 3
-                    Lcdat 1 , 1 , "Sync In & Out "
+
+                    Lcdat 3 , 1 , "Set Key ID"
+
+               Case 4
+
+                    Lcdat 3 , 1 , "Set Module ID"
+
+               Case 5
+
+                    Lcdat 3 , 1 , "Config Relay"
+
+               Case 6
+
+                    Lcdat 3 , 1 , "Config Pwm"
 
         End Select
 
@@ -529,31 +641,135 @@ Sub Setting_menu
            Return
         End If
 
-        If Touch = 2 Then Incr Count
-        If Touch = 3 Then Decr Count
+        If Touch = 2 Then
+           Incr Count
+           Cls
+        End If
+        If Touch = 3 Then
+           Decr Count
+           Cls
+        End If
+        Lcdat 1 , 1 , "Setting Menu    " , 1
+        If Count = 0 Then Count = 5
+        If Count > 5 Then Count = 1
         If Touch = 1 Then
            Select Case Count
                   Case 1
-                       Call Module_config
-                  Case 2
                        Call Remote_menu
+
+                  Case 2
+                       Lcdat 3 , 1 , "all IDs Cleared"
+                       Relaymodulecounter = 0
+                       Pwmmodulecounter = 0
+                       Einputcounter = 0
+                       Inputcounter = 0
+                       Findorder = Clearall
+                       Call Order
+
                   Case 3
-                       Call Sync_io
+                       Call Setkeyid
+
+                  Case 4
+                       Call Set_id_modules
+
+                  Case 5
+                       Configmode = Relaymodule
+                       Call Module_config
+
+                  Case 6
+                       Configmode = Pwmmodule
+                       Call Module_config
            End Select
         End If
     Loop
 End Sub
 
-Sub Module_config
-    Cls
-    Findorder = Setrelaymoduleid
-    Call Order
+Sub Setkeyid
 
+    Incr Inputcounter
 
+    Do
+      Call Readtouch
+
+      If Touch = 4 Then
+         Cls
+         Return
+      End If
+
+      If Touch = 2 Then
+         Incr Inputcounter
+         Cls
+      End If
+
+      If Touch = 3 Then
+         Decr Inputcounter
+         Cls
+      End If
+
+      Lcdat 3 , 1 , "Learn Input " ; Inputcounter
+
+      If Touch = 1 Then
+         Einputcounter = Inputcounter
+         Id = Inputcounter
+         Findorder = Learnkey
+         Call Order
+         Lcdat 4 , 1 , "press a Key"
+
+      End If
+
+    Loop
 
 End Sub
 
+Sub Set_id_modules
+    Cls
+    Count = 1
+    Do
+      Call Readtouch
+      If Touch = 4 Then
+         Cls
+         Return
+      End If
+      If Touch = 2 Then
+         Cls
+         Incr Count
+      End If
+      If Touch = 3 Then
+         Cls
+         Decr Count
+      End If
+      If Touch = 1 Then
+         Typ = 110 : Id = Relaymodulecounter
+         Findorder = Setidformodules
+         Call Order
+         Typ = 111 : Id = Pwmmodulecounter
+         Findorder = Setidformodules
+         Call Order
+
+      End If
+
+    Loop
+
+End Sub
+
+Sub Module_config
+    Id = 0
+    Do
+      If Configmode = Relaymodule Then
+         Typ = Relaymodule
+         Cmd = 180
+      Elseif Configmode = Pwmmodule Then
+         Typ = Pwmmodule
+         Cmd = 163
+      End If
+
+    Loop
+
+End Sub
+
+
 Sub Sync_io
+Cls
 
 End Sub
 
@@ -576,41 +792,6 @@ Sub Remote_menu
                   Case 2
                        Findorder = Learnremote
                        Call Order
-                  Case 3
-                        Remotekeyid = 1
-                        Cls
-                        Do
-                          Lcdat 1 , 1 , "out " ; Remotekeyid
-                          Call Readtouch
-                          If Touch = 1 Then
-                             Cls
-                             Id = Remotekeyid
-                             Findorder = Setoutput
-                             Call Order
-                             Cls
-                             Lcdat 1 , 1 , "out " ; Remotekeyid
-                             Findorder = Setremoteid
-                             Call Order
-                          End If
-
-                          If Touch = 2 Then
-                             Incr Remotekeyid
-                          End If
-
-                          If Touch = 3 Then
-                             Decr Remotekeyid
-                          End If
-
-                          If Touch = 4 Then
-                             Findorder = Resetalloutput
-                             Call Order
-                             Findorder = Readallinput
-                             Call Order
-                             Findorder = Readremote
-                             Call Order
-                             Return
-                          End If
-                        Loop
            End Select
 
         End If
@@ -664,51 +845,12 @@ Sub Remote_menu
                     Lcdat 1 , 1 , "Clear Remotes "
                Case 2
                     Lcdat 1 , 1 , "Learn New     "
-               Case 3
-                    Lcdat 1 , 1 , "Config Remotes"
+               'Case 3
+                    'Lcdat 1 , 1 , "Config Remotes"
         End Select
     Loop
 End Sub
 
-Sub Input_menu
-    Cls
-    Id = 0
-    Do
-      Call Readtouch
-      If Touch = 1 Then
-         Incr Id
-         Findorder = Setoutput
-         Call Order
-         Lcdat Id , 1 , "out" ; Id
-         Waitms 20
-         Findorder = Learnkey
-         Call Order
-      End If
-
-      If Touch = 2 Then
-
-
-      End If
-
-      If Touch = 3 Then
-
-      End If
-
-      If Touch = 4 Then
-         Findorder = Resetalloutput
-         Call Order
-         Findorder = Readallinput
-         Call Order
-         Findorder = Readremote
-         Call Order
-         Cls
-         Return
-      End If
-
-
-    Loop
-
-End Sub
 
 Sub Jacuzi_menu
 
@@ -728,7 +870,7 @@ End Sub
 
 Sub Checkanswer
     Disable Urxc
-    Select Case Din(2)
+    Select Case Typ
 
            Case Keyin
 
@@ -770,9 +912,15 @@ Sub Checkanswer
 
            Case Steps
 
-           Case Outlogic
+           Case Relaymodule
+                If Cmd = 165 Then
+                   Relaymodulecounter = Id
+                End If
 
-           Case Outpwm
+           Case Pwmmodule
+                If Cmd = 165 Then
+                   Pwmmodulecounter = Id
+                End If
 
     End Select
     Return
@@ -791,7 +939,7 @@ Sub Order
 
            Case Read1input
 
-                Typ = 101 : Cmd = 150 : Id = Id
+                Typ = 101 : Cmd = 150
 
            Case Learnkey
 
@@ -859,10 +1007,16 @@ Sub Order
 
            Case Setrelaymoduleid
 
-                Typ = 110 : Cmd = 160 : Id = Relaymodulecounter
+                Typ = 110 : Cmd = 151 : Id = Relaymodulecounter
 
            Case Setpwmmoduleid
-                Typ = 111 : Cmd = 160 : Id = Pwmmodulecounter
+                Typ = 111 : Cmd = 151 : Id = Pwmmodulecounter
+
+           Case Setidformodules
+                Cmd = 151
+
+           Case Clearall
+                Typ = Alltyp : Cmd = 158 : Id = Allid
 
 
 
@@ -1240,75 +1394,6 @@ Sub Errorbeep
 
 End Sub
 
-Sub Main_menu
-     Touch = 0
-     Do
-     Loop Until Touch1 = 0
-     Waitms 100
-     Cls
-     Count = 1
-     Do
-            Disable Urxc
-            If Touch = 2 Then
-                   touch = 0
-                   incr count
-                   If Count > Main_menu_counter Then Count = 1
-                   cls
-            End If
-            if touch = 3 then
-                   Touch = 0
-                   decr count
-                   If Count = 0 Then Count = Main_menu_counter
-                   Cls
-            endif
-            If Touch = 4 Then
-                   Findorder = Readallinput
-                   Call Order
-                   Findorder = Readremote
-                   Call Order
-                   Touch = 0
-                   cls
-                   Return
-            endif
-            Select Case Count
-                   case 1
-                        Showpic 50 , 20 , Jaccuziicon
-                   case 2
-                        Showpic 50 , 20 , Planticon
-                   case 3
-                        Showpic 50 , 20 , Watersystemicon
-                   case 4
-                        Showpic 50 , 20 , Lighticon
-                   Case 5
-                        Showpic 50 , 20 , Setclockicon
-                   Case 6
-                        Showpic 50 , 20 , Settingicon
-                        'Lcdat 1 , 1 , "Setting"
-            End Select
-            if touch = 1 then
-                   Touch = 0
-                   Cls
-                   Select Case Count
-                          Case 1
-                               Call Jacuzi_menu
-                          Case 2
-                               Call Plant_menu
-                          Case 3
-                               Call Watersystem_menu
-                          Case 4
-                               Call Light_menu
-                          Case 5
-                               Call Clock_menu
-                          Case 6
-                               Call Setting_menu
-
-
-                   End Select
-            End If
-            Call Readtouch
-     Loop
-End Sub
-
 Sub Readtouch
 
 Touch = 0
@@ -1339,7 +1424,3 @@ Touch = 0
  If Touch > 0 Then Call Beep
 'loop until touch > 0
 End Sub
-
-
-
-

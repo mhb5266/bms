@@ -1,6 +1,6 @@
 Report       : bt136 pwm
-Date         : 09-14-2020
-Time         : 13:50:04
+Date         : 09-16-2020
+Time         : 14:01:55
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 352 hex  -> Will fit into ROM
-ROMIMAGE     :  850 dec
-FLASH USED   :  10  %
+ROMIMAGE     : 5B0 hex  -> Will fit into ROM
+ROMIMAGE     :  1456 dec
+FLASH USED   :  17  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  910  dec
+Space left   :  901  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -95,18 +95,26 @@ MAXIN                            Byte              0065          101
 TYP                              Byte              0066          102 
 CMD                              Byte              0067          103 
 ID                               Byte              0068          104 
-INOK                             Bit [7]           0069          105 
-WIC                              Byte              006A          106 
-TEST                             Word              006B          107 
-LIGHT                            Word              006D          109 
-PLUS                             Byte              006F          111 
-UPDOWN                           Bit [6]           0069          105 
-SECC                             Word              0070          112 
-TERM                             Byte              0072          114 
-PW                               Word              0073          115 
-STEPS                            Byte              0075          117 
-DELAY_                           Word              0076          118 
-I                                Byte              0078          120 
+DIRECT                           Byte              0069          105 
+ENDBIT                           Byte              006A          106 
+INOK                             Bit [7]           006B          107 
+WIC                              Byte              006C          108 
+TEST                             Word              006D          109 
+LIGHT                            Word              006F          111 
+PLUS                             Byte              0071          113 
+UPDOWN                           Bit [6]           006B          107 
+SECC                             Word              0072          114 
+TERM                             Byte              0074          116 
+PW                               Word              0075          117 
+STEPS                            Byte              0077          119 
+DELAY_                           Word              0078          120 
+USDELAY                          Dword             007A          122 
+I                                Byte              007E          126 
+IDWASGOT                         Bit [5]           006B          107 
+BASEID                           EEPROM Byte       0000          0 
+MINID                            Byte              007F          127 
+MAXID                            Byte              0080          128 
+COUNTERID                        Byte              0081          129 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -475,11 +483,15 @@ _HWSTACK_LOW                     &H0437
 _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
+TOMASTER                         242
+TOSLAVE                          232
 MAXLIGHT                         0
 DARK                             65535
 MIDLIGHT                         8800
 MINLIGHT                         11800
 REMOTE                           104
+PWMMODULE                        111
+MYTYP                            111
 D                                0
 CBITINFINITY                     0
 CMBITINFINITY                    1
@@ -544,8 +556,6 @@ R31                              not used
 ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
-TYP                              not used
-ID                               not used
 TEST                             not used
 PLUS                             not used
 UPDOWN                           not used

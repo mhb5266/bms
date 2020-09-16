@@ -1,6 +1,6 @@
 Report       : internal eeprom 4m remote
-Date         : 09-14-2020
-Time         : 16:46:40
+Date         : 09-16-2020
+Time         : 14:00:18
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : DA2 hex  -> Will fit into ROM
-ROMIMAGE     :  3490 dec
-FLASH USED   :  42  %
+ROMIMAGE     : E26 hex  -> Will fit into ROM
+ROMIMAGE     :  3622 dec
+FLASH USED   :  44  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 8 hex
 S-Stackstart : 440 hex
 Framesize    : 18 hex
 Framestart   : 420 hex
-Space left   :  804  dec
+Space left   :  849  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -123,15 +123,14 @@ CLEARALL                         Bit [7]           00C7          199
 FINDORDER                        Byte              00C8          200 
 REMOTEID                         EEPROM Byte(40)   0051          81 
 CODEID                           EEPROM Byte(40)   0079          121 
-CODEIDS                          Byte(40)          00C9          201 
-RAW                              Byte              00F1          241 
-REMOTEAD                         Long              00F2          242 
-REMOTECODE                       Byte              00F6          246 
-CMDID                            EEPROM Byte(40)   00A1          161 
-CMDCODE                          Byte              00F7          247 
-REMOTECOUNTER                    Byte              00F8          248 
-KEYLEARND                        Byte              00F9          249 
-WIC                              Byte              00FA          250 
+SETID                            EEPROM Byte(40)   00A1          161 
+RAW                              Byte              00C9          201 
+CMDID                            EEPROM Byte(40)   00C9          201 
+CMDCODE                          Byte              00CA          202 
+ERCOUNTER                        EEPROM Byte       00F1          241 
+RCOUNTER                         Byte              00CB          203 
+KEYLEARND                        Byte              00CC          204 
+WIC                              Byte              00CD          205 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -504,6 +503,7 @@ EEWRITE                          160
 EEREAD                           161
 ALLID                            99
 NONID                            0
+MYTYP                            104
 TOMASTER                         242
 TOSLAVE                          232
 LEARNDONE                        184
@@ -577,8 +577,6 @@ EADDRESS                         not used
 E_READ                           not used
 E_WRITE                          not used
 FINDORDER                        not used
-CODEIDS                          not used
-REMOTEAD                         not used
-REMOTECODE                       not used
+CMDID                            not used
 KEYLEARND                        not used
 

@@ -60,29 +60,26 @@ Config Portd = Output
            Const Stopall = 1
            Const normal = 2
            Const Refreshall = 3
+
+           Config Portc = Output
+
+           En Alias Portd.2 : Config Portd.2 = Output
+           Rxtx Alias Portb.0 : Config Portb.0 = Output
+
+           Config Portc = Output
+
 Configs:
 
 Enable Interrupts
 Enable Urxc
 On Urxc Rx
 
-'Enable Utxc
-'On Utxc Issend
 
+Defines:
 
+Dim Outsid(28) As Eram Byte
 
-Declare Sub Findorder
-
-Config Portc = Output
-'Em Alias Portc.3 : Config Portc.3 = Output
-En Alias Portd.2 : Config Portd.2 = Output
-'Rxtx Alias Portb.0 : Config Portb.0 = Output
-
-Config Portc = Output
-
-'Learn Alias Pinb.2 : Config Pinb.2 = Input
-
-
+Dim Idwasgot As Boolean
 Dim Typ As Byte
 Dim Cmd As Byte
 Dim Id As Byte
@@ -95,14 +92,15 @@ Dim Keyids As Byte : Dim Ekeyids As Eram Byte
 Dim Counterid As Byte : Counterid = 28
 Dim Baseid As Eram Byte
 
-Dim Minid As Byte
-Dim Maxid As Byte
+Dim Minid As Byte : Minid = Baseid + 1
+Dim Maxid As Byte : Maxid = Counterid + Baseid
 
-Minid = Baseid + 1
-Maxid = Counterid + Baseid
-
-'Dim Findorder As Byte
-
+Dim Temponid(28) As Byte
+Dim Tempontime(28) As Word
+Dim Tempon As Boolean
+Dim Wantid As Boolean
+Dim Sycid As Boolean
+Dim Setid As Byte
 Dim Din(5) As Byte
 
 
@@ -114,9 +112,24 @@ Dim Learnok As Boolean
 Dim Blank As Boolean : Reset Blank
 Dim Idblank As Byte
 
+Dim Direct As Byte
+Dim Endbit As Byte
+
+
+
+Subs:
+
+Declare Sub Findorder
+
+Declare Sub Tx
+
+
+Consts:
+
 'Const D = 10
 Const Allid = 99
-
+Const Toslave = 232
+Const Tomaster = 242
 
 Const Readallinput = 1
 Const Read1input = 2
@@ -142,16 +155,11 @@ Const Remote = 104
 Const Relaymodules = 110
 
 
-
-Typ = 110
-Cmd = 2
- Id = 1
-'Wait 2
-Reset Inok
-Reset En
+Const Mytyp = 110
 
 Startup:
-
+Reset Inok
+Reset En
 If Efirst > 0 Then
    Efirst = 0
    For I = 1 To 28
@@ -165,30 +173,75 @@ End If
 Main:
 
      Do
+       If Sycid = 1 Then
+          Do
+          Loop Until Sycid = 0
+       End If
        If Blank = 1 Then
           Toggle Outs(idblank)
+          J = Idblank
           Call Setouts
           Waitms 200
        End If
 
-       If Key = 1 Then
-          D = 0
-          Set Out1
-          Waitms 20
+       If Tempon = 1 Then
+          For I = 1 To Counterid
+              If Temponid(i) = 1 Then
+                 Incr Tempontime(i)
+                 Wait 1
+                 If Tempontime(i) = 120 Then
+                    Tempontime = 0
+                    Tempon(i) = 0
+                    Outs(i) = 0
+                    J = I
+                    Call Setouts
+                 End If
+              End If
+          Next
+       End If
 
+       If Key = 1 Then
+          If Wantid = 1 Then
+             Baseid = Id
+             Minid = Baseid + 1
+             Maxid = Counterid + Baseid
+             Typ = Mytyp : Cmd = 165 : Id = Maxid
+
+             Direct = Tomaster
+             Call Tx
+             Status = Refreshall
+             Call Keyorder
+             Wait 1
+             Status = Stopall
+             Call Keyorder
+             Portc = Minid
+             Wait 10
+             Portc = Maxid
+             Wait 10
+             Portc = 0
+
+          Else
+              D = 0
+              Set Out1
+              Waitms 20
+
+              Do
+                Waitms 100
+                Incr D
+                If D > 10 Then Reset Out1
+              Loop Until Key = 0
+
+              If D < 10 Then
+                 Toggle Togglekey
+                 If Togglekey = 1 Then Status = Stopall Else Status = Normal
+              Elseif D > 10 Then
+                     Status = Refreshall
+              End If
+              D = 0
+              Call Keyorder
+          End If
           Do
-            Waitms 100
-            Incr D
-            If D > 10 Then Reset Out1
           Loop Until Key = 0
-                    If D < 10 Then
-                       Toggle Togglekey
-                       If Togglekey = 1 Then status = Stopall Else status = normal
-                    Elseif D > 10 Then
-                       Status = Refreshall
-                    End If
-                    D = 0
-                    Call Keyorder
        End If
 
      Loop
@@ -196,6 +249,21 @@ Main:
 
 Gosub Main
 
+
+
+
+Sub Tx
+    If Direct = Tomaster Then
+       Endbit = 220
+    Elseif Direct = Toslave Then
+       Endbit = 210
+    End If
+    Set En
+    Waitms 1
+    Printbin Direct ; Typ ; Cmd ; Id ; Endbit
+    Waitms 30
+    Reset En
+End Sub
 
 
 Sub Keyorder
@@ -292,46 +360,66 @@ Sub Setouts
 
 End Sub
 
-Sub Findorder:
-    'Select Case Din(2)
-
-           'Case Keyin
-                If Cmd = 151 Then
-                   Moduleid = Id
-                End If
-
-                If Cmd = 160 Then
-                   Baseid = Id
-                   Minid = Baseid
-                   Maxid = Counterid + Baseid
-                End If
-
-                If Cmd = 180 Then
-
-                   Outs(id) = 1
-                   J = Id
-                   Call Setouts
-                   'If Id < 30 Then Set Portc.id
-                   'If Id = 99 Then Portc = 255
-                   Reset Blank
-                End If
-                If Cmd = 181 Then
-                   Outs(id) = 0
-                   J = Id
-                   Call Setouts
-                   'If Id < 30 Then Reset Portc.id
-                   'If Id = 99 Then Portc = 0
-                   Reset Blank
-                End If
-                If Cmd = 183 Then
-                   Set Blank
-                   Idblank = Id
-                End If
+Sub Findorder
 
 
-           'Case Outpwm
+        Select Case Cmd
+               Case 151
+                    If Typ = Mytyp Then
+                       Set Wantid
+                    End If
+               Case 159
+                    If Id >= Minid And Id <= Maxid Then
+                       For I = 1 To Counterid
+                           If Outsid(i) = Id Then
+                              Set Tempon
+                              If Outs(i) = 0 Then Temponid(i) = 1
+                           End If
+                       Next
+                    End If
+               Case 160
+                    If Id >= Minid And Id <= Maxid Then
+                       Set Sycid
+                       Setid = Id
+                    End If
+               Case 180
+                    'If Sycid = 1 Then
+                       'Outsid(setid) = Id
+                       'Reset Sycid
+                    'Else
+                       For I = 1 To Counterid
+                           If Outsid(i) = Id Then
+                              Tempon(id) = 0
+                              J = I
+                              Status = Normal
+                              Outs(j) = 1
+                              Call Setouts
+                           End If
+                       Next I
+                    'End If
+               Case 181
+                    If Id = Allid Then
+                       For I = 1 To Counterid
+                           Outs(i) = 0
+                           J = I
+                           Call Setouts
+                       Next
+                    End If
+                    For I = 1 To Counterid
+                        If Outsid(i) = Id Then
+                           J = I
+                           Status = Normal
+                           Outs(j) = 0
+                           Call Setouts
+                        End If
+                    Next I
+               Case 183
+                       Set Blank
+                       Idblank = Id
 
-    'End Select
+
+        End Select
+
 
 End Sub
 
@@ -349,8 +437,9 @@ Rx:
       Din(i) = Maxin
 
       If Inok = 1 Then
-        'Toggle Rxtx
-        If Din(2) = Keyin Or Din(2) = Remote Or Din(2) = Relaymodules Then
+        Typ = Din(2)
+        If Typ = Keyin Or Typ = Remote Or Typ = Relaymodules Then
+           Toggle Rxtx
            Typ = Din(2) : Cmd = Din(3) : Id = Din(4)
            Call Findorder
         End If

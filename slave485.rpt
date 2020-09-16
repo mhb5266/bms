@@ -1,6 +1,6 @@
 Report       : slave485
-Date         : 09-09-2020
-Time         : 17:08:59
+Date         : 09-16-2020
+Time         : 18:04:58
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 514 hex  -> Will fit into ROM
-ROMIMAGE     :  1300 dec
-FLASH USED   :  15  %
+ROMIMAGE     : 628 hex  -> Will fit into ROM
+ROMIMAGE     :  1576 dec
+FLASH USED   :  19  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  912  dec
+Space left   :  911  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -94,26 +94,34 @@ MAXIN                            Byte              0060          96
 TYP                              Byte              0061          97 
 CMD                              Byte              0062          98 
 ID                               Byte              0063          99 
-EID                              EEPROM Byte       0000          0 
-STARTBIT                         Byte              0064          100 
-ENDBIT                           Byte              0065          101 
-I                                Byte              0066          102 
-J                                Long              0067          103 
-A                                Byte              006B          107 
-REPLY                            Byte              006C          108 
-INOK                             Bit [7]           006D          109 
-TOUCH                            Bit [6]           006D          109 
-SENDOK                           Bit [5]           006D          109 
-ISREQUEST                        Bit [4]           006D          109 
-TIMEOUT                          Bit [3]           006D          109 
-ENBUZ                            Bit [2]           006D          109 
-ENSENSOR                         Bit [1]           006D          109 
-ENKEY                            Bit [0]           006D          109 
-WANTID                           Bit [7]           006E          110 
-BACKTYP                          Byte              006F          111 
-BACKCMD                          Byte              0070          112 
-BACKID                           Byte              0071          113 
-DIN                              Byte(5)           0072          114 
+TOUCHID1                         EEPROM Byte       0000          0 
+TOUCHID2                         EEPROM Byte       0001          1 
+TOUCHID3                         EEPROM Byte       0002          2 
+TOUCHID4                         EEPROM Byte       0003          3 
+S1                               Bit [7]           0064          100 
+S2                               Bit [6]           0064          100 
+S3                               Bit [5]           0064          100 
+S4                               Bit [4]           0064          100 
+EID                              EEPROM Byte       0004          4 
+DIRECT                           Byte              0065          101 
+ENDBIT                           Byte              0066          102 
+I                                Byte              0067          103 
+J                                Long              0068          104 
+A                                Byte              006C          108 
+REPLY                            Byte              006D          109 
+INOK                             Bit [3]           0064          100 
+TOUCH                            Byte              006E          110 
+SENDOK                           Bit [2]           0064          100 
+ISREQUEST                        Bit [1]           0064          100 
+TIMEOUT                          Bit [0]           0064          100 
+ENBUZ                            Bit [7]           006F          111 
+ENSENSOR                         Bit [6]           006F          111 
+ENKEY                            Bit [5]           006F          111 
+WANTID                           Bit [4]           006F          111 
+BACKTYP                          Byte              0070          112 
+BACKCMD                          Byte              0071          113 
+BACKID                           Byte              0072          114 
+DIN                              Byte(5)           0073          115 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -482,8 +490,12 @@ _HWSTACK_LOW                     &H0437
 _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
+TOMASTER                         242
+TOSLAVE                          232
 ALLID                            99
+ALLTYP                           115
 NONID                            0
+MYTYP                            101
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -548,7 +560,11 @@ ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
 EID                              not used
+J                                not used
 A                                not used
 REPLY                            not used
 TIMEOUT                          not used
+BACKTYP                          not used
+BACKCMD                          not used
+BACKID                           not used
 
