@@ -1,6 +1,6 @@
 Report       : slave485
-Date         : 09-16-2020
-Time         : 18:04:58
+Date         : 09-17-2020
+Time         : 14:12:51
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,8 +8,8 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 628 hex  -> Will fit into ROM
-ROMIMAGE     :  1576 dec
+ROMIMAGE     : 632 hex  -> Will fit into ROM
+ROMIMAGE     :  1586 dec
 FLASH USED   :  19  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz

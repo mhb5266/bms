@@ -120,6 +120,8 @@ Declare Sub Clear_remotes
 Declare Sub Tx
 Declare Sub Getid
 Declare Sub Order
+Declare Sub Beep
+Declare Sub Errorbeep
 
 Startup:
 '-------------------------- read rnumber index from eeprom
@@ -135,8 +137,8 @@ End If
 Waitms 500
 Set Led1
 Set Rxtx
-Gosub Beep
-Gosub Beep
+call beep
+call beep
 Reset Led1
 Waitms 500
 Reset Rxtx
@@ -151,7 +153,7 @@ Main:
 Do
   'Reset Watchdog
 
-
+  Reset En
   Gosub _read
 
   If Learnnew = 1 Then
@@ -161,7 +163,7 @@ Do
 
   If Clearall = 1 Then
 
-    Gosub Beep
+    call beep
     Waitms 100
     Call Clear_remotes
     Reset Clearall
@@ -244,7 +246,7 @@ Check:
              If Ra = Address Then
                 Raw = I                                     'code
                 Gosub Command
-                Gosub Beep
+                call beep
                 Exit For
              End If
          Next
@@ -304,12 +306,7 @@ Command:
         Waitms 200
 Return
 '-------------------------------------------------------------------------- BEEP
-Beep:
-Set Buzz
-Waitms 80
-Reset Buzz
-Waitms 30
-Return
+
 
 Rx:
 
@@ -323,39 +320,69 @@ Rx:
       Din(i) = Maxin
 
       If Inok = 1 Then
-        Toggle Rxtx
+
         Wic = Din(4)
-        If Din(2) = Typ Then Call Checkanswer
+        If Din(2) = Mytyp Then Call Checkanswer
         I = 0
-        Reset Inok
+
       End If
 
 
 Return
 
 
-End
+Sub Errorbeep
+    Set Buzz
+    Waitms 700
+    Reset Buzz
+End Sub
+
+Sub Beep
+    Set Buzz
+    Waitms 80
+    Reset Buzz
+    Waitms 30
+End Sub
 
 
 Sub Clear_remotes
+
+If Clearall = 1 Then
      Reset Rel1
      Reset Rel2
      Reset Rel3
      Reset Rel4
+     For I = 1 To 50
+
+         Remoteid(i) = 0
+
+         Codeid(i) = 0
+     Next I
+     Rnumber = 0
+     Rnumber_e = Rnumber
+     Set Led1
+     Call Beep
+     Call Beep
+     Call Errorbeep
+     Wait 1
+     Reset Led1
+     Reset Clearall
+End If
+     '(
      Set Led1
      Keycheck = 1
      Waitms 150
      Do
             'If Key1 = 0 Then
             If Clearall = 1 Then
-               Gosub Beep
+               call beep
                'While Key1 = 0
                While Clearall = 1
                      Incr T
                      Waitms 1
                      If T >= 5000 Then
                         T = 0
-                        Gosub Beep
+                        call beep
                         Rnumber = 0
                         Rnumber_e = Rnumber
                         Waitms 10
@@ -363,7 +390,7 @@ Sub Clear_remotes
                         Waitms 750
                         Reset Buzz
                         Reset Led1
-                        Reset Clearall
+
                         Rcounter = 0
                         For I = 1 To 50
 
@@ -371,8 +398,7 @@ Sub Clear_remotes
 
                             Codeid(i) = 0
                         Next I
-                        Direct = Tomaster : Cmd = 185
-                        Call Tx
+                        Reset Clearall
                         Return
                         Exit While
                      End If
@@ -384,6 +410,7 @@ Sub Clear_remotes
                End If
             End If
      Loop
+')
 End Sub
 
 Sub Do_learn:
@@ -391,7 +418,7 @@ Sub Do_learn:
            Gosub _read
 
            If Okread = 1 Then
-              Gosub Beep                                        'repeat check
+              Call Beep                                     'repeat check
               If Rnumber = 0 Then                               ' agar avalin remote as ke learn mishavad
                  Incr Rnumber
                  Rnumber_e = Rnumber
@@ -445,14 +472,11 @@ Sub Do_learn:
 
 End Sub
 
-Sub Getid
 
-
-End Sub
 
 Sub Checkanswer
 
-    If Din(2) = Typ Then
+            Toggle Rxtx
             Select Case Din(3)
 
 
@@ -499,9 +523,11 @@ Sub Checkanswer
 
                   Set Learnnew
                   Reset Clearall
+
                 Case 162
                   Reset Learnnew
                   Set Clearall
+                  Call Clear_remotes
                 Case 163
                   Reset Learnnew
                   Reset Clearall
@@ -519,9 +545,7 @@ Sub Checkanswer
                   Set Wantid_led
                   Cmdcode = 164
             End Select
-
-
-    End If
+            Reset Inok
 End Sub
 
 Sub Order
@@ -539,6 +563,7 @@ Sub Tx:
     End If
 
     Set En
+    Waitms 10
     Printbin Direct ; Typ ; Cmd ; Id ; Endbit
     Waitms 50
     Reset En
@@ -546,3 +571,4 @@ Sub Tx:
 
 
 End Sub
+End

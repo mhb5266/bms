@@ -143,11 +143,11 @@ Dim Touch As Byte
 Dim Nextday As Boolean
 Dim Count As Byte
 
-
-Dim Relaymodulecounter As Eram Byte : If Relaymodulecounter = 255 Then Relaymodulecounter = 0
-Dim Pwmmodulecounter As Eram Byte : If Pwmmodulecounter = 255 Then Pwmmodulecounter = 0
-Dim Einputcounter As Eram Byte : If Einputcounter = 255 Then Einputcounter = 0
 Dim Inputcounter As Byte
+Dim Relaymodulecounter As Eram Byte
+Dim Pwmmodulecounter As Eram Byte
+Dim Einputcounter As Eram Byte                              ': If Einputcounter < 255 Then Inputcounter = Einputcounter
+
 
 Dim Configmode As Byte
 
@@ -662,7 +662,7 @@ Sub Setting_menu
                        Relaymodulecounter = 0
                        Pwmmodulecounter = 0
                        Einputcounter = 0
-                       Inputcounter = 0
+                       'Inputcounter = 0
                        Findorder = Clearall
                        Call Order
 
@@ -686,37 +686,37 @@ End Sub
 
 Sub Setkeyid
 
-    Incr Inputcounter
+    'Incr Inputcounter
 
     Do
+      'Waitms 100
       Call Readtouch
 
       If Touch = 4 Then
-         Cls
+         Einputcounter = Inputcounter
          Return
       End If
 
       If Touch = 2 Then
          Incr Inputcounter
-         Cls
+         Einputcounter = Inputcounter
       End If
 
       If Touch = 3 Then
          Decr Inputcounter
-         Cls
+         Einputcounter = Inputcounter
       End If
-
-      Lcdat 3 , 1 , "Learn Input " ; Inputcounter
+      Inputcounter = Einputcounter
+      Lcdat 3 , 1 , "Leran Key " ; Inputcounter
 
       If Touch = 1 Then
-         Einputcounter = Inputcounter
-         Id = Inputcounter
+         Id = Einputcounter
+         Waitms 2
          Findorder = Learnkey
          Call Order
          Lcdat 4 , 1 , "press a Key"
-
       End If
-
+      Touch = 0
     Loop
 
 End Sub
@@ -875,21 +875,21 @@ Sub Checkanswer
            Case Keyin
 
 
-                If Din(4) = Id Then
-                   Lcdat Id , 1 ,"input " ;id;" connect"
-                End If
-                If Din(3) = 151 Then
-                   If Din(4) = Id Then
-                      Learnok = 1
-                   End If
-                End If
-                If Din(3) = 180 Then Set Portc.din(4)
-                If Din(3) = 181 Then Reset Portc.din(4)
-                If Din(3) = 182 Then
-                   Set Portc.id
-                   Wait 2
-                   Reset Portc.id
-                End If
+                'If Din(4) = Id Then
+                   'Lcdat Id , 1 ,"input " ;id;" connect"
+                'End If
+                'If Din(3) = 151 Then
+                   'If Din(4) = Id Then
+                      'Learnok = 1
+                   'End If
+                'End If
+                'If Din(3) = 180 Then Set Portc.din(4)
+                'If Din(3) = 181 Then Reset Portc.din(4)
+                'If Din(3) = 182 Then
+                   'Set Portc.id
+                   'Wait 2
+                   'Reset Portc.id
+                'End If
            Case Remote
                 Select Case Din(3)
                        Case 180
@@ -1398,23 +1398,26 @@ Sub Readtouch
 
 Touch = 0
 'do
-  reset watchdog
+  'reset watchdog
     if touch1 = 1 then
        do
 
        Loop Until Touch1 = 0
        Touch = 1
     endif
+
     if touch2 = 1 then
        Do
        Loop Until Touch2 = 0
        Touch = 2
-    endif
+    End If
+
     if touch3 = 1 then
        Do
        Loop Until Touch3 = 0
        touch = 3
     endif
+
     if touch4 = 1 then
        Do
        Loop Until Touch4 = 0

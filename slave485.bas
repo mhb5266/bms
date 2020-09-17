@@ -177,6 +177,7 @@ Sub Keytouched:
              End Select
              Call Beep
              Reset Wantid
+             reset isrequest
           End If
 
 
