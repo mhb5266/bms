@@ -36,8 +36,8 @@ Maxconfig:
           Dim Direct As Byte
           Dim Endbit As Byte
 
-          Const Tomaster = 242
-          Const Toslave = 232
+          Const Tomaster = 252
+          Const Toinput = 242
 
 
 
@@ -106,10 +106,8 @@ Rx:
       Inputbin Maxin
 
 
-      If I = 5 Then
-         If Maxin = 230 Or Maxin = 210 Then Set Inok
-      End If
-      If Maxin = 252 Or Maxin = 232 Then I = 1
+      If I = 5 And Maxin = 210 Then Set Inok
+      If Maxin = 232 Then I = 1
 
       Din(i) = Maxin
 
@@ -159,9 +157,9 @@ End
 
 Sub Tx
     If Direct = Tomaster Then
-       Endbit = 220
-    Elseif Direct = Toslave Then
-           Endbit = 210
+       Endbit = 230
+    Elseif Direct = Toinput Then
+           Endbit = 220
     End If
 
     Set En

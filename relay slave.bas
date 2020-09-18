@@ -42,17 +42,7 @@ Config Portd = Output
 
            Key Alias Pinb.7 : Config Portb.7 = Input
 
-           Dim Outs(28) As Byte
-           Dim Eouts(28) As Eram Byte
-           Dim D As Byte
-           Dim Moduleid As Eram Byte
 
-
-           Dim status As Byte
-
-           Dim Efirst As Eram Byte
-
-           Dim Togglekey As Boolean
 
            Declare Sub Setouts
            Declare Sub Keyorder
@@ -77,7 +67,20 @@ On Urxc Rx
 
 Defines:
 
-Dim Outsid(28) As Eram Byte
+Dim Outs(28) As Byte
+Dim Eoutnum(28) As Eram Byte
+Dim Eoutid(28) As Eram Byte
+Dim Eouts(28) As Eram Byte
+Dim D As Byte
+Dim Moduleid As Eram Byte
+
+Dim Tempid As Byte
+
+Dim status As Byte
+
+Dim Efirst As Eram Byte
+
+Dim Togglekey As Boolean
 
 Dim Idwasgot As Boolean
 Dim Typ As Byte
@@ -90,7 +93,7 @@ Dim A As Byte
 Dim Reply As Byte
 Dim Keyids As Byte : Dim Ekeyids As Eram Byte
 Dim Counterid As Byte : Counterid = 28
-Dim Baseid As Eram Byte
+Dim Baseid As Byte
 
 Dim Minid As Byte : Minid = Baseid + 1
 Dim Maxid As Byte : Maxid = Counterid + Baseid
@@ -98,7 +101,7 @@ Dim Maxid As Byte : Maxid = Counterid + Baseid
 Dim Temponid(28) As Byte
 Dim Tempontime(28) As Word
 Dim Tempon As Boolean
-Dim Wantid As Boolean
+Dim wantnum As Boolean
 Dim Sycid As Boolean
 Dim Setid As Byte
 Dim Din(5) As Byte
@@ -128,8 +131,10 @@ Consts:
 
 'Const D = 10
 Const Allid = 99
-Const Toslave = 232
-Const Tomaster = 242
+
+Const Tomaster = 252
+Const Tooutput = 232
+Const Toinput = 242
 
 Const Readallinput = 1
 Const Read1input = 2
@@ -173,10 +178,7 @@ End If
 Main:
 
      Do
-       If Sycid = 1 Then
-          Do
-          Loop Until Sycid = 0
-       End If
+
        If Blank = 1 Then
           Toggle Outs(idblank)
           J = Idblank
@@ -201,24 +203,22 @@ Main:
        End If
 
        If Key = 1 Then
-          If Wantid = 1 Then
+          If wantnum = 1 Then
+             Reset wantnum
              Baseid = Id
-             Minid = Baseid + 1
-             Maxid = Counterid + Baseid
-             Typ = Mytyp : Cmd = 165 : Id = Maxid
-
+             For I = 1 To Counterid
+                 Baseid = Baseid + 1
+                 Eoutnum(i) = Baseid
+             Next
+             Id = Eoutnum(counterid)
              Direct = Tomaster
+             Portc = Id
+             Cmd = 165
              Call Tx
-             Status = Refreshall
-             Call Keyorder
              Wait 1
-             Status = Stopall
-             Call Keyorder
-             Portc = Minid
-             Wait 10
-             Portc = Maxid
-             Wait 10
              Portc = 0
+
+
 
           Else
               D = 0
@@ -254,9 +254,9 @@ Gosub Main
 
 Sub Tx
     If Direct = Tomaster Then
+       Endbit = 230
+    Elseif Direct = Toinput Then
        Endbit = 220
-    Elseif Direct = Toslave Then
-       Endbit = 210
     End If
     Set En
     Waitms 1
@@ -366,29 +366,48 @@ Sub Findorder
         Select Case Cmd
                Case 151
                     If Typ = Mytyp Then
-                       Set Wantid
+                       Set Wantnum
                     End If
+               Case 158
+                    For I = 1 To Counterid
+                        Eoutid(i) = 0
+                        Eoutnum(i) = 0
+                        Eouts(i) = 0
+                        For J = 1 To Counterid
+                            Call Setouts
+                        Next
+                    Next
                Case 159
                     If Id >= Minid And Id <= Maxid Then
                        For I = 1 To Counterid
-                           If Outsid(i) = Id Then
+                           If Eoutid(i) = Id Then
                               Set Tempon
                               If Outs(i) = 0 Then Temponid(i) = 1
                            End If
                        Next
                     End If
                Case 160
-                    If Id >= Minid And Id <= Maxid Then
-                       Set Sycid
-                       Setid = Id
-                    End If
+                    For I = 1 To Counterid
+                        If Eoutnum(i) = Id Then
+                           Set Outs(i)
+                           J = I
+                           Tempid = I
+                           Set Sycid
+                           Call Setouts
+                        End If
+                    Next
                Case 180
                     'If Sycid = 1 Then
                        'Outsid(setid) = Id
                        'Reset Sycid
                     'Else
+                       If Sycid = 1 Then
+                          Eoutid(tempid) = Id
+                          Reset Sycid
+                       End If
                        For I = 1 To Counterid
-                           If Outsid(i) = Id Then
+                           'If Eoutsnum(i) = Id Then
+                           If Eoutid(i) = Id Then
                               Tempon(id) = 0
                               J = I
                               Status = Normal
@@ -398,6 +417,10 @@ Sub Findorder
                        Next I
                     'End If
                Case 181
+                    If Sycid = 1 Then
+                          Eoutid(tempid) = Id
+                          Reset Sycid
+                    End If
                     If Id = Allid Then
                        For I = 1 To Counterid
                            Outs(i) = 0
@@ -406,7 +429,8 @@ Sub Findorder
                        Next
                     End If
                     For I = 1 To Counterid
-                        If Outsid(i) = Id Then
+                        'If Eoutsnum(i) = Id Then
+                        If Eoutid(i) = Id Then
                            J = I
                            Status = Normal
                            Outs(j) = 0
@@ -431,8 +455,8 @@ Rx:
       Incr I
       Inputbin Maxin
 
-      If I = 5 And Maxin = 230 Or Maxin = 210 Then Set Inok
-      If Maxin = 252 Or Maxin = 232 Then I = 1
+      If I = 5 And Maxin = 210 Then Set Inok
+      If Maxin = 232 Then I = 1
 
       Din(i) = Maxin
 

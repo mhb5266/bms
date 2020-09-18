@@ -71,6 +71,8 @@ Dim Typ As Byte
 Dim Cmd As Byte
 Dim Id As Byte
 
+Dim Newaddress As Eram Byte :if newaddress=255 then newaddress=0
+
 Dim direct As Byte
 Dim Endbit As Byte : Endbit = 220
 
@@ -86,6 +88,7 @@ Dim Findorder As Byte
 Dim Remoteid(40) As Eram Byte
 Dim Codeid(40) As Eram Byte
 Dim Setid(40) As Eram Byte
+Dim Skey(40) As Eram Byte
 
 
 Dim Raw As Byte
@@ -105,8 +108,9 @@ Const Allid = 99
 Const Nonid = 0
 Const Mytyp = 104 : : Typ = Mytyp
 
-Const Tomaster = 242
-Const Toslave = 232
+Const Tomaster = 252
+Const Tooutput = 232
+Const Toinput = 242
 
 Const Learndone = 184
 Const Cleardone = 185
@@ -272,8 +276,8 @@ Command:
                    ' Cmd = 164
 
         End Select
-        Direct = Toslave
-        Call Tx
+        'Direct = Tooutput
+        'Call Tx
         If Wantid = 1 Then
            Incr Rcounter
            Ercounter = Rcounter
@@ -291,8 +295,9 @@ Command:
                If Remoteid(i) = Raw Then
                   If Codeid(i) = Code Then
                                     Id = Setid(i)
-                                    Cmd = 180
-                                    Direct = Toslave
+                                    If Skey(i) = 180 Then Skey(i) = 181 Else Skey(i) = 180
+                                    Cmd = Skey(i)
+                                    Direct = Tooutput
                                     Call Tx
                                     Exit For
                   End If
@@ -314,16 +319,18 @@ Rx:
       Inputbin Maxin
 
 
-      If I = 5 And Maxin = 230 Then Set Inok
-      If Maxin = 252 Then I = 1
+      If I = 5 And Maxin = 220 Then Set Inok
+      If Maxin = 242 Then I = 1
 
       Din(i) = Maxin
 
       If Inok = 1 Then
 
         Wic = Din(4)
-        If Din(2) = Mytyp Then Call Checkanswer
+        Id = Wic
         I = 0
+        If Din(2) = Mytyp Then Call Checkanswer
+
 
       End If
 
@@ -346,7 +353,7 @@ End Sub
 
 
 Sub Clear_remotes
-
+ '(
 If Clearall = 1 Then
      Reset Rel1
      Reset Rel2
@@ -368,48 +375,6 @@ If Clearall = 1 Then
      Reset Led1
      Reset Clearall
 End If
-     '(
-     Set Led1
-     Keycheck = 1
-     Waitms 150
-     Do
-            'If Key1 = 0 Then
-            If Clearall = 1 Then
-               call beep
-               'While Key1 = 0
-               While Clearall = 1
-                     Incr T
-                     Waitms 1
-                     If T >= 5000 Then
-                        T = 0
-                        call beep
-                        Rnumber = 0
-                        Rnumber_e = Rnumber
-                        Waitms 10
-                        Set Buzz
-                        Waitms 750
-                        Reset Buzz
-                        Reset Led1
-
-                        Rcounter = 0
-                        For I = 1 To 50
-
-                            Remoteid(i) = 0
-
-                            Codeid(i) = 0
-                        Next I
-                        Reset Clearall
-                        Return
-                        Exit While
-                     End If
-               Wend
-               If T < 5000 Then
-                  T = 0
-                  Reset Led1
-                  Exit Do
-               End If
-            End If
-     Loop
 ')
 End Sub
 
@@ -426,8 +391,6 @@ Sub Do_learn:
                  Ra = Address
                  Eevar(rnumber) = Ra
                  Waitms 10
-                 Direct = Tomaster : Cmd = 184 : Id = Rnumber
-                 Call Tx
                  Exit Do
               Else                                          'address avalin khane baraye zakhire address remote
                  For I = 1 To Rnumber
@@ -453,8 +416,6 @@ Sub Do_learn:
                        Rnumber_e = Rnumber                  'meghdare rnumber ra dar eeprom zakhore mikonad
                        Ra = Address
                        Eevar(rnumber) = Ra
-                       Direct = Tomaster : Cmd = 184 : Id = Rnumber
-                       Call Tx
                        Waitms 10
                     End If
                  End If
@@ -467,7 +428,6 @@ Sub Do_learn:
          Reset Led1
 
     Loop
-    Incr Rnumber
 
 
 End Sub
@@ -525,7 +485,28 @@ Sub Checkanswer
                   Reset Clearall
 
                 Case 162
+                  If Id <> 72 Then Return
                   Reset Learnnew
+                            Set Led1
+                            Reset Rel1
+                            Reset Rel2
+                            Reset Rel3
+                            Reset Rel4
+                            For I = 1 To 50
+
+                                Remoteid(i) = 0
+
+                                Codeid(i) = 0
+                            Next I
+                            Rnumber = 0
+                            Rnumber_e = Rnumber
+
+                            Call Beep
+                            Call Beep
+                            Call Errorbeep
+                            Wait 1
+                            Reset Led1
+                            Reset Clearall
                   Set Clearall
                   Call Clear_remotes
                 Case 163
@@ -557,8 +538,8 @@ End Sub
 Sub Tx:
 
     If Direct = Tomaster Then
-       Endbit = 220
-    Elseif Direct = Toslave Then
+       Endbit = 230
+    Elseif Direct = Tooutput Then
        Endbit = 210
     End If
 

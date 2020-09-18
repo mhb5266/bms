@@ -69,8 +69,9 @@ Dim Eid As Eram Byte
 Dim Direct As Byte
 Dim Endbit As Byte
 
-Const Tomaster = 242
-Const Toslave = 232
+Const Tomaster = 252
+Const Tooutput = 232
+Const Toinput = 242
 
 Dim I As Byte
 Dim J As Long
@@ -177,7 +178,7 @@ Sub Keytouched:
              End Select
              Call Beep
              Reset Wantid
-             reset isrequest
+             Reset Isrequest
           End If
 
 
@@ -204,7 +205,7 @@ Sub Keytouched:
                          Id = Touchid1
                          Cmd = 159
              End Select
-             Direct = Toslave
+             Direct = Tooutput
              Call Tx
           End If
 
@@ -214,8 +215,8 @@ Sub Keytouched:
 End Sub
 
 Sub Tx
-    If Direct = Toslave Then Endbit = 210
-    If Direct = Tomaster Then Endbit = 220
+    If Direct = Tooutput Then Endbit = 210
+    If Direct = Tomaster Then Endbit = 230
 
     Set En
     Waitms 10
@@ -231,7 +232,7 @@ Sub Findorder
 
 Cmd = Din(3)
 Id = Din(4)
-
+Toggle Rt
 
             Select Case Cmd
 
@@ -278,19 +279,19 @@ Issend:
 Return
 
 Rx:
-      Reset Rt
+
 
       Incr I
       Inputbin Maxin
 
 
-      If I = 5 And Maxin = 230 Then Set Inok
-      If Maxin = 252 Then I = 1
+      If I = 5 And Maxin = 220 Then Set Inok
+      If Maxin = 242 Then I = 1
 
       Din(i) = Maxin
 
       If Inok = 1 Then
-        Toggle Portc.5
+        Toggle Rt
         Typ = Din(2)
         If Typ = Mytyp Or Typ = Alltyp Then Call Findorder
         I = 0

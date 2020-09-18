@@ -128,6 +128,7 @@ Dim Learndone As Boolean
 Dim Cleardone As Byte
 Dim Setremotedone As Boolean
 
+Dim Direct As Byte
 
 Const Keyin = 101
 Const Steps = 102
@@ -144,11 +145,12 @@ Dim Nextday As Boolean
 Dim Count As Byte
 
 Dim Inputcounter As Byte
-Dim Relaymodulecounter As Eram Byte
-Dim Pwmmodulecounter As Eram Byte
-Dim Einputcounter As Eram Byte                              ': If Einputcounter < 255 Then Inputcounter = Einputcounter
+Dim Relaymodulecounter As Eram Byte : If Relaymodulecounter = 255 Then Relaymodulecounter = 0
+Dim Pwmmodulecounter As Eram Byte : If Pwmmodulecounter = 255 Then Pwmmodulecounter = 0
+Dim Einputcounter As Eram Byte : If Einputcounter = 255 Then Einputcounter = 0
+          Inputcounter = Einputcounter
 
-
+Dim Sycnum As Eram Byte
 Dim Configmode As Byte
 
 Dim I As Byte
@@ -160,7 +162,7 @@ Const Allid = 99
 Const Alltyp = 115
 Const Readallinput = 1
 Const Read1input = 2
-Const Learnkey = 3
+Const setidkey = 3
 Const Enablebuz = 4
 Const Disablebuz = 5
 Const Enablesensor = 6
@@ -180,11 +182,17 @@ Const Setoutput = 19
 Const Clearid = 20
 Const Learnremote = 21
 Const Clearremote = 22
-Const Setremoteid = 23
-Const Setrelaymoduleid = 24
-Const Setpwmmoduleid = 25
+Const setidremote = 23
+Const sycrelaymoduleid = 24
+Const sycpwmmoduleid = 25
 Const Setidformodules = 26
 Const Clearall = 27
+
+Const Tomaster = 252
+Const Tooutput = 232
+Const Toinput = 242
+
+
 
 Consts:
 
@@ -264,11 +272,11 @@ Rx:
       Incr I
       Inputbin Maxin
 
-      If I = 5 And Maxin = 220 Then Set Inok
-      If Maxin = 242 Then I = 1
+      If I = 5 And Maxin = 230 Then Set Inok
+      If Maxin = 252 Then I = 1
 
       Din(i) = Maxin
-      If Inok = 1 And Din(1) = 242 Then
+      If Inok = 1 And Din(1) = 252 Then
          I = 0
          Typ = Din(2) : Cmd = Din(3) : Id = Din(4)
          Checkanswer
@@ -662,7 +670,16 @@ Sub Setting_menu
                        Relaymodulecounter = 0
                        Pwmmodulecounter = 0
                        Einputcounter = 0
-                       'Inputcounter = 0
+                       Inputcounter = 0
+                       Typ = 101
+                       Direct = Toinput
+                       Findorder = Clearall
+                       Call Order
+                       Typ = 104
+                       Findorder = Clearremote
+                       Call Order
+                       Direct = Tooutput
+                       Typ = 110
                        Findorder = Clearall
                        Call Order
 
@@ -707,12 +724,16 @@ Sub Setkeyid
          Einputcounter = Inputcounter
       End If
       Inputcounter = Einputcounter
+      Lcdat 1 , 1 , "Set Key IDs     " , 1
       Lcdat 3 , 1 , "Leran Key " ; Inputcounter
 
       If Touch = 1 Then
          Id = Einputcounter
+         Remotekeyid = Id
          Waitms 2
-         Findorder = Learnkey
+         Findorder = setidkey
+         Call Order
+         Findorder = Setidremote
          Call Order
          Lcdat 4 , 1 , "press a Key"
       End If
@@ -724,25 +745,35 @@ End Sub
 Sub Set_id_modules
     Cls
     Count = 1
+    Id = Relaymodulecounter
+    Lcdat 5 , 1 , "relay " ; Id
+
+    Id = Pwmmodulecounter
+    Lcdat 6 , 1 , "pwm " ; Id
+
     Do
       Call Readtouch
       If Touch = 4 Then
          Cls
          Return
       End If
-      If Touch = 2 Then
+      If Touch = 2 Or Touch = 3 Then
          Cls
-         Incr Count
+             Id = Relaymodulecounter
+             Lcdat 5 , 1 , "relay " ; Id
+
+             Id = Pwmmodulecounter
+             Lcdat 6 , 1 , "pwm " ; Id
       End If
-      If Touch = 3 Then
-         Cls
-         Decr Count
-      End If
+      Lcdat 1 , 1 , "Set Output IDs  " , 1
+
       If Touch = 1 Then
          Typ = 110 : Id = Relaymodulecounter
+         Lcdat 5 , 1 , "relay " ; Id
          Findorder = Setidformodules
          Call Order
          Typ = 111 : Id = Pwmmodulecounter
+         Lcdat 6 , 1 , "pwm " ; Id
          Findorder = Setidformodules
          Call Order
 
@@ -753,18 +784,49 @@ Sub Set_id_modules
 End Sub
 
 Sub Module_config
-    Id = 0
-    Do
-      If Configmode = Relaymodule Then
-         Typ = Relaymodule
-         Cmd = 180
-      Elseif Configmode = Pwmmodule Then
-         Typ = Pwmmodule
-         Cmd = 163
-      End If
+        Cls
+        Count = 1
+Do
+        Call Readtouch
+        If Touch = 4 Then
+           Cls
+           Return
+        End If
 
-    Loop
+        If Touch = 2 Then
+           Incr Count
+           Sycnum = Count
+           Cls
+        End If
+        If Touch = 3 Then
+           Decr Count
+           Sycnum = Count
+           Cls
+        End If
+        Count = Sycnum
+        If Configmode = Relaymodule Then Lcdat 1 , 1 , "Relay Cng Menu  " , 1
+        If Configmode = Pwmmodule Then Lcdat 1 , 1 , "PWM Cng Menu    " , 1
+        Lcdat 5 , 1 , "Syc I/O " ; Count ; "  "
+        If Touch = 1 Then
+               Lcdat 6 , 1 , "press a key"
+              If Configmode = Relaymodule Then
+                 Findorder = Readallinput
+                 Call Order
+                 Typ = Relaymodule
+                 Cmd = 180
+                 Findorder = Sycrelaymoduleid
+                 Id = Count
+                 Call Order
+              Elseif Configmode = Pwmmodule Then
+                 Typ = Pwmmodule
+                 Cmd = 163
+                 Findorder = Setoutput
+              End If
 
+
+        End If
+        Touch = 0
+Loop
 End Sub
 
 
@@ -795,11 +857,11 @@ Sub Remote_menu
            End Select
 
         End If
-
+        Lcdat 1 , 1 , "Remote Menu     " , 1
         If Cleardone = 1 Then
 
                       Cls
-                      Lcdat 1 , 1 , "Clear is Done"
+                      Lcdat 5 , 1 , "Clear is Done"
                       Count = 2
                       Wait 1
                       Cls
@@ -809,8 +871,8 @@ Sub Remote_menu
         If Learndone = 1 Then
 
                       Cls
-                      Lcdat 1 , 1 , "learn Is Done"
-                      Lcdat 2 , 1 , Din(4)
+                      Lcdat 5 , 1 , "learn Is Done"
+                      Lcdat 6 , 1 , Din(4)
                       Count = 3
                       Wait 1
                       Cls
@@ -820,7 +882,7 @@ Sub Remote_menu
         If Setremotedone = 1 Then
 
                       Cls
-                      Lcdat 1 , 1 , "key " ; Remotekeyid ; "  set"
+                      Lcdat 5 , 1 , "key " ; Remotekeyid ; "  set"
                       Wait 1
                       Cls
                       Incr Remotekeyid
@@ -842,11 +904,11 @@ Sub Remote_menu
 
         Select Case Count
                Case 1
-                    Lcdat 1 , 1 , "Clear Remotes "
+                    Lcdat 3 , 1 , "Clear Remotes "
                Case 2
-                    Lcdat 1 , 1 , "Learn New     "
-               'Case 3
-                    'Lcdat 1 , 1 , "Config Remotes"
+                    Lcdat 3 , 1 , "Learn New     "
+               Case 3
+                    Lcdat 3 , 1 , "Config Remotes"
         End Select
     Loop
 End Sub
@@ -915,11 +977,17 @@ Sub Checkanswer
            Case Relaymodule
                 If Cmd = 165 Then
                    Relaymodulecounter = Id
+                   Lcdat 5 , 1 , Id
+                   Wait 2
+                   Cls
                 End If
 
            Case Pwmmodule
                 If Cmd = 165 Then
                    Pwmmodulecounter = Id
+                   Lcdat 5 , 1 , Id
+                   Wait 2
+                   Cls
                 End If
 
     End Select
@@ -935,59 +1003,59 @@ Sub Order
 
            Case Readallinput
 
-                Typ = 101 : Cmd = 150 : Id = Allid
+                Direct = Toinput : Typ = 101 : Cmd = 150 : Id = Allid
 
            Case Read1input
 
-                Typ = 101 : Cmd = 150
+                Direct = Toinput : Typ = 101 : Cmd = 150
 
-           Case Learnkey
+           Case Setidkey
 
-                Typ = 101 : Cmd = 151 : Id = Id
+                Direct = Toinput : Typ = 101 : Cmd = 151 : Id = Id
 
            Case Enablebuz
 
-                Typ = 101 : Cmd = 152 : Id = Allid
+                Direct = Toinput : Typ = 101 : Cmd = 152 : Id = Allid
 
            Case Disablebuz
 
-                Typ = 101 : Cmd = 153 : Id = Allid
+                Direct = Toinput : Typ = 101 : Cmd = 153 : Id = Allid
 
            Case Enablesensor
 
-                Typ = 101 : Cmd = 154 : Id = Allid
+                Direct = Toinput : Typ = 101 : Cmd = 154 : Id = Allid
 
            Case Disablesensor
 
-                Typ = 101 : Cmd = 155 : Id = Allid
+                Direct = Toinput : Typ = 101 : Cmd = 155 : Id = Allid
 
            Case Enableinput
 
-                Typ = 101 : Cmd = 156 : Id = Allid
+                Direct = Toinput : Typ = 101 : Cmd = 156 : Id = Allid
 
            Case Disableinput
 
-                Typ = 101 : Cmd = 157 : Id = Allid
+                Direct = Toinput : Typ = 101 : Cmd = 157 : Id = Allid
 
            Case Readremote
 
-                Typ = 104 : Cmd = 150 : Id = Allid
+                Direct = Toinput : Typ = 104 : Cmd = 150 : Id = Allid
 
            Case Outputblank
 
-                Typ = 110 : Cmd = 183 : Id = Id
+                Direct = Tooutput : Typ = 110 : Cmd = 183 : Id = Id
 
            Case Resetoutput
 
-                Typ = 110 : Cmd = 181 : Id = Id
+                Direct = Tooutput : Typ = 110 : Cmd = 181 : Id = Id
 
            Case Resetalloutput
 
-                Typ = 110 : Cmd = 181 : Id = Allid
+                Direct = Tooutput : Typ = 110 : Cmd = 181 : Id = Allid
 
            Case Setoutput
 
-                Typ = 110 : Cmd = 180 : Id = Id
+                Direct = Tooutput : Typ = 110 : Cmd = 180 : Id = Id
 
            Case Clearid
 
@@ -995,28 +1063,28 @@ Sub Order
 
            Case Clearremote
 
-                Typ = 104 : Cmd = 162 : Id = 0
+                Direct = Toinput : Typ = 104 : Cmd = 162 : Id = 72
 
            Case Learnremote
 
-                Typ = 104 : Cmd = 161 : Id = 0
+                Direct = Toinput : Typ = 104 : Cmd = 161 : Id = 72
 
-           Case Setremoteid
+           Case Setidremote
 
-                Typ = 104 : Cmd = 151 : Id = Remotekeyid
+                Direct = Toinput : Typ = 104 : Cmd = 151 : Id = Remotekeyid
 
-           Case Setrelaymoduleid
+           Case Sycrelaymoduleid
 
-                Typ = 110 : Cmd = 151 : Id = Relaymodulecounter
+                Direct = Tooutput : Typ = 110 : Cmd = 160
 
-           Case Setpwmmoduleid
-                Typ = 111 : Cmd = 151 : Id = Pwmmodulecounter
+           Case Sycpwmmoduleid
+                Direct = Tooutput : Typ = 111 : Cmd = 160
 
            Case Setidformodules
-                Cmd = 151
+                Direct = Tooutput : Cmd = 151
 
            Case Clearall
-                Typ = Alltyp : Cmd = 158 : Id = Allid
+                 Cmd = 158
 
 
 
@@ -1030,10 +1098,15 @@ End Sub
 
 
 Sub Tx
+    If Direct = Toinput Then
+       Endbit = 220
+    Elseif Direct = Tooutput Then
+       Endbit = 210
+    End If
     Set Em
     Waitms 10
     Set Txled
-    Printbin 252 ; Typ ; Cmd ; Id ; 230
+    Printbin Direct ; Typ ; Cmd ; Id ; Endbit
     Waitms 50
     Reset Em
     Reset Txled

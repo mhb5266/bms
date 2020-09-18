@@ -1,6 +1,6 @@
 Report       : internal eeprom 4m remote
-Date         : 09-17-2020
-Time         : 15:58:34
+Date         : 09-18-2020
+Time         : 18:24:17
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : D8E hex  -> Will fit into ROM
-ROMIMAGE     :  3470 dec
-FLASH USED   :  42  %
+ROMIMAGE     : DDE hex  -> Will fit into ROM
+ROMIMAGE     :  3550 dec
+FLASH USED   :  43  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -112,6 +112,7 @@ DIN                              Byte(5)           00BD          189
 TYP                              Byte              00C2          194 
 CMD                              Byte              00C3          195 
 ID                               Byte              00C4          196 
+NEWADDRESS                       EEPROM Byte       0051          81 
 DIRECT                           Byte              00C5          197 
 ENDBIT                           Byte              00C6          198 
 INOK                             Bit [4]           00B5          181 
@@ -121,13 +122,14 @@ ENABLE_REMOTE                    Bit [1]           00B5          181
 LEARNNEW                         Bit [0]           00B5          181 
 CLEARALL                         Bit [7]           00C7          199 
 FINDORDER                        Byte              00C8          200 
-REMOTEID                         EEPROM Byte(40)   0051          81 
-CODEID                           EEPROM Byte(40)   0079          121 
-SETID                            EEPROM Byte(40)   00A1          161 
+REMOTEID                         EEPROM Byte(40)   0052          82 
+CODEID                           EEPROM Byte(40)   007A          122 
+SETID                            EEPROM Byte(40)   00A2          162 
+SKEY                             EEPROM Byte(40)   00CA          202 
 RAW                              Byte              00C9          201 
-CMDID                            EEPROM Byte(40)   00C9          201 
+CMDID                            EEPROM Byte(40)   00F2          242 
 CMDCODE                          Byte              00CA          202 
-ERCOUNTER                        EEPROM Byte       00F1          241 
+ERCOUNTER                        EEPROM Byte       011A          282 
 RCOUNTER                         Byte              00CB          203 
 KEYLEARND                        Byte              00CC          204 
 WIC                              Byte              00CD          205 
@@ -504,8 +506,9 @@ EEREAD                           161
 ALLID                            99
 NONID                            0
 MYTYP                            104
-TOMASTER                         242
-TOSLAVE                          232
+TOMASTER                         252
+TOOUTPUT                         232
+TOINPUT                          242
 LEARNDONE                        184
 CLEARDONE                        185
 KEYWASSET                        186
