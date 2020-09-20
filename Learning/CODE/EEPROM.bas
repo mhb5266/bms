@@ -6,23 +6,23 @@ $regfile = "M8def.dat"
 $crystal = 4000000
 '-------------------------------------------------------------------------------
 Config Pinb.0 = Input                                       'RF INPUT
-Config Pinc.2 = Output                                      'Buzzer B.1
-Config Pinc.1 = Output                                      'led1 learning led
+Config Pinc.1 = Output                                      'Buzzer B.1
+Config Pinc.0 = Output                                      'led1 learning led
 Config Pinc.0 = Input                                       'key1
 Config Pind.2 = Output                                      'relay 1
 Config Pind.3 = Output                                      'relay 2
 Config Pind.4 = Output                                      'relay3
 Config Pind.5 = Output
 
-Config Portb.1 = Output : Pg Alias Portb.1                  'relay4
+'Config Portb.1 = Output : Pg Alias Portb.1                  'relay4
 
 Config Scl = Portc.5                                        'at24cxx pin6
 Config Sda = Portc.4                                        'at24cxx pin5
 '--------------------------------- Alias  --------------------------------------
 _in Alias Pinb.0                                            'RF input
-Buzz Alias Portc.2
-Led1 Alias Portc.1                                          'learning led
-Key1 Alias Pinc.0                                           'learn key
+Buzz Alias Portc.1
+Led1 Alias Portc.0                                          'learning led
+Key1 Alias Pinb.1                                           'learn key
                                           'B.1
 Rel1 Alias Portd.2                                          'relay1
 Rel2 Alias Portd.3                                          'relay2
@@ -240,20 +240,20 @@ Reset Led1
 Return
 '================================================================ CHECK   code chek ok
 Check:
-Okread = 1
-If Keycheck = 0 Then                                        'agar keycheck=1 bashad yani be releha farman nade
-Eaddress = 10
-For I = 1 To Rnumber
-Gosub Ra_r
-If Ra = Address Then                                        'code
-Gosub Command
-Gosub Beep
-Exit For
-End If
-Eaddress = Eaddress + 1
-Next
-End If
-Keycheck = 0
+      Okread = 1
+      If Keycheck = 0 Then                                        'agar keycheck=1 bashad yani be releha farman nade
+         Eaddress = 10
+         For I = 1 To Rnumber
+             Gosub Ra_r
+             If Ra = Address Then                           'code
+                          Gosub Command
+                          Gosub Beep
+                          Exit For
+             End If
+             Eaddress = Eaddress + 1
+         Next
+      End If
+      Keycheck = 0
 Return
 '-------------------------------- Relay command
 Command:

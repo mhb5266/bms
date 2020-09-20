@@ -291,9 +291,9 @@ Rx:
       Din(i) = Maxin
 
       If Inok = 1 Then
-        Toggle Rt
+
         Typ = Din(2)
-        If Typ = Mytyp Or Typ = Alltyp Then Call Findorder
+        If Typ = Mytyp Then Call Findorder
         I = 0
         Reset Inok
       End If

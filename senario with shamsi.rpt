@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 09-18-2020
-Time         : 18:22:00
+Date         : 09-20-2020
+Time         : 16:56:25
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,9 +8,9 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : 55C6 hex  -> Will fit into ROM
-ROMIMAGE     :  21958 dec
-FLASH USED   :  16  %
+ROMIMAGE     : 601C hex  -> Will fit into ROM
+ROMIMAGE     :  24604 dec
+FLASH USED   :  18  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 10D8 hex
 Framesize    : 20 hex
 Framestart   : 10A8 hex
-Space left   :  3829  dec
+Space left   :  3825  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -172,24 +172,30 @@ ENDBIT                           Byte              01A1          417
 FINDORDER                        Byte              01A2          418 
 REMOTEID                         Byte              01A3          419 
 REMOTEKEYID                      Byte              01A4          420 
-DIN                              Byte(5)           01A5          421 
+SETLIGHT                         Byte              01A5          421 
+DIN                              Byte(5)           01A6          422 
 INOK                             Bit [6]           0199          409 
 LEARNOK                          Bit [5]           0199          409 
 LEARNDONE                        Bit [4]           0199          409 
-CLEARDONE                        Byte              01AA          426 
+CLEARDONE                        Byte              01AB          427 
 SETREMOTEDONE                    Bit [3]           0199          409 
-DIRECT                           Byte              01AB          427 
-TOUCH                            Byte              01AC          428 
+DIRECT                           Byte              01AC          428 
+POOSH                            Word              01AD          429 
+TOUCH                            Byte              01AF          431 
 NEXTDAY                          Bit [2]           0199          409 
-COUNT                            Byte              01AD          429 
-INPUTCOUNTER                     Byte              01AE          430 
+COUNT                            Byte              01B0          432 
+INPUTCOUNTER                     Byte              01B1          433 
 RELAYMODULECOUNTER               EEPROM Byte       0001          1 
 PWMMODULECOUNTER                 EEPROM Byte       0002          2 
 EINPUTCOUNTER                    EEPROM Byte       0003          3 
 SYCNUM                           EEPROM Byte       0004          4 
-CONFIGMODE                       Byte              01AF          431 
-I                                Byte              01B0          432 
-J                                Byte              01B1          433 
+CONFIGMODE                       Byte              01B2          434 
+OK1                              Bit [1]           0199          409 
+OK2                              Bit [0]           0199          409 
+OK3                              Bit [7]           01B3          435 
+OK4                              Bit [6]           01B3          435 
+I                                Byte              01B4          436 
+J                                Byte              01B5          437 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -929,9 +935,14 @@ SYCRELAYMODULEID                 24
 SYCPWMMODULEID                   25
 SETIDFORMODULES                  26
 CLEARALL                         27
+PWMLIGHT                         28
 TOMASTER                         252
 TOOUTPUT                         232
 TOINPUT                          242
+DARK                             161
+MINLIGHT                         162
+MIDLIGHT                         163
+MAXLIGHT                         164
 MAIN_MENU_COUNTER                6
 _SDA                             1
 _SCL                             0

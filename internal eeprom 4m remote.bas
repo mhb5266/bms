@@ -6,24 +6,24 @@ $baud = 115200
 Configs:
 '-------------------------------------------------------------------------------
 Config Pinb.0 = Input                                       'RF INPUT
-Config Pinc.5 = Output                                      'Buzzer B.2
+Config Pinc.1 = Output                                      'Buzzer B.2
 Config Pind.2 = Output                                      'relay 1
 Config Pind.3 = Output                                      'relay 2
 Config Pind.4 = Output                                      'relay3
 Config Pind.5 = Output                                      'relay4
-Config Pinc.4 = Output                                      'led1 learning led
-Config Pinc.0 = Input                                       'key1
-Config Scl = Portb.2                                        'at24cxx pin6
-Config Sda = Portb.1                                        'at24cxx pin5
+Config Pinc.0 = Output                                      'led1 learning led
+'Config Pinc.0 = Input                                       'key1
+Config Scl = Portc.5                                        'at24cxx pin6
+Config Sda = Portc.4                                        'at24cxx pin5
 '--------------------------------- Alias  --------------------------------------
 _in Alias Pinb.0                                            'RF input
-Buzz Alias Portc.5                                          'B.1
+Buzz Alias Portc.1                                          'B.1
 Rel1 Alias Portd.2                                          'relay1
 Rel2 Alias Portd.3                                          'relay2
 Rel3 Alias Portd.4                                          'relay3
 Rel4 Alias Portd.5                                          'relay4
-Led1 Alias Portc.4                                          'learning led
-Key1 Alias Pinc.0                                           'learn key
+Led1 Alias Portc.0                                          'learning led
+'Key1 Alias Pinc.0                                           'learn key
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Const Eewrite = 160                                         'eeprom write address
 Const Eeread = 161                                          'eeprom read address
@@ -56,6 +56,7 @@ Dim E_write As Byte
 Dim Eevar(20) As Eram Long
 
 Maxconfig:
+Rxtx Alias Portd.7 : Config Portd.7 = Output
 Enable Interrupts
 
 Enable Urxc
@@ -91,6 +92,7 @@ Dim Setid(40) As Eram Byte
 Dim Skey(40) As Eram Byte
 
 
+
 Dim Raw As Byte
 
 Dim Cmdid(40) As Eram Byte
@@ -101,8 +103,11 @@ Dim Rcounter As Byte : Rcounter = Ercounter
 
 Dim Keylearnd As Byte
 Dim wic As Byte
+Dim Test As Word
 
-Rxtx Alias Portd.7 : Config Portd.7 = Output
+
+
+Consts:
 
 Const Allid = 99
 Const Nonid = 0
@@ -117,6 +122,7 @@ Const Cleardone = 185
 Const Keywasset = 186
 Const Sendkey = 150
 
+Subs:
 
 Declare Sub checkanswer
 Declare Sub Do_learn
@@ -158,20 +164,23 @@ Do
   'Reset Watchdog
 
   Reset En
-  Gosub _read
-
-  If Learnnew = 1 Then
-     Call Do_learn
-     Reset Learnnew
+  Incr Test
+  If Test = 100 Then
+     Test = 0
+     Gosub _read
   End If
+  'If Learnnew = 1 Then
+   '  Call Do_learn
+    ' Reset Learnnew
+  'End If
 
-  If Clearall = 1 Then
+  'If Clearall = 1 Then
 
-    call beep
-    Waitms 100
-    Call Clear_remotes
-    Reset Clearall
-  End If
+   ' call beep
+    'Waitms 100
+    'Call Clear_remotes
+    'Reset Clearall
+  'End If
 
 Loop
 '*******************************************************************************
@@ -286,10 +295,14 @@ Command:
            Codeid(rcounter) = Code
            Setid(rcounter) = Wic
 
+           Reset Wantid
 
+           Reset Isrequest
+           Reset Isrequest_led
         End If
 
         If Isrequest = 1 Then
+           Toggle Isrequest_led
            For I = 1 To 40
 
                If Remoteid(i) = Raw Then
@@ -305,7 +318,7 @@ Command:
 
            Next
         End If
-
+        Reset Wantid_led
 
 
         Waitms 200
@@ -326,10 +339,11 @@ Rx:
 
       If Inok = 1 Then
 
+        Reset Inok
         Wic = Din(4)
         Id = Wic
         I = 0
-        If Din(2) = Mytyp Then Call Checkanswer
+        If Din(2) = 104 Then Call Checkanswer
 
 
       End If
@@ -435,8 +449,8 @@ End Sub
 
 
 Sub Checkanswer
-
-            Toggle Rxtx
+                   Toggle Rxtx
+            Reset Inok
             Select Case Din(3)
 
 
@@ -483,6 +497,7 @@ Sub Checkanswer
 
                   Set Learnnew
                   Reset Clearall
+                  Call Do_learn
 
                 Case 162
                   If Id <> 72 Then Return
@@ -507,8 +522,8 @@ Sub Checkanswer
                             Wait 1
                             Reset Led1
                             Reset Clearall
-                  Set Clearall
-                  Call Clear_remotes
+                  'Set Clearall
+                  'Call Clear_remotes
                 Case 163
                   Reset Learnnew
                   Reset Clearall
@@ -526,7 +541,7 @@ Sub Checkanswer
                   Set Wantid_led
                   Cmdcode = 164
             End Select
-            Reset Inok
+
 End Sub
 
 Sub Order
@@ -536,13 +551,12 @@ Sub Order
 End Sub
 
 Sub Tx:
-
+    Toggle Rxtx
     If Direct = Tomaster Then
        Endbit = 230
     Elseif Direct = Tooutput Then
        Endbit = 210
     End If
-
     Set En
     Waitms 10
     Printbin Direct ; Typ ; Cmd ; Id ; Endbit

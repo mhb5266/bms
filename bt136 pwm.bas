@@ -10,17 +10,30 @@ Configs:
         'Enable Timer1
         'On Timer1 T1rutin
         Start Timer1
-        Start Timer0
+
+        'Start Timer0
+        'Enable Ovf0
+        'On Timer0 T0rutin
+
         Config Int1 = Rising
         Enable Int1
         On Int1 Int1rutin
 
+
+
 Defports:
         'Config Portb.2 = Output : Blink_ Alias Portb.2
-        Config Portc.5 = Output : Led1 Alias Portc.5
-        Config Portc.4 = Output : Led2 Alias Portc.4
+        Config Portc.5 = Output : out1 Alias Portc.5
+        Config Portc.4 = Output : out2 Alias Portc.4
+        Config Portc.3 = Output : Out3 Alias Portc.3
+        Config Portc.2 = Output : Out4 Alias Portc.2
+        Config Portc.1 = Output : Out5 Alias Portc.1
+        Config Portc.0 = Output : Out6 Alias Portc.0
+        Config Portd.6 = Output : out7 Alias Portd.6
+        Config Portd.7 = Output : out8 Alias Portd.7
+
         Config Portd.3 = Input : Ziro Alias Pind.3
-        Config Portb.1 = Input : Key Alias Pinb.1
+        Config Portb.5 = Input : Key Alias Pinb.5
 
 Maxconfig:
           Enable Urxc
@@ -35,12 +48,20 @@ Maxconfig:
           Dim Id As Byte
           Dim Direct As Byte
           Dim Endbit As Byte
+          Dim Wantnum As Boolean
+          Dim Baseid As Byte
+          Dim Eoutnum(8) As Eram Byte
+          Dim Default_light As Word
+          Dim Tempon As Boolean
+          Dim Timee(8) As Word
+          Dim X As Byte
+
 
           Const Tomaster = 252
           Const Toinput = 242
 
 
-
+          Const Timeout = 6000
 
           Const Maxlight = 0
           Const Dark = 65535
@@ -56,7 +77,7 @@ Maxconfig:
 
 Defvals:
         dim test as word
-        Dim Light As Word : Light = Dark
+        Dim Light(8) As Word
         'dim down as Word
         Dim Plus As Byte
         dim updown as Boolean
@@ -69,10 +90,11 @@ Defvals:
         Dim I As Byte
 
         Dim Idwasgot As Boolean
-        Dim Baseid As Eram Byte
+       ' Dim Baseid As Eram Byte
         Dim Minid As Byte
         Dim Maxid As Byte
         Dim Counterid As Byte : Counterid = 8
+
 
 
         const d = 0
@@ -89,11 +111,33 @@ Main:
      Do
 
 
-       If Timer1 > Light Then Set Led1 Else Reset Led1
+       If Timer1 > Light(1) Then Set Out1 Else Reset Out1
+       If Timer1 > Light(2) Then Set Out2 Else Reset Out2
+       If Timer1 > Light(3) Then Set Out3 Else Reset Out3
+       If Timer1 > Light(4) Then Set Out4 Else Reset Out4
+       If Timer1 > Light(5) Then Set Out5 Else Reset Out5
+       If Timer1 > Light(6) Then Set Out6 Else Reset Out6
+       If Timer1 > Light(7) Then Set Out7 Else Reset Out7
+       If Timer1 > Light(8) Then Set Out8 Else Reset Out8
 
-
-
-
+       If Key = 1 Then
+          If Wantnum = 1 Then
+             Reset wantnum
+             Baseid = Id
+             For I = 1 To Counterid
+                 Baseid = Baseid + 1
+                 Eoutnum(i) = Baseid
+             Next
+             Id = Eoutnum(counterid)
+             Direct = Tomaster
+             Portc = Id
+             Typ = Pwmmodule
+             Cmd = 165
+             Call Tx
+             Wait 1
+             Portc = 0
+           End If
+        End If
 
      Loop
 
@@ -122,34 +166,44 @@ Rx:
 
 Return
 
+T0rutin:
+        Portc = 0
+        Portb = 0
+        Stop Timer0
+        Timer0 = 147
+
+        If Tempon = 1 Then
+
+           For X = 1 To 8
+               If Light(x) < Dark Then Incr Timee(x)
+               If Timee(x) = Timeout Then Light(x) = Dark
+           Next X
+
+        End If
+
+        For X = 1 To 8
+            Light(x) = Default_light
+        Next X
+Return
+
 Int1rutin:
           Stop Timer1
 
-'(
-          Incr Test
 
-          If Test = 300 Then
-             Test = 0
-             Toggle Blink_
-             Incr I
-             If I = 5 Then I = 1
+          Reset out1
+          Reset Out2
+          Reset Out3
+          Reset Out4
+          Reset Out5
+          Reset Out6
+          Reset Out7
+          Reset Out8
 
-                Select Case I
-                       Case 1
-                            Light = 0
-                       Case 2
-                            Light = 8800
-                       Case 3
-                            Light = 12000
-                       Case 4
-                            Light = 65535
-
-                End Select
-          End If
-')
-          Reset Led1
           Timer1 = 0
           Start Timer1
+        For X = 1 To 8
+            Light(x) = Default_light
+        Next X
 
 Return
 
@@ -191,7 +245,7 @@ End Sub
 Sub Refreshout
     Light = Dark
     Do
-       If Timer1 > Light Then Set Led1 Else Reset Led1
+       If Timer1 > Light Then Set Out1 Else Reset Out1
        Waitus 1
        Incr Usdelay
        If Usdelay > 1000000 Then
@@ -219,10 +273,22 @@ Sub Checkanswer
     Cmd = Din(3)
     Select Case Cmd
            Case 160
-                If Din(2) = Pwmmodule Then
-                   Id = Din(4)
-                   Call Getid
-                End If
+                'If Din(2) = Pwmmodule Then
+                   'Id = Din(4)
+                  ' Call Getid
+                'End If
+           Case 161
+                Default_light = Dark
+
+           Case 162
+                Default_light = Minlight
+
+           Case 163
+                Default_light = Midlight
+
+           Case 164
+                Default_light = Maxlight
+
            Case 180
                 Incr Steps
                 If Steps > 4 Then Steps = 1
@@ -230,13 +296,13 @@ Sub Checkanswer
     End Select
     Select Case Steps
            Case 4
-                Light = Maxlight
+                Default_light = Maxlight
            Case 3
-                Light = Midlight
+                Default_light = Midlight
            Case 2
-                Light = Minlight
+                Default_light = Minlight
            Case 1
-                Light = Dark
+                Default_light = Dark
     End Select
 
 

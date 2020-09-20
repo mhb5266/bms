@@ -1,6 +1,6 @@
 Report       : EEPROM
-Date         : 05-02-2020
-Time         : 12:41:34
+Date         : 09-19-2020
+Time         : 16:42:03
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,12 +8,12 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 10A4 hex  -> Will fit into ROM
-ROMIMAGE     :  4260 dec
-FLASH USED   :  52  %
+ROMIMAGE     : 148C hex  -> Will fit into ROM
+ROMIMAGE     :  5260 dec
+FLASH USED   :  64  %
 BAUD         : 9600 Baud
-XTAL         : 4000000 Hz
-BAUD error   : 0.16%
+XTAL         : 11059200 Hz
+BAUD error   : 0.%
 
 Stack start  : 45F hex
 Stack size   : 20 hex
@@ -21,7 +21,7 @@ S-Stacksize  : 8 hex
 S-Stackstart : 440 hex
 Framesize    : 18 hex
 Framestart   : 420 hex
-Space left   :  849  dec
+Space left   :  834  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -90,25 +90,44 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-S                                Word(24)          0060          96 
-I                                Byte              0090          144 
-SADDRESS                         String * 20       0091          145 
-SCODE                            String * 4        00A6          166 
-ADDRESS                          Long              00AB          171 
-CODE                             Byte              00AF          175 
-RA                               Long              00B0          176 
-RNUMBER                          Byte              00B4          180 
-OKREAD                           Bit [7]           00B5          181 
-ERROR                            Bit [6]           00B5          181 
-KEYCHECK                         Bit [5]           00B5          181 
-T                                Word              00B6          182 
-EADDRESS                         Word              00B8          184 
-E_READ                           Byte              00BA          186 
-E_WRITE                          Byte              00BB          187 
-M                                String * 8        00BC          188 
-M1                               String * 2        00C5          197 
-M2                               String * 2        00C8          200 
-M3                               String * 2        00CB          203 
+MAXIN                            Byte              0060          96 
+INOK                             Bit [7]           0061          97 
+ID                               Byte              0062          98 
+TYP                              Byte              0063          99 
+CMD                              Byte              0064          100 
+DIN                              Byte(5)           0065          101 
+WIC                              Byte              006A          106 
+DIRECT                           Byte              006B          107 
+ENDBIT                           Byte              006C          108 
+CMDCODE                          Byte              006D          109 
+ERCOUNTER                        Byte              006E          110 
+REMOTEID                         EEPROM Byte(40)   0000          0 
+CODEID                           EEPROM Byte(40)   0028          40 
+SETID                            EEPROM Byte(40)   0050          80 
+ISREQUEST                        Bit [6]           0061          97 
+WANTID                           Bit [5]           0061          97 
+CLEARALL                         Bit [4]           0061          97 
+LEARNNEW                         Bit [3]           0061          97 
+ENABLE_REMOTE                    Bit [2]           0061          97 
+S                                Word(24)          006F          111 
+I                                Byte              009F          159 
+SADDRESS                         String * 20       00A0          160 
+SCODE                            String * 4        00B5          181 
+ADDRESS                          Long              00BA          186 
+CODE                             Byte              00BE          190 
+RA                               Long              00BF          191 
+RNUMBER                          Byte              00C3          195 
+OKREAD                           Bit [1]           0061          97 
+ERROR                            Bit [0]           0061          97 
+KEYCHECK                         Bit [7]           00C4          196 
+T                                Word              00C5          197 
+EADDRESS                         Word              00C7          199 
+E_READ                           Byte              00C9          201 
+E_WRITE                          Byte              00CA          202 
+M                                String * 8        00CB          203 
+M1                               String * 2        00D4          212 
+M2                               String * 2        00D7          215 
+M3                               String * 2        00DA          218 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -456,7 +475,7 @@ _ERAMSIZE                        512
 _SIM                             0
 _HUGE                            0
 _BASE                            1
-_XTAL                            4000000
+_XTAL                            11059200
 _BUILD                           20781
 _COMPILER                        90
 _HWMUL                           1
@@ -477,10 +496,13 @@ _HWSTACK_LOW                     &H043F
 _SWSTACK_LOW                     &H0438
 _FRAME_HIGH                      &H0439
 _XMEGA                           0
+TOMASTER                         252
+TOINPUT                          242
+TOOUTPUT                         232
 EEWRITE                          160
 EEREAD                           161
-_SDA                             1
-_SCL                             2
+_SDA                             4
+_SCL                             5
 ___I2CDELAY                      5
 CBITINFINITY                     0
 CMBITINFINITY                    1

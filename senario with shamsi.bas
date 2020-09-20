@@ -119,6 +119,8 @@ Dim Findorder As Byte
 Dim Remoteid As Byte
 Dim Remotekeyid As Byte
 
+Dim Setlight As Byte
+
 Dim Din(5) As Byte
 
 Dim Inok As Boolean
@@ -140,6 +142,7 @@ Const Outstep = 112
 
 Defines:
 
+Dim poosh As Word
 Dim Touch As Byte
 Dim Nextday As Boolean
 Dim Count As Byte
@@ -148,10 +151,14 @@ Dim Inputcounter As Byte
 Dim Relaymodulecounter As Eram Byte : If Relaymodulecounter = 255 Then Relaymodulecounter = 0
 Dim Pwmmodulecounter As Eram Byte : If Pwmmodulecounter = 255 Then Pwmmodulecounter = 0
 Dim Einputcounter As Eram Byte : If Einputcounter = 255 Then Einputcounter = 0
-          Inputcounter = Einputcounter
+Inputcounter = Einputcounter
 
 Dim Sycnum As Eram Byte
 Dim Configmode As Byte
+Dim Ok1 As Boolean
+Dim Ok2 As Boolean
+Dim Ok3 As Boolean
+Dim Ok4 As Boolean
 
 Dim I As Byte
 Dim J As Byte
@@ -187,12 +194,16 @@ Const sycrelaymoduleid = 24
 Const sycpwmmoduleid = 25
 Const Setidformodules = 26
 Const Clearall = 27
+Const Pwmlight = 28
 
 Const Tomaster = 252
 Const Tooutput = 232
 Const Toinput = 242
 
-
+Const Dark = 161
+Const Minlight = 162
+Const Midlight = 163
+Const Maxlight = 164
 
 Consts:
 
@@ -253,11 +264,9 @@ Main:
        Gosub M_to_sh
        Call Temp
        Call Show
-
-       Touch = 0
-       Call Readtouch
-       If Touch = 1 Then Call Main_menu
-
+       If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
+          Gosub Choose_senario
+       End If
        Call Ifcheck
 
 
@@ -265,6 +274,115 @@ Main:
 
 Gosub Main
 
+Choose_senario:
+
+Do
+Waitms 50
+Incr Poosh
+If Poosh > 1200 Then
+   Cls
+   Return
+End If
+
+       If Touch1 = 1 Then
+          Poosh = 0
+          Do
+            Waitms 50
+            Incr poosh
+            If Poosh > 60 Then
+               Exit Do
+            End If
+          Loop Until Touch1 = 0
+          If Poosh > 60 Then
+             Poosh = 0
+             Cls
+             Call Main_menu
+          Elseif Poosh < 20 Then
+                 Toggle Ok1
+                 Reset Ok2
+                 Reset Ok3
+                 Reset Ok4
+                 Cls
+                 Showpic 1 , 1 , Night
+                 If Poosh < 20 And Ok1 = 0 Then
+                    Cls
+                    Lcdat 5 , 1 , "night is set"
+                    Return
+                 End If
+
+          End If
+          Poosh = 0
+       End If
+
+       If Touch2 = 1 And Ok2 = 0 Then
+                 Poosh = 0
+                 Set Ok2
+                 Reset Ok1
+                 Reset Ok3
+                 Reset Ok4
+                 Cls
+                 Showpic 1 , 1 , Party
+                 Do
+                 Loop Until Touch2 = 0
+
+       Elseif Touch2 = 1 And Ok2 = 1 Then
+       Poosh = 0
+                 Do
+                    Cls
+                    Lcdat 5 , 1 , "party is set"
+                    Setlight = Maxlight
+                    Findorder = Pwmlight
+                    Call Order
+
+                    Wait 2
+                    Return
+                 Loop Until Touch2 = 0
+       End If
+
+       If Touch3 = 1 And Ok3 = 0 Then
+       Poosh = 0
+                 Set Ok3
+                 Reset Ok1
+                 Reset Ok2
+                 Reset Ok4
+                 Cls
+                 Showpic 1 , 1 , Rutin
+                 Do
+                 Loop Until Touch3 = 0
+
+
+       Elseif Touch3 = 1 And Ok3 = 1 Then
+       Poosh = 0
+                 Do
+                    Cls
+                    Lcdat 5 , 1 , "rutin is set"
+                    Wait 2
+                    Return
+                 Loop Until Touch3 = 0
+       End If
+       If Touch4 = 1 And Ok4 = 0 Then
+       Poosh = 0
+                 Set Ok4
+                 Reset Ok1
+                 Reset Ok2
+                 Reset Ok3
+                 Cls
+                 Showpic 20 , 1 , Tv
+                 Do
+                 Loop Until Touch4 = 0
+
+
+       Elseif Touch4 = 1 And Ok4 = 1 Then
+       Poosh = 0
+                 Do
+                    Cls
+                    Lcdat 5 , 1 , "tv is set"
+                    Wait 2
+                    Return
+                 Loop Until Touch4 = 0
+       End If
+Loop
+Return
 
 Rx:
 
@@ -513,6 +631,14 @@ $include "font32x32.font"
 $include "font16x16.font"
 $include "font8x8.font"
 
+Tv:
+      $bgf "tv.bgf"
+Party:
+      $bgf "party.bgf"
+Rutin:
+      $bgf "rutin.bgf"
+Night:
+      $bgf "night.bgf"
 Logo:
 $bgf "logo.bgf"
 Settingicon:
@@ -537,6 +663,7 @@ $bgf "kelidha.bgf"
 End
 
 Sub Main_menu
+
      Touch = 0
      Do
      Loop Until Touch1 = 0
@@ -544,7 +671,7 @@ Sub Main_menu
      Cls
      Count = 1
      Do
-            Disable Urxc
+            'Disable Urxc
             If Touch = 2 Then
                    touch = 0
                    incr count
@@ -706,9 +833,12 @@ Sub Setkeyid
     'Incr Inputcounter
 
     Do
-      'Waitms 100
-      Call Readtouch
 
+      'Waitms 100
+
+      Do
+        Call Readtouch
+      Loop Until Touch > 0
       If Touch = 4 Then
          Einputcounter = Inputcounter
          Return
@@ -716,28 +846,29 @@ Sub Setkeyid
 
       If Touch = 2 Then
          Incr Inputcounter
-         Einputcounter = Inputcounter
       End If
 
       If Touch = 3 Then
          Decr Inputcounter
-         Einputcounter = Inputcounter
       End If
-      Inputcounter = Einputcounter
+      If Inputcounter > 10 Then Inputcounter = 10
+      If Inputcounter < 1 Then Inputcounter = 1
+      Einputcounter = Inputcounter
       Lcdat 1 , 1 , "Set Key IDs     " , 1
-      Lcdat 3 , 1 , "Leran Key " ; Inputcounter
+      Lcdat 3 , 1 , "Leran Key " ; Inputcounter ; "  "
 
       If Touch = 1 Then
          Id = Einputcounter
          Remotekeyid = Id
          Waitms 2
-         Findorder = setidkey
+         Findorder = Setidkey
          Call Order
          Findorder = Setidremote
          Call Order
          Lcdat 4 , 1 , "press a Key"
+         Wait 1
+         Lcdat 4 , 1 , "                "
       End If
-      Touch = 0
     Loop
 
 End Sub
@@ -810,6 +941,8 @@ Do
         If Touch = 1 Then
                Lcdat 6 , 1 , "press a key"
               If Configmode = Relaymodule Then
+                 Findorder = Readremote
+                 call order
                  Findorder = Readallinput
                  Call Order
                  Typ = Relaymodule
@@ -931,7 +1064,7 @@ Sub Light_menu
 End Sub
 
 Sub Checkanswer
-    Disable Urxc
+    'Disable Urxc
     Select Case Typ
 
            Case Keyin
@@ -1071,7 +1204,7 @@ Sub Order
 
            Case Setidremote
 
-                Direct = Toinput : Typ = 104 : Cmd = 151 : Id = Remotekeyid
+                Direct = Toinput : Typ = 104 : Cmd = 151
 
            Case Sycrelaymoduleid
 
@@ -1085,6 +1218,10 @@ Sub Order
 
            Case Clearall
                  Cmd = 158
+
+           Case Pwmlight
+
+                Direct = Tooutput : Typ = Pwmmodule : Cmd = Setlight : Id = Allid
 
 
 

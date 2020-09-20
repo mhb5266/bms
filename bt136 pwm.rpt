@@ -1,6 +1,6 @@
 Report       : bt136 pwm
-Date         : 09-18-2020
-Time         : 12:53:47
+Date         : 09-20-2020
+Time         : 17:15:47
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 58C hex  -> Will fit into ROM
-ROMIMAGE     :  1420 dec
-FLASH USED   :  17  %
+ROMIMAGE     : 8A2 hex  -> Will fit into ROM
+ROMIMAGE     :  2210 dec
+FLASH USED   :  26  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  901  dec
+Space left   :  867  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -97,24 +97,30 @@ CMD                              Byte              0067          103
 ID                               Byte              0068          104 
 DIRECT                           Byte              0069          105 
 ENDBIT                           Byte              006A          106 
-INOK                             Bit [7]           006B          107 
-WIC                              Byte              006C          108 
-TEST                             Word              006D          109 
-LIGHT                            Word              006F          111 
-PLUS                             Byte              0071          113 
-UPDOWN                           Bit [6]           006B          107 
-SECC                             Word              0072          114 
-TERM                             Byte              0074          116 
-PW                               Word              0075          117 
-STEPS                            Byte              0077          119 
-DELAY_                           Word              0078          120 
-USDELAY                          Dword             007A          122 
-I                                Byte              007E          126 
-IDWASGOT                         Bit [5]           006B          107 
-BASEID                           EEPROM Byte       0000          0 
-MINID                            Byte              007F          127 
-MAXID                            Byte              0080          128 
-COUNTERID                        Byte              0081          129 
+WANTNUM                          Bit [7]           006B          107 
+BASEID                           Byte              006C          108 
+EOUTNUM                          EEPROM Byte(8)    0000          0 
+DEFAULT_LIGHT                    Word              006D          109 
+TEMPON                           Bit [6]           006B          107 
+TIMEE                            Word(8)           006F          111 
+X                                Byte              007F          127 
+INOK                             Bit [5]           006B          107 
+WIC                              Byte              0080          128 
+TEST                             Word              0081          129 
+LIGHT                            Word(8)           0083          131 
+PLUS                             Byte              0093          147 
+UPDOWN                           Bit [4]           006B          107 
+SECC                             Word              0094          148 
+TERM                             Byte              0096          150 
+PW                               Word              0097          151 
+STEPS                            Byte              0099          153 
+DELAY_                           Word              009A          154 
+USDELAY                          Dword             009C          156 
+I                                Byte              00A0          160 
+IDWASGOT                         Bit [3]           006B          107 
+MINID                            Byte              00A1          161 
+MAXID                            Byte              00A2          162 
+COUNTERID                        Byte              00A3          163 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -485,6 +491,7 @@ _FRAME_HIGH                      &H0429
 _XMEGA                           0
 TOMASTER                         252
 TOINPUT                          242
+TIMEOUT                          6000
 MAXLIGHT                         0
 DARK                             65535
 MIDLIGHT                         8800

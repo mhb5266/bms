@@ -3,27 +3,76 @@
 ' Program by icpulse.ir
 '**************************************
 $regfile = "M8def.dat"
-$crystal = 4000000
+$crystal = 11059200
+
+Config_rxtx:
+
+Rxtx Alias Portd.7 : Config Portd.7 = Output
+Wantid_led Alias Portc.3 : Config Portc.3 = Output
+Isrequest_led Alias Portc.2 : Config Portc.2 = Output
+En Alias Portd.6 : Config Portd.6 = Output
+Dim Maxin As Byte
+
+Dim Inok As Boolean
+
+Dim Id As Byte
+Dim Typ As Byte
+Dim Cmd As Byte
+Dim Din(5) As Byte
+Dim Wic As Byte
+Dim Direct As Byte
+Dim Endbit As Byte
+Dim Cmdcode As Byte
+Dim Ercounter As Byte
+Dim Remoteid(40) As Eram Byte
+Dim Codeid(40) As Eram Byte
+Dim Setid(40) As Eram Byte
+
+
+Dim Isrequest As Boolean
+Dim Wantid As Boolean
+Dim Clearall As Boolean
+Dim Learnnew As Boolean
+Dim Enable_remote As Boolean
+
+'Dim Eevar(10) As Eram Byte
+
+
+Const Tomaster = 252
+Const Toinput = 242
+Const Tooutput = 232
+
+
+Declare Sub Tx
+Declare Sub Checkanswer
+Declare Sub Do_learn
+Declare Sub Clear_remotes
+Declare Sub Beep
+Declare Sub Errorbeep
+Declare Sub Order
+
+Config_remote:
+
 '-------------------------------------------------------------------------------
 Config Pinb.0 = Input                                       'RF INPUT
-Config Pinc.5 = Output                                      'Buzzer B.1
+Config Pinc.1 = Output                                      'Buzzer B.1
 Config Pind.2 = Output                                      'relay 1
 Config Pind.3 = Output                                      'relay 2
 Config Pind.4 = Output                                      'relay3
 Config Pind.5 = Output                                      'relay4
-Config Pinc.4 = Output                                      'led1 learning led
-Config Pinc.0 = Input                                       'key1
-Config Scl = Portb.2                                        'at24cxx pin6
-Config Sda = Portb.1                                        'at24cxx pin5
+Config Pinc.0 = Output                                      'led1 learning led
+Config Pinb.1 = Input                                       'key1
+Config Scl = Portc.5                                        'at24cxx pin6
+Config Sda = Portc.4                                        'at24cxx pin5
 '--------------------------------- Alias  --------------------------------------
 _in Alias Pinb.0                                            'RF input
-Buzz Alias Portc.5                                          'B.1
+Buzz Alias Portc.0                                          'B.1
 Rel1 Alias Portd.2                                          'relay1
 Rel2 Alias Portd.3                                          'relay2
 Rel3 Alias Portd.4                                          'relay3
 Rel4 Alias Portd.5                                          'relay4
-Led1 Alias Portc.4                                          'learning led
-Key1 Alias Pinc.0                                           'learn key
+Led1 Alias Portc.1                                          'learning led
+Key1 Alias Pinb.1                                           'learn key
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Const Eewrite = 160                                         'eeprom write address
 Const Eeread = 161                                          'eeprom read address
@@ -65,90 +114,89 @@ End If
 '------------------- startup
 Waitms 500
 Set Led1
-Gosub Beep
-Gosub Beep
+Call Beep
+call beep
 Reset Led1
 Waitms 500
 Enable Interrupts
+
+
 
 Main:
 'Start Watchdog
 '************************************************************************ main
 Do
-'Reset Watchdog
-Gosub _read
-If Key1 = 0 Then
-'Reset Watchdog
-'Stop Watchdog
-Gosub Beep
-Waitms 100
-Gosub Keys
-'Start Watchdog
-End If
+
+  Gosub _read
+  If Key1 = 0 Then
+
+    Call Beep
+    Waitms 100
+    Gosub Keys
+
+  End If
 
 Loop
 '*******************************************************************************
 '--------------------------------------------------------------------------read
 _read:
-Okread = 0
-If _in = 1 Then
-Do
-'Reset Watchdog
-If _in = 0 Then Exit Do
-Loop
-Timer1 = 0
-Start Timer1
-While _in = 0
-'Reset Watchdog
-Wend
-Stop Timer1
-If Timer1 >= 3500 And Timer1 <= 8800 Then
-Do
-If _in = 1 Then
-Timer1 = 0
-Start Timer1
-While _in = 1
-'Reset Watchdog
-Wend
-Stop Timer1
-Incr I
-S(i) = Timer1
-End If
-'Reset Watchdog
-If I = 24 Then Exit Do
-Loop
-For I = 1 To 24
-'Reset Watchdog
-If S(i) >= 120 And S(i) <= 350 Then
-S(i) = 0
-Else
-If S(i) >= 400 And S(i) <= 850 Then
- S(i) = 1
- Else
- I = 0
- Address = 0
- Code = 0
- Okread = 0
- Return
- End If
- End If
-Next
-I = 0
-Saddress = ""
-Scode = ""
-For I = 1 To 20
-Saddress = Saddress + Str(s(i))
-Next
-For I = 21 To 24
-Scode = Scode + Str(s(i))
-Next
-Address = Binval(saddress)
-Code = Binval(scode)
-Gosub Check
-''''''''''''''''''''''''''''''''''''''''''
-I = 0
-End If
-End If
+      Okread = 0
+      If _in = 1 Then
+         Do
+           If _in = 0 Then Exit Do
+         Loop
+         Timer1 = 0
+         Start Timer1
+         While _in = 0
+
+         Wend
+         Stop Timer1
+         If Timer1 >= 9722 And Timer1 <= 23611 Then
+            Do
+              If _in = 1 Then
+                 Timer1 = 0
+                 Start Timer1
+                 While _in = 1
+
+                 Wend
+                 Stop Timer1
+                 Incr I
+                 S(i) = Timer1
+              End If
+
+              If I = 24 Then Exit Do
+            Loop
+            For I = 1 To 24
+                If S(i) >= 332 And S(i) <= 972 Then
+                   S(i) = 0
+                Else
+                    If S(i) >= 1111 And S(i) <= 2361 Then
+                       S(i) = 1
+                    Else
+                        I = 0
+                        Address = 0
+                        Code = 0
+                        Okread = 0
+                        Return
+                    End If
+                End If
+            Next
+            I = 0
+            Saddress = ""
+            Scode = ""
+            For I = 1 To 20
+                Saddress = Saddress + Str(s(i))
+            Next
+            For I = 21 To 24
+                Scode = Scode + Str(s(i))
+            Next
+            Address = Binval(saddress)
+            Code = Binval(scode)
+            Gosub Check
+
+            I = 0
+         End If
+      End If
 Return
 
 '========================================================================= keys  learning
@@ -162,13 +210,13 @@ Keycheck = 1                                                'hengame learn karda
 Waitms 150
 Do
 If Key1 = 0 Then                                            ' agar kelid feshorde bemanad
-Gosub Beep
+call beep
 While Key1 = 0
 Incr T
 Waitms 1
 If T >= 5000 Then
 T = 0
-Gosub Beep
+call beep
 Rnumber = 0
 Gosub Rnumber_ew
 Set Buzz
@@ -189,7 +237,7 @@ End If
 ''''''''''''''''''''''''''^^^
 Gosub _read
 If Okread = 1 Then
-Gosub Beep
+call beep
 ''''''''''''''''''''''repeat check
 If Rnumber = 0 Then                                         ' agar avalin remote as ke learn mishavad
 Incr Rnumber
@@ -241,7 +289,7 @@ For I = 1 To Rnumber
 Gosub Ra_r
 If Ra = Address Then                                        'code
 Gosub Command
-Gosub Beep
+Call Beep
 Exit For
 End If
 Eaddress = Eaddress + 1
@@ -251,35 +299,26 @@ Keycheck = 0
 Return
 '-------------------------------- Relay command
 Command:
-Select Case Code:
+Select Case Code
 
-Case 1:
+Case 1
 Toggle Rel1
 Waitms 50
 
-Case 2:
+Case 2
 Toggle Rel2
 Waitms 50
 
-Case 4:
+Case 4
 Toggle Rel3
 Waitms 50
 
-Case 8:
+Case 8
 Toggle Rel4
 Waitms 50
 
 Case Else
 End Select
-Return
-'-------------------
-
-'-------------------------------------------------------------------------- BEEP
-Beep:
-Set Buzz
-Waitms 80
-Reset Buzz
-Waitms 30
 Return
 '---------------------- for write a byte to eeprom
 Eew:
@@ -349,171 +388,419 @@ Return
 '------------------------------------------------------decode eeprom address
 Decode:
 Select Case Rnumber
-Case 1:
+Case 1
 Eaddress = 10
-Case 2:
+Case 2
 Eaddress = 13
-Case 3:
+Case 3
 Eaddress = 16
-Case 4:
+Case 4
 Eaddress = 19
-Case 5:
+Case 5
 Eaddress = 22
-Case 6:
+Case 6
 Eaddress = 25
-Case 7:
+Case 7
 Eaddress = 28
-Case 8:
+Case 8
 Eaddress = 31
-Case 9:
+Case 9
 Eaddress = 34
-Case 10:
+Case 10
 Eaddress = 37
-Case 11:
+Case 11
 Eaddress = 40
-Case 12:
+Case 12
 Eaddress = 43
-Case 13:
+Case 13
 Eaddress = 46
-Case 14:
+Case 14
 Eaddress = 49
-Case 15:
+Case 15
 Eaddress = 52
-Case 16:
+Case 16
 Eaddress = 55
-Case 17:
+Case 17
 Eaddress = 58
-Case 18:
+Case 18
 Eaddress = 61
-Case 19:
+Case 19
 Eaddress = 64
-Case 20:
+Case 20
 Eaddress = 67
-Case 21:
+Case 21
 Eaddress = 70
-Case 22:
+Case 22
 Eaddress = 73
-Case 23:
+Case 23
 Eaddress = 76
-Case 24:
+Case 24
 Eaddress = 79
-Case 25:
+Case 25
 Eaddress = 82
-Case 26:
+Case 26
 Eaddress = 85
-Case 27:
+Case 27
 Eaddress = 88
-Case 28:
+Case 28
 Eaddress = 91
-Case 29:
+Case 29
 Eaddress = 94
-Case 30:
+Case 30
 Eaddress = 97
-Case 40:
+Case 40
 Eaddress = 100
-Case 41:
+Case 41
 Eaddress = 103
-Case 42:
+Case 42
 Eaddress = 106
-Case 43:
+Case 43
 Eaddress = 109
-Case 44:
+Case 44
 Eaddress = 112
-Case 45:
+Case 45
 Eaddress = 115
-Case 46:
+Case 46
 Eaddress = 118
-Case 47:
+Case 47
 Eaddress = 121
-Case 48:
+Case 48
 Eaddress = 124
-Case 49:
+Case 49
 Eaddress = 127
-Case 50:
+Case 50
 Eaddress = 130
-Case 51:
+Case 51
 Eaddress = 133
-Case 52:
+Case 52
 Eaddress = 136
-Case 53:
+Case 53
 Eaddress = 139
-Case 54:
+Case 54
 Eaddress = 142
-Case 55:
+Case 55
 Eaddress = 145
-Case 56:
+Case 56
 Eaddress = 148
-Case 57:
+Case 57
 Eaddress = 151
-Case 58:
+Case 58
 Eaddress = 154
-Case 59:
+Case 59
 Eaddress = 157
-Case 60:
+Case 60
 Eaddress = 160
-Case 70:
+Case 70
 Eaddress = 163
-Case 71:
+Case 71
 Eaddress = 166
-Case 72:
+Case 72
 Eaddress = 169
-Case 73:
+Case 73
 Eaddress = 172
-Case 74:
+Case 74
 Eaddress = 175
-Case 75:
+Case 75
 Eaddress = 178
-Case 76:
+Case 76
 Eaddress = 181
-Case 77:
+Case 77
 Eaddress = 184
-Case 78:
+Case 78
 Eaddress = 187
-Case 79:
+Case 79
 Eaddress = 190
-Case 80:
+Case 80
 Eaddress = 193
-Case 81:
+Case 81
 Eaddress = 196
-Case 82:
+Case 82
 Eaddress = 199
-Case 83:
+Case 83
 Eaddress = 202
-Case 84:
+Case 84
 Eaddress = 205
-Case 85:
+Case 85
 Eaddress = 208
-Case 86:
+Case 86
 Eaddress = 211
-Case 87:
+Case 87
 Eaddress = 214
-Case 88:
+Case 88
 Eaddress = 217
-Case 89:
+Case 89
 Eaddress = 220
-Case 90:
+Case 90
 Eaddress = 223
-Case 91:
+Case 91
 Eaddress = 226
-Case 92:
+Case 92
 Eaddress = 229
-Case 93:
+Case 93
 Eaddress = 232
-Case 94:
+Case 94
 Eaddress = 235
-Case 95:
+Case 95
 Eaddress = 238
-Case 96:
+Case 96
 Eaddress = 241
-Case 97:
+Case 97
 Eaddress = 244
-Case 98:
+Case 98
 Eaddress = 247
-Case 99:
+Case 99
 Eaddress = 250
-Case 100:
+Case 100
 Eaddress = 253
 Case Else
 End Select
 Return
 '-------------------------------------------------------------------------------
+
+
+
+Rx:
+
+      Incr I
+      Inputbin Maxin
+
+
+      If I = 5 And Maxin = 220 Then Set Inok
+      If Maxin = 242 Then I = 1
+
+      Din(i) = Maxin
+
+      If Inok = 1 Then
+
+        Reset Inok
+        Wic = Din(4)
+        Id = Wic
+        I = 0
+        If Din(2) = 104 Then Call Checkanswer
+
+
+      End If
+
+
+Return
+
+
+Sub Errorbeep
+    Set Buzz
+    Waitms 700
+    Reset Buzz
+End Sub
+
+Sub Beep
+    Set Buzz
+    Waitms 80
+    Reset Buzz
+    Waitms 30
+End Sub
+
+
+Sub Clear_remotes
+ '(
+If Clearall = 1 Then
+     Reset Rel1
+     Reset Rel2
+     Reset Rel3
+     Reset Rel4
+     For I = 1 To 50
+
+         Remoteid(i) = 0
+
+         Codeid(i) = 0
+     Next I
+     Rnumber = 0
+     Rnumber_e = Rnumber
+     Set Led1
+     Call Beep
+     Call Beep
+     Call Errorbeep
+     Wait 1
+     Reset Led1
+     Reset Clearall
+End If
+')
+End Sub
+
+'(
+Sub Do_learn:
+    Do
+           Gosub _read
+
+           If Okread = 1 Then
+              Call Beep                                     'repeat check
+              If Rnumber = 0 Then                               ' agar avalin remote as ke learn mishavad
+                 Incr Rnumber
+                 Rnumber_e = Rnumber
+                 Waitms 10
+                 Ra = Address
+                 Eevar(rnumber) = Ra
+                 Waitms 10
+                 Exit Do
+              Else                                          'address avalin khane baraye zakhire address remote
+                 For I = 1 To Rnumber
+                     Ra = Eevar(i)
+                     If Ra = Address Then                       'agar address remote tekrari bod yani ghablan learn shode
+                        Set Buzz
+                        Wait 1
+                        Reset Buzz
+                        Error = 1
+                        Exit For
+                     Else
+                        Error = 0
+                     End If
+                 Next
+                 If Error = 0 Then                              ' agar tekrari nabod
+                    Incr Rnumber                                'be meghdare rnumber ke index tedade remote haye learn shode ast yek vahed ezafe kon
+                    If Rnumber > 20 Then                    'agar bishtar az 100 remote learn shavad
+                       Rnumber = 20
+                       Set Buzz
+                       Wait 5
+                       Reset Buzz
+                    Else                                    'agar kamtar az 100 remote bod
+                       Rnumber_e = Rnumber                  'meghdare rnumber ra dar eeprom zakhore mikonad
+                       Ra = Address
+                       Eevar(rnumber) = Ra
+                       Waitms 10
+                    End If
+                 End If
+              End If
+
+
+              Exit Do
+           End If
+         Okread = 0
+         Reset Led1
+
+    Loop
+
+
+End Sub
+
+')
+
+Sub Checkanswer
+                   Toggle Rxtx
+            Reset Inok
+            Select Case Din(3)
+
+
+                Case 150
+
+                  Set Isrequest
+                  Reset Learnnew
+                  Reset Clearall
+                  Set Isrequest_led
+                  Reset Wantid_led
+
+                Case 151
+
+                  Reset Learnnew
+                  Reset Clearall
+                  Wic = Din(4)
+                  Cmdcode = 180
+                  Set Wantid
+                  Reset Isrequest_led
+                  Set Wantid_led
+                  'Call Getid
+
+                Case 156
+
+                  Reset Learnnew
+                  Reset Clearall
+                  Set Enable_remote
+
+                Case 157
+
+                  Reset Learnnew
+                  Reset Clearall
+                  Reset Enable_remote
+
+                Case 158
+                     Ercounter = 0
+                     For I = 1 To 40
+                         Remoteid(i) = 0
+                         Codeid(i) = 0
+                         Setid(i) = 0
+                     Next
+
+                Case 161
+
+                  Set Learnnew
+                  Reset Clearall
+                  'Call Do_learn
+
+                Case 162
+                  If Id <> 72 Then Return
+                  Reset Learnnew
+                            Set Led1
+                            Reset Rel1
+                            Reset Rel2
+                            Reset Rel3
+                            Reset Rel4
+                            For I = 1 To 50
+
+                                Remoteid(i) = 0
+
+                                Codeid(i) = 0
+                            Next I
+                            'Rnumber = 0
+                            'Rnumber_e = Rnumber
+
+                            Call Beep
+                            Call Beep
+                            Call Errorbeep
+                            Wait 1
+                            Reset Led1
+                            Reset Clearall
+                  'Set Clearall
+                  'Call Clear_remotes
+                Case 163
+                  Reset Learnnew
+                  Reset Clearall
+                  Wic = Din(4)
+                  Cmdcode = 163
+                  Set Wantid
+                  Reset Isrequest_led
+                  Set Wantid_led
+                Case 164
+                  Reset Learnnew
+                  Reset Clearall
+                  Wic = Din(4)
+                  Set Wantid
+                  Reset Isrequest_led
+                  Set Wantid_led
+                  Cmdcode = 164
+            End Select
+
+End Sub
+
+Sub Order
+
+
+
+End Sub
+
+Sub Tx:
+    Toggle Rxtx
+    If Direct = Tomaster Then
+       Endbit = 230
+    Elseif Direct = Tooutput Then
+       Endbit = 210
+    End If
+    Set En
+    Waitms 10
+    Printbin Direct ; Typ ; Cmd ; Id ; Endbit
+    Waitms 50
+    Reset En
+
+
+
+End Sub
+
+End
+
+

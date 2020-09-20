@@ -30,7 +30,7 @@ Config Portd = Output
            Out17 Alias Porta.4
            Out18 Alias Porta.3
            Out19 Alias Porta.2
-           Out20 Alias Porta.5
+           Out20 Alias Porta.1
            Out21 Alias Portb.2
            Out22 Alias Portb.1
            Out23 Alias Portb.0
@@ -132,6 +132,9 @@ Consts:
 'Const D = 10
 Const Allid = 99
 
+Const Relaymodule = 110
+Const Pwmmodule = 111
+
 Const Tomaster = 252
 Const Tooutput = 232
 Const Toinput = 242
@@ -213,6 +216,7 @@ Main:
              Id = Eoutnum(counterid)
              Direct = Tomaster
              Portc = Id
+             Typ = Relaymodule
              Cmd = 165
              Call Tx
              Wait 1
