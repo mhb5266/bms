@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 09-20-2020
-Time         : 16:56:25
+Date         : 09-21-2020
+Time         : 17:27:44
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,9 +8,9 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : 601C hex  -> Will fit into ROM
-ROMIMAGE     :  24604 dec
-FLASH USED   :  18  %
+ROMIMAGE     : 61B2 hex  -> Will fit into ROM
+ROMIMAGE     :  25010 dec
+FLASH USED   :  19  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -163,6 +163,7 @@ S                                String * 10       018E          398
 BLINK_FLAG                       Bit [7]           0199          409 
 SELECTION                        Byte              019A          410 
 A                                Byte              019B          411 
+BACKTIME                         Bit [6]           0199          409 
 MAXIN                            Byte              019C          412 
 ID                               Byte              019D          413 
 TYP                              Byte              019E          414 
@@ -174,15 +175,15 @@ REMOTEID                         Byte              01A3          419
 REMOTEKEYID                      Byte              01A4          420 
 SETLIGHT                         Byte              01A5          421 
 DIN                              Byte(5)           01A6          422 
-INOK                             Bit [6]           0199          409 
-LEARNOK                          Bit [5]           0199          409 
-LEARNDONE                        Bit [4]           0199          409 
+INOK                             Bit [5]           0199          409 
+LEARNOK                          Bit [4]           0199          409 
+LEARNDONE                        Bit [3]           0199          409 
 CLEARDONE                        Byte              01AB          427 
-SETREMOTEDONE                    Bit [3]           0199          409 
+SETREMOTEDONE                    Bit [2]           0199          409 
 DIRECT                           Byte              01AC          428 
 POOSH                            Word              01AD          429 
 TOUCH                            Byte              01AF          431 
-NEXTDAY                          Bit [2]           0199          409 
+NEXTDAY                          Bit [1]           0199          409 
 COUNT                            Byte              01B0          432 
 INPUTCOUNTER                     Byte              01B1          433 
 RELAYMODULECOUNTER               EEPROM Byte       0001          1 
@@ -190,10 +191,10 @@ PWMMODULECOUNTER                 EEPROM Byte       0002          2
 EINPUTCOUNTER                    EEPROM Byte       0003          3 
 SYCNUM                           EEPROM Byte       0004          4 
 CONFIGMODE                       Byte              01B2          434 
-OK1                              Bit [1]           0199          409 
-OK2                              Bit [0]           0199          409 
-OK3                              Bit [7]           01B3          435 
-OK4                              Bit [6]           01B3          435 
+OK1                              Bit [0]           0199          409 
+OK2                              Bit [7]           01B3          435 
+OK3                              Bit [6]           01B3          435 
+OK4                              Bit [5]           01B3          435 
 I                                Byte              01B4          436 
 J                                Byte              01B5          437 
 
@@ -936,6 +937,7 @@ SYCPWMMODULEID                   25
 SETIDFORMODULES                  26
 CLEARALL                         27
 PWMLIGHT                         28
+PWMBLINK                         29
 TOMASTER                         252
 TOOUTPUT                         232
 TOINPUT                          242

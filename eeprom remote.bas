@@ -303,6 +303,7 @@ Command:
                      Typ = Mytyp
                      Direct = Tooutput
                      Call Tx
+                     Exit For
                   End If
                End If
            Next H

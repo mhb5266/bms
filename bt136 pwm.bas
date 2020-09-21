@@ -56,6 +56,17 @@ Maxconfig:
           Dim Timee(8) As Word
           Dim X As Byte
 
+          Dim Blink_ As Boolean
+          Dim Blink_id As Byte
+          Dim Blink_delay As Byte
+          Dim Blink_step As Byte
+          Dim Blink_light As Word
+
+          Dim Syc As Boolean
+          Dim Eout(8) As Eram Byte
+          Dim Eoutid(8) As Eram Byte
+          Dim Tempid As Byte
+          Dim J As Byte
 
           Const Tomaster = 252
           Const Toinput = 242
@@ -111,33 +122,16 @@ Main:
      Do
 
 
-       If Timer1 > Light(1) Then Set Out1 Else Reset Out1
-       If Timer1 > Light(2) Then Set Out2 Else Reset Out2
-       If Timer1 > Light(3) Then Set Out3 Else Reset Out3
-       If Timer1 > Light(4) Then Set Out4 Else Reset Out4
-       If Timer1 > Light(5) Then Set Out5 Else Reset Out5
-       If Timer1 > Light(6) Then Set Out6 Else Reset Out6
-       If Timer1 > Light(7) Then Set Out7 Else Reset Out7
-       If Timer1 > Light(8) Then Set Out8 Else Reset Out8
+              If Timer1 > Light(1) Then Set Out1 Else Reset Out1
+              If Timer1 > Light(2) Then Set Out2 Else Reset Out2
+              If Timer1 > Light(3) Then Set Out3 Else Reset Out3
+              If Timer1 > Light(4) Then Set Out4 Else Reset Out4
+              If Timer1 > Light(5) Then Set Out5 Else Reset Out5
+              If Timer1 > Light(6) Then Set Out6 Else Reset Out6
+              If Timer1 > Light(7) Then Set Out7 Else Reset Out7
+              If Timer1 > Light(8) Then Set Out8 Else Reset Out8
 
-       If Key = 1 Then
-          If Wantnum = 1 Then
-             Reset wantnum
-             Baseid = Id
-             For I = 1 To Counterid
-                 Baseid = Baseid + 1
-                 Eoutnum(i) = Baseid
-             Next
-             Id = Eoutnum(counterid)
-             Direct = Tomaster
-             Portc = Id
-             Typ = Pwmmodule
-             Cmd = 165
-             Call Tx
-             Wait 1
-             Portc = 0
-           End If
-        End If
+
 
      Loop
 
@@ -190,7 +184,31 @@ Int1rutin:
           Stop Timer1
 
 
-          Reset out1
+          If Blink_ = 1 Then
+             Incr Blink_delay
+             If Blink_delay = 0 Then
+                Incr Blink_step
+                If Blink_step > 4 Then Blink_step = 1
+                Select Case Blink_step
+                       Case 1
+                            Blink_light = Dark
+                       Case 2
+                            Blink_light = Minlight
+                       Case 3
+                            Blink_light = Midlight
+                       Case 4
+                            Blink_light = Maxlight
+                End Select
+                For I = 1 To Counterid
+                    If Blink_id = Eoutnum(i) Then
+                       Light(i) = Blink_light
+                    End If
+                Next
+             End If
+
+          End If
+
+          Reset Out1
           Reset Out2
           Reset Out3
           Reset Out4
@@ -272,11 +290,36 @@ End Sub
 Sub Checkanswer
     Cmd = Din(3)
     Select Case Cmd
+           Case 151
+                      Do
+                      Loop Until Key = 1
+                      Baseid = Id
+                      For I = 1 To Counterid
+                          Baseid = Baseid + 1
+                          Eoutnum(i) = Baseid
+                      Next
+                      Id = Eoutnum(counterid)
+                      Direct = Tomaster
+                      Portc = Id
+                      Typ = Pwmmodule
+                      Cmd = 165
+                      Call Tx
+                      Portc = 0
+                      Wait 1
+                      Portc = 255
+                      Wait 1
+                      Portc = 0
+
+           Case 158
+                    For I = 1 To Counterid
+                        Eoutid(i) = 0
+                        Eoutnum(i) = 0
+                        Light(i) = Dark
+                    Next
+
            Case 160
-                'If Din(2) = Pwmmodule Then
-                   'Id = Din(4)
-                  ' Call Getid
-                'End If
+                Set Syc
+                Tempid = Id
            Case 161
                 Default_light = Dark
 
@@ -290,20 +333,30 @@ Sub Checkanswer
                 Default_light = Maxlight
 
            Case 180
-                Incr Steps
-                If Steps > 4 Then Steps = 1
+                If Syc = 0 Then
+                                Reset Blink_
+                                Incr Steps
+                                If Steps > 4 Then Steps = 1
+                                If Steps = 4 Then Default_light = Maxlight
+                                If Steps = 3 Then Default_light = Midlight
+                                If Steps = 2 Then Default_light = Minlight
+                                If Steps = 1 Then Default_light = Dark
+                                For I = 1 To Counterid
+                                    If Eoutid(i) = Id Then
+                                       Light(i) = Default_light
+                                       Exit For
+                                    End If
+                                Next
+                Else
+                    Eoutid(tempid) = Id
+                End If
+
            Case 159
+           Case 183
+                Set Blink_
+                Blink_id = Id
     End Select
-    Select Case Steps
-           Case 4
-                Default_light = Maxlight
-           Case 3
-                Default_light = Midlight
-           Case 2
-                Default_light = Minlight
-           Case 1
-                Default_light = Dark
-    End Select
+
 
 
 End Sub

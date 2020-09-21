@@ -102,6 +102,8 @@ S1 = "  WWW.ISEEE.IR"
 Dim Blink_flag As Bit
 Dim Selection As Byte
 Dim A As Byte
+Dim Backtime As Boolean
+
 
 Maxconfig:
 
@@ -195,6 +197,7 @@ Const sycpwmmoduleid = 25
 Const Setidformodules = 26
 Const Clearall = 27
 Const Pwmlight = 28
+Const Pwmblink = 29
 
 Const Tomaster = 252
 Const Tooutput = 232
@@ -264,10 +267,13 @@ Main:
        Gosub M_to_sh
        Call Temp
        Call Show
-       If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
-          Gosub Choose_senario
-       End If
-       Call Ifcheck
+       'If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
+          'Gosub Choose_senario
+       'End If
+       Call Readtouch
+
+       If Touch > 0 Then Call Main_menu
+       'Call Ifcheck
 
 
      Loop
@@ -734,7 +740,28 @@ End Sub
 
 
 Sub Ifcheck
+    If Sh_month = 6 And Sh_day = 30 And _hour = 0 And _min = 0 And Backtime = 0 Then
+       Set Backtime
+       If Backtime = 1 Then
+          _hour = 23
+          Sh_day = 30
+           Gosub Sh_to_m
+           Gosub Setdate
+           Gosub Settime
 
+       End If
+    End If
+    If Sh_month = 1 And Sh_day = 1 And _hour = 0 And _min = 0 And Backtime = 0 Then
+       Set Backtime
+       If Backtime = 1 Then
+          _hour = 1
+          Sh_day = 2
+           Gosub Sh_to_m
+           Gosub Setdate
+           Gosub Settime
+       End If
+    End If
+    If _hour = 5 And _min = 23 Then Reset Backtime
 End Sub
 
 
@@ -785,8 +812,8 @@ Sub Setting_menu
            Cls
         End If
         Lcdat 1 , 1 , "Setting Menu    " , 1
-        If Count = 0 Then Count = 5
-        If Count > 5 Then Count = 1
+        If Count = 0 Then Count = 6
+        If Count > 6 Then Count = 1
         If Touch = 1 Then
            Select Case Count
                   Case 1
@@ -951,9 +978,19 @@ Do
                  Id = Count
                  Call Order
               Elseif Configmode = Pwmmodule Then
+                 Findorder = Readremote
+                 Call Order
+                 Findorder = Readallinput
+                 Call Order
                  Typ = Pwmmodule
-                 Cmd = 163
-                 Findorder = Setoutput
+                 Cmd = 183
+                 Findorder = Pwmblink
+                 Id = Count
+                 Call Order
+                 Cmd = 160
+                 Findorder = Sycpwmmoduleid
+                 Id = Count
+                 Call Order
               End If
 
 
@@ -1223,6 +1260,9 @@ Sub Order
 
                 Direct = Tooutput : Typ = Pwmmodule : Cmd = Setlight : Id = Allid
 
+           Case Pwmblink
+
+                Direct = Tooutput : Typ = Pwmmodule : Cmd = 183
 
 
     End Select
@@ -1254,7 +1294,7 @@ End Sub
 
 Sub Show
 
-
+       Call Ifcheck
        Lcdat 4 , 1 , Sens1
        Lcdat 4 , 90 , Sens2
 
@@ -1305,6 +1345,7 @@ Sub Show
        End If
 
 
+       Call Ifcheck
 End Sub
 
 

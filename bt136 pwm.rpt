@@ -1,6 +1,6 @@
 Report       : bt136 pwm
-Date         : 09-20-2020
-Time         : 17:15:47
+Date         : 09-21-2020
+Time         : 16:48:27
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 8A2 hex  -> Will fit into ROM
-ROMIMAGE     :  2210 dec
-FLASH USED   :  26  %
+ROMIMAGE     : ADE hex  -> Will fit into ROM
+ROMIMAGE     :  2782 dec
+FLASH USED   :  33  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  867  dec
+Space left   :  860  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -104,23 +104,33 @@ DEFAULT_LIGHT                    Word              006D          109
 TEMPON                           Bit [6]           006B          107 
 TIMEE                            Word(8)           006F          111 
 X                                Byte              007F          127 
-INOK                             Bit [5]           006B          107 
-WIC                              Byte              0080          128 
-TEST                             Word              0081          129 
-LIGHT                            Word(8)           0083          131 
-PLUS                             Byte              0093          147 
-UPDOWN                           Bit [4]           006B          107 
-SECC                             Word              0094          148 
-TERM                             Byte              0096          150 
-PW                               Word              0097          151 
-STEPS                            Byte              0099          153 
-DELAY_                           Word              009A          154 
-USDELAY                          Dword             009C          156 
-I                                Byte              00A0          160 
-IDWASGOT                         Bit [3]           006B          107 
-MINID                            Byte              00A1          161 
-MAXID                            Byte              00A2          162 
-COUNTERID                        Byte              00A3          163 
+BLINK_                           Bit [5]           006B          107 
+BLINK_ID                         Byte              0080          128 
+BLINK_DELAY                      Byte              0081          129 
+BLINK_STEP                       Byte              0082          130 
+BLINK_LIGHT                      Word              0083          131 
+SYC                              Bit [4]           006B          107 
+EOUT                             EEPROM Byte(8)    0008          8 
+EOUTID                           EEPROM Byte(8)    0010          16 
+TEMPID                           Byte              0085          133 
+J                                Byte              0086          134 
+INOK                             Bit [3]           006B          107 
+WIC                              Byte              0087          135 
+TEST                             Word              0088          136 
+LIGHT                            Word(8)           008A          138 
+PLUS                             Byte              009A          154 
+UPDOWN                           Bit [2]           006B          107 
+SECC                             Word              009B          155 
+TERM                             Byte              009D          157 
+PW                               Word              009E          158 
+STEPS                            Byte              00A0          160 
+DELAY_                           Word              00A1          161 
+USDELAY                          Dword             00A3          163 
+I                                Byte              00A7          167 
+IDWASGOT                         Bit [1]           006B          107 
+MINID                            Byte              00A8          168 
+MAXID                            Byte              00A9          169 
+COUNTERID                        Byte              00AA          170 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -563,6 +573,9 @@ R31                              not used
 ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
+WANTNUM                          not used
+EOUT                             not used
+J                                not used
 TEST                             not used
 PLUS                             not used
 UPDOWN                           not used
