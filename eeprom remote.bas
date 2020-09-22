@@ -29,17 +29,22 @@ Dim Wic As Byte
 Dim Direct As Byte
 Dim Endbit As Byte
 Dim Cmdcode As Byte
-Dim Rcounter As Byte
-Dim Ercounter As Eram Byte
+
+Dim Numcounter As Byte
+Dim Idcounter As Byte
+Dim Eidcounter As Eram Byte
+Idcounter = Eidcounter
+If Idcounter = 255 Then Idcounter = 50
+Eidcounter = Idcounter
 Dim Remoteid(40) As Eram Byte
 Dim Codeid(40) As Eram Byte
 Dim Setid(40) As Eram Byte
-Dim Codes(40) As Byte
+
 Dim Raw As Byte
 Dim H As Byte
 Dim X As Byte
 Dim W As Byte
-Dim Z As Byte
+Dim Test As Byte
 
 Dim Isrequest As Boolean
 Dim Wantid As Boolean
@@ -131,6 +136,9 @@ call beep
 Reset Led1
 Waitms 500
 
+For I = 0 To 40
+    If Remoteid(i) > 0 And Remoteid(i) <> 255 Then Incr Numcounter
+Next
 
 
 Main:
@@ -278,28 +286,39 @@ Command:
         Toggle Rel1
 
         If Wantid = 1 Then
-           Incr Rcounter
-           Ercounter = Rcounter
-           Waitms 2
 
-           Remoteid(rcounter) = Raw
-           Codeid(rcounter) = Code
-           Setid(rcounter) = Wic
+           For I = 0 To Numcounter
+               If Remoteid(i) = Raw Then
+                  Exit For
+               Else
+                   If Codeid(i) = Code Then
+                      Exit For
+                   Else
+                       Incr Idcounter
+                       Incr Numcounter
+                       Remoteid(numcounter) = Raw
+                       Codeid(numcounter) = Code
+                       Setid(numcounter) = Idcounter
+                       For Test = 1 To 4
+                           Toggle Wantid_led
+                           Wait 1
+                       Next
+                   End If
+               End If
 
-
-           Reset Wantid_led
+           Next
 
         End If
 
         If Isrequest = 1 Then
-           Reset Wantid
-           Reset Wantid_led
-           For H = 1 To 40
+           'Reset Wantid
+           'Reset Wantid_led
+           For H = 0 To Numcounter
                If Remoteid(h) = Raw Then
                   If Codeid(h) = Code Then
                      Id = Setid(h)
-                     If Codes(h) = 180 Then Codes(h) = 181 Else Codes(h) = 180
-                     Cmd = Codes(h)
+                     'If Codes(h) = 180 Then Codes(h) = 181 Else Codes(h) = 180
+                     Cmd = 180
                      Typ = Mytyp
                      Direct = Tooutput
                      Call Tx
@@ -635,6 +654,7 @@ Sub Checkanswer
                   Reset Clearall
                   Set Isrequest_led
                   Reset Wantid_led
+                  Reset Wantid
 
                 Case 151
 
@@ -643,9 +663,10 @@ Sub Checkanswer
                   Wic = Din(4)
                   Cmdcode = 180
                   Set Wantid
+                  Reset Isrequest
                   Reset Isrequest_led
-                  Set Wantid_led
-                  'Call Getid
+                  'Set Wantid_led
+
 
                 Case 156
 
@@ -660,11 +681,12 @@ Sub Checkanswer
                   Reset Enable_remote
 
                 Case 158
-                     Ercounter = 0
+                     'Ercounter = 0
                      For I = 1 To 40
                          Remoteid(i) = 0
                          Codeid(i) = 0
                          Setid(i) = 0
+                         Eidcounter = 0
                      Next
 
                 Case 161

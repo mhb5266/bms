@@ -187,8 +187,7 @@ Sub Keytouched:
              Select Case Touch
                     Case 1
                          Id = Touchid1
-                         Toggle S1
-                         If S1 = 1 Then Cmd = 180 Else Cmd = 181
+                         cmd=180
                     Case 2
                          Id = Touchid2
                          Toggle S2

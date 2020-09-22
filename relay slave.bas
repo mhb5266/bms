@@ -47,9 +47,7 @@ Config Portd = Output
            Declare Sub Setouts
            Declare Sub Keyorder
 
-           Const Stopall = 1
-           Const normal = 2
-           Const Refreshall = 3
+
 
            Config Portc = Output
 
@@ -67,10 +65,16 @@ On Urxc Rx
 
 Defines:
 
+Dim Test As Byte
+Dim Wantid As Boolean
+
 Dim Outs(28) As Byte
 Dim Eoutnum(28) As Eram Byte
-Dim Eoutid(28) As Eram Byte
+Dim Eoutid1(28) As Eram Byte
+Dim Eoutid2(28) As Eram Byte
+Dim Eoutid3(28) As Eram Byte
 Dim Eouts(28) As Eram Byte
+Dim Idgot As Eram Byte
 Dim D As Byte
 Dim Moduleid As Eram Byte
 
@@ -87,7 +91,8 @@ Dim Typ As Byte
 Dim Cmd As Byte
 Dim Id As Byte
 Dim I As Byte
-Dim J As Long
+Dim J As Byte
+Dim K As Byte
 Dim Maxin As Byte
 Dim A As Byte
 Dim Reply As Byte
@@ -105,7 +110,8 @@ Dim wantnum As Boolean
 Dim Sycid As Boolean
 Dim Setid As Byte
 Dim Din(5) As Byte
-
+Dim Z As Byte
+Dim Onoff As Boolean
 
 Dim Timeout As Boolean
 Dim Sendok As Boolean
@@ -123,11 +129,16 @@ Dim Endbit As Byte
 Subs:
 
 Declare Sub Findorder
-
+Declare Sub Getid
 Declare Sub Tx
 
 
 Consts:
+
+Const Stopall = 1
+Const normal = 2
+Const Refreshall = 3
+Const Resetall = 4
 
 'Const D = 10
 Const Allid = 99
@@ -181,14 +192,14 @@ End If
 Main:
 
      Do
-
+      '(
        If Blank = 1 Then
           Toggle Outs(idblank)
           J = Idblank
           Call Setouts
           Waitms 200
        End If
-
+')
        If Tempon = 1 Then
           For I = 1 To Counterid
               If Temponid(i) = 1 Then
@@ -206,46 +217,22 @@ Main:
        End If
 
        If Key = 1 Then
-          If wantnum = 1 Then
-             Reset wantnum
-             Baseid = Id
-             For I = 1 To Counterid
-                 Baseid = Baseid + 1
-                 Eoutnum(i) = Baseid
-             Next
-             Id = Eoutnum(counterid)
-             Direct = Tomaster
-             Portc = Id
-             Typ = Relaymodule
-             Cmd = 165
-             Call Tx
-             Wait 1
-             Portc = 0
-
-
-
-          Else
-              D = 0
-              Set Out1
-              Waitms 20
-
-              Do
-                Waitms 100
-                Incr D
-                If D > 10 Then Reset Out1
-              Loop Until Key = 0
-
-              If D < 10 Then
-                 Toggle Togglekey
-                 If Togglekey = 1 Then Status = Stopall Else Status = Normal
-              Elseif D > 10 Then
-                     Status = Refreshall
-              End If
-              D = 0
-              Call Keyorder
-          End If
+          Test = 0
           Do
+            Waitms 100
+            Incr Test
+            If Test > 30 Then
+               Call Getid
+               Exit Do
+            End If
           Loop Until Key = 0
+          If Test < 10 Then
+             Status = Refreshall
+             Call Keyorder
+             Wait 1
+             Status = Stopall
+             Call Keyorder
+          End If
        End If
 
      Loop
@@ -254,7 +241,42 @@ Main:
 Gosub Main
 
 
+Sub Getid
+    Reset En
+    Set Out1
+    Wait 1
+    Reset Out1
+    If Wantid = 1 Then
+       K = Idgot
+       Do
 
+         Do
+         Loop Until Key = 1
+         Waitms 30
+         Test = 0
+         Do
+           Waitms 100
+           Incr Test
+           If Test > 30 Then
+              Reset Wantid
+              Status = Resetall
+              Call Keyorder
+              Return
+           End If
+         Loop Until Key = 0
+         Incr K
+         Status = Resetall
+         Call Keyorder
+         J = K
+         Outs(j) = 1
+         Call Setouts
+
+       Loop
+    Else
+        Return
+    End If
+
+End Sub
 
 Sub Tx
     If Direct = Tomaster Then
@@ -272,12 +294,12 @@ End Sub
 
 Sub Keyorder
 
-    Select Case status
+    Select Case Status
            Case Stopall
                  For J = 1 To 28
                     Outs(j) = 0
                     Call Setouts
-                    Waitms 200
+                    Waitms 250
                 Next
 
 
@@ -294,6 +316,12 @@ Sub Keyorder
                     Call Setouts
                     Waitms 250
                 Next
+
+           Case Resetall
+                Porta = 0
+                Portb = 0
+                Portc = 0
+                Portd = 0
 
     End Select
 
@@ -370,59 +398,62 @@ Sub Findorder
         Select Case Cmd
                Case 151
                     If Typ = Mytyp Then
-                       Set Wantnum
+                       Set Wantid
                     End If
                Case 158
                     For I = 1 To Counterid
-                        Eoutid(i) = 0
+                        Eoutid1(i) = 0
                         Eoutnum(i) = 0
                         Eouts(i) = 0
+                        Idgot = 0
                         For J = 1 To Counterid
                             Call Setouts
                         Next
+                        Status = Resetall
+                        Call Keyorder
                     Next
                Case 159
                     If Id >= Minid And Id <= Maxid Then
                        For I = 1 To Counterid
-                           If Eoutid(i) = Id Then
+                           If Eoutid1(i) = Id Then
                               Set Tempon
                               If Outs(i) = 0 Then Temponid(i) = 1
                            End If
                        Next
                     End If
                Case 160
-                    For I = 1 To Counterid
-                        If Eoutnum(i) = Id Then
-                           Set Outs(i)
-                           J = I
-                           Tempid = I
-                           Set Sycid
-                           Call Setouts
-                        End If
-                    Next
+
                Case 180
-                    'If Sycid = 1 Then
-                       'Outsid(setid) = Id
-                       'Reset Sycid
-                    'Else
-                       If Sycid = 1 Then
-                          Eoutid(tempid) = Id
-                          Reset Sycid
-                       End If
-                       For I = 1 To Counterid
-                           'If Eoutsnum(i) = Id Then
-                           If Eoutid(i) = Id Then
-                              Tempon(id) = 0
-                              J = I
-                              Status = Normal
-                              Outs(j) = 1
+                       If Wantid = 1 Then
+                          If Eoutid1(k) = 0 Then
+                             Eoutid1(k) = Id
+                          Elseif Eoutid2(k) = 0 And Eoutid1(k) <> Id Then
+                             Eoutid2(k) = Id
+                          Elseif Eoutid3(k) = 0 And Eoutid2(k) <> Id Then
+                             Eoutid3(k) = Id
+                          End If
+                          For Z = 1 To 4
+                              Toggle Onoff
+                              Outs(j) = Onoff
                               Call Setouts
-                           End If
-                       Next I
-                    'End If
+                              wait 1
+                          Next
+                       Else
+
+                           For I = 1 To Counterid
+                               'If Eoutsnum(i) = Id Then
+                               If Eoutid1(i) = Id Or Eoutid2(i) = Id Or Eoutid3(i) = Id Then
+                                  Tempon(id) = 0
+                                  J = I
+                                  Status = Normal
+                                  If Outs(j) = 1 Then Outs(j) = 0 Else Outs(j) = 1
+                                  Call Setouts
+                               End If
+                           Next
+                       End If
                Case 181
                     If Sycid = 1 Then
-                          Eoutid(tempid) = Id
+                          Eoutid1(tempid) = Id
                           Reset Sycid
                     End If
                     If Id = Allid Then
@@ -434,7 +465,7 @@ Sub Findorder
                     End If
                     For I = 1 To Counterid
                         'If Eoutsnum(i) = Id Then
-                        If Eoutid(i) = Id Then
+                        If Eoutid1(i) = Id Then
                            J = I
                            Status = Normal
                            Outs(j) = 0

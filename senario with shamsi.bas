@@ -94,8 +94,11 @@ Dim Temp5 As Byte
 Dim Menu As Byte
 Dim Timer_1 As Word
 
-Dim S2 As String * 5
-Dim S1 As String * 15
+
+Dim S1 As String * 16
+Dim S2 As String * 16
+Dim S3 As String * 16
+Dim S4 As String * 16
 Dim S As String * 10
 
 S1 = "  WWW.ISEEE.IR"
@@ -141,6 +144,16 @@ Const Remote = 104
 Const relaymodule = 110
 Const pwmmodule = 111
 Const Outstep = 112
+
+
+Plant_def:
+
+          Dim Plant_status As Byte
+          Dim Plant_start_hour As Byte
+          Dim Plant_start_min As Byte
+          Dim Plant_stop_hour As Byte
+          Dim Plant_stop_min As Byte
+          Dim Plant_days(7) As Byte
 
 Defines:
 
@@ -199,6 +212,7 @@ Const Clearall = 27
 Const Pwmlight = 28
 Const Pwmblink = 29
 
+
 Const Tomaster = 252
 Const Tooutput = 232
 Const Toinput = 242
@@ -248,14 +262,14 @@ Declare Sub Checkanswer
 
 Startup:
 
-
+Eday = Day
 Set Backlight
 'Lcdat 1 , 1 , "hi"
 'Waitms 500
 Cls
 Call Beep
 Showpic 32 , 1 , Logo
-Wait 3
+Wait 1
 Cls
 
 
@@ -273,7 +287,7 @@ Main:
        Call Readtouch
 
        If Touch > 0 Then Call Main_menu
-       'Call Ifcheck
+       Call Ifcheck
 
 
      Loop
@@ -740,10 +754,13 @@ End Sub
 
 
 Sub Ifcheck
-    If Sh_month = 6 And Sh_day = 30 And _hour = 0 And _min = 0 And Backtime = 0 Then
+
+    If Sh_month = 6 And Sh_day = 31 And _hour = 0 And _min = 0 And Backtime = 0 Then
+
        Set Backtime
        If Backtime = 1 Then
           _hour = 23
+          _min = 0
           Sh_day = 30
            Gosub Sh_to_m
            Gosub Setdate
@@ -751,10 +768,12 @@ Sub Ifcheck
 
        End If
     End If
-    If Sh_month = 1 And Sh_day = 1 And _hour = 0 And _min = 0 And Backtime = 0 Then
+
+    If Sh_month = 1 And Sh_day = 2 And _hour = 0 And _min = 0 And Backtime = 0 Then
        Set Backtime
        If Backtime = 1 Then
           _hour = 1
+          _min = 0
           Sh_day = 2
            Gosub Sh_to_m
            Gosub Setdate
@@ -861,11 +880,9 @@ Sub Setkeyid
 
     Do
 
-      'Waitms 100
 
-      Do
         Call Readtouch
-      Loop Until Touch > 0
+
       If Touch = 4 Then
          Einputcounter = Inputcounter
          Return
@@ -873,14 +890,16 @@ Sub Setkeyid
 
       If Touch = 2 Then
          Incr Inputcounter
+         Einputcounter = Inputcounter
       End If
 
       If Touch = 3 Then
          Decr Inputcounter
+         Einputcounter = Inputcounter
       End If
-      If Inputcounter > 10 Then Inputcounter = 10
+      If Inputcounter > 50 Then Inputcounter = 1
       If Inputcounter < 1 Then Inputcounter = 1
-      Einputcounter = Inputcounter
+      Inputcounter = Einputcounter
       Lcdat 1 , 1 , "Set Key IDs     " , 1
       Lcdat 3 , 1 , "Leran Key " ; Inputcounter ; "  "
 
@@ -890,9 +909,9 @@ Sub Setkeyid
          Waitms 2
          Findorder = Setidkey
          Call Order
-         Findorder = Setidremote
-         Call Order
-         Lcdat 4 , 1 , "press a Key"
+         'Findorder = Setidremote
+         'Call Order
+         Lcdat 4 , 1 , "press a Key     "
          Wait 1
          Lcdat 4 , 1 , "                "
       End If
@@ -901,31 +920,10 @@ Sub Setkeyid
 End Sub
 
 Sub Set_id_modules
-    Cls
-    Count = 1
-    Id = Relaymodulecounter
-    Lcdat 5 , 1 , "relay " ; Id
-
-    Id = Pwmmodulecounter
-    Lcdat 6 , 1 , "pwm " ; Id
-
-    Do
-      Call Readtouch
-      If Touch = 4 Then
-         Cls
-         Return
-      End If
-      If Touch = 2 Or Touch = 3 Then
-         Cls
-             Id = Relaymodulecounter
-             Lcdat 5 , 1 , "relay " ; Id
-
-             Id = Pwmmodulecounter
-             Lcdat 6 , 1 , "pwm " ; Id
-      End If
-      Lcdat 1 , 1 , "Set Output IDs  " , 1
-
-      If Touch = 1 Then
+                 Findorder = Readremote
+                 call order
+                 Findorder = Readallinput
+                 Call Order
          Typ = 110 : Id = Relaymodulecounter
          Lcdat 5 , 1 , "relay " ; Id
          Findorder = Setidformodules
@@ -934,7 +932,14 @@ Sub Set_id_modules
          Lcdat 6 , 1 , "pwm " ; Id
          Findorder = Setidformodules
          Call Order
-
+         Lcdat 5 , 1 , "   Pls select   "
+         Lcdat 6 , 1 , "output Module & "
+         Lcdat 7 , 1 , "syc with inputs "
+    Do
+      Call Readtouch
+      If Touch = 4 Then
+         Cls
+         Exit Do
       End If
 
     Loop
@@ -1011,6 +1016,8 @@ Sub Remote_menu
     Do
         Call Readtouch
         If Touch = 4 Then
+           Findorder = Readremote
+           Call Order
            Cls
            Return
         End If
@@ -1024,6 +1031,10 @@ Sub Remote_menu
                   Case 2
                        Findorder = Learnremote
                        Call Order
+                  Case 3
+                       Findorder = Setidremote
+                       Lcdat 5 , 1 , "Press Remote    "
+                       Call Order
            End Select
 
         End If
@@ -1031,7 +1042,7 @@ Sub Remote_menu
         If Cleardone = 1 Then
 
                       Cls
-                      Lcdat 5 , 1 , "Clear is Done"
+                      Lcdat 5 , 1 , "Clear is Done   "
                       Count = 2
                       Wait 1
                       Cls
@@ -1041,7 +1052,7 @@ Sub Remote_menu
         If Learndone = 1 Then
 
                       Cls
-                      Lcdat 5 , 1 , "learn Is Done"
+                      Lcdat 5 , 1 , "learn Is Done   "
                       Lcdat 6 , 1 , Din(4)
                       Count = 3
                       Wait 1
@@ -1074,11 +1085,11 @@ Sub Remote_menu
 
         Select Case Count
                Case 1
-                    Lcdat 3 , 1 , "Clear Remotes "
+                    Lcdat 3 , 1 , "Clear Remotes   "
                Case 2
-                    Lcdat 3 , 1 , "Learn New     "
+                    Lcdat 3 , 1 , "Learn New       "
                Case 3
-                    Lcdat 3 , 1 , "Config Remotes"
+                    Lcdat 3 , 1 , "Config Remotes  "
         End Select
     Loop
 End Sub
@@ -1089,7 +1100,193 @@ Sub Jacuzi_menu
 End Sub
 
 Sub Plant_menu
+ Do
 
+    Incr Timer_1
+    If Timer_1 > 5 Then
+     Timer_1 = 0
+     Toggle Blink_flag
+    End If
+
+    Lcdat 1 , 1 , "Plant Setting   " , 1
+    '-----------------------------
+    If Selection = 1 And Blink_flag = 0 Then
+       S1 = "    "
+    Else
+       Select Case Plant_status
+              Case 1
+                   S1 = "ON  "
+              Case 2
+                   S1 = "OFF "
+              Case 3
+                   S1 = "Auto"
+       End Select
+    End If
+
+    Lcdat 2 , 1 , "Status: "
+    Lcdat 2 , 65 , S1
+    '------------------------------
+    If Selection = 2 And Blink_flag = 0 Then
+
+     S2 = "  "
+    Else
+
+     S = Str(plant_start_hour)
+     S = Format(s , "00")
+     S2 = S1 + S
+
+    End If
+    S2 = S2 + ":"
+    '------------------------------
+    If Selection = 3 And Blink_flag = 0 Then
+
+     S2 = S2 + "  "
+    Else
+
+     S = Str(plant_start_min)
+     S = Format(s , "00")
+     S2 = S2 + S
+
+    End If
+
+
+    Lcdat 3 , 1 , "ON:  "
+    Lcdat 3 , 33 , S2
+
+
+    '--------------------------------
+    If Selection = 4 And Blink_flag = 0 Then
+
+     S3 = "  "
+    Else
+
+     S = Str(plant_stop_hour)
+     S = Format(s , "00")
+     S3 = S3 + S
+
+    End If
+    S3 = S3 + ":"
+    '---------------------------------
+    If Selection = 5 And Blink_flag = 0 Then
+
+     S3 = S3 + "  "
+    Else
+
+     S = Str(plant_stop_min)
+     S = Format(s , "00")
+     S3 = S3 + S
+
+    End If
+     Lcdat 4 , 1 , "OFF: "
+     Lcdat 4 , 33 , S3
+    '----------------------------------
+    If Selection = 6 And Blink_flag = 0 Then
+
+     S1 = S1 + "  "
+    Else
+
+     S = Str(sh_day)
+     S = Format(s , "00")
+     S1 = S1 + S
+
+    End If
+
+    If Selection = 7 And Blink_flag = 0 Then
+       S2 = "   "
+       Eday = Day
+    Else
+        Select Case Day
+           Case 1
+                S2 = "Sat"
+           Case 2
+                S2 = "Sun"
+           Case 3
+                S2 = "Mon"
+           Case 4
+                S2 = "Tue"
+           Case 5
+                S2 = "Wed"
+           Case 6
+                S2 = "Thu"
+           Case 7
+                S2 = "Fri"
+
+        End Select
+
+    End If
+
+    Lcdat 2 , 1 , S1
+    Lcdat 3 , 1 , S2
+
+
+
+
+
+    Call Readtouch
+
+    If Touch = 1 Then
+       Incr Selection
+       Touch = 0
+    End If
+
+    If Touch = 4 Then
+       Cls
+       Touch = 0
+       Return
+    End If
+    '-----------------------------------
+    If Touch = 2 Then
+          If Selection = 1 Then Incr Plant_status
+          If Selection = 2 Then Incr Plant_start_hour
+          If Selection = 3 Then Incr Plant_start_min
+          If Selection = 4 Then Incr Plant_stop_hour
+          If Selection = 5 Then Incr Plant_stop_min
+          If Selection = 6 Then Incr Plant_days(i)
+          'If Selection = 7 Then Incr Day
+          Touch = 0
+    End If
+    '------------------------------------
+    If Touch = 3 Then
+         If Selection = 1 Then Decr Plant_status
+         If Selection = 2 Then Decr Plant_start_hour
+         If Selection = 3 Then Decr Plant_start_min
+         If Selection = 4 Then Decr Plant_stop_hour
+         If Selection = 5 Then Decr Plant_stop_min
+         If Selection = 6 Then Decr Plant_days(i)
+         'If Selection = 7 Then Decr Day
+         Touch = 0
+    End If
+
+    '--------------------------------------
+    If _hour > 100 Then _hour = 23
+    If _min > 100 Then _min = 59
+    If _sec > 100 Then _sec = 59
+
+    If _hour > 23 Then _hour = 0
+    If _min > 59 Then _min = 0
+    If _sec > 59 Then _sec = 0
+    If Sh_year > 1470 Then Sh_year = 1390
+    If Sh_month > 12 Then Sh_month = 1
+    If Sh_day > 31 Then Sh_day = 1
+
+
+
+    If Sh_year < 1390 Then Sh_year = 1470
+    If Sh_month < 1 Then Sh_month = 12
+    If Sh_day < 1 Then Sh_day = 31
+
+    If Day < 1 Then Day = 7
+    If Day > 7 Then Day = 1
+
+    '---------------------------------------
+
+
+    Waitms 40
+
+    If Selection > 7 Then
+       Exit Do
+    End If
+ Loop
 End Sub
 
 Sub Watersystem_menu
@@ -1309,9 +1506,9 @@ Sub Show
        If _min > 9 Then
           Lcdat 1 , 24 , _min
        Else
-          Lcdat 1 , 24 , "0" ; _min
+          Lcdat 1 , 24 , "0" ; _min ; "  "
        End If
-        Day = Eday
+        If Day > 7 Or Day < 0 Then Day = 1
         Select Case Day
            Case 1
                 S2 = "Sat"
@@ -1345,7 +1542,7 @@ Sub Show
        End If
 
 
-       Call Ifcheck
+       'Call Ifcheck
 End Sub
 
 

@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 09-21-2020
-Time         : 17:27:44
+Date         : 09-22-2020
+Time         : 15:50:04
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,9 +8,9 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : 61B2 hex  -> Will fit into ROM
-ROMIMAGE     :  25010 dec
-FLASH USED   :  19  %
+ROMIMAGE     : 6A9C hex  -> Will fit into ROM
+ROMIMAGE     :  27292 dec
+FLASH USED   :  20  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 10D8 hex
 Framesize    : 20 hex
 Framestart   : 10A8 hex
-Space left   :  3825  dec
+Space left   :  3767  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -157,46 +157,54 @@ TEMP4                            Word              0172          370
 TEMP5                            Byte              0174          372 
 MENU                             Byte              0175          373 
 TIMER_1                          Word              0176          374 
-S2                               String * 5        0178          376 
-S1                               String * 15       017E          382 
-S                                String * 10       018E          398 
-BLINK_FLAG                       Bit [7]           0199          409 
-SELECTION                        Byte              019A          410 
-A                                Byte              019B          411 
-BACKTIME                         Bit [6]           0199          409 
-MAXIN                            Byte              019C          412 
-ID                               Byte              019D          413 
-TYP                              Byte              019E          414 
-CMD                              Byte              019F          415 
-STARTBIT                         Byte              01A0          416 
-ENDBIT                           Byte              01A1          417 
-FINDORDER                        Byte              01A2          418 
-REMOTEID                         Byte              01A3          419 
-REMOTEKEYID                      Byte              01A4          420 
-SETLIGHT                         Byte              01A5          421 
-DIN                              Byte(5)           01A6          422 
-INOK                             Bit [5]           0199          409 
-LEARNOK                          Bit [4]           0199          409 
-LEARNDONE                        Bit [3]           0199          409 
-CLEARDONE                        Byte              01AB          427 
-SETREMOTEDONE                    Bit [2]           0199          409 
-DIRECT                           Byte              01AC          428 
-POOSH                            Word              01AD          429 
-TOUCH                            Byte              01AF          431 
-NEXTDAY                          Bit [1]           0199          409 
-COUNT                            Byte              01B0          432 
-INPUTCOUNTER                     Byte              01B1          433 
+S1                               String * 16       0178          376 
+S2                               String * 16       0189          393 
+S3                               String * 16       019A          410 
+S4                               String * 16       01AB          427 
+S                                String * 10       01BC          444 
+BLINK_FLAG                       Bit [7]           01C7          455 
+SELECTION                        Byte              01C8          456 
+A                                Byte              01C9          457 
+BACKTIME                         Bit [6]           01C7          455 
+MAXIN                            Byte              01CA          458 
+ID                               Byte              01CB          459 
+TYP                              Byte              01CC          460 
+CMD                              Byte              01CD          461 
+STARTBIT                         Byte              01CE          462 
+ENDBIT                           Byte              01CF          463 
+FINDORDER                        Byte              01D0          464 
+REMOTEID                         Byte              01D1          465 
+REMOTEKEYID                      Byte              01D2          466 
+SETLIGHT                         Byte              01D3          467 
+DIN                              Byte(5)           01D4          468 
+INOK                             Bit [5]           01C7          455 
+LEARNOK                          Bit [4]           01C7          455 
+LEARNDONE                        Bit [3]           01C7          455 
+CLEARDONE                        Byte              01D9          473 
+SETREMOTEDONE                    Bit [2]           01C7          455 
+DIRECT                           Byte              01DA          474 
+PLANT_STATUS                     Byte              01DB          475 
+PLANT_START_HOUR                 Byte              01DC          476 
+PLANT_START_MIN                  Byte              01DD          477 
+PLANT_STOP_HOUR                  Byte              01DE          478 
+PLANT_STOP_MIN                   Byte              01DF          479 
+PLANT_DAYS                       Byte(7)           01E0          480 
+POOSH                            Word              01E7          487 
+TOUCH                            Byte              01E9          489 
+NEXTDAY                          Bit [1]           01C7          455 
+COUNT                            Byte              01EA          490 
+INPUTCOUNTER                     Byte              01EB          491 
 RELAYMODULECOUNTER               EEPROM Byte       0001          1 
 PWMMODULECOUNTER                 EEPROM Byte       0002          2 
 EINPUTCOUNTER                    EEPROM Byte       0003          3 
 SYCNUM                           EEPROM Byte       0004          4 
-CONFIGMODE                       Byte              01B2          434 
-OK1                              Bit [0]           0199          409 
-OK2                              Bit [7]           01B3          435 
-OK3                              Bit [6]           01B3          435 
-OK4                              Bit [5]           01B3          435 
-I                                Byte              01B4          436 
-J                                Byte              01B5          437 
+CONFIGMODE                       Byte              01EC          492 
+OK1                              Bit [0]           01C7          455 
+OK2                              Bit [7]           01ED          493 
+OK3                              Bit [6]           01ED          493 
+OK4                              Bit [5]           01ED          493 
+I                                Byte              01EE          494 
+J                                Byte              01EF          495 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -1053,10 +1061,16 @@ TEMP1                            not used
 TEMP2                            not used
 TEMP3                            not used
 MENU                             not used
+S4                               not used
 REMOTEID                         not used
 LEARNOK                          not used
 
 Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  0 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
