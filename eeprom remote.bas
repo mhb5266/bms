@@ -30,15 +30,20 @@ Dim Direct As Byte
 Dim Endbit As Byte
 Dim Cmdcode As Byte
 
-Dim Numcounter As Byte
+Dim Enum As Eram Byte
+Dim num As Byte
+Num = Enum
+If Num > 100 Then Num = 0
 Dim Idcounter As Byte
 Dim Eidcounter As Eram Byte
 Idcounter = Eidcounter
-If Idcounter = 255 Then Idcounter = 50
+If Idcounter = 255 Then Idcounter = 40
 Eidcounter = Idcounter
 Dim Remoteid(40) As Eram Byte
 Dim Codeid(40) As Eram Byte
 Dim Setid(40) As Eram Byte
+Dim Gotid As Boolean
+Dim Hasid As Boolean
 
 Dim Raw As Byte
 Dim H As Byte
@@ -47,7 +52,7 @@ Dim W As Byte
 Dim Test As Byte
 
 Dim Isrequest As Boolean
-Dim Wantid As Boolean
+
 Dim Clearall As Boolean
 Dim Learnnew As Boolean
 Dim Enable_remote As Boolean
@@ -136,9 +141,7 @@ call beep
 Reset Led1
 Waitms 500
 
-For I = 0 To 40
-    If Remoteid(i) > 0 And Remoteid(i) <> 255 Then Incr Numcounter
-Next
+
 
 
 Main:
@@ -285,48 +288,46 @@ Command:
 
         Toggle Rel1
 
-        If Wantid = 1 Then
+        If Num = 0 Or Num = 255 Then Num = 1
+        Reset Hasid
+        For I = 0 To 40
+            If Remoteid(i) = Raw And Codeid(i) = Code Then
+               If Setid(i) < 255 Or Setid(i) > 0 Then Set Hasid
+               If Hasid = 1 Then
+                       If Isrequest = 1 Then
+                          For H = 0 To 8
+                              If Remoteid(h) = Raw Then
+                                    Id = Setid(i)
+                                    Cmd = 180
+                                    Typ = Mytyp
+                                    Direct = Tooutput
+                                    Call Tx
+                                    Exit For
 
-           For I = 0 To Numcounter
-               If Remoteid(i) = Raw Then
-                  Exit For
-               Else
-                   If Codeid(i) = Code Then
-                      Exit For
-                   Else
-                       Incr Idcounter
-                       Incr Numcounter
-                       Remoteid(numcounter) = Raw
-                       Codeid(numcounter) = Code
-                       Setid(numcounter) = Idcounter
-                       For Test = 1 To 4
-                           Toggle Wantid_led
-                           Wait 1
-                       Next
-                   End If
+                              End If
+                          Next H
+                       End If
+                       Exit For
                End If
+            End If
+        Next
 
+
+        If Hasid = 0 Then
+           Incr Idcounter
+           Incr Num
+           Enum = Num
+           Eidcounter = Idcounter
+           Remoteid(num) = Raw
+           Codeid(num) = Code
+           Setid(num) = Idcounter
+           For X = 1 To 4
+               Toggle Wantid_led
+               Waitms 250
            Next
-
         End If
 
-        If Isrequest = 1 Then
-           'Reset Wantid
-           'Reset Wantid_led
-           For H = 0 To Numcounter
-               If Remoteid(h) = Raw Then
-                  If Codeid(h) = Code Then
-                     Id = Setid(h)
-                     'If Codes(h) = 180 Then Codes(h) = 181 Else Codes(h) = 180
-                     Cmd = 180
-                     Typ = Mytyp
-                     Direct = Tooutput
-                     Call Tx
-                     Exit For
-                  End If
-               End If
-           Next H
-        End If
+
 
 
 Return
@@ -648,13 +649,8 @@ Sub Checkanswer
 
 
                 Case 150
-
-                  Set Isrequest
-                  Reset Learnnew
-                  Reset Clearall
-                  Set Isrequest_led
-                  Reset Wantid_led
-                  Reset Wantid
+                     Set Isrequest_led
+                     Set Isrequest
 
                 Case 151
 
@@ -662,7 +658,7 @@ Sub Checkanswer
                   Reset Clearall
                   Wic = Din(4)
                   Cmdcode = 180
-                  Set Wantid
+
                   Reset Isrequest
                   Reset Isrequest_led
                   'Set Wantid_led
@@ -681,14 +677,27 @@ Sub Checkanswer
                   Reset Enable_remote
 
                 Case 158
-                     'Ercounter = 0
-                     For I = 1 To 40
+                       For I = 1 To 8
                          Remoteid(i) = 0
-                         Codeid(i) = 0
-                         Setid(i) = 0
+                         'Codeid(i) = 0
+                         'Setid(i) = 0
                          Eidcounter = 0
                      Next
+                  Reset Learnnew
+                            Set Led1
+                            Reset Rel1
+                            Reset Rel2
+                            Reset Rel3
+                            Reset Rel4
+                                  Rnumber = 0
+                                  Gosub Rnumber_ew
 
+                            Call Beep
+                            Call Beep
+                            Call Errorbeep
+                            Wait 1
+                            Reset Led1
+                            Reset Clearall
                 Case 161
 
                   'Set Learnnew
@@ -696,7 +705,12 @@ Sub Checkanswer
                    Call Do_learn
 
                 Case 162
-                  If Id <> 72 Then Return
+                     For I = 1 To 8
+                         Remoteid(i) = 0
+                         'Codeid(i) = 0
+                         'Setid(i) = 0
+                         Eidcounter = 0
+                     Next
                   Reset Learnnew
                             Set Led1
                             Reset Rel1
@@ -718,14 +732,13 @@ Sub Checkanswer
                   Reset Clearall
                   Wic = Din(4)
                   Cmdcode = 163
-                  Set Wantid
+
                   Reset Isrequest_led
                   Set Wantid_led
                 Case 164
                   Reset Learnnew
                   Reset Clearall
                   Wic = Din(4)
-                  Set Wantid
                   Reset Isrequest_led
                   Set Wantid_led
                   Cmdcode = 164

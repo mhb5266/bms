@@ -1,6 +1,6 @@
 Report       : relay slave
-Date         : 09-22-2020
-Time         : 16:50:01
+Date         : 09-23-2020
+Time         : 15:42:30
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M16
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : FFA hex  -> Will fit into ROM
-ROMIMAGE     :  4090 dec
-FLASH USED   :  24  %
+ROMIMAGE     : 1030 hex  -> Will fit into ROM
+ROMIMAGE     :  4144 dec
+FLASH USED   :  25  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -93,6 +93,7 @@ PWM0                             Byte              005C          92
 ERR                              Bit [2]           0006          6 
 TEST                             Byte              0060          96 
 WANTID                           Bit [7]           0061          97 
+GOTID                            Bit [6]           0061          97 
 OUTS                             Byte(28)          0062          98 
 EOUTNUM                          EEPROM Byte(28)   0000          0 
 EOUTID1                          EEPROM Byte(28)   001C          28 
@@ -105,8 +106,8 @@ MODULEID                         EEPROM Byte       008D          141
 TEMPID                           Byte              007F          127 
 STATUS                           Byte              0080          128 
 EFIRST                           EEPROM Byte       008E          142 
-TOGGLEKEY                        Bit [6]           0061          97 
-IDWASGOT                         Bit [5]           0061          97 
+TOGGLEKEY                        Bit [5]           0061          97 
+IDWASGOT                         Bit [4]           0061          97 
 TYP                              Byte              0081          129 
 CMD                              Byte              0082          130 
 ID                               Byte              0083          131 
@@ -124,19 +125,19 @@ MINID                            Byte              008D          141
 MAXID                            Byte              008E          142 
 TEMPONID                         Byte(28)          008F          143 
 TEMPONTIME                       Word(28)          00AB          171 
-TEMPON                           Bit [4]           0061          97 
-WANTNUM                          Bit [3]           0061          97 
-SYCID                            Bit [2]           0061          97 
+TEMPON                           Bit [3]           0061          97 
+WANTNUM                          Bit [2]           0061          97 
+SYCID                            Bit [1]           0061          97 
 SETID                            Byte              00E3          227 
 DIN                              Byte(5)           00E4          228 
 Z                                Byte              00E9          233 
-ONOFF                            Bit [1]           0061          97 
-TIMEOUT                          Bit [0]           0061          97 
-SENDOK                           Bit [7]           00EA          234 
-INOK                             Bit [6]           00EA          234 
+ONOFF                            Bit [0]           0061          97 
+TIMEOUT                          Bit [7]           00EA          234 
+SENDOK                           Bit [6]           00EA          234 
+INOK                             Bit [5]           00EA          234 
 LIGHT                            Byte              00EB          235 
-LEARNOK                          Bit [5]           00EA          234 
-BLANK                            Bit [4]           00EA          234 
+LEARNOK                          Bit [4]           00EA          234 
+BLANK                            Bit [3]           00EA          234 
 IDBLANK                          Byte              00EC          236 
 DIRECT                           Byte              00ED          237 
 ENDBIT                           Byte              00EE          238 

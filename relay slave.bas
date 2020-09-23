@@ -67,6 +67,7 @@ Defines:
 
 Dim Test As Byte
 Dim Wantid As Boolean
+Dim Gotid As Boolean
 
 Dim Outs(28) As Byte
 Dim Eoutnum(28) As Eram Byte
@@ -425,19 +426,22 @@ Sub Findorder
 
                Case 180
                        If Wantid = 1 Then
+                          Reset Gotid
                           If Eoutid1(k) = 0 Then
-                             Eoutid1(k) = Id
+                             Eoutid1(k) = Id : Set Gotid
                           Elseif Eoutid2(k) = 0 And Eoutid1(k) <> Id Then
-                             Eoutid2(k) = Id
+                             Eoutid2(k) = Id : Set Gotid
                           Elseif Eoutid3(k) = 0 And Eoutid2(k) <> Id Then
-                             Eoutid3(k) = Id
+                             Eoutid3(k) = Id : Set Gotid
                           End If
-                          For Z = 1 To 4
-                              Toggle Onoff
-                              Outs(j) = Onoff
-                              Call Setouts
-                              wait 1
-                          Next
+                          If Gotid = 1 Then
+                             For Z = 1 To 4
+                                 Toggle Onoff
+                                 Outs(j) = Onoff
+                                 Call Setouts
+                                 Waitms 500
+                             Next
+                          End If
                        Else
 
                            For I = 1 To Counterid

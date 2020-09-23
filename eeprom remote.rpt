@@ -1,6 +1,6 @@
 Report       : eeprom remote
-Date         : 09-22-2020
-Time         : 16:39:11
+Date         : 09-23-2020
+Time         : 17:18:51
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,8 +8,8 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 16BA hex  -> Will fit into ROM
-ROMIMAGE     :  5818 dec
+ROMIMAGE     : 16F0 hex  -> Will fit into ROM
+ROMIMAGE     :  5872 dec
 FLASH USED   :  71  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
@@ -100,22 +100,24 @@ WIC                              Byte              006A          106
 DIRECT                           Byte              006B          107 
 ENDBIT                           Byte              006C          108 
 CMDCODE                          Byte              006D          109 
-NUMCOUNTER                       Byte              006E          110 
+ENUM                             EEPROM Byte       0000          0 
+NUM                              Byte              006E          110 
 IDCOUNTER                        Byte              006F          111 
-EIDCOUNTER                       EEPROM Byte       0000          0 
-REMOTEID                         EEPROM Byte(40)   0001          1 
-CODEID                           EEPROM Byte(40)   0029          41 
-SETID                            EEPROM Byte(40)   0051          81 
+EIDCOUNTER                       EEPROM Byte       0001          1 
+REMOTEID                         EEPROM Byte(40)   0002          2 
+CODEID                           EEPROM Byte(40)   002A          42 
+SETID                            EEPROM Byte(40)   0052          82 
+GOTID                            Bit [6]           0061          97 
+HASID                            Bit [5]           0061          97 
 RAW                              Byte              0070          112 
 H                                Byte              0071          113 
 X                                Byte              0072          114 
 W                                Byte              0073          115 
 TEST                             Byte              0074          116 
-ISREQUEST                        Bit [6]           0061          97 
-WANTID                           Bit [5]           0061          97 
-CLEARALL                         Bit [4]           0061          97 
-LEARNNEW                         Bit [3]           0061          97 
-ENABLE_REMOTE                    Bit [2]           0061          97 
+ISREQUEST                        Bit [4]           0061          97 
+CLEARALL                         Bit [3]           0061          97 
+LEARNNEW                         Bit [2]           0061          97 
+ENABLE_REMOTE                    Bit [1]           0061          97 
 S                                Word(24)          0075          117 
 I                                Byte              00A5          165 
 SADDRESS                         String * 20       00A6          166 
@@ -124,9 +126,9 @@ ADDRESS                          Long              00C0          192
 CODE                             Byte              00C4          196 
 RA                               Long              00C5          197 
 RNUMBER                          Byte              00C9          201 
-OKREAD                           Bit [1]           0061          97 
-ERROR                            Bit [0]           0061          97 
-KEYCHECK                         Bit [7]           00CA          202 
+OKREAD                           Bit [0]           0061          97 
+ERROR                            Bit [7]           00CA          202 
+KEYCHECK                         Bit [6]           00CA          202 
 T                                Word              00CB          203 
 EADDRESS                         Word              00CD          205 
 E_READ                           Byte              00CF          207 
@@ -575,6 +577,7 @@ R31                              not used
 ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
-X                                not used
+GOTID                            not used
 W                                not used
+TEST                             not used
 
