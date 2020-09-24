@@ -187,19 +187,22 @@ Sub Keytouched:
              Select Case Touch
                     Case 1
                          Id = Touchid1
-                         cmd=180
+                         Cmd = 180
                     Case 2
                          Id = Touchid2
                          Toggle S2
-                         If S2 = 1 Then Cmd = 180 Else Cmd = 181
+                         'If S2 = 1 Then Cmd = 180 Else Cmd = 181
+                         Cmd = 180
                     Case 3
                          Id = Touchid3
                          Toggle S3
-                         If S3 = 1 Then Cmd = 180 Else Cmd = 181
+                         'If S3 = 1 Then Cmd = 180 Else Cmd = 181
+                         Cmd = 180
                     Case 4
                          Id = Touchid4
                          Toggle S4
-                         If S4 = 1 Then Cmd = 180 Else Cmd = 181
+                         'If S4 = 1 Then Cmd = 180 Else Cmd = 181
+                         Cmd = 180
                     Case 5
                          Id = Touchid1
                          Cmd = 159

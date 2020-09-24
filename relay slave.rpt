@@ -1,6 +1,6 @@
 Report       : relay slave
-Date         : 09-23-2020
-Time         : 15:42:30
+Date         : 09-24-2020
+Time         : 15:19:42
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M16
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : 1030 hex  -> Will fit into ROM
-ROMIMAGE     :  4144 dec
-FLASH USED   :  25  %
+ROMIMAGE     : 10F8 hex  -> Will fit into ROM
+ROMIMAGE     :  4344 dec
+FLASH USED   :  26  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -102,10 +102,9 @@ EOUTID3                          EEPROM Byte(28)   0054          84
 EOUTS                            EEPROM Byte(28)   0070          112 
 IDGOT                            EEPROM Byte       008C          140 
 D                                Byte              007E          126 
-MODULEID                         EEPROM Byte       008D          141 
 TEMPID                           Byte              007F          127 
 STATUS                           Byte              0080          128 
-EFIRST                           EEPROM Byte       008E          142 
+EFIRST                           EEPROM Byte       008D          141 
 TOGGLEKEY                        Bit [5]           0061          97 
 IDWASGOT                         Bit [4]           0061          97 
 TYP                              Byte              0081          129 
@@ -118,7 +117,7 @@ MAXIN                            Byte              0087          135
 A                                Byte              0088          136 
 REPLY                            Byte              0089          137 
 KEYIDS                           Byte              008A          138 
-EKEYIDS                          EEPROM Byte       008F          143 
+EKEYIDS                          EEPROM Byte       008E          142 
 COUNTERID                        Byte              008B          139 
 BASEID                           Byte              008C          140 
 MINID                            Byte              008D          141 
@@ -637,7 +636,6 @@ COMPARE1                         not used
 PWM1B                            not used
 PWM0                             not used
 D                                not used
-MODULEID                         not used
 TOGGLEKEY                        not used
 IDWASGOT                         not used
 A                                not used
@@ -646,6 +644,7 @@ KEYIDS                           not used
 EKEYIDS                          not used
 WANTNUM                          not used
 SETID                            not used
+Z                                not used
 TIMEOUT                          not used
 SENDOK                           not used
 LIGHT                            not used

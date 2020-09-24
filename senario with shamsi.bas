@@ -145,6 +145,10 @@ Const relaymodule = 110
 Const pwmmodule = 111
 Const Outstep = 112
 
+Dim X As Word
+Dim W As Word
+Dim Z As Word
+
 
 Plant_def:
 
@@ -844,13 +848,13 @@ Sub Setting_menu
                        Pwmmodulecounter = 0
                        Einputcounter = 0
                        Inputcounter = 0
-                       Typ = 101
-                       Direct = Toinput
-                       Findorder = Clearall
-                       Call Order
-                       Typ = 104
-                       Findorder = Clearremote
-                       Call Order
+                       'Typ = 101
+                       'Direct = Toinput
+                       'Findorder = Clearall
+                       'Call Order
+                       'Typ = 104
+                       'Findorder = Clearremote
+                       'Call Order
                        Direct = Tooutput
                        Typ = 110
                        Findorder = Clearall
@@ -1023,63 +1027,39 @@ Sub Remote_menu
         End If
 
         If Touch = 1 Then
-           Enable Urxc
            Select Case Count
                   Case 1
+                       Direct = Toinput
+                       Typ = 104
                        Findorder = Clearremote
+                       Call Order
+                       Findorder = Clearall
+                       Call Order
+                       Typ = 101
+                       Direct = Toinput
+                       Findorder = Clearall
                        Call Order
                   Case 2
                        Findorder = Learnremote
                        Call Order
                   Case 3
-                       Findorder = Setidremote
-                       Lcdat 5 , 1 , "Press Remote    "
-                       Call Order
+                       'Findorder = Setidremote
+                       'Lcdat 5 , 1 , "Press Remote    "
+                       'Call Order
            End Select
 
         End If
         Lcdat 1 , 1 , "Remote Menu     " , 1
-        If Cleardone = 1 Then
-
-                      Cls
-                      Lcdat 5 , 1 , "Clear is Done   "
-                      Count = 2
-                      Wait 1
-                      Cls
-                      Reset Cleardone
-        End If
-
-        If Learndone = 1 Then
-
-                      Cls
-                      Lcdat 5 , 1 , "learn Is Done   "
-                      Lcdat 6 , 1 , Din(4)
-                      Count = 3
-                      Wait 1
-                      Cls
-                      Reset Learndone
-        End If
-
-        If Setremotedone = 1 Then
-
-                      Cls
-                      Lcdat 5 , 1 , "key " ; Remotekeyid ; "  set"
-                      Wait 1
-                      Cls
-                      Incr Remotekeyid
-                      If Remotekeyid > 50 Then Remotekeyid = 1
-                      Reset Setremotedone
-        End If
 
         If Touch = 2 Then
            Incr Count
-           If Count > 3 Then Count = 1
+           If Count > 2 Then Count = 1
            Cls
         End If
 
         If Touch = 3 Then
            Decr Count
-           If Count = 0 Then Count = 3
+           If Count = 0 Then Count = 2
            Cls
         End If
 
@@ -1088,8 +1068,8 @@ Sub Remote_menu
                     Lcdat 3 , 1 , "Clear Remotes   "
                Case 2
                     Lcdat 3 , 1 , "Learn New       "
-               Case 3
-                    Lcdat 3 , 1 , "Config Remotes  "
+               'Case 3
+                    'Lcdat 3 , 1 , "Config Remotes  "
         End Select
     Loop
 End Sub
@@ -1430,11 +1410,11 @@ Sub Order
 
            Case Clearremote
 
-                Direct = Toinput : Typ = 104 : Cmd = 162 : Id = 72
+                Direct = Toinput : Typ = 104 : Cmd = 162 : Id = Allid
 
            Case Learnremote
 
-                Direct = Toinput : Typ = 104 : Cmd = 161 : Id = 72
+                Direct = Toinput : Typ = 104 : Cmd = 161 : Id = Allid
 
            Case Setidremote
 
@@ -1508,7 +1488,58 @@ Sub Show
        Else
           Lcdat 1 , 24 , "0" ; _min ; "  "
        End If
-        If Day > 7 Or Day < 0 Then Day = 1
+
+
+       Lcdat 1 , 96 , S2
+
+       Lcdat 2 , 1 , Sh_year ; "/"
+       If Sh_month < 10 Then
+          Lcdat 2 , 40 , "0" ; Sh_month ; "/"
+       Else
+           Lcdat 2 , 40 , Sh_month ; "/"
+       End If
+       If Sh_day < 10 Then
+          Lcdat 2 , 64 , "0" ; Sh_day
+       Else
+           Lcdat 2 , 64 , Sh_day
+       End If
+
+       X = Sh_year
+       X = X - 1396
+
+       If X > 3 Then
+          W = X Mod 4
+          If W = 0 Then W = X / 4
+       Else
+           W = 0
+       End If
+
+       X = X + W
+       If X > 7 Then X = X Mod 7
+       X = X + 4
+
+       If X > 7 Then X = X - 7
+
+       Z = 0
+       If Sh_month > 1 Then
+          Z = Sh_month - 1
+          If Z > 6 Then
+             Z = Z - 6
+             Z = Z * 30
+             Z = Z + 186
+             Z = Z + Sh_day
+          Else
+              Z = Z * 31
+              Z = Z + Sh_day
+          End If
+       Else
+           Z = Sh_day
+       End If
+       Z = Z Mod 7
+       Z = Z + X
+       If Z > 7 Then Z = Z - 7
+
+       Day = Z - 1
         Select Case Day
            Case 1
                 S2 = "Sat"
@@ -1527,19 +1558,8 @@ Sub Show
 
         End Select
 
-       Lcdat 1 , 96 , S2
+        'Lcdat 8 , 10 , X
 
-       Lcdat 2 , 1 , Sh_year ; "/"
-       If Sh_month < 10 Then
-          Lcdat 2 , 40 , "0" ; Sh_month ; "/"
-       Else
-           Lcdat 2 , 40 , Sh_month ; "/"
-       End If
-       If Sh_day < 10 Then
-          Lcdat 2 , 64 , "0" ; Sh_day
-       Else
-           Lcdat 2 , 64 , Sh_day
-       End If
 
 
        'Call Ifcheck

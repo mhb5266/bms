@@ -77,7 +77,7 @@ Dim Eoutid3(28) As Eram Byte
 Dim Eouts(28) As Eram Byte
 Dim Idgot As Eram Byte
 Dim D As Byte
-Dim Moduleid As Eram Byte
+'Dim Moduleid As Eram Byte
 
 Dim Tempid As Byte
 
@@ -266,6 +266,7 @@ Sub Getid
            End If
          Loop Until Key = 0
          Incr K
+         If K > 28 Then K = 1
          Status = Resetall
          Call Keyorder
          J = K
@@ -300,7 +301,7 @@ Sub Keyorder
                  For J = 1 To 28
                     Outs(j) = 0
                     Call Setouts
-                    Waitms 250
+                    Waitms 200
                 Next
 
 
@@ -315,7 +316,7 @@ Sub Keyorder
                 For J = 1 To 28
                     Outs(j) = 1
                     Call Setouts
-                    Waitms 250
+                    Waitms 200
                 Next
 
            Case Resetall
@@ -427,23 +428,36 @@ Sub Findorder
                Case 180
                        If Wantid = 1 Then
                           Reset Gotid
-                          If Eoutid1(k) = 0 Then
-                             Eoutid1(k) = Id : Set Gotid
-                          Elseif Eoutid2(k) = 0 And Eoutid1(k) <> Id Then
-                             Eoutid2(k) = Id : Set Gotid
-                          Elseif Eoutid3(k) = 0 And Eoutid2(k) <> Id Then
-                             Eoutid3(k) = Id : Set Gotid
+                          If Eoutid1(k) > 100 Or Eoutid1(k) = 0 Then
+                             Eoutid1(k) = Id
+                             Set Gotid
+                          Else
+                              If Eoutid2(k) > 100 Or Eoutid2(k) = 0 Then
+                                 If Eoutid1(k) <> Id Then
+                                    Eoutid2(k) = Id
+                                    Set Gotid
+                                 End If
+                              Else
+                                  If Eoutid3(k) > 100 Or Eoutid3(k) = 0 Then
+                                     If Eoutid1(k) <> Id And Eoutid2(k) <> Id Then
+                                        Eoutid3(k) = Id
+                                        Set Gotid
+                                     End If
+                                  End If
+                              End If
                           End If
                           If Gotid = 1 Then
-                             For Z = 1 To 4
+                             For I = 1 To 4
                                  Toggle Onoff
-                                 Outs(j) = Onoff
+                                 Outs(k) = Onoff
                                  Call Setouts
-                                 Waitms 500
+                                 Waitms 250
+
                              Next
                           End If
-                       Else
+                       End If
 
+                           If Id > 0 And < 100 Then
                            For I = 1 To Counterid
                                'If Eoutsnum(i) = Id Then
                                If Eoutid1(i) = Id Or Eoutid2(i) = Id Or Eoutid3(i) = Id Then
@@ -454,7 +468,7 @@ Sub Findorder
                                   Call Setouts
                                End If
                            Next
-                       End If
+                           end if
                Case 181
                     If Sycid = 1 Then
                           Eoutid1(tempid) = Id

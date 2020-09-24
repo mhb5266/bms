@@ -37,7 +37,9 @@ If Num > 100 Then Num = 0
 Dim Idcounter As Byte
 Dim Eidcounter As Eram Byte
 Idcounter = Eidcounter
-If Idcounter = 255 Then Idcounter = 40
+
+If Idcounter > 100 Then Idcounter = 40
+
 Eidcounter = Idcounter
 Dim Remoteid(40) As Eram Byte
 Dim Codeid(40) As Eram Byte
@@ -288,14 +290,14 @@ Command:
 
         Toggle Rel1
 
-        If Num = 0 Or Num = 255 Then Num = 1
+        If Num = 0 Or Num > 40 Then Num = 1
         Reset Hasid
-        For I = 0 To 40
+        For I = 1 To 40
             If Remoteid(i) = Raw And Codeid(i) = Code Then
-               If Setid(i) < 255 Or Setid(i) > 0 Then Set Hasid
+               If Setid(i) < 100 Or Setid(i) > 0 Then Set Hasid
                If Hasid = 1 Then
                        If Isrequest = 1 Then
-                          For H = 0 To 8
+                          For H = 1 To 40
                               If Remoteid(h) = Raw Then
                                     Id = Setid(i)
                                     Cmd = 180
@@ -677,14 +679,21 @@ Sub Checkanswer
                   Reset Enable_remote
 
                 Case 158
-                       For I = 1 To 8
-                         Remoteid(i) = 0
-                         'Codeid(i) = 0
-                         'Setid(i) = 0
-                         Eidcounter = 0
-                     Next
+                     Set Led1
+                  For I = 1 To 40
+                      Eidcounter = 0
+                      Waitms 50
+                      Remoteid(i) = 0
+                      Waitms 50
+                      Codeid(i) = 0
+                      Waitms 50
+                      Setid(i) = 0
+                      Waitms 50
+                  Next
+                  Num = 0
+
                   Reset Learnnew
-                            Set Led1
+
                             Reset Rel1
                             Reset Rel2
                             Reset Rel3
@@ -698,6 +707,11 @@ Sub Checkanswer
                             Wait 1
                             Reset Led1
                             Reset Clearall
+                            Din(1) = 0
+                            Din(2) = 0
+                            Din(3) = 0
+                            Din(4) = 0
+                            Din(5) = 0
                 Case 161
 
                   'Set Learnnew
@@ -705,14 +719,20 @@ Sub Checkanswer
                    Call Do_learn
 
                 Case 162
-                     For I = 1 To 8
-                         Remoteid(i) = 0
-                         'Codeid(i) = 0
-                         'Setid(i) = 0
-                         Eidcounter = 0
-                     Next
+                Set Led1
+                  For I = 1 To 40
+                      Eidcounter = 0
+                      Waitms 50
+                      Remoteid(i) = 0
+                      Waitms 50
+                      Codeid(i) = 0
+                      Waitms 50
+                      Setid(i) = 0
+                      Waitms 50
+                  Next
+                  Num = 0
                   Reset Learnnew
-                            Set Led1
+
                             Reset Rel1
                             Reset Rel2
                             Reset Rel3
@@ -734,13 +754,13 @@ Sub Checkanswer
                   Cmdcode = 163
 
                   Reset Isrequest_led
-                  Set Wantid_led
+                  'Set Wantid_led
                 Case 164
                   Reset Learnnew
                   Reset Clearall
                   Wic = Din(4)
                   Reset Isrequest_led
-                  Set Wantid_led
+                  'Set Wantid_led
                   Cmdcode = 164
             End Select
 

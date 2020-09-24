@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 09-23-2020
-Time         : 12:43:31
+Date         : 09-24-2020
+Time         : 16:33:05
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,8 +8,8 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : 6A9C hex  -> Will fit into ROM
-ROMIMAGE     :  27292 dec
+ROMIMAGE     : 6B1E hex  -> Will fit into ROM
+ROMIMAGE     :  27422 dec
 FLASH USED   :  20  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 10D8 hex
 Framesize    : 20 hex
 Framestart   : 10A8 hex
-Space left   :  3767  dec
+Space left   :  3761  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -183,28 +183,31 @@ LEARNDONE                        Bit [3]           01C7          455
 CLEARDONE                        Byte              01D9          473 
 SETREMOTEDONE                    Bit [2]           01C7          455 
 DIRECT                           Byte              01DA          474 
-PLANT_STATUS                     Byte              01DB          475 
-PLANT_START_HOUR                 Byte              01DC          476 
-PLANT_START_MIN                  Byte              01DD          477 
-PLANT_STOP_HOUR                  Byte              01DE          478 
-PLANT_STOP_MIN                   Byte              01DF          479 
-PLANT_DAYS                       Byte(7)           01E0          480 
-POOSH                            Word              01E7          487 
-TOUCH                            Byte              01E9          489 
+X                                Word              01DB          475 
+W                                Word              01DD          477 
+Z                                Word              01DF          479 
+PLANT_STATUS                     Byte              01E1          481 
+PLANT_START_HOUR                 Byte              01E2          482 
+PLANT_START_MIN                  Byte              01E3          483 
+PLANT_STOP_HOUR                  Byte              01E4          484 
+PLANT_STOP_MIN                   Byte              01E5          485 
+PLANT_DAYS                       Byte(7)           01E6          486 
+POOSH                            Word              01ED          493 
+TOUCH                            Byte              01EF          495 
 NEXTDAY                          Bit [1]           01C7          455 
-COUNT                            Byte              01EA          490 
-INPUTCOUNTER                     Byte              01EB          491 
+COUNT                            Byte              01F0          496 
+INPUTCOUNTER                     Byte              01F1          497 
 RELAYMODULECOUNTER               EEPROM Byte       0001          1 
 PWMMODULECOUNTER                 EEPROM Byte       0002          2 
 EINPUTCOUNTER                    EEPROM Byte       0003          3 
 SYCNUM                           EEPROM Byte       0004          4 
-CONFIGMODE                       Byte              01EC          492 
+CONFIGMODE                       Byte              01F2          498 
 OK1                              Bit [0]           01C7          455 
-OK2                              Bit [7]           01ED          493 
-OK3                              Bit [6]           01ED          493 
-OK4                              Bit [5]           01ED          493 
-I                                Byte              01EE          494 
-J                                Byte              01EF          495 
+OK2                              Bit [7]           01F3          499 
+OK3                              Bit [6]           01F3          499 
+OK4                              Bit [5]           01F3          499 
+I                                Byte              01F4          500 
+J                                Byte              01F5          501 
 
 --------------------------------------------------------------------------------
 Constant                         Value
