@@ -8,6 +8,7 @@ $baud = 115200
 $lib "glcdKS108.lbx"
 
 
+
 Tempconfig:
 
  Config 1wire = Portc.1
@@ -27,6 +28,7 @@ Lcdconfig:
 '-----------------------------------------------------
 Config Graphlcd = 128 * 64sed , Dataport = Portf , Controlport = Porta , Ce = 1 , Ce2 = 0 , Cd = 6 , Rd = 5 , Reset = 2 , Enable = 4
 Setfont Font8x8
+
 
 Portconfig:
 
@@ -92,6 +94,7 @@ Dim Temp4 As Word
 Dim Temp5 As Byte
 
 Dim Menu As Byte
+Dim Test As Byte
 Dim Timer_1 As Word
 
 
@@ -102,7 +105,7 @@ Dim S4 As String * 16
 Dim S As String * 10
 
 S1 = "  WWW.ISEEE.IR"
-Dim Blink_flag As Bit
+Dim blink_ As Bit
 Dim Selection As Byte
 Dim A As Byte
 Dim Backtime As Boolean
@@ -124,6 +127,38 @@ Dim Findorder As Byte
 Dim Remoteid As Byte
 Dim Remotekeyid As Byte
 
+Dim Lstatus As Eram Byte
+Dim Pstatus As Eram Byte
+Dim Wstatus As Eram Byte
+
+Dim Ldays As Eram Byte
+Dim Pdays As Eram Byte
+Dim Wdays As Eram Byte
+Dim Days As Byte
+
+Dim Lonhour As Eram Byte
+Dim Lonmin As Eram Byte
+Dim Loffhour As Eram Byte
+Dim Loffmin As Eram Byte
+
+Dim Ponhour As Eram Byte
+Dim Ponmin As Eram Byte
+Dim Poffhour As Eram Byte
+Dim Poffmin As Eram Byte
+
+Dim Wonhour As Eram Byte
+Dim Wonmin As Eram Byte
+Dim Woffhour As Eram Byte
+Dim Woffmin As Eram Byte
+
+Dim Onhour As Byte
+Dim Onmin As Byte
+Dim Offhour As Byte
+Dim Offmin As Byte
+
+Dim Status As Byte
+
+
 Dim Setlight As Byte
 
 Dim Din(5) As Byte
@@ -144,6 +179,11 @@ Const Remote = 104
 Const relaymodule = 110
 Const pwmmodule = 111
 Const Outstep = 112
+
+Const Idjacuzi = 51
+Const Idwater = 52
+Const Idlight = 53
+Const Idplant = 54
 
 Dim X As Word
 Dim W As Word
@@ -243,6 +283,7 @@ Declare Sub Watersystem_menu
 Declare Sub Plant_menu
 Declare Sub Remote_menu
 Declare Sub Setting_menu
+Declare Sub Pwlsetting
 
 Declare Sub Setkeyid
 Declare Sub Set_id_modules
@@ -273,7 +314,7 @@ Set Backlight
 Cls
 Call Beep
 Showpic 32 , 1 , Logo
-Wait 1
+Waitms 500
 Cls
 
 
@@ -652,7 +693,9 @@ Return
 Includes:
 
 $include "font32x32.font"
-$include "font16x16.font"
+
+$include "font16x16en.font"
+
 $include "font8x8.font"
 
 Tv:
@@ -908,16 +951,23 @@ Sub Setkeyid
       Lcdat 3 , 1 , "Leran Key " ; Inputcounter ; "  "
 
       If Touch = 1 Then
-         Id = Einputcounter
-         Remotekeyid = Id
-         Waitms 2
-         Findorder = Setidkey
-         Call Order
-         'Findorder = Setidremote
-         'Call Order
-         Lcdat 4 , 1 , "press a Key     "
-         Wait 1
-         Lcdat 4 , 1 , "                "
+         Lcdat 3 , 1 , "Press All Key    "
+         Touch = 0
+         If Inputcounter = 0 Then Inputcounter = 1
+         Einputcounter = Inputcounter
+         Id = Inputcounter
+         Do
+           Findorder = Readallinput
+           Call Order
+           Call Readtouch
+           If Inputcounter > 50 Then Inputcounter = 1
+           Id = Inputcounter
+           Findorder = Setidkey
+           Call Order
+           Wait 3
+           Lcdat 3 , 1 , "Key number " ; Inputcounter
+         Loop Until Touch = 4
+         Cls
       End If
     Loop
 
@@ -1074,207 +1124,347 @@ Sub Remote_menu
     Loop
 End Sub
 
+Sub Pwlsetting
+    Selection = 0
+    Cls
+
+
+    Do
+
+    Select Case Id
+           Case Idlight
+                Lcdat 1 , 1 , "Light Setting   " , 1
+           Case Idplant
+                Lcdat 1 , 1 , "Plant Setting   " , 1
+           Case Idwater
+                Lcdat 1 , 1 , "Watersys Setting" , 1
+    End Select
+
+
+        Incr Timer_1
+        If Timer_1 > 5 Then
+         Timer_1 = 0
+         Toggle Blink_
+        End If
+
+
+        If Status < 1 Then Status = 3 : If Status > 3 Then Status = 1
+
+        If Onhour > 59 Then Onhour = 0
+        If Onmin > 59 Then Onmin = 0
+
+
+        If Offhour > 59 Then Offhour = 0
+        If Offmin > 59 Then Offmin = 0
+
+        S1 = ""
+        '-----------------------------
+        If Selection = 1 And Blink_ = 0 Then
+           S1 = S1 + "      "
+        Else
+           If Status = 1 Then S1 = S1 + "ON  "
+           If Status = 2 Then S1 = S1 + "OFF "
+           If Status = 3 Then S1 = S1 + "AUTO"
+        End If
+
+        Setfont Font16x16en
+        Lcdat 3 , 1 , S1
+        Setfont Font8x8
+
+        If Status = 3 Then
+
+                  S1 = "ON :"
+
+
+                 '-----------------------------
+                 If Selection = 2 And Blink_ = 0 Then
+
+                  S1 = S1 + "  "
+                 Else
+
+                  S = Str(onhour)
+                  S = Format(s , "00")
+                  S1 = S1 + S
+
+                 End If
+                 S1 = S1 + ":"
+                 '------------------------------
+                 If Selection = 3 And Blink_ = 0 Then
+
+                  S1 = S1 + "  "
+                 Else
+
+                  S = Str(onmin)
+                  S = Format(s , "00")
+                  S1 = S1 + S
+
+                 End If
+
+                 Lcdat 6 , 1 , S1
+
+                 S1 = "OFF:"
+                 '------------------------------
+                 If Selection = 4 And Blink_ = 0 Then
+
+                  S1 = S1 + "  "
+                 Else
+
+                  S = Str(offhour)
+                  S = Format(s , "00")
+                  S1 = S1 + S
+
+                 End If
+                 S1 = S1 + ":"
+                 '------------------------------
+                 If Selection = 5 And Blink_ = 0 Then
+
+                  S1 = S1 + "  "
+                 Else
+
+                  S = Str(offmin)
+                  S = Format(s , "00")
+                  S1 = S1 + S
+
+                 End If
+
+
+                 Lcdat 7 , 1 , S1
+
+
+
+
+                S1 = ""
+                '--------------------------------
+                If Selection = 6 And Blink_ = 0 Then
+
+                 S1 = S1 + "     "
+                Else
+
+                 If Days.0 = 1 Then S1 = S1 + "*Sat" Else S1 = S1 + " Sat"
+
+
+                End If
+
+                Lcdat 2 , 88 , S1
+
+                '---------------------------------
+                S1 = ""
+                If Selection = 7 And Blink_ = 0 Then
+
+                 S1 = S1 + "     "
+                Else
+
+                 If Days.1 = 1 Then S1 = S1 + "*Sun" Else S1 = S1 + " Sun"
+
+
+                End If
+
+                Lcdat 3 , 88 , S1
+                '----------------------------------
+
+                S1 = ""
+                If Selection = 8 And Blink_ = 0 Then
+
+                 S1 = S1 + "     "
+                Else
+
+                 If Days.2 = 1 Then S1 = S1 + "*Mon" Else S1 = S1 + " Mon"
+
+
+                End If
+
+                Lcdat 4 , 88 , S1
+                '----------------------------------
+                S1 = ""
+                If Selection = 9 And Blink_ = 0 Then
+
+                 S1 = S1 + "     "
+                Else
+
+                 If Days.3 = 1 Then S1 = S1 + "*Tue" Else S1 = S1 + " Tue"
+
+
+                End If
+
+                Lcdat 5 , 88 , S1
+                '----------------------------------
+
+                S1 = ""
+                If Selection = 10 And Blink_ = 0 Then
+
+                 S1 = S1 + "     "
+                Else
+
+                 If Days.4 = 1 Then S1 = S1 + "*Wed" Else S1 = S1 + " Wed"
+
+
+                End If
+
+                Lcdat 6 , 88 , S1
+                '----------------------------------
+                S1 = ""
+                If Selection = 11 And Blink_ = 0 Then
+
+                 S1 = S1 + "     "
+                Else
+
+                 If Days.5 = 1 Then S1 = S1 + "*Thu" Else S1 = S1 + " Thu"
+
+
+                End If
+
+                Lcdat 7 , 88 , S1
+                '----------------------------------
+
+                S1 = ""
+                If Selection = 12 And Blink_ = 0 Then
+
+                 S1 = S1 + "    "
+                Else
+
+                 If Days.6 = 1 Then S1 = S1 + "*Fri" Else S1 = S1 + " Fri"
+
+
+                End If
+
+                Lcdat 8 , 88 , S1
+                '----------------------------------
+        End If
+
+        Call Readtouch
+
+        If Touch = 1 Then
+           Incr Selection
+           Touch = 0
+        End If
+
+        If Touch = 4 Then
+           Cls
+           Return
+        End If
+
+        '-----------------------------------
+        If Touch = 2 Then
+
+              If Selection = 1 Then Incr Status
+              If Selection = 2 Then Incr Onhour
+              If Selection = 3 Then Incr Onmin
+              If Selection = 4 Then Incr Offhour
+              If Selection = 5 Then Incr Offmin
+              If Selection = 6 Then Toggle Days.0
+              If Selection = 7 Then Toggle Days.1
+              If Selection = 8 Then Toggle Days.2
+              If Selection = 9 Then Toggle Days.3
+              If Selection = 10 Then Toggle Days.4
+              If Selection = 11 Then Toggle Days.5
+              If Selection = 12 Then Toggle Days.6
+
+              Touch = 0
+              Cls
+        End If
+        '------------------------------------
+        If Touch = 3 Then
+              If Selection = 1 Then Decr Status
+              If Selection = 2 Then Decr Onhour
+              If Selection = 3 Then Decr Onmin
+              If Selection = 4 Then Decr Offhour
+              If Selection = 5 Then Decr Offmin
+              If Selection = 6 Then Toggle Days.0
+              If Selection = 7 Then Toggle Days.1
+              If Selection = 8 Then Toggle Days.2
+              If Selection = 9 Then Toggle Days.3
+              If Selection = 10 Then Toggle Days.4
+              If Selection = 11 Then Toggle Days.5
+              If Selection = 12 Then Toggle Days.6
+             Touch = 0
+             Cls
+        End If
+
+        '--------------------------------------
+
+
+
+        Waitms 50
+
+        If Selection > 12 Then
+           Cls
+           Exit Do
+        End If
+    Loop
+End Sub
 
 Sub Jacuzi_menu
+
+    Id = Idjacuzi
+
+
 
 End Sub
 
 Sub Plant_menu
- Do
 
-    Incr Timer_1
-    If Timer_1 > 5 Then
-     Timer_1 = 0
-     Toggle Blink_flag
-    End If
+    Id = Idplant
 
-    Lcdat 1 , 1 , "Plant Setting   " , 1
-    '-----------------------------
-    If Selection = 1 And Blink_flag = 0 Then
-       S1 = "    "
-    Else
-       Select Case Plant_status
-              Case 1
-                   S1 = "ON  "
-              Case 2
-                   S1 = "OFF "
-              Case 3
-                   S1 = "Auto"
-       End Select
-    End If
+    Days = Pdays
+    Status = Pstatus
+    Onhour = Ponhour
+    Onmin = Ponmin
+    Offhour = Poffhour
+    Offmin = Poffmin
 
-    Lcdat 2 , 1 , "Status: "
-    Lcdat 2 , 65 , S1
-    '------------------------------
-    If Selection = 2 And Blink_flag = 0 Then
+    Call Pwlsetting
 
-     S2 = "  "
-    Else
-
-     S = Str(plant_start_hour)
-     S = Format(s , "00")
-     S2 = S1 + S
-
-    End If
-    S2 = S2 + ":"
-    '------------------------------
-    If Selection = 3 And Blink_flag = 0 Then
-
-     S2 = S2 + "  "
-    Else
-
-     S = Str(plant_start_min)
-     S = Format(s , "00")
-     S2 = S2 + S
-
-    End If
+    Pdays = Days
+    Pstatus = Status
+    Ponhour = Onhour
+    Ponmin = Onmin
+    Poffhour = Offhour
+    Poffmin = Offmin
 
 
-    Lcdat 3 , 1 , "ON:  "
-    Lcdat 3 , 33 , S2
-
-
-    '--------------------------------
-    If Selection = 4 And Blink_flag = 0 Then
-
-     S3 = "  "
-    Else
-
-     S = Str(plant_stop_hour)
-     S = Format(s , "00")
-     S3 = S3 + S
-
-    End If
-    S3 = S3 + ":"
-    '---------------------------------
-    If Selection = 5 And Blink_flag = 0 Then
-
-     S3 = S3 + "  "
-    Else
-
-     S = Str(plant_stop_min)
-     S = Format(s , "00")
-     S3 = S3 + S
-
-    End If
-     Lcdat 4 , 1 , "OFF: "
-     Lcdat 4 , 33 , S3
-    '----------------------------------
-    If Selection = 6 And Blink_flag = 0 Then
-
-     S1 = S1 + "  "
-    Else
-
-     S = Str(sh_day)
-     S = Format(s , "00")
-     S1 = S1 + S
-
-    End If
-
-    If Selection = 7 And Blink_flag = 0 Then
-       S2 = "   "
-       Eday = Day
-    Else
-        Select Case Day
-           Case 1
-                S2 = "Sat"
-           Case 2
-                S2 = "Sun"
-           Case 3
-                S2 = "Mon"
-           Case 4
-                S2 = "Tue"
-           Case 5
-                S2 = "Wed"
-           Case 6
-                S2 = "Thu"
-           Case 7
-                S2 = "Fri"
-
-        End Select
-
-    End If
-
-    Lcdat 2 , 1 , S1
-    Lcdat 3 , 1 , S2
-
-
-
-
-
-    Call Readtouch
-
-    If Touch = 1 Then
-       Incr Selection
-       Touch = 0
-    End If
-
-    If Touch = 4 Then
-       Cls
-       Touch = 0
-       Return
-    End If
-    '-----------------------------------
-    If Touch = 2 Then
-          If Selection = 1 Then Incr Plant_status
-          If Selection = 2 Then Incr Plant_start_hour
-          If Selection = 3 Then Incr Plant_start_min
-          If Selection = 4 Then Incr Plant_stop_hour
-          If Selection = 5 Then Incr Plant_stop_min
-          If Selection = 6 Then Incr Plant_days(i)
-          'If Selection = 7 Then Incr Day
-          Touch = 0
-    End If
-    '------------------------------------
-    If Touch = 3 Then
-         If Selection = 1 Then Decr Plant_status
-         If Selection = 2 Then Decr Plant_start_hour
-         If Selection = 3 Then Decr Plant_start_min
-         If Selection = 4 Then Decr Plant_stop_hour
-         If Selection = 5 Then Decr Plant_stop_min
-         If Selection = 6 Then Decr Plant_days(i)
-         'If Selection = 7 Then Decr Day
-         Touch = 0
-    End If
-
-    '--------------------------------------
-    If _hour > 100 Then _hour = 23
-    If _min > 100 Then _min = 59
-    If _sec > 100 Then _sec = 59
-
-    If _hour > 23 Then _hour = 0
-    If _min > 59 Then _min = 0
-    If _sec > 59 Then _sec = 0
-    If Sh_year > 1470 Then Sh_year = 1390
-    If Sh_month > 12 Then Sh_month = 1
-    If Sh_day > 31 Then Sh_day = 1
-
-
-
-    If Sh_year < 1390 Then Sh_year = 1470
-    If Sh_month < 1 Then Sh_month = 12
-    If Sh_day < 1 Then Sh_day = 31
-
-    If Day < 1 Then Day = 7
-    If Day > 7 Then Day = 1
-
-    '---------------------------------------
-
-
-    Waitms 40
-
-    If Selection > 7 Then
-       Exit Do
-    End If
- Loop
 End Sub
 
 Sub Watersystem_menu
+
+    Id = Idwater
+
+    Days = Wdays
+    Status = Wstatus
+    Onhour = Wonhour
+    Onmin = Wonmin
+    Offhour = Woffhour
+    Offmin = Woffmin
+
+    Call Pwlsetting
+
+    Wdays = Days
+    Wstatus = Status
+    Wonhour = Onhour
+    Wonmin = Onmin
+    Woffhour = Offhour
+    Woffmin = Offmin
 
 End Sub
 
 Sub Light_menu
 
+    Id = Idlight
+
+    Days = Ldays
+    Status = Lstatus
+    Onhour = Lonhour
+    Onmin = Lonmin
+    Offhour = Loffhour
+    Offmin = Loffmin
+
+    Call Pwlsetting
+
+    Ldays = Days
+    Lstatus = Status
+    Lonhour = Onhour
+    Lonmin = Onmin
+    Loffhour = Offhour
+    Loffmin = Offmin
 End Sub
 
 Sub Checkanswer
@@ -1283,6 +1473,17 @@ Sub Checkanswer
 
            Case Keyin
 
+                If Cmd = 151 Then
+                         Id = Einputcounter
+                         Remotekeyid = Id
+                         Findorder = Setidkey
+                         Call Order
+                End If
+
+                If Cmd = 156 Then
+                   Incr Inputcounter
+                   Einputcounter = Inputcounter
+                End If
 
                 'If Din(4) = Id Then
                    'Lcdat Id , 1 ,"input " ;id;" connect"
@@ -1611,12 +1812,12 @@ Sub Clock_menu
     Incr Timer_1
     If Timer_1 > 5 Then
      Timer_1 = 0
-     Toggle Blink_flag
+     Toggle blink_
     End If
 
     S1 = "TIME: "
     '-----------------------------
-    If Selection = 1 And Blink_flag = 0 Then
+    If Selection = 1 And blink_ = 0 Then
 
      S1 = S1 + "  "
     Else
@@ -1628,7 +1829,7 @@ Sub Clock_menu
     End If
     S1 = S1 + ":"
     '------------------------------
-    If Selection = 2 And Blink_flag = 0 Then
+    If Selection = 2 And blink_ = 0 Then
 
      S1 = S1 + "  "
     Else
@@ -1640,7 +1841,7 @@ Sub Clock_menu
     End If
     S1 = S1 + ":"
     '------------------------------
-    If Selection = 3 And Blink_flag = 0 Then
+    If Selection = 3 And blink_ = 0 Then
 
      S1 = S1 + "  "
     Else
@@ -1657,7 +1858,7 @@ Sub Clock_menu
 
     S1 = "DATE: "
     '--------------------------------
-    If Selection = 4 And Blink_flag = 0 Then
+    If Selection = 4 And blink_ = 0 Then
 
      S1 = S1 + "    "
     Else
@@ -1669,7 +1870,7 @@ Sub Clock_menu
     End If
     S1 = S1 + "/"
     '---------------------------------
-    If Selection = 5 And Blink_flag = 0 Then
+    If Selection = 5 And blink_ = 0 Then
 
      S1 = S1 + "  "
     Else
@@ -1681,7 +1882,7 @@ Sub Clock_menu
     End If
     S1 = S1 + "/"
     '----------------------------------
-    If Selection = 6 And Blink_flag = 0 Then
+    If Selection = 6 And blink_ = 0 Then
 
      S1 = S1 + "  "
     Else
@@ -1692,7 +1893,7 @@ Sub Clock_menu
 
     End If
 
-    If Selection = 7 And Blink_flag = 0 Then
+    If Selection = 7 And Blink_ = 0 Then
        S2 = "   "
        Eday = Day
     Else

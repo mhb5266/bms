@@ -38,7 +38,7 @@ Dim Idcounter As Byte
 Dim Eidcounter As Eram Byte
 Idcounter = Eidcounter
 
-If Idcounter > 100 Then Idcounter = 40
+If Idcounter > 100 Then Idcounter = 60
 
 Eidcounter = Idcounter
 Dim Remoteid(40) As Eram Byte
@@ -689,6 +689,7 @@ Sub Checkanswer
                       Waitms 50
                       Setid(i) = 0
                       Waitms 50
+                      Toggle Buzz
                   Next
                   Num = 0
 
@@ -729,6 +730,7 @@ Sub Checkanswer
                       Waitms 50
                       Setid(i) = 0
                       Waitms 50
+                      Toggle Buzz
                   Next
                   Num = 0
                   Reset Learnnew

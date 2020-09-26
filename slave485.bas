@@ -54,6 +54,8 @@ Dim Touchid2 As Eram Byte
 Dim Touchid3 As Eram Byte
 Dim Touchid4 As Eram Byte
 
+Dim Tempid As Byte
+
 Dim S1 As Boolean
 Dim S2 As Boolean
 Dim S3 As Boolean
@@ -86,7 +88,13 @@ Dim Timeout As Boolean
 Dim Enbuz As Boolean
 Dim Ensensor As Boolean
 Dim Enkey As Boolean
+
 Dim Wantid As Boolean
+
+'Dim Wantid1 As Boolean
+'Dim Wantid2 As Boolean
+'Dim Wantid3 As Boolean
+'Dim Wantid4 As Boolean
 
 Dim Backtyp As Byte : Dim Backcmd As Byte : Dim Backid As Byte
 
@@ -165,6 +173,7 @@ Sub Refreshkey
 End Sub
 
 Sub Keytouched:
+          '(
           If Wantid = 1 Then
              Select Case Touch
                     Case 1
@@ -180,34 +189,77 @@ Sub Keytouched:
              Reset Wantid
              Reset Isrequest
           End If
-
+')
 
           If Isrequest = 1 Then
              Call Beep
              Select Case Touch
                     Case 1
-                         Id = Touchid1
-                         Cmd = 180
+                         If Wantid = 1 Then
+                            If Touchid1 = 0 Or Touchid1 > 50 Then
+                               If Tempid > 0 Then
+                                  Touchid1 = Tempid
+                                  Tempid = 0
+                                  Reset Wantid
+                                  Direct = Tomaster : Cmd = 156
+                               End If
+                            End If
+                         Else
+                            If Touchid1 > 0 And Touchid1 < 50 Then
+                               Direct = Tooutput : Id = Touchid1 : Cmd = 180
+                            End If
+                         End If
                     Case 2
-                         Id = Touchid2
-                         Toggle S2
-                         'If S2 = 1 Then Cmd = 180 Else Cmd = 181
-                         Cmd = 180
+                         If Wantid = 1 Then
+                            If Touchid2 = 0 Or Touchid2 > 50 Then
+                               If Tempid > 0 Then
+                                  Touchid2 = Tempid
+                                  Tempid = 0
+                                  Reset Wantid
+                                  Direct = Tomaster : Cmd = 156
+                               End If
+                            End If
+                         Else
+                            If Touchid2 > 0 And Touchid2 < 50 Then
+                               Direct = Tooutput : Id = Touchid2 : Cmd = 180
+                            End If
+                         End If
                     Case 3
-                         Id = Touchid3
-                         Toggle S3
-                         'If S3 = 1 Then Cmd = 180 Else Cmd = 181
-                         Cmd = 180
+                         If Wantid = 1 Then
+                            If Touchid3 = 0 Or Touchid3 > 50 Then
+                               If Tempid > 0 Then
+                                  Touchid3 = Tempid
+                                  Tempid = 0
+                                  Reset Wantid
+                                  Direct = Tomaster : Cmd = 156
+                               End If
+                            End If
+                         Else
+                            If Touchid3 > 0 And Touchid3 < 50 Then
+                               Direct = Tooutput : Id = Touchid3 : Cmd = 180
+                            End If
+                         End If
                     Case 4
-                         Id = Touchid4
-                         Toggle S4
-                         'If S4 = 1 Then Cmd = 180 Else Cmd = 181
-                         Cmd = 180
+                         If Wantid = 1 Then
+                            If Touchid4 = 0 Or Touchid4 > 50 Then
+                               If Tempid > 0 Then
+                                  Touchid4 = Tempid
+                                  Tempid = 0
+                                  Reset Wantid
+                                  Direct = Tomaster : Cmd = 156
+                               End If
+                            End If
+                         Else
+                            If Touchid4 > 0 And Touchid4 < 50 Then
+                               Direct = Tooutput : Id = Touchid4 : Cmd = 180
+                            End If
+                         End If
                     Case 5
-                         Id = Touchid1
-                         Cmd = 159
+                         If Touchid1 < 50 And Touchid1 > 0 Then
+                            Id = Touchid1
+                            Cmd = 159
+                         End If
              End Select
-             Direct = Tooutput
              Call Tx
           End If
 
@@ -242,8 +294,8 @@ Toggle Rt
                   Set Isrequest
                    Reset Wantid
                 Case 151
-                  Set Wantid
-                  Reset Isrequest
+                     Set Wantid
+                     Tempid = Id
                 Case 152
                   Set Enbuz
                 Case 153

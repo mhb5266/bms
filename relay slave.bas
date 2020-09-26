@@ -405,6 +405,8 @@ Sub Findorder
                Case 158
                     For I = 1 To Counterid
                         Eoutid1(i) = 0
+                        Eoutid2(i) = 0
+                        Eoutid3(i) = 0
                         Eoutnum(i) = 0
                         Eouts(i) = 0
                         Idgot = 0
@@ -457,7 +459,7 @@ Sub Findorder
                           End If
                        End If
 
-                           If Id > 0 And < 100 Then
+                           If Id > 0 And Id < 100 Then
                            For I = 1 To Counterid
                                'If Eoutsnum(i) = Id Then
                                If Eoutid1(i) = Id Or Eoutid2(i) = Id Or Eoutid3(i) = Id Then
