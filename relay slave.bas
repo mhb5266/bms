@@ -472,26 +472,20 @@ Sub Findorder
                            Next
                            end if
                Case 181
-                    If Sycid = 1 Then
-                          Eoutid1(tempid) = Id
-                          Reset Sycid
-                    End If
-                    If Id = Allid Then
-                       For I = 1 To Counterid
-                           Outs(i) = 0
-                           J = I
-                           Call Setouts
-                       Next
-                    End If
-                    For I = 1 To Counterid
-                        'If Eoutsnum(i) = Id Then
-                        If Eoutid1(i) = Id Then
-                           J = I
-                           Status = Normal
-                           Outs(j) = 0
-                           Call Setouts
-                        End If
-                    Next I
+
+                           If Id > 0 And Id < 100 Then
+                           For I = 1 To Counterid
+                               'If Eoutsnum(i) = Id Then
+                               If Eoutid1(i) = Id Or Eoutid2(i) = Id Or Eoutid3(i) = Id Then
+                                  Tempon(id) = 0
+                                  J = I
+                                  Status = Normal
+                                  Outs(j) = 0
+                                  Call Setouts
+                               End If
+                           Next
+                           End If
+
                Case 183
                        Set Blank
                        Idblank = Id

@@ -324,7 +324,7 @@ Command:
            Codeid(num) = Code
            Setid(num) = Idcounter
            For X = 1 To 4
-               Toggle Wantid_led
+               Toggle Buzz
                Waitms 250
            Next
         End If

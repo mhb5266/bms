@@ -106,8 +106,21 @@ Defvals:
         Dim Maxid As Byte
         Dim Counterid As Byte : Counterid = 8
 
+        Dim Eoutid1(8) As Eram Byte
+        Dim Eoutid2(8) As Eram Byte
+        Dim Eoutid3(8) As Eram Byte
 
+        Dim Status As Byte
 
+        Dim Wantid As Boolean
+        Dim Idgot As Boolean
+        Dim Gotid As Boolean
+
+        Dim Eouts(8) As Eram Byte
+
+        Const Resetall = 1
+        Const Keyin = 101
+        Const Mytyp = 111
         const d = 0
 
 Subs:
@@ -152,7 +165,8 @@ Rx:
       If Inok = 1 Then
         Toggle Rxtx
         Wic = Din(4)
-        If Din(2) = Remote Or Din(2) = Pwmmodule Then Call Checkanswer
+        Typ = Din(2)
+        If Typ = Remote Or Typ = Pwmmodule Or Typ = Keyin Then Call Checkanswer
         I = 0
         Reset Inok
       End If
@@ -288,75 +302,21 @@ Sub Refreshout
 End Sub
 
 Sub Checkanswer
+
     Cmd = Din(3)
     Select Case Cmd
+           Case 150
+
            Case 151
-                      Do
-                      Loop Until Key = 1
-                      Baseid = Id
-                      For I = 1 To Counterid
-                          Baseid = Baseid + 1
-                          Eoutnum(i) = Baseid
-                      Next
-                      Id = Eoutnum(counterid)
-                      Direct = Tomaster
-                      Portc = Id
-                      Typ = Pwmmodule
-                      Cmd = 165
-                      Call Tx
-                      Portc = 0
-                      Wait 1
-                      Portc = 255
-                      Wait 1
-                      Portc = 0
 
-           Case 158
-                    For I = 1 To Counterid
-                        Eoutid(i) = 0
-                        Eoutnum(i) = 0
-                        Light(i) = Dark
-                    Next
-
-           Case 160
-                Set Syc
-                Tempid = Id
-           Case 161
-                Default_light = Dark
-
-           Case 162
-                Default_light = Minlight
-
-           Case 163
-                Default_light = Midlight
-
-           Case 164
-                Default_light = Maxlight
-
-           Case 180
-                If Syc = 0 Then
-                                Reset Blink_
-                                Incr Steps
-                                If Steps > 4 Then Steps = 1
-                                If Steps = 4 Then Default_light = Maxlight
-                                If Steps = 3 Then Default_light = Midlight
-                                If Steps = 2 Then Default_light = Minlight
-                                If Steps = 1 Then Default_light = Dark
-                                For I = 1 To Counterid
-                                    If Eoutid(i) = Id Then
-                                       Light(i) = Default_light
-                                       Exit For
-                                    End If
-                                Next
-                Else
-                    Eoutid(tempid) = Id
-                End If
 
            Case 159
-           Case 183
-                Set Blink_
-                Blink_id = Id
+
+
+           Case 161 To 164
+
+           Case 181
+
     End Select
-
-
 
 End Sub

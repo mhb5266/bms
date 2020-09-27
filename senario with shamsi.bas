@@ -737,16 +737,16 @@ Sub Main_menu
      Waitms 100
      Cls
      Count = 1
+     Showpic 50 , 20 , Jaccuziicon
+
      Do
             'Disable Urxc
             If Touch = 2 Then
-                   touch = 0
                    incr count
                    If Count > Main_menu_counter Then Count = 1
                    cls
             End If
-            if touch = 3 then
-                   Touch = 0
+            If Touch = 3 Then
                    decr count
                    If Count = 0 Then Count = Main_menu_counter
                    Cls
@@ -760,21 +760,24 @@ Sub Main_menu
                    cls
                    Return
             endif
-            Select Case Count
-                   case 1
-                        Showpic 50 , 20 , Jaccuziicon
-                   case 2
-                        Showpic 50 , 20 , Planticon
-                   case 3
-                        Showpic 50 , 20 , Watersystemicon
-                   case 4
-                        Showpic 50 , 20 , Lighticon
-                   Case 5
-                        Showpic 50 , 20 , Setclockicon
-                   Case 6
-                        Showpic 50 , 20 , Settingicon
-                        'Lcdat 1 , 1 , "Setting"
-            End Select
+            If Touch = 2 Or Touch = 3 Then
+                        Select Case Count
+                               case 1
+                                    Showpic 50 , 20 , Jaccuziicon
+                               case 2
+                                    Showpic 50 , 20 , Planticon
+                               case 3
+                                    Showpic 50 , 20 , Watersystemicon
+                               case 4
+                                    Showpic 50 , 20 , Lighticon
+                               Case 5
+                                    Showpic 50 , 20 , Setclockicon
+                               Case 6
+                                    Showpic 50 , 20 , Settingicon
+                                    'Lcdat 1 , 1 , "Setting"
+                        End Select
+                        Touch = 0
+            End If
             If Touch = 1 Then
                    Touch = 0
                    Cls
@@ -1335,6 +1338,10 @@ Sub Pwlsetting
 
         If Touch = 1 Then
            Incr Selection
+           If Status < 3 Then
+              If Selection > 1 Then Selection = 1
+              Return
+           End If
            Touch = 0
         End If
 
@@ -1421,6 +1428,21 @@ Sub Plant_menu
     Poffhour = Offhour
     Poffmin = Offmin
 
+    If Status = 1 Then
+       Cmd = 180
+       Id = Idplant
+       Typ = Relaymodule
+       Direct = Tooutput
+       Call Tx
+    End If
+    If Status = 2 Then
+       Cmd = 181
+       Id = Idplant
+       Typ = Relaymodule
+       Direct = Tooutput
+       Call Tx
+    End If
+
 
 End Sub
 
@@ -1444,6 +1466,21 @@ Sub Watersystem_menu
     Woffhour = Offhour
     Woffmin = Offmin
 
+    If Status = 1 Then
+       Cmd = 180
+       Id = Idwater
+       Typ = Relaymodule
+       Direct = Tooutput
+       Call Tx
+    End If
+    If Status = 2 Then
+       Cmd = 181
+       Id = Idwater
+       Typ = Relaymodule
+       Direct = Tooutput
+       Call Tx
+    End If
+
 End Sub
 
 Sub Light_menu
@@ -1465,6 +1502,20 @@ Sub Light_menu
     Lonmin = Onmin
     Loffhour = Offhour
     Loffmin = Offmin
+    If Status = 1 Then
+       Cmd = 180
+       Id = Idlight
+       Typ = Relaymodule
+       Direct = Tooutput
+       Call Tx
+    End If
+    If Status = 2 Then
+       Cmd = 181
+       Id = Idlight
+       Typ = Relaymodule
+       Direct = Tooutput
+       Call Tx
+    End If
 End Sub
 
 Sub Checkanswer

@@ -1,6 +1,6 @@
 Report       : bt136 pwm
-Date         : 09-26-2020
-Time         : 15:06:45
+Date         : 09-27-2020
+Time         : 12:37:36
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : ADE hex  -> Will fit into ROM
-ROMIMAGE     :  2782 dec
-FLASH USED   :  33  %
+ROMIMAGE     : 84E hex  -> Will fit into ROM
+ROMIMAGE     :  2126 dec
+FLASH USED   :  25  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  860  dec
+Space left   :  858  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -131,6 +131,14 @@ IDWASGOT                         Bit [1]           006B          107
 MINID                            Byte              00A8          168 
 MAXID                            Byte              00A9          169 
 COUNTERID                        Byte              00AA          170 
+EOUTID1                          EEPROM Byte(8)    0018          24 
+EOUTID2                          EEPROM Byte(8)    0020          32 
+EOUTID3                          EEPROM Byte(8)    0028          40 
+STATUS                           Byte              00AB          171 
+WANTID                           Bit [0]           006B          107 
+IDGOT                            Bit [7]           00AC          172 
+GOTID                            Bit [6]           00AC          172 
+EOUTS                            EEPROM Byte(8)    0030          48 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -509,6 +517,8 @@ MINLIGHT                         11800
 REMOTE                           104
 PWMMODULE                        111
 MYTYP                            111
+RESETALL                         1
+KEYIN                            101
 D                                0
 CBITINFINITY                     0
 CMBITINFINITY                    1
@@ -574,7 +584,10 @@ ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
 WANTNUM                          not used
+SYC                              not used
 EOUT                             not used
+EOUTID                           not used
+TEMPID                           not used
 J                                not used
 TEST                             not used
 PLUS                             not used
@@ -583,4 +596,12 @@ SECC                             not used
 TERM                             not used
 PW                               not used
 DELAY_                           not used
+EOUTID1                          not used
+EOUTID2                          not used
+EOUTID3                          not used
+STATUS                           not used
+WANTID                           not used
+IDGOT                            not used
+GOTID                            not used
+EOUTS                            not used
 
