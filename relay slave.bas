@@ -405,11 +405,17 @@ Sub Findorder
                Case 158
                     For I = 1 To Counterid
                         Eoutid1(i) = 0
+                        Waitms 2
                         Eoutid2(i) = 0
+                        Waitms 2
                         Eoutid3(i) = 0
+                        Waitms 2
                         Eoutnum(i) = 0
+                        Waitms 2
                         Eouts(i) = 0
+                        Waitms 2
                         Idgot = 0
+                        Waitms 2
                         For J = 1 To Counterid
                             Call Setouts
                         Next

@@ -10,30 +10,31 @@ Configs:
         'Enable Timer1
         'On Timer1 T1rutin
         Start Timer1
-
-        'Start Timer0
-        'Enable Ovf0
-        'On Timer0 T0rutin
-
+        Start Timer0
         Config Int1 = Rising
         Enable Int1
         On Int1 Int1rutin
 
 
 
+
 Defports:
-        'Config Portb.2 = Output : Blink_ Alias Portb.2
+        Config Portb.2 = Output : buz Alias Portb.2
+
+        Config Portd.3 = Input : Ziro Alias Pind.3
+
+
+
         Config Portc.5 = Output : out1 Alias Portc.5
-        Config Portc.4 = Output : out2 Alias Portc.4
+        Config Portc.4 = Output : Out2 Alias Portc.4
         Config Portc.3 = Output : Out3 Alias Portc.3
         Config Portc.2 = Output : Out4 Alias Portc.2
         Config Portc.1 = Output : Out5 Alias Portc.1
         Config Portc.0 = Output : Out6 Alias Portc.0
-        Config Portd.6 = Output : out7 Alias Portd.6
-        Config Portd.7 = Output : out8 Alias Portd.7
+        Config Portd.7 = Output : Out7 Alias Portd.7
+        Config Portd.6 = Output : Out8 Alias Portd.6
 
-        Config Portd.3 = Input : Ziro Alias Pind.3
-        Config Portb.5 = Input : Key Alias Pinb.5
+        Config Portb.1 = Input : Key Alias Pinb.1
 
 Maxconfig:
           Enable Urxc
@@ -46,49 +47,28 @@ Maxconfig:
           Dim Typ As Byte
           Dim Cmd As Byte
           Dim Id As Byte
-          Dim Direct As Byte
-          Dim Endbit As Byte
-          Dim Wantnum As Boolean
-          Dim Baseid As Byte
-          Dim Eoutnum(8) As Eram Byte
-          Dim Default_light As Word
-          Dim Tempon As Boolean
-          Dim Timee(8) As Word
-          Dim X As Byte
-
-          Dim Blink_ As Boolean
-          Dim Blink_id As Byte
-          Dim Blink_delay As Byte
-          Dim Blink_step As Byte
-          Dim Blink_light As Word
-
-          Dim Syc As Boolean
-          Dim Eout(8) As Eram Byte
-          Dim Eoutid(8) As Eram Byte
-          Dim Tempid As Byte
-          Dim J As Byte
-
-          Const Tomaster = 252
-          Const Toinput = 242
-
-
-          Const Timeout = 6000
+          Dim Wantid As Boolean
 
           Const Maxlight = 0
           Const Dark = 65535
           Const Midlight = 8800
           Const Minlight = 11800
-
-          Const Remote = 104
+          Const Relaymodule = 110
           Const Pwmmodule = 111
-          Const Mytyp = 111
+          Const Remote = 104
 
           Dim Inok As Boolean
           Dim Wic As Byte
 
+          Declare Sub Checkanswer
+          Declare Sub Getid
+          Declare Sub Keyorder
+
+
 Defvals:
         dim test as word
-        Dim Light(8) As Word
+        Dim Light(8) As Eram Word
+        Dim Alllight As Eram Word
         'dim down as Word
         Dim Plus As Byte
         dim updown as Boolean
@@ -97,53 +77,65 @@ Defvals:
         Dim Pw As Word
         Dim Steps As Byte
         Dim Delay_ As Word
-        Dim Usdelay As Dword
         Dim I As Byte
 
-        Dim Idwasgot As Boolean
-       ' Dim Baseid As Eram Byte
-        Dim Minid As Byte
-        Dim Maxid As Byte
-        Dim Counterid As Byte : Counterid = 8
+
+        const d = 0
 
         Dim Eoutid1(8) As Eram Byte
         Dim Eoutid2(8) As Eram Byte
         Dim Eoutid3(8) As Eram Byte
 
-        Dim Status As Byte
-
-        Dim Wantid As Boolean
-        Dim Idgot As Boolean
         Dim Gotid As Boolean
+        'Dim Idgot As Boolean
+        Dim K As Byte
+        Dim J As Byte
+        Dim X As Byte
+        Dim Outs(8) As Byte
+        Dim Status As Byte
+        Const Refreshall = 1
+        Const Stopall = 2
 
-        Dim Eouts(8) As Eram Byte
 
-        Const Resetall = 1
-        Const Keyin = 101
-        Const Mytyp = 111
-        const d = 0
 
-Subs:
-
-          Declare Sub Checkanswer
-          Declare Sub Getid
-          Declare Sub Tx
-          Declare Sub Refreshout
+Start Timer0
 
 Main:
 
      Do
 
 
-              If Timer1 > Light(1) Then Set Out1 Else Reset Out1
-              If Timer1 > Light(2) Then Set Out2 Else Reset Out2
-              If Timer1 > Light(3) Then Set Out3 Else Reset Out3
-              If Timer1 > Light(4) Then Set Out4 Else Reset Out4
-              If Timer1 > Light(5) Then Set Out5 Else Reset Out5
-              If Timer1 > Light(6) Then Set Out6 Else Reset Out6
-              If Timer1 > Light(7) Then Set Out7 Else Reset Out7
-              If Timer1 > Light(8) Then Set Out8 Else Reset Out8
+       If Timer1 > Light(1) Then Set Out1 Else Reset Out1
+       If Timer1 > Light(2) Then Set Out2 Else Reset Out2
+       If Timer1 > Light(3) Then Set Out3 Else Reset Out3
+       If Timer1 > Light(4) Then Set Out4 Else Reset Out4
+       If Timer1 > Light(5) Then Set Out5 Else Reset Out5
+       If Timer1 > Light(6) Then Set Out6 Else Reset Out6
+       If Timer1 > Light(7) Then Set Out7 Else Reset Out7
+       If Timer1 > Light(8) Then Set Out8 Else Reset Out8
 
+
+       If Key = 1 Then
+          Test = 0
+          Do
+            Waitms 100
+            Incr Test
+            Set Buz
+            If Test > 30 Then
+             For I = 1 To 8
+                 Toggle Buz
+                 Waitms 200
+             Next
+               Call Getid
+            End If
+          Loop Until Key = 0
+          If Test < 10 Then
+             For I = 1 To 4
+                 Toggle Buz
+                 Waitms 500
+             Next
+          End If
+       End If
 
 
      Loop
@@ -157,8 +149,10 @@ Rx:
       Inputbin Maxin
 
 
-      If I = 5 And Maxin = 210 Then Set Inok
-      If Maxin = 232 Then I = 1
+      If I = 5 Then
+         If Maxin = 230 Or Maxin = 210 Then Set Inok
+      End If
+      If Maxin = 252 Or Maxin = 232 Then I = 1
 
       Din(i) = Maxin
 
@@ -166,7 +160,7 @@ Rx:
         Toggle Rxtx
         Wic = Din(4)
         Typ = Din(2)
-        If Typ = Remote Or Typ = Pwmmodule Or Typ = Keyin Then Call Checkanswer
+        If Typ = Remote Or Typ = Relaymodule Then Call Checkanswer
         I = 0
         Reset Inok
       End If
@@ -174,149 +168,196 @@ Rx:
 
 Return
 
-T0rutin:
-        Portc = 0
-        Portb = 0
-        Stop Timer0
-        Timer0 = 147
-
-        If Tempon = 1 Then
-
-           For X = 1 To 8
-               If Light(x) < Dark Then Incr Timee(x)
-               If Timee(x) = Timeout Then Light(x) = Dark
-           Next X
-
-        End If
-
-        For X = 1 To 8
-            Light(x) = Default_light
-        Next X
-Return
-
 Int1rutin:
           Stop Timer1
 
+'(
+          Incr Test
 
-          If Blink_ = 1 Then
-             Incr Blink_delay
-             If Blink_delay = 0 Then
-                Incr Blink_step
-                If Blink_step > 4 Then Blink_step = 1
-                Select Case Blink_step
+          If Test = 300 Then
+             Test = 0
+             Toggle buz
+             Incr I
+             If I = 5 Then I = 1
+
+                Select Case I
                        Case 1
-                            Blink_light = Dark
+                            Light = 0
                        Case 2
-                            Blink_light = Minlight
+                            Light = 8800
                        Case 3
-                            Blink_light = Midlight
+                            Light = 12000
                        Case 4
-                            Blink_light = Maxlight
-                End Select
-                For I = 1 To Counterid
-                    If Blink_id = Eoutnum(i) Then
-                       Light(i) = Blink_light
-                    End If
-                Next
-             End If
+                            Light = 65535
 
+                End Select
           End If
+')
+
 
           Reset Out1
-          Reset Out2
-          Reset Out3
-          Reset Out4
-          Reset Out5
-          Reset Out6
-          Reset Out7
-          Reset Out8
-
           Timer1 = 0
           Start Timer1
-        For X = 1 To 8
-            Light(x) = Default_light
-        Next X
 
 Return
 
 End
 
-Sub Tx
-    If Direct = Tomaster Then
-       Endbit = 230
-    Elseif Direct = Toinput Then
-           Endbit = 220
-    End If
 
-    Set En
-    Waitms 10
-    Printbin Direct ; Typ ; Cmd ; Id ; Endbit
-    Waitms 50
-    Reset En
+
+Sub Keyorder
+
+
 End Sub
 
 Sub Getid
+    Reset En
+    Set Buz
+    Wait 3
+    Reset Buz
+    If Wantid = 1 Then
+       'K = Idgot
+       Do
 
-    Do
-        If Key = 1 Then
-           Set Idwasgot
-           Baseid = Id
-           Minid = Baseid + 1
-           Maxid = Counterid + Baseid
-           Typ = Mytyp : Cmd = 165 : Id = Maxid
+         Do
+         Loop Until Key = 1
+         Portc = 0
+         Portd = 0
+         Waitms 30
+         Test = 0
+         Do
+           Waitms 100
+           Incr Test
+           If Test > 30 Then
+             Reset Wantid
+             For I = 1 To 8
+                 Toggle Buz
+                 Waitms 200
+             Next
+              Return
+           End If
+         Loop Until Key = 0
+         Incr K
+         If K > 8 Then K = 1
+         Select Case K
+                Case 1
+                     Set Out1
+                Case 2
+                     Set Out2
+                Case 3
+                     Set Out3
+                Case 4
+                     Set Out4
+                Case 5
+                     Set Out5
+                Case 6
+                     Set Out6
+                Case 7
+                     Set Out7
+                Case 8
+                     Set Out8
+         End Select
 
-           Direct = Tomaster
-           Call Tx
-           Call Refreshout
-        End If
-    Loop Until Idwasgot = 1
-    Reset Idwasgot
-
-End Sub
-
-Sub Refreshout
-    Light = Dark
-    Do
-       If Timer1 > Light Then Set Out1 Else Reset Out1
-       Waitus 1
-       Incr Usdelay
-       If Usdelay > 1000000 Then
-          Incr Steps
-          Select Case Steps
-                 Case 1
-                      Light = Dark
-                 Case 2
-                      Light = Minlight
-                 Case 3
-                      Light = Midlight
-                 Case 4
-                      Light = Maxlight
-                 Case 5
-                      Light = Dark
-                      Steps = 0
-                      Exit Do
-          End Select
-       End If
-    Loop
+       Loop
+    Else
+        Return
+    End If
 
 End Sub
 
 Sub Checkanswer
-
     Cmd = Din(3)
     Select Case Cmd
-           Case 150
-
            Case 151
+                Set Wantid
+                Set Buz
+                Waitms 500
+                Reset Buz
 
+           Case 158
+                    For I = 1 To 8
+                        Eoutid1(i) = 0
+                        Waitms 2
+                        Eoutid2(i) = 0
+                        Waitms 2
+                        Eoutid3(i) = 0
+                        Waitms 2
+                        Light(i) = Dark
+                        Waitms 2
+                    Next
+                                 For I = 1 To 8
+                                     Toggle Buz
+                                     Waitms 200
+                                 Next
+           Case 180
+                If Wantid = 1 Then
+                          Reset Gotid
+                          If Eoutid1(k) > 100 Or Eoutid1(k) = 0 Then
+                             Eoutid1(k) = Id
+                             Set Gotid
+                          Else
+                              If Eoutid2(k) > 100 Or Eoutid2(k) = 0 Then
+                                 If Eoutid1(k) <> Id Then
+                                    Eoutid2(k) = Id
+                                    Set Gotid
+                                 End If
+                              Else
+                                  If Eoutid3(k) > 100 Or Eoutid3(k) = 0 Then
+                                     If Eoutid1(k) <> Id And Eoutid2(k) <> Id Then
+                                        Eoutid3(k) = Id
+                                        Set Gotid
+                                     End If
+                                  End If
+                              End If
+                          End If
+                          If Gotid = 1 Then
+                             For I = 1 To 4
+                                 Select Case K
+                                         Case 1
+                                              Toggle Out1
+                                         Case 2
+                                              Toggle Out2
+                                         Case 3
+                                              Toggle Out3
+                                         Case 4
+                                              Toggle Out4
+                                         Case 5
+                                              Toggle Out5
+                                         Case 6
+                                              Toggle Out6
+                                         Case 7
+                                              Toggle Out7
+                                         Case 8
+                                              Toggle Out8
+                                 End Select
+                                 Waitms 500
+                             Next
+                          End If
+                Else
+                    For I = 1 To 8
+                        If Id = 0 Or Id > 100 Then Return
+                        If Eoutid1(i) = Id Or Eoutid2(i) = Id Or Eoutid3(i) = Idthen
+                           If Light(i) = Dark Then
+                              Light(i) = Minlight
+                           Elseif Light(i) = Minlight Then
+                              Light(i) = Midlight
+                           Elseif Light(i) = Midlight Then
+                              Light(i) = Maxlight
+                           Elseif Light(i) = Maxlight Then
+                              Light(i) = Dark
+                           End If
+                        End If
 
-           Case 159
-
-
-           Case 161 To 164
-
-           Case 181
-
+                    Next
+                End If
+           Case 161
+                Alllight = Minlight
+           Case 162
+                Alllight = Midlight
+           Case 163
+                Alllight = Maxlight
+           Case 164
+                Alllight = Dark
     End Select
 
 End Sub

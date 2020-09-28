@@ -1,6 +1,6 @@
 Report       : bt136 pwm
-Date         : 09-27-2020
-Time         : 12:37:36
+Date         : 09-28-2020
+Time         : 12:11:42
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 84E hex  -> Will fit into ROM
-ROMIMAGE     :  2126 dec
-FLASH USED   :  25  %
+ROMIMAGE     : BCC hex  -> Will fit into ROM
+ROMIMAGE     :  3020 dec
+FLASH USED   :  36  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  858  dec
+Space left   :  900  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -95,50 +95,29 @@ MAXIN                            Byte              0065          101
 TYP                              Byte              0066          102 
 CMD                              Byte              0067          103 
 ID                               Byte              0068          104 
-DIRECT                           Byte              0069          105 
-ENDBIT                           Byte              006A          106 
-WANTNUM                          Bit [7]           006B          107 
-BASEID                           Byte              006C          108 
-EOUTNUM                          EEPROM Byte(8)    0000          0 
-DEFAULT_LIGHT                    Word              006D          109 
-TEMPON                           Bit [6]           006B          107 
-TIMEE                            Word(8)           006F          111 
-X                                Byte              007F          127 
-BLINK_                           Bit [5]           006B          107 
-BLINK_ID                         Byte              0080          128 
-BLINK_DELAY                      Byte              0081          129 
-BLINK_STEP                       Byte              0082          130 
-BLINK_LIGHT                      Word              0083          131 
-SYC                              Bit [4]           006B          107 
-EOUT                             EEPROM Byte(8)    0008          8 
-EOUTID                           EEPROM Byte(8)    0010          16 
-TEMPID                           Byte              0085          133 
-J                                Byte              0086          134 
-INOK                             Bit [3]           006B          107 
-WIC                              Byte              0087          135 
-TEST                             Word              0088          136 
-LIGHT                            Word(8)           008A          138 
-PLUS                             Byte              009A          154 
-UPDOWN                           Bit [2]           006B          107 
-SECC                             Word              009B          155 
-TERM                             Byte              009D          157 
-PW                               Word              009E          158 
-STEPS                            Byte              00A0          160 
-DELAY_                           Word              00A1          161 
-USDELAY                          Dword             00A3          163 
-I                                Byte              00A7          167 
-IDWASGOT                         Bit [1]           006B          107 
-MINID                            Byte              00A8          168 
-MAXID                            Byte              00A9          169 
-COUNTERID                        Byte              00AA          170 
-EOUTID1                          EEPROM Byte(8)    0018          24 
-EOUTID2                          EEPROM Byte(8)    0020          32 
-EOUTID3                          EEPROM Byte(8)    0028          40 
-STATUS                           Byte              00AB          171 
-WANTID                           Bit [0]           006B          107 
-IDGOT                            Bit [7]           00AC          172 
-GOTID                            Bit [6]           00AC          172 
-EOUTS                            EEPROM Byte(8)    0030          48 
+WANTID                           Bit [7]           0069          105 
+INOK                             Bit [6]           0069          105 
+WIC                              Byte              006A          106 
+TEST                             Word              006B          107 
+LIGHT                            EEPROM Word(8)    0000          0 
+ALLLIGHT                         EEPROM Word       0010          16 
+PLUS                             Byte              006D          109 
+UPDOWN                           Bit [5]           0069          105 
+SECC                             Word              006E          110 
+TERM                             Byte              0070          112 
+PW                               Word              0071          113 
+STEPS                            Byte              0073          115 
+DELAY_                           Word              0074          116 
+I                                Byte              0076          118 
+EOUTID1                          EEPROM Byte(8)    0012          18 
+EOUTID2                          EEPROM Byte(8)    001A          26 
+EOUTID3                          EEPROM Byte(8)    0022          34 
+GOTID                            Bit [4]           0069          105 
+K                                Byte              0077          119 
+J                                Byte              0078          120 
+X                                Byte              0079          121 
+OUTS                             Byte(8)           007A          122 
+STATUS                           Byte              0082          130 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -507,19 +486,16 @@ _HWSTACK_LOW                     &H0437
 _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
-TOMASTER                         252
-TOINPUT                          242
-TIMEOUT                          6000
 MAXLIGHT                         0
 DARK                             65535
 MIDLIGHT                         8800
 MINLIGHT                         11800
-REMOTE                           104
+RELAYMODULE                      110
 PWMMODULE                        111
-MYTYP                            111
-RESETALL                         1
-KEYIN                            101
+REMOTE                           104
 D                                0
+REFRESHALL                       1
+STOPALL                          2
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -583,25 +559,15 @@ R31                              not used
 ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
-WANTNUM                          not used
-SYC                              not used
-EOUT                             not used
-EOUTID                           not used
-TEMPID                           not used
-J                                not used
-TEST                             not used
 PLUS                             not used
 UPDOWN                           not used
 SECC                             not used
 TERM                             not used
 PW                               not used
+STEPS                            not used
 DELAY_                           not used
-EOUTID1                          not used
-EOUTID2                          not used
-EOUTID3                          not used
+J                                not used
+X                                not used
+OUTS                             not used
 STATUS                           not used
-WANTID                           not used
-IDGOT                            not used
-GOTID                            not used
-EOUTS                            not used
 
