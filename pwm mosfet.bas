@@ -10,7 +10,7 @@ Configs:
         'Enable Timer1
         'on Timer1 T1rutin
         'Start Timer1
-        enable timer0
+        Enable Timer0
         Start Timer0
         On Ovf0 T0rutin
         'Config Int1 = Rising
