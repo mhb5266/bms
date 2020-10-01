@@ -92,7 +92,7 @@ Dim Temp2 As Integer
 Dim Temp3 As Word
 Dim Temp4 As Word
 Dim Temp5 As Byte
-
+Dim Showtemp As Byte
 Dim Menu As Byte
 Dim Test As Byte
 Dim Timer_1 As Word
@@ -324,15 +324,15 @@ Main:
      Do
        Gosub Read_date_time
        Gosub M_to_sh
-       Call Temp
+       Showtemp = _sec Mod 5
+       If Showtemp = 0 Then Call Temp
        Call Show
-       'If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
-          'Gosub Choose_senario
-       'End If
+       If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
+          Gosub Choose_senario
+       End If
        Call Readtouch
 
-       If Touch > 0 Then Call Main_menu
-       Call Ifcheck
+       'If Touch > 0 Then Call Main_menu
 
 
      Loop
@@ -698,6 +698,16 @@ $include "font16x16en.font"
 
 $include "font8x8.font"
 
+Cancelicon:
+      $bgf "cancel.bgf"
+Perviousicon:
+
+      $bgf "pervious.bgf"
+Nexticon:
+      $bgf "next.bgf"
+
+Menuicon:
+      $bgf "menu.bgf"
 Tv:
       $bgf "tv.bgf"
 Party:
@@ -1724,9 +1734,29 @@ End Sub
 Sub Show
 
        Call Ifcheck
-       Lcdat 4 , 1 , Sens1
-       Lcdat 4 , 90 , Sens2
+       Showpic 8 , 48 , Cancelicon
+       Showpic 40 , 48 , Perviousicon
+       Showpic 72 , 48 , Nexticon
+       Showpic 104 , 48 , Menuicon
+              Setfont Font16x16en
 
+              Select Case _sec
+                     Case 0 To 10
+                          Lcdat 4 , 1 , Sens1 ; "!" ; "  "
+                     Case 11 To 20
+                          Lcdat 4 , 1 , Sens2 ; "!" ; "  "
+                     Case 21 To 30
+                          Lcdat 4 , 1 , Sens1 ; "!" ; "  "
+                     Case 31 To 40
+                          Lcdat 4 , 1 , Sens2 ; "!" ; "  "
+                     Case 41 To 50
+                          Lcdat 4 , 1 , Sens1 ; "!" ; "  "
+                     Case 51 To 59
+                          Lcdat 4 , 1 , Sens2 ; "!" ; "  "
+              End Select
+
+
+       Setfont Font8x8
 
        If _hour > 9 Then
           Lcdat 1 , 1 , _hour
@@ -1738,7 +1768,7 @@ Sub Show
        If _min > 9 Then
           Lcdat 1 , 24 , _min
        Else
-          Lcdat 1 , 24 , "0" ; _min ; "  "
+          Lcdat 1 , 24 , "0" ; _min ; "    "
        End If
 
 

@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 09-27-2020
-Time         : 12:23:47
+Date         : 10-01-2020
+Time         : 13:54:53
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,8 +8,8 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : 8B38 hex  -> Will fit into ROM
-ROMIMAGE     :  35640 dec
+ROMIMAGE     : 8EB8 hex  -> Will fit into ROM
+ROMIMAGE     :  36536 dec
 FLASH USED   :  27  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 10D8 hex
 Framesize    : 20 hex
 Framestart   : 10A8 hex
-Space left   :  3754  dec
+Space left   :  3753  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -155,34 +155,35 @@ TEMP2                            Integer           016E          366
 TEMP3                            Word              0170          368 
 TEMP4                            Word              0172          370 
 TEMP5                            Byte              0174          372 
-MENU                             Byte              0175          373 
-TEST                             Byte              0176          374 
-TIMER_1                          Word              0177          375 
-S1                               String * 16       0179          377 
-S2                               String * 16       018A          394 
-S3                               String * 16       019B          411 
-S4                               String * 16       01AC          428 
-S                                String * 10       01BD          445 
-BLINK_                           Bit [7]           01C8          456 
-SELECTION                        Byte              01C9          457 
-A                                Byte              01CA          458 
-BACKTIME                         Bit [6]           01C8          456 
-MAXIN                            Byte              01CB          459 
-ID                               Byte              01CC          460 
-TYP                              Byte              01CD          461 
-CMD                              Byte              01CE          462 
-STARTBIT                         Byte              01CF          463 
-ENDBIT                           Byte              01D0          464 
-FINDORDER                        Byte              01D1          465 
-REMOTEID                         Byte              01D2          466 
-REMOTEKEYID                      Byte              01D3          467 
+SHOWTEMP                         Byte              0175          373 
+MENU                             Byte              0176          374 
+TEST                             Byte              0177          375 
+TIMER_1                          Word              0178          376 
+S1                               String * 16       017A          378 
+S2                               String * 16       018B          395 
+S3                               String * 16       019C          412 
+S4                               String * 16       01AD          429 
+S                                String * 10       01BE          446 
+BLINK_                           Bit [7]           01C9          457 
+SELECTION                        Byte              01CA          458 
+A                                Byte              01CB          459 
+BACKTIME                         Bit [6]           01C9          457 
+MAXIN                            Byte              01CC          460 
+ID                               Byte              01CD          461 
+TYP                              Byte              01CE          462 
+CMD                              Byte              01CF          463 
+STARTBIT                         Byte              01D0          464 
+ENDBIT                           Byte              01D1          465 
+FINDORDER                        Byte              01D2          466 
+REMOTEID                         Byte              01D3          467 
+REMOTEKEYID                      Byte              01D4          468 
 LSTATUS                          EEPROM Byte       0001          1 
 PSTATUS                          EEPROM Byte       0002          2 
 WSTATUS                          EEPROM Byte       0003          3 
 LDAYS                            EEPROM Byte       0004          4 
 PDAYS                            EEPROM Byte       0005          5 
 WDAYS                            EEPROM Byte       0006          6 
-DAYS                             Byte              01D4          468 
+DAYS                             Byte              01D5          469 
 LONHOUR                          EEPROM Byte       0007          7 
 LONMIN                           EEPROM Byte       0008          8 
 LOFFHOUR                         EEPROM Byte       0009          9 
@@ -195,44 +196,44 @@ WONHOUR                          EEPROM Byte       000F          15
 WONMIN                           EEPROM Byte       0010          16 
 WOFFHOUR                         EEPROM Byte       0011          17 
 WOFFMIN                          EEPROM Byte       0012          18 
-ONHOUR                           Byte              01D5          469 
-ONMIN                            Byte              01D6          470 
-OFFHOUR                          Byte              01D7          471 
-OFFMIN                           Byte              01D8          472 
-STATUS                           Byte              01D9          473 
-SETLIGHT                         Byte              01DA          474 
-DIN                              Byte(5)           01DB          475 
-INOK                             Bit [5]           01C8          456 
-LEARNOK                          Bit [4]           01C8          456 
-LEARNDONE                        Bit [3]           01C8          456 
-CLEARDONE                        Byte              01E0          480 
-SETREMOTEDONE                    Bit [2]           01C8          456 
-DIRECT                           Byte              01E1          481 
-X                                Word              01E2          482 
-W                                Word              01E4          484 
-Z                                Word              01E6          486 
-PLANT_STATUS                     Byte              01E8          488 
-PLANT_START_HOUR                 Byte              01E9          489 
-PLANT_START_MIN                  Byte              01EA          490 
-PLANT_STOP_HOUR                  Byte              01EB          491 
-PLANT_STOP_MIN                   Byte              01EC          492 
-PLANT_DAYS                       Byte(7)           01ED          493 
-POOSH                            Word              01F4          500 
-TOUCH                            Byte              01F6          502 
-NEXTDAY                          Bit [1]           01C8          456 
-COUNT                            Byte              01F7          503 
-INPUTCOUNTER                     Byte              01F8          504 
+ONHOUR                           Byte              01D6          470 
+ONMIN                            Byte              01D7          471 
+OFFHOUR                          Byte              01D8          472 
+OFFMIN                           Byte              01D9          473 
+STATUS                           Byte              01DA          474 
+SETLIGHT                         Byte              01DB          475 
+DIN                              Byte(5)           01DC          476 
+INOK                             Bit [5]           01C9          457 
+LEARNOK                          Bit [4]           01C9          457 
+LEARNDONE                        Bit [3]           01C9          457 
+CLEARDONE                        Byte              01E1          481 
+SETREMOTEDONE                    Bit [2]           01C9          457 
+DIRECT                           Byte              01E2          482 
+X                                Word              01E3          483 
+W                                Word              01E5          485 
+Z                                Word              01E7          487 
+PLANT_STATUS                     Byte              01E9          489 
+PLANT_START_HOUR                 Byte              01EA          490 
+PLANT_START_MIN                  Byte              01EB          491 
+PLANT_STOP_HOUR                  Byte              01EC          492 
+PLANT_STOP_MIN                   Byte              01ED          493 
+PLANT_DAYS                       Byte(7)           01EE          494 
+POOSH                            Word              01F5          501 
+TOUCH                            Byte              01F7          503 
+NEXTDAY                          Bit [1]           01C9          457 
+COUNT                            Byte              01F8          504 
+INPUTCOUNTER                     Byte              01F9          505 
 RELAYMODULECOUNTER               EEPROM Byte       0013          19 
 PWMMODULECOUNTER                 EEPROM Byte       0014          20 
 EINPUTCOUNTER                    EEPROM Byte       0015          21 
 SYCNUM                           EEPROM Byte       0016          22 
-CONFIGMODE                       Byte              01F9          505 
-OK1                              Bit [0]           01C8          456 
-OK2                              Bit [7]           01FA          506 
-OK3                              Bit [6]           01FA          506 
-OK4                              Bit [5]           01FA          506 
-I                                Byte              01FB          507 
-J                                Byte              01FC          508 
+CONFIGMODE                       Byte              01FA          506 
+OK1                              Bit [0]           01C9          457 
+OK2                              Bit [7]           01FB          507 
+OK3                              Bit [6]           01FB          507 
+OK4                              Bit [5]           01FB          507 
+I                                Byte              01FC          508 
+J                                Byte              01FD          509 
 
 --------------------------------------------------------------------------------
 Constant                         Value
