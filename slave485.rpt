@@ -1,6 +1,6 @@
 Report       : slave485
-Date         : 09-26-2020
-Time         : 14:49:09
+Date         : 10-03-2020
+Time         : 13:40:32
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 7CC hex  -> Will fit into ROM
-ROMIMAGE     :  1996 dec
-FLASH USED   :  24  %
+ROMIMAGE     : 866 hex  -> Will fit into ROM
+ROMIMAGE     :  2150 dec
+FLASH USED   :  26  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  910  dec
+Space left   :  908  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -103,26 +103,28 @@ S1                               Bit [7]           0065          101
 S2                               Bit [6]           0065          101 
 S3                               Bit [5]           0065          101 
 S4                               Bit [4]           0065          101 
+TEMPON                           Word              0066          102 
+TEMPEN                           Bit [3]           0065          101 
 EID                              EEPROM Byte       0004          4 
-DIRECT                           Byte              0066          102 
-ENDBIT                           Byte              0067          103 
-I                                Byte              0068          104 
-J                                Long              0069          105 
-A                                Byte              006D          109 
-REPLY                            Byte              006E          110 
-INOK                             Bit [3]           0065          101 
-TOUCH                            Byte              006F          111 
-SENDOK                           Bit [2]           0065          101 
-ISREQUEST                        Bit [1]           0065          101 
-TIMEOUT                          Bit [0]           0065          101 
-ENBUZ                            Bit [7]           0070          112 
-ENSENSOR                         Bit [6]           0070          112 
-ENKEY                            Bit [5]           0070          112 
-WANTID                           Bit [4]           0070          112 
-BACKTYP                          Byte              0071          113 
-BACKCMD                          Byte              0072          114 
-BACKID                           Byte              0073          115 
-DIN                              Byte(5)           0074          116 
+DIRECT                           Byte              0068          104 
+ENDBIT                           Byte              0069          105 
+I                                Byte              006A          106 
+J                                Long              006B          107 
+A                                Byte              006F          111 
+REPLY                            Byte              0070          112 
+INOK                             Bit [2]           0065          101 
+TOUCH                            Byte              0071          113 
+SENDOK                           Bit [1]           0065          101 
+ISREQUEST                        Bit [0]           0065          101 
+TIMEOUT                          Bit [7]           0072          114 
+ENBUZ                            Bit [6]           0072          114 
+ENSENSOR                         Bit [5]           0072          114 
+ENKEY                            Bit [4]           0072          114 
+WANTID                           Bit [3]           0072          114 
+BACKTYP                          Byte              0073          115 
+BACKCMD                          Byte              0074          116 
+BACKID                           Byte              0075          117 
+DIN                              Byte(5)           0076          118 
 
 --------------------------------------------------------------------------------
 Constant                         Value

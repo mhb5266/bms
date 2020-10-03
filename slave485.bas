@@ -61,6 +61,9 @@ Dim S2 As Boolean
 Dim S3 As Boolean
 Dim S4 As Boolean
 
+Dim Tempon As Word
+Dim Tempen As Boolean
+
 Typ = 101
 Cmd = 181
  'Id = 2
@@ -114,6 +117,21 @@ Main:
 
 
        Do
+
+         If Tempon > 0 Then
+            If Tempen = 1 Then
+               Decr Tempon
+               Waitms 100
+               If Tempon = 0 Then
+                  Direct = Tooutput
+                  Cmd = 181
+                  Id = Touchid1
+                  Call Tx
+                  Waitms 10
+                  Call Tx
+               End If
+            End If
+         End If
 
          Call Refreshkey
 
@@ -202,6 +220,8 @@ Sub Keytouched:
                                   Tempid = 0
                                   Reset Wantid
                                   Direct = Tomaster : Cmd = 156
+                                  Reset Tempen
+                                  Tempon = 0
                                End If
                             End If
                          Else
@@ -258,6 +278,8 @@ Sub Keytouched:
                          If Touchid1 < 50 And Touchid1 > 0 Then
                             Id = Touchid1
                             Cmd = 159
+                            Set Tempen
+                            Tempon = 300
                          End If
              End Select
              Call Tx

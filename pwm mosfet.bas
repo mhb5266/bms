@@ -53,11 +53,12 @@ Maxconfig:
 
           Const Maxlight = 0
           Const Dark = 65535
-          Const Midlight = 8800
-          Const Minlight = 11800
+          Const Midlight = 9000
+          Const Minlight = 13000
           Const Relaymodule = 110
           Const Pwmmodule = 111
           Const Remote = 104
+          Const Keyin = 101
 
           Dim Inok As Boolean
           Dim Wic As Byte
@@ -93,16 +94,7 @@ Defvals:
         Dim Outid2(8) As Byte
         Dim Outid3(8) As Byte
 
-        For I = 1 To 8
-            Outid1(i) = Eoutid1(i)
-            Waitms 2
-            Outid2(i) = Eoutid2(i)
-            Waitms 2
-            Outid3(i) = Eoutid3(i)
-            Waitms 2
-            Light(i) = Elight(i)
-            Waitms 2
-        Next
+
         Dim Gotid As Boolean
         'Dim Idgot As Boolean
         Dim K As Byte
@@ -113,9 +105,21 @@ Defvals:
         Const Refreshall = 1
         Const Stopall = 2
 
+        For I = 1 To 8
+            Outid1(i) = Eoutid1(i)
+            Waitms 2
+            Outid2(i) = Eoutid2(i)
+            Waitms 2
+            Outid3(i) = Eoutid3(i)
+            Waitms 2
+            Light(i) = Elight(i)
+            Waitms 200
+            Toggle Buz
+        Next
 
 
 Start Timer0
+
 
 Main:
 
@@ -177,7 +181,7 @@ Rx:
         Toggle Rxtx
         Id = Din(4)
         Typ = Din(2)
-        If Typ = Remote Or Typ = Relaymodule Then Call Checkanswer
+        If Typ = Keyin Or Typ = Remote Then Call Checkanswer
         I = 0
         Reset Inok
       End If
@@ -312,6 +316,11 @@ Sub Getid
 
        Loop
     Else
+        For I = 1 To 8
+            Toggle Buz
+            Waitms 100
+        Next
+        Reset Wantid
         Return
     End If
 
@@ -320,11 +329,17 @@ End Sub
 Sub Checkanswer
     Cmd = Din(3)
     Select Case Cmd
+           Case 150
+                Reset Wantid
            Case 151
-                Set Wantid
-                Set Buz
-                Waitms 500
-                Reset Buz
+                If Typ = Pwmmodule Then
+                                Set Wantid
+                                For I = 1 To 4
+                                    Toggle Buz
+                                    Waitms 500
+                                Next
+                                Reset Buz
+                End If
 
            Case 158
                     For I = 1 To 8
@@ -336,27 +351,40 @@ Sub Checkanswer
                         Waitms 2
                         Light(i) = Dark
                         Waitms 2
+                        Toggle Buz
+                        Outid1(i) = 0
+                        Outid2(i) = 0
+                        Outid3(i) = 0
+                        Waitms 200
                     Next
-                                 For I = 1 To 8
-                                     Toggle Buz
-                                     Waitms 200
-                                 Next
+
+           Case 159
+                    For I = 1 To 8
+                        If Id = 0 Or Id > 100 Then Return
+                        If Outid1(i) = Id Or Outid2(i) = Id Or Outid3(i) = Id Then
+                           Light(i) = Maxlight
+                        End If
+                    Next
+
            Case 180
                 If Wantid = 1 Then
                           Reset Gotid
                           If Outid1(k) > 100 Or Outid1(k) = 0 Then
                              Outid1(k) = Id
+                             Eoutid1(k) = Outid1(k)
                              Set Gotid
                           Else
                               If Outid2(k) > 100 Or Outid2(k) = 0 Then
                                  If Outid1(k) <> Id Then
                                     Outid2(k) = Id
+                                    Eoutid2(k) = Outid2(k)
                                     Set Gotid
                                  End If
                               Else
                                   If Outid3(k) > 100 Or Outid3(k) = 0 Then
                                      If Outid1(k) <> Id And Outid2(k) <> Id Then
                                         Outid3(k) = Id
+                                        Eoutid3(k) = Outid3(k)
                                         Set Gotid
                                      End If
                                   End If
@@ -382,16 +410,10 @@ Sub Checkanswer
                                          Case 8
                                               Toggle Out8
                                  End Select
-                                 Eoutid1(i) = Outid1(i)
-                                 Waitms 2
-                                 Eoutid2(i) = Outid2(i)
-                                 Waitms 2
-                                 Eoutid3(i) = Outid3(i)
                                  Waitms 250
-
                              Next
                           End If
-                Else
+                    End If
                     For I = 1 To 8
                         If Id = 0 Or Id > 100 Then Return
                         If Outid1(i) = Id Or Outid2(i) = Id Or Outid3(i) = Id Then
@@ -404,17 +426,26 @@ Sub Checkanswer
                            Elseif Light(i) = Maxlight Then
                               Light(i) = Dark
                            End If
+                        Elight(i) = Light(i)
                         End If
                     Next
-                End If
+
+           Case 181
+                    For I = 1 To 8
+                        If Id = 0 Or Id > 100 Then Return
+                        If Outid1(i) = Id Or Outid2(i) = Id Or Outid3(i) = Id Then
+                           Light(i) = dark
+                        End If
+                    Next
+
            Case 161
-                Alllight = Minlight
-           Case 162
-                Alllight = Midlight
-           Case 163
-                Alllight = Maxlight
-           Case 164
                 Alllight = Dark
+           Case 162
+                Alllight = Minlight
+           Case 163
+                Alllight = Midlight
+           Case 164
+                Alllight = Maxlight
     End Select
 
 End Sub

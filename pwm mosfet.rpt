@@ -1,6 +1,6 @@
 Report       : pwm mosfet
-Date         : 09-28-2020
-Time         : 16:55:44
+Date         : 10-03-2020
+Time         : 14:24:55
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : CBA hex  -> Will fit into ROM
-ROMIMAGE     :  3258 dec
-FLASH USED   :  39  %
+ROMIMAGE     : F26 hex  -> Will fit into ROM
+ROMIMAGE     :  3878 dec
+FLASH USED   :  47  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -492,11 +492,12 @@ _FRAME_HIGH                      &H0429
 _XMEGA                           0
 MAXLIGHT                         0
 DARK                             65535
-MIDLIGHT                         8800
-MINLIGHT                         11800
+MIDLIGHT                         9000
+MINLIGHT                         13000
 RELAYMODULE                      110
 PWMMODULE                        111
 REMOTE                           104
+KEYIN                            101
 D                                0
 REFRESHALL                       1
 STOPALL                          2

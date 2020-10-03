@@ -255,6 +255,7 @@ Const Setidformodules = 26
 Const Clearall = 27
 Const Pwmlight = 28
 Const Pwmblink = 29
+Const Readyoutput = 30
 
 
 Const Tomaster = 252
@@ -320,6 +321,11 @@ Cls
 
 Main:
 
+       Showpic 8 , 48 , Cancelicon
+       Showpic 40 , 48 , Perviousicon
+       Showpic 72 , 48 , Nexticon
+       Showpic 104 , 48 , Menuicon
+
 
      Do
        Gosub Read_date_time
@@ -328,6 +334,8 @@ Main:
        If Showtemp = 0 Then Call Temp
        Call Show
        If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
+          poosh=0
+          Call Beep
           Gosub Choose_senario
        End If
        Call Readtouch
@@ -421,6 +429,9 @@ End If
                  Do
                     Cls
                     Lcdat 5 , 1 , "rutin is set"
+                    Setlight = Minlight
+                    Findorder = Pwmlight
+                    Call Order
                     Wait 2
                     Return
                  Loop Until Touch3 = 0
@@ -765,6 +776,8 @@ Sub Main_menu
                    Findorder = Readallinput
                    Call Order
                    Findorder = Readremote
+                   Call Order
+                   Findorder = Readyoutput
                    Call Order
                    Touch = 0
                    cls
@@ -1703,6 +1716,8 @@ Sub Order
 
                 Direct = Tooutput : Typ = Pwmmodule : Cmd = 183
 
+           Case Readyoutput
+                Direct = Tooutput : Typ = Pwmmodule : Cmd = 150
 
     End Select
 
@@ -1734,10 +1749,6 @@ End Sub
 Sub Show
 
        Call Ifcheck
-       Showpic 8 , 48 , Cancelicon
-       Showpic 40 , 48 , Perviousicon
-       Showpic 72 , 48 , Nexticon
-       Showpic 104 , 48 , Menuicon
               Setfont Font16x16en
 
               Select Case _sec
