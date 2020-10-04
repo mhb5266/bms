@@ -105,7 +105,7 @@ Dim S4 As String * 16
 Dim S As String * 10
 
 S1 = "  WWW.ISEEE.IR"
-Dim blink_ As Bit
+Dim Blink_ As Bit
 Dim Selection As Byte
 Dim A As Byte
 Dim Backtime As Boolean
@@ -176,8 +176,8 @@ Const Keyin = 101
 Const Steps = 102
 Const Senario = 103
 Const Remote = 104
-Const relaymodule = 110
-Const pwmmodule = 111
+Const Relaymodule = 110
+Const Pwmmodule = 111
 Const Outstep = 112
 
 Const Idjacuzi = 51
@@ -201,7 +201,7 @@ Plant_def:
 
 Defines:
 
-Dim poosh As Word
+Dim Poosh As Word
 Dim Touch As Byte
 Dim Nextday As Boolean
 Dim Count As Byte
@@ -228,7 +228,7 @@ Const Allid = 99
 Const Alltyp = 115
 Const Readallinput = 1
 Const Read1input = 2
-Const setidkey = 3
+Const Setidkey = 3
 Const Enablebuz = 4
 Const Disablebuz = 5
 Const Enablesensor = 6
@@ -248,9 +248,9 @@ Const Setoutput = 19
 Const Clearid = 20
 Const Learnremote = 21
 Const Clearremote = 22
-Const setidremote = 23
-Const sycrelaymoduleid = 24
-Const sycpwmmoduleid = 25
+Const Setidremote = 23
+Const Sycrelaymoduleid = 24
+Const Sycpwmmoduleid = 25
 Const Setidformodules = 26
 Const Clearall = 27
 Const Pwmlight = 28
@@ -334,7 +334,7 @@ Main:
        If Showtemp = 0 Then Call Temp
        Call Show
        If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
-          poosh=0
+          Poosh = 0
           Call Beep
           Gosub Choose_senario
        End If
@@ -361,7 +361,7 @@ End If
           Poosh = 0
           Do
             Waitms 50
-            Incr poosh
+            Incr Poosh
             If Poosh > 60 Then
                Exit Do
             End If
@@ -763,15 +763,15 @@ Sub Main_menu
      Do
             'Disable Urxc
             If Touch = 2 Then
-                   incr count
+                   Incr Count
                    If Count > Main_menu_counter Then Count = 1
-                   cls
+                   Cls
             End If
             If Touch = 3 Then
-                   decr count
+                   Decr Count
                    If Count = 0 Then Count = Main_menu_counter
                    Cls
-            endif
+            End If
             If Touch = 4 Then
                    Findorder = Readallinput
                    Call Order
@@ -780,18 +780,18 @@ Sub Main_menu
                    Findorder = Readyoutput
                    Call Order
                    Touch = 0
-                   cls
+                   Cls
                    Return
-            endif
+            End If
             If Touch = 2 Or Touch = 3 Then
                         Select Case Count
-                               case 1
+                               Case 1
                                     Showpic 50 , 20 , Jaccuziicon
-                               case 2
+                               Case 2
                                     Showpic 50 , 20 , Planticon
-                               case 3
+                               Case 3
                                     Showpic 50 , 20 , Watersystemicon
-                               case 4
+                               Case 4
                                     Showpic 50 , 20 , Lighticon
                                Case 5
                                     Showpic 50 , 20 , Setclockicon
@@ -1001,7 +1001,7 @@ End Sub
 
 Sub Set_id_modules
                  Findorder = Readremote
-                 call order
+                 Call Order
                  Findorder = Readallinput
                  Call Order
          Typ = 110 : Id = Relaymodulecounter
@@ -1054,7 +1054,7 @@ Do
                Lcdat 6 , 1 , "press a key"
               If Configmode = Relaymodule Then
                  Findorder = Readremote
-                 call order
+                 Call Order
                  Findorder = Readallinput
                  Call Order
                  Typ = Relaymodule
@@ -1904,12 +1904,12 @@ Sub Clock_menu
     Incr Timer_1
     If Timer_1 > 5 Then
      Timer_1 = 0
-     Toggle blink_
+     Toggle Blink_
     End If
 
     S1 = "TIME: "
     '-----------------------------
-    If Selection = 1 And blink_ = 0 Then
+    If Selection = 1 And Blink_ = 0 Then
 
      S1 = S1 + "  "
     Else
@@ -1921,7 +1921,7 @@ Sub Clock_menu
     End If
     S1 = S1 + ":"
     '------------------------------
-    If Selection = 2 And blink_ = 0 Then
+    If Selection = 2 And Blink_ = 0 Then
 
      S1 = S1 + "  "
     Else
@@ -1933,7 +1933,7 @@ Sub Clock_menu
     End If
     S1 = S1 + ":"
     '------------------------------
-    If Selection = 3 And blink_ = 0 Then
+    If Selection = 3 And Blink_ = 0 Then
 
      S1 = S1 + "  "
     Else
@@ -1950,7 +1950,7 @@ Sub Clock_menu
 
     S1 = "DATE: "
     '--------------------------------
-    If Selection = 4 And blink_ = 0 Then
+    If Selection = 4 And Blink_ = 0 Then
 
      S1 = S1 + "    "
     Else
@@ -1962,7 +1962,7 @@ Sub Clock_menu
     End If
     S1 = S1 + "/"
     '---------------------------------
-    If Selection = 5 And blink_ = 0 Then
+    If Selection = 5 And Blink_ = 0 Then
 
      S1 = S1 + "  "
     Else
@@ -1974,7 +1974,7 @@ Sub Clock_menu
     End If
     S1 = S1 + "/"
     '----------------------------------
-    If Selection = 6 And blink_ = 0 Then
+    If Selection = 6 And Blink_ = 0 Then
 
      S1 = S1 + "  "
     Else
@@ -2160,30 +2160,30 @@ Sub Readtouch
 Touch = 0
 'do
   'reset watchdog
-    if touch1 = 1 then
-       do
+    If Touch1 = 1 Then
+       Do
 
        Loop Until Touch1 = 0
        Touch = 1
-    endif
+    End If
 
-    if touch2 = 1 then
+    If Touch2 = 1 Then
        Do
        Loop Until Touch2 = 0
        Touch = 2
     End If
 
-    if touch3 = 1 then
+    If Touch3 = 1 Then
        Do
        Loop Until Touch3 = 0
-       touch = 3
-    endif
+       Touch = 3
+    End If
 
-    if touch4 = 1 then
+    If Touch4 = 1 Then
        Do
        Loop Until Touch4 = 0
-       touch = 4
-    endif
+       Touch = 4
+    End If
 
  If Touch > 0 Then Call Beep
 'loop until touch > 0
