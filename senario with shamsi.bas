@@ -6,7 +6,7 @@ $regfile = "m128def.dat"
 $crystal = 11059200
 $baud = 115200
 $lib "glcdKS108.lbx"
-
+'$include "FONT/farsi_map.bas"
 
 
 Tempconfig:
@@ -28,7 +28,7 @@ Lcdconfig:
 '-----------------------------------------------------
 Config Graphlcd = 128 * 64sed , Dataport = Portf , Controlport = Porta , Ce = 1 , Ce2 = 0 , Cd = 6 , Rd = 5 , Reset = 2 , Enable = 4
 Setfont Font8x8
-
+Initlcd
 
 Portconfig:
 
@@ -310,14 +310,22 @@ Startup:
 
 Eday = Day
 Set Backlight
-'Lcdat 1 , 1 , "hi"
-'Waitms 500
+
 Cls
 Call Beep
 Showpic 32 , 1 , Logo
 Waitms 500
 Cls
+Findorder = Readremote
+Call Order
+Findorder = Readallinput
+Call Order
 
+     '  Setfont Fontdig12x16_f
+
+'       Lcdat 3 , 1 , Farsi( "ÓáÇã" ) , 0
+'Wait 3
+'Cls
 
 Main:
 
@@ -399,7 +407,8 @@ End If
                  Loop Until Touch2 = 0
 
        Elseif Touch2 = 1 And Ok2 = 1 Then
-       Poosh = 0
+                 Call Beep
+                 Poosh = 0
                  Do
                     Cls
                     Lcdat 5 , 1 , "party is set"
@@ -413,6 +422,7 @@ End If
        End If
 
        If Touch3 = 1 And Ok3 = 0 Then
+       Call Beep
        Poosh = 0
                  Set Ok3
                  Reset Ok1
@@ -437,6 +447,7 @@ End If
                  Loop Until Touch3 = 0
        End If
        If Touch4 = 1 And Ok4 = 0 Then
+       Call Beep
        Poosh = 0
                  Set Ok4
                  Reset Ok1
@@ -701,13 +712,6 @@ M_day = Kole_roz_m
 Return
 
 
-Includes:
-
-$include "font32x32.font"
-
-$include "font16x16en.font"
-
-$include "font8x8.font"
 
 Cancelicon:
       $bgf "cancel.bgf"
@@ -749,6 +753,20 @@ $bgf "kelidha.bgf"
 
 
 End
+
+Includes:
+$include "FONT/farsi_map.bas"
+$include "FONT/font8x8.font"
+$include "FONT/font12x16dig_f.font"
+$include "FONT/digit_notifi_12x16.font "
+
+
+$include "font32x32.font"
+
+$include "font16x16en.font"
+
+'$include "font8x8.font"
+
 
 Sub Main_menu
 
@@ -828,32 +846,51 @@ End Sub
 
 Sub Ifcheck
 
-    If Sh_month = 6 And Sh_day = 31 And _hour = 0 And _min = 0 And Backtime = 0 Then
+    If Sh_month = 6 And Sh_day = 31 Then
+       If _hour = 0 And _min = 0 And Backtime = 0 Then
+              Set Backtime
+              If Backtime = 1 Then
+                 _hour = 23
+                 _min = 0
+                 Sh_day = 30
+                  Gosub Sh_to_m
+                  Gosub Setdate
+                  Gosub Settime
 
-       Set Backtime
-       If Backtime = 1 Then
-          _hour = 23
-          _min = 0
-          Sh_day = 30
-           Gosub Sh_to_m
-           Gosub Setdate
-           Gosub Settime
-
+              End If
        End If
+    Else
+        If _hour = 0 And _min = 0 Then
+           Incr Day
+           Eday = Day
+        End If
     End If
 
-    If Sh_month = 1 And Sh_day = 2 And _hour = 0 And _min = 0 And Backtime = 0 Then
-       Set Backtime
-       If Backtime = 1 Then
-          _hour = 1
-          _min = 0
-          Sh_day = 2
-           Gosub Sh_to_m
-           Gosub Setdate
-           Gosub Settime
+    If Sh_month = 1 And Sh_day = 2 Then
+       If _hour = 0 And _min = 0 And Backtime = 0 Then
+              Set Backtime
+              If Backtime = 1 Then
+                 _hour = 1
+                 _min = 0
+                  Gosub Sh_to_m
+                  Gosub Setdate
+                  Gosub Settime
+              End If
        End If
+    Else
+        If _hour = 0 And _min = 0 Then
+           Incr Day
+           Eday = Day
+        End If
     End If
-    If _hour = 5 And _min = 23 Then Reset Backtime
+
+
+
+    If _hour = 1 And _min = 1 And Backtime = 1 Then
+       Reset Backtime
+       Incr Day
+       Eday = Day
+    End If
 End Sub
 
 
@@ -1010,6 +1047,8 @@ Sub Set_id_modules
          Call Order
          Typ = 111 : Id = Pwmmodulecounter
          Lcdat 6 , 1 , "pwm " ; Id
+         Findorder = Setidformodules
+         Call Order
          Findorder = Setidformodules
          Call Order
          Lcdat 5 , 1 , "   Pls select   "
@@ -1749,8 +1788,8 @@ End Sub
 Sub Show
 
        Call Ifcheck
-              Setfont Font16x16en
-
+              'Setfont Font16x16en
+              '(
               Select Case _sec
                      Case 0 To 10
                           Lcdat 4 , 1 , Sens1 ; "!" ; "  "
@@ -1765,9 +1804,12 @@ Sub Show
                      Case 51 To 59
                           Lcdat 4 , 1 , Sens2 ; "!" ; "  "
               End Select
+')
 
-
+       Lcdat 4 , 1 , Farsi(sens1)
        Setfont Font8x8
+
+
 
        If _hour > 9 Then
           Lcdat 1 , 1 , _hour
@@ -1797,6 +1839,7 @@ Sub Show
            Lcdat 2 , 64 , Sh_day
        End If
 
+       '(
        X = Sh_year
        X = X - 1396
 
@@ -1833,6 +1876,8 @@ Sub Show
        If Z > 7 Then Z = Z - 7
 
        Day = Z - 1
+
+')
         Select Case Day
            Case 1
                 S2 = "Sat"

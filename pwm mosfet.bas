@@ -19,15 +19,14 @@ Configs:
 
 
 
-
 Defports:
-        Config Portb.2 = Output : buz Alias Portb.2
+        Config Portb.2 = Output : Buz Alias Portb.2
 
         Config Portd.3 = Input : Ziro Alias Pind.3
 
 
 
-        Config Portc.5 = Output : out1 Alias Portc.5
+        Config Portc.5 = Output : Out1 Alias Portc.5
         Config Portc.4 = Output : Out2 Alias Portc.4
         Config Portc.3 = Output : Out3 Alias Portc.3
         Config Portc.2 = Output : Out4 Alias Portc.2
@@ -45,6 +44,7 @@ Maxconfig:
           Rxtx Alias Portb.2 : Config Portb.2 = Output
           En Alias Portd.2 : Config Portd.2 = Output : Reset En
           Dim Din(5) As Byte
+          Dim He(5) * 5 As Byte
           Dim Maxin As Byte
           Dim Typ As Byte
           Dim Cmd As Byte
@@ -53,8 +53,8 @@ Maxconfig:
 
           Const Maxlight = 0
           Const Dark = 65535
-          Const Midlight = 9000
-          Const Minlight = 13000
+          Const Midlight = 10500
+          Const Minlight = 13500
           Const Relaymodule = 110
           Const Pwmmodule = 111
           Const Remote = 104
@@ -69,13 +69,13 @@ Maxconfig:
 
 
 Defvals:
-        dim test as word
+        Dim Test As Word
         Dim Elight(8) As Eram Word
         Dim Light(8) As Word
         Dim Alllight As Eram Word
         'dim down as Word
         Dim Plus As Byte
-        dim updown as Boolean
+        Dim Updown As Boolean
         Dim Secc As Word
         Dim Term As Byte
         Dim Pw As Word
@@ -84,7 +84,7 @@ Defvals:
         Dim I As Byte
 
 
-        const d = 0
+        Const D = 0
 
         Dim Eoutid1(8) As Eram Byte
         Dim Eoutid2(8) As Eram Byte
@@ -434,7 +434,7 @@ Sub Checkanswer
                     For I = 1 To 8
                         If Id = 0 Or Id > 100 Then Return
                         If Outid1(i) = Id Or Outid2(i) = Id Or Outid3(i) = Id Then
-                           Light(i) = dark
+                           Light(i) = Dark
                         End If
                     Next
 

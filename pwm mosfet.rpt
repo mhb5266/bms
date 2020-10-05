@@ -1,6 +1,6 @@
 Report       : pwm mosfet
-Date         : 10-03-2020
-Time         : 14:24:55
+Date         : 10-05-2020
+Time         : 10:45:41
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -492,8 +492,8 @@ _FRAME_HIGH                      &H0429
 _XMEGA                           0
 MAXLIGHT                         0
 DARK                             65535
-MIDLIGHT                         9000
-MINLIGHT                         13000
+MIDLIGHT                         10500
+MINLIGHT                         13500
 RELAYMODULE                      110
 PWMMODULE                        111
 REMOTE                           104

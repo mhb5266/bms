@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 10-03-2020
-Time         : 13:51:37
+Date         : 10-05-2020
+Time         : 16:50:53
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,9 +8,9 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : 8F00 hex  -> Will fit into ROM
-ROMIMAGE     :  36608 dec
-FLASH USED   :  27  %
+ROMIMAGE     : 9D2E hex  -> Will fit into ROM
+ROMIMAGE     :  40238 dec
+FLASH USED   :  30  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -1100,6 +1100,9 @@ S3                               not used
 S4                               not used
 REMOTEID                         not used
 LEARNOK                          not used
+X                                not used
+W                                not used
+Z                                not used
 PLANT_STATUS                     not used
 PLANT_START_HOUR                 not used
 PLANT_START_MIN                  not used
@@ -1112,6 +1115,7 @@ Source string could be too big to fit into target string [S>___STRBUF]  in line 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
+Source string could be too big to fit into target string [SENS1>___XL]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
