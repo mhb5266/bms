@@ -1,2 +1,10 @@
+Error : 97    Line :   2     SUB or FUNCTION must be DECLARED first [FARSI]  , in File : C:\Users\Em electronic\Desktop\lcd\bascom\bascom\bascom\FONT/farsi_map.bas
+Error : 114   Line :   4     LOCAL only allowed in SUB or FUNCTION [BF_CHR AS STRING * 1 , NX_CHR AS STRING * 1 , CUR_CHR AS STRING * 1]  , in File : C:\Users\Em electronic\Desktop\lcd\bascom\bascom\bascom\FONT/farsi_map.bas
+Error : 97    Line :   2     SUB or FUNCTION must be DECLARED first [FARSI]  , in File : C:\Users\Em electronic\Desktop\lcd\bascom\bascom\bascom\FONT/farsi_map.bas
+Error : 114   Line :   4     LOCAL only allowed in SUB or FUNCTION [BF_CHR AS STRING * 1 , NX_CHR AS STRING * 1 , CUR_CHR AS STRING * 1]  , in File : C:\Users\Em electronic\Desktop\lcd\bascom\bascom\bascom\FONT/farsi_map.bas
+Error : 97    Line :   2     SUB or FUNCTION must be DECLARED first [FARSI]  , in File : C:\Users\Em electronic\Desktop\lcd\bascom\bascom\bascom\FONT/farsi_map.bas
+Error : 114   Line :   4     LOCAL only allowed in SUB or FUNCTION [BF_CHR AS STRING * 1 , NX_CHR AS STRING * 1 , CUR_CHR AS STRING * 1]  , in File : C:\Users\Em electronic\Desktop\lcd\bascom\bascom\bascom\FONT/farsi_map.bas
 Error : 344   Line :   89    Program will overwrite bootloader [ 818 too long]  , in File : C:\PROGRAM FILES (X86)\MCS ELECTRONICS\BASCOM-AVR\LIB\FP_TRIG.LBX
 Error : 344   Line :   89    Program will overwrite bootloader [ 818 too long]  , in File : C:\PROGRAM FILES (X86)\MCS ELECTRONICS\BASCOM-AVR\LIB\FP_TRIG.LBX
+Error : 97    Line :   2     SUB or FUNCTION must be DECLARED first [FARSI]  , in File : C:\Users\Em electronic\Desktop\bms\Bms\FONT/farsi_map.bas
+Error : 114   Line :   4     LOCAL only allowed in SUB or FUNCTION [BF_CHR AS STRING * 1 , NX_CHR AS STRING * 1 , CUR_CHR AS STRING * 1]  , in File : C:\Users\Em electronic\Desktop\bms\Bms\FONT/farsi_map.bas

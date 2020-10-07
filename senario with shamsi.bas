@@ -4,10 +4,15 @@ $regfile = "m128def.dat"
 
 
 $crystal = 11059200
-$baud = 115200
-$lib "glcdKS108.lbx"
-'$include "FONT/farsi_map.bas"
 
+$hwstack = 64
+$swstack = 100
+$framesize = 100
+
+$baud = 115200
+
+$include "FONT/farsi_func.bas"
+$lib "glcdKS108.lib"
 
 Tempconfig:
 
@@ -275,7 +280,7 @@ Const Main_menu_counter = 6
 Subs:
 
 Declare Sub Ifcheck
-
+'Declare Function Farsi(byval S As String * 20) As String * 20
 
 Declare Sub Clock_menu
 Declare Sub Jacuzi_menu
@@ -321,25 +326,22 @@ Call Order
 Findorder = Readallinput
 Call Order
 
-     '  Setfont Fontdig12x16_f
-
-'       Lcdat 3 , 1 , Farsi( "”·«„" ) , 0
-'Wait 3
-'Cls
 
 Main:
 
-       Showpic 8 , 48 , Cancelicon
-       Showpic 40 , 48 , Perviousicon
-       Showpic 72 , 48 , Nexticon
-       Showpic 104 , 48 , Menuicon
+       'Showpic 8 , 48 , Cancelicon
+       'Showpic 40 , 48 , Perviousicon
+       'Showpic 72 , 48 , Nexticon
+       'Showpic 104 , 48 , Menuicon
 
 
      Do
        Gosub Read_date_time
        Gosub M_to_sh
-       Showtemp = _sec Mod 5
-       If Showtemp = 0 Then Call Temp
+       Showtemp = _sec Mod 15
+       If Showtemp = 0 Then
+          Call Temp
+       End If
        Call Show
        If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
           Poosh = 0
@@ -388,6 +390,9 @@ End If
                  If Poosh < 20 And Ok1 = 0 Then
                     Cls
                     Lcdat 5 , 1 , "night is set"
+                    Setlight = Minlight
+                    Findorder = Pwmlight
+                    Call Order
                     Return
                  End If
 
@@ -439,7 +444,7 @@ End If
                  Do
                     Cls
                     Lcdat 5 , 1 , "rutin is set"
-                    Setlight = Minlight
+                    Setlight = Midlight
                     Findorder = Pwmlight
                     Call Order
                     Wait 2
@@ -965,6 +970,10 @@ Sub Setting_menu
                        Typ = 110
                        Findorder = Clearall
                        Call Order
+                       Direct = Tooutput
+                       Typ = 111
+                       Findorder = Clearall
+                       Call Order
 
                   Case 3
                        Call Setkeyid
@@ -1164,7 +1173,7 @@ Sub Remote_menu
            End Select
 
         End If
-        Lcdat 1 , 1 , "Remote Menu     " , 1
+        Lcdat 1 , 1 , Farsi( "      „‰ÊÌ —Ì„Ê ") , 1
 
         If Touch = 2 Then
            Incr Count
@@ -1180,9 +1189,9 @@ Sub Remote_menu
 
         Select Case Count
                Case 1
-                    Lcdat 3 , 1 , "Clear Remotes   "
+                    Lcdat 3 , 1 , Farsi( "  Å«ò ò—œ‰ —Ì„Ê ")
                Case 2
-                    Lcdat 3 , 1 , "Learn New       "
+                    Lcdat 3 , 1 , Farsi( "    ŒÊ«‰œ‰ —Ì„Ê " )
                'Case 3
                     'Lcdat 3 , 1 , "Config Remotes  "
         End Select
@@ -1198,11 +1207,11 @@ Sub Pwlsetting
 
     Select Case Id
            Case Idlight
-                Lcdat 1 , 1 , "Light Setting   " , 1
+                Lcdat 1 , 1 , Farsi( "         ‰Ê— ‰„«") , 1
            Case Idplant
-                Lcdat 1 , 1 , "Plant Setting   " , 1
+                Lcdat 1 , 1 , Farsi( "       —‘œ êÌ«Â ") , 1
            Case Idwater
-                Lcdat 1 , 1 , "Watersys Setting" , 1
+                Lcdat 1 , 1 , Farsi( "          ¬»Ì«—Ì" ) , 1
     End Select
 
 
@@ -1227,18 +1236,18 @@ Sub Pwlsetting
         If Selection = 1 And Blink_ = 0 Then
            S1 = S1 + "      "
         Else
-           If Status = 1 Then S1 = S1 + "ON  "
-           If Status = 2 Then S1 = S1 + "OFF "
-           If Status = 3 Then S1 = S1 + "AUTO"
+           If Status = 1 Then S1 = S1 + "  —Ê‘‰  "
+           If Status = 2 Then S1 = S1 + " Œ«„Ê‘  "
+           If Status = 3 Then S1 = S1 + "« Ê„« Ìò"
         End If
 
-        Setfont Font16x16en
+        Setfont Font8x8
         Lcdat 3 , 1 , S1
         Setfont Font8x8
 
         If Status = 3 Then
 
-                  S1 = "ON :"
+                  S1 = "—Ê‘‰ :"
 
 
                  '-----------------------------
@@ -1265,9 +1274,9 @@ Sub Pwlsetting
 
                  End If
 
-                 Lcdat 6 , 1 , S1
+                 Lcdat 6 , 1 , Farsi(s1)
 
-                 S1 = "OFF:"
+                 S1 = "Œ«„Ê‘:"
                  '------------------------------
                  If Selection = 4 And Blink_ = 0 Then
 
@@ -1293,7 +1302,7 @@ Sub Pwlsetting
                  End If
 
 
-                 Lcdat 7 , 1 , S1
+                 Lcdat 7 , 1 , Farsi(s1 )
 
 
 
@@ -1785,28 +1794,28 @@ Sub Tx
 
 End Sub
 
+
 Sub Show
 
        Call Ifcheck
-              'Setfont Font16x16en
-              '(
-              Select Case _sec
-                     Case 0 To 10
-                          Lcdat 4 , 1 , Sens1 ; "!" ; "  "
-                     Case 11 To 20
-                          Lcdat 4 , 1 , Sens2 ; "!" ; "  "
-                     Case 21 To 30
-                          Lcdat 4 , 1 , Sens1 ; "!" ; "  "
-                     Case 31 To 40
-                          Lcdat 4 , 1 , Sens2 ; "!" ; "  "
-                     Case 41 To 50
-                          Lcdat 4 , 1 , Sens1 ; "!" ; "  "
-                     Case 51 To 59
-                          Lcdat 4 , 1 , Sens2 ; "!" ; "  "
-              End Select
-')
+       Setfont Font8x8
 
-       Lcdat 4 , 1 , Farsi(sens1)
+       Showtemp = _sec Mod 5
+       If Showtemp = 0 Then
+          Showtemp = _sec Mod 10
+          If Showtemp = 0 Then
+             Lcdat 3 , 40 , Farsi( "œ„«Ì ÃòÊ“Ì ")
+             Setfont Fontdig12x16_f
+             Lcdat 5 , 1 , Sens1 ; " !  "
+          Else
+              Lcdat 3 , 40 , Farsi( " œ„«Ì „ÕÌÿ ")
+              Setfont Fontdig12x16_f
+              Lcdat 5 , 1 , Sens2 ; " !  "
+          End If
+       End If
+
+
+
        Setfont Font8x8
 
 
@@ -1825,18 +1834,18 @@ Sub Show
        End If
 
 
-       Lcdat 1 , 96 , S2
+       'Lcdat 1 , 96 , S2
 
-       Lcdat 2 , 1 , Sh_year ; "/"
+       Lcdat 1 , 48 , Sh_year ; "/"
        If Sh_month < 10 Then
-          Lcdat 2 , 40 , "0" ; Sh_month ; "/"
+          Lcdat 1 , 88 , "0" ; Sh_month ; "/"
        Else
-           Lcdat 2 , 40 , Sh_month ; "/"
+           Lcdat 1 , 88 , Sh_month ; "/"
        End If
        If Sh_day < 10 Then
-          Lcdat 2 , 64 , "0" ; Sh_day
+          Lcdat 1 , 112 , "0" ; Sh_day
        Else
-           Lcdat 2 , 64 , Sh_day
+           Lcdat 1 , 112 , Sh_day
        End If
 
        '(

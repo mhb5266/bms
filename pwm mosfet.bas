@@ -44,7 +44,7 @@ Maxconfig:
           Rxtx Alias Portb.2 : Config Portb.2 = Output
           En Alias Portd.2 : Config Portd.2 = Output : Reset En
           Dim Din(5) As Byte
-          Dim He(5) * 5 As Byte
+          'Dim He(5) * 5 As Byte
           Dim Maxin As Byte
           Dim Typ As Byte
           Dim Cmd As Byte
@@ -56,7 +56,7 @@ Maxconfig:
           Const Midlight = 10500
           Const Minlight = 13500
           Const Relaymodule = 110
-          Const Pwmmodule = 111
+          Const Mytyp = 111
           Const Remote = 104
           Const Keyin = 101
 
@@ -181,7 +181,7 @@ Rx:
         Toggle Rxtx
         Id = Din(4)
         Typ = Din(2)
-        If Typ = Keyin Or Typ = Remote Then Call Checkanswer
+        If Typ = Keyin Or Typ = Remote Or Typ = Mytyp Then Call Checkanswer
         I = 0
         Reset Inok
       End If
@@ -332,7 +332,7 @@ Sub Checkanswer
            Case 150
                 Reset Wantid
            Case 151
-                If Typ = Pwmmodule Then
+                If Typ = Mytyp Then
                                 Set Wantid
                                 For I = 1 To 4
                                     Toggle Buz
@@ -362,7 +362,7 @@ Sub Checkanswer
                     For I = 1 To 8
                         If Id = 0 Or Id > 100 Then Return
                         If Outid1(i) = Id Or Outid2(i) = Id Or Outid3(i) = Id Then
-                           Light(i) = Maxlight
+                           Light(i) = Alllight
                         End If
                     Next
 
@@ -438,14 +438,18 @@ Sub Checkanswer
                         End If
                     Next
 
-           Case 161
-                Alllight = Dark
-           Case 162
-                Alllight = Minlight
-           Case 163
-                Alllight = Midlight
-           Case 164
-                Alllight = Maxlight
+           Case 161 To 164
+                If Cmd = 161 Then Alllight = Dark
+                If Cmd = 162 Then Alllight = Minlight
+                If Cmd = 163 Then Alllight = Midlight
+                If Cmd = 164 Then Alllight = Maxlight
+                For I = 1 To 8
+                    Light(i) = Alllight
+                    Waitms 2
+                Next
+
+
+
     End Select
 
 End Sub

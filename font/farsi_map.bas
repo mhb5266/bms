@@ -1,4 +1,4 @@
-Declare Function Farsi(byval S As String * 20) As String * 20
+'Declare Function Farsi(byval S As String * 20) As String * 20
 Function Farsi(byval S As String * 20) As String * 20
 
        Local Bf_chr As String * 1 , Nx_chr As String * 1 , Cur_chr As String * 1
