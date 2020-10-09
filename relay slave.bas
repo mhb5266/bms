@@ -81,7 +81,7 @@ Dim D As Byte
 
 Dim Tempid As Byte
 
-Dim status As Byte
+Dim Status As Byte
 
 Dim Efirst As Eram Byte
 
@@ -107,7 +107,7 @@ Dim Maxid As Byte : Maxid = Counterid + Baseid
 Dim Temponid(28) As Byte
 Dim Tempontime(28) As Word
 Dim Tempon As Boolean
-Dim wantnum As Boolean
+Dim Wantnum As Boolean
 Dim Sycid As Boolean
 Dim Setid As Byte
 Dim Din(5) As Byte
@@ -137,7 +137,7 @@ Declare Sub Tx
 Consts:
 
 Const Stopall = 1
-Const normal = 2
+Const Normal = 2
 Const Refreshall = 3
 Const Resetall = 4
 
@@ -476,7 +476,7 @@ Sub Findorder
                                   Call Setouts
                                End If
                            Next
-                           end if
+                           End If
                Case 181
 
                            If Id > 0 And Id < 100 Then
@@ -491,6 +491,20 @@ Sub Findorder
                                End If
                            Next
                            End If
+               Case 182
+                           If Id > 0 And Id < 100 Then
+                           For I = 1 To Counterid
+                               'If Eoutsnum(i) = Id Then
+                               If Eoutid1(i) = Id Or Eoutid2(i) = Id Or Eoutid3(i) = Id Then
+                                  Tempon(id) = 0
+                                  J = I
+                                  Status = Normal
+                                  Outs(j) = 1
+                                  Call Setouts
+                               End If
+                           Next
+                           End If
+
 
                Case 183
                        Set Blank

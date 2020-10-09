@@ -362,7 +362,7 @@ Choose_senario:
 Do
 Waitms 50
 Incr Poosh
-If Poosh > 1200 Then
+If Poosh > 600 Then
    Cls
    Return
 End If
@@ -372,16 +372,16 @@ End If
           Do
             Waitms 50
             Incr Poosh
-            If Poosh > 60 Then
+            If Poosh > 40 Then
                Exit Do
             End If
           Loop Until Touch1 = 0
-          If Poosh > 60 Then
+          If Poosh > 40 Then
              Poosh = 0
              Cls
              Call Main_menu
           Elseif Poosh < 20 Then
-                 Toggle Ok1
+                 Set Ok1
                  Reset Ok2
                  Reset Ok3
                  Reset Ok4
@@ -451,27 +451,38 @@ End If
                     Return
                  Loop Until Touch3 = 0
        End If
-       If Touch4 = 1 And Ok4 = 0 Then
-       Call Beep
-       Poosh = 0
-                 Set Ok4
+
+       If Touch4 = 1 Then
+          Poosh = 0
+          Do
+            Waitms 50
+            Incr Poosh
+            If Poosh > 40 Then
+               Exit Do
+            End If
+          Loop Until Touch4 = 0
+          If Poosh > 40 Then
+             Poosh = 0
+             Cls
+             Return
+          Elseif Poosh < 20 Then
                  Reset Ok1
                  Reset Ok2
                  Reset Ok3
+                 Set Ok4
                  Cls
-                 Showpic 20 , 1 , Tv
-                 Do
-                 Loop Until Touch4 = 0
-
-
-       Elseif Touch4 = 1 And Ok4 = 1 Then
-       Poosh = 0
-                 Do
+                 Showpic 1 , 1 , Tv
+                 If Poosh < 20 And Ok1 = 0 Then
                     Cls
                     Lcdat 5 , 1 , "tv is set"
-                    Wait 2
+                    Setlight = Minlight
+                    Findorder = Pwmlight
+                    Call Order
                     Return
-                 Loop Until Touch4 = 0
+                 End If
+
+          End If
+          Poosh = 0
        End If
 Loop
 Return

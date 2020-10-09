@@ -10,7 +10,7 @@ Configs:
         'Enable Timer1
         'on Timer1 T1rutin
         'Start Timer1
-        enable timer0
+        Enable Timer0
         Start Timer0
         On Ovf0 T0rutin
         'Config Int1 = Rising
@@ -21,13 +21,13 @@ Configs:
 
 
 Defports:
-        Config Portb.2 = Output : buz Alias Portb.2
+        Config Portb.2 = Output : Buz Alias Portb.2
 
         Config Portd.3 = Input : Ziro Alias Pind.3
 
 
 
-        Config Portc.5 = Output : out1 Alias Portc.5
+        Config Portc.5 = Output : Out1 Alias Portc.5
         Config Portc.4 = Output : Out2 Alias Portc.4
         Config Portc.3 = Output : Out3 Alias Portc.3
         Config Portc.2 = Output : Out4 Alias Portc.2
@@ -68,13 +68,13 @@ Maxconfig:
 
 
 Defvals:
-        dim test as word
+        Dim Test As Word
         Dim Elight(8) As Eram Word
         Dim Light(8) As Word
         Dim Alllight As Eram Word
         'dim down as Word
         Dim Plus As Byte
-        dim updown as Boolean
+        Dim Updown As Boolean
         Dim Secc As Word
         Dim Term As Byte
         Dim Pw As Word
@@ -83,7 +83,7 @@ Defvals:
         Dim I As Byte
 
 
-        const d = 0
+        Const D = 0
 
         Dim Eoutid1(8) As Eram Byte
         Dim Eoutid2(8) As Eram Byte
@@ -407,6 +407,23 @@ Sub Checkanswer
                         End If
                     Next
                 End If
+
+           Case 181
+                    For I = 1 To 8
+                        If Id = 0 Or Id > 100 Then Return
+                        If Outid1(i) = Id Or Outid2(i) = Id Or Outid3(i) = Id Then
+                           Light(i) = Dark
+                        End If
+                    Next
+           Case 182
+                    For I = 1 To 8
+                        If Id = 0 Or Id > 100 Then Return
+                        If Outid1(i) = Id Or Outid2(i) = Id Or Outid3(i) = Id Then
+                           Light(i) = Maxlight
+                        End If
+                    Next
+
+
            Case 161
                 Alllight = Minlight
            Case 162

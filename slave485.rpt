@@ -1,6 +1,6 @@
 Report       : slave485
-Date         : 10-03-2020
-Time         : 13:40:32
+Date         : 10-09-2020
+Time         : 16:08:37
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 866 hex  -> Will fit into ROM
-ROMIMAGE     :  2150 dec
-FLASH USED   :  26  %
+ROMIMAGE     : 8E8 hex  -> Will fit into ROM
+ROMIMAGE     :  2280 dec
+FLASH USED   :  27  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -97,30 +97,30 @@ ID                               Byte              0063          99
 TOUCHID1                         EEPROM Byte       0000          0 
 TOUCHID2                         EEPROM Byte       0001          1 
 TOUCHID3                         EEPROM Byte       0002          2 
-TOUCHID4                         EEPROM Byte       0003          3 
-TEMPID                           Byte              0064          100 
-S1                               Bit [7]           0065          101 
-S2                               Bit [6]           0065          101 
-S3                               Bit [5]           0065          101 
-S4                               Bit [4]           0065          101 
+ALLOFFON                         Bit [7]           0064          100 
+TEMPID                           Byte              0065          101 
+S1                               Bit [6]           0064          100 
+S2                               Bit [5]           0064          100 
+S3                               Bit [4]           0064          100 
+S4                               Bit [3]           0064          100 
 TEMPON                           Word              0066          102 
-TEMPEN                           Bit [3]           0065          101 
-EID                              EEPROM Byte       0004          4 
+TEMPEN                           Bit [2]           0064          100 
+EID                              EEPROM Byte       0003          3 
 DIRECT                           Byte              0068          104 
 ENDBIT                           Byte              0069          105 
 I                                Byte              006A          106 
 J                                Long              006B          107 
 A                                Byte              006F          111 
 REPLY                            Byte              0070          112 
-INOK                             Bit [2]           0065          101 
+INOK                             Bit [1]           0064          100 
 TOUCH                            Byte              0071          113 
-SENDOK                           Bit [1]           0065          101 
-ISREQUEST                        Bit [0]           0065          101 
-TIMEOUT                          Bit [7]           0072          114 
-ENBUZ                            Bit [6]           0072          114 
-ENSENSOR                         Bit [5]           0072          114 
-ENKEY                            Bit [4]           0072          114 
-WANTID                           Bit [3]           0072          114 
+SENDOK                           Bit [0]           0064          100 
+ISREQUEST                        Bit [7]           0072          114 
+TIMEOUT                          Bit [6]           0072          114 
+ENBUZ                            Bit [5]           0072          114 
+ENSENSOR                         Bit [4]           0072          114 
+ENKEY                            Bit [3]           0072          114 
+WANTID                           Bit [2]           0072          114 
 BACKTYP                          Byte              0073          115 
 BACKCMD                          Byte              0074          116 
 BACKID                           Byte              0075          117 

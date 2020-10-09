@@ -443,10 +443,6 @@ Sub Checkanswer
                 If Cmd = 162 Then Alllight = Minlight
                 If Cmd = 163 Then Alllight = Midlight
                 If Cmd = 164 Then Alllight = Maxlight
-                For I = 1 To 8
-                    Light(i) = Alllight
-                    Waitms 2
-                Next
 
 
 

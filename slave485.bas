@@ -19,7 +19,7 @@ On Urxc Rx
 'On Utxc Issend
 
 Config Portc = Output
-config portb=INPUT
+Config Portb = Input
 
 En Alias Portd.2 : Config Portd.2 = Output
 
@@ -52,7 +52,9 @@ Dim Id As Byte
 Dim Touchid1 As Eram Byte
 Dim Touchid2 As Eram Byte
 Dim Touchid3 As Eram Byte
-Dim Touchid4 As Eram Byte
+
+
+Dim Alloffon As Boolean
 
 Dim Tempid As Byte
 
@@ -123,6 +125,7 @@ Main:
                Decr Tempon
                Waitms 100
                If Tempon = 0 Then
+                  Reset Tempen
                   Direct = Tooutput
                   Cmd = 181
                   Id = Touchid1
@@ -191,23 +194,6 @@ Sub Refreshkey
 End Sub
 
 Sub Keytouched:
-          '(
-          If Wantid = 1 Then
-             Select Case Touch
-                    Case 1
-                         Touchid1 = Id
-                    Case 2
-                         Touchid2 = Id
-                    Case 3
-                         Touchid3 = Id
-                    Case 4
-                         Touchid4 = Id
-             End Select
-             Call Beep
-             Reset Wantid
-             Reset Isrequest
-          End If
-')
 
           If Isrequest = 1 Then
              Call Beep
@@ -260,29 +246,39 @@ Sub Keytouched:
                             End If
                          End If
                     Case 4
-                         If Wantid = 1 Then
-                            If Touchid4 = 0 Or Touchid4 > 50 Then
-                               If Tempid > 0 Then
-                                  Touchid4 = Tempid
-                                  Tempid = 0
-                                  Reset Wantid
-                                  Direct = Tomaster : Cmd = 156
-                               End If
-                            End If
+                         Toggle Alloffon
+                         Direct = Tooutput
+                         If Alloffon = 1 Then
+                            Cmd = 181
                          Else
-                            If Touchid4 > 0 And Touchid4 < 50 Then
-                               Direct = Tooutput : Id = Touchid4 : Cmd = 180
-                            End If
+                            Cmd = 182
+                         End If
+                         If Touchid1 > 0 And Touchid1 < 50 Then
+                            Id = Touchid1
+                            Call Tx
+                         End If
+                         If Touchid2 > 0 And Touchid2 < 50 Then
+                            Id = Touchid2
+                            Call Tx
+                         End If
+                         If Touchid3 > 0 And Touchid3 < 50 Then
+                            Id = Touchid3
+                            Call Tx
                          End If
                     Case 5
                          If Touchid1 < 50 And Touchid1 > 0 Then
                             Id = Touchid1
                             Cmd = 159
+                            If Tempen = 0 Then Set Sendok
                             Set Tempen
                             Tempon = 300
+
                          End If
              End Select
-             Call Tx
+
+             If Cmd = 180 Or Cmd = 156 Or Sendok = 1 Then Call Tx
+             Reset Sendok
+
           End If
 
           Do
@@ -336,8 +332,6 @@ Toggle Rt
                   Touchid2 = 0
                   Waitms 2
                   Touchid3 = 0
-                  Waitms 2
-                  Touchid4 = 0
                   Waitms 2
                   Call Beep
             End Select
