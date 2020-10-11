@@ -115,11 +115,22 @@ Defvals:
         Const Stopall = 2
 
 
+        For I = 1 To 8
+            Outid1(i) = Eoutid1(i)
+            Waitms 2
+            Outid2(i) = Eoutid2(i)
+            Waitms 2
+            Outid3(i) = Eoutid3(i)
+            Waitms 2
+            Light(i) = Elight(i)
+            Waitms 2
+        Next
 
 Start Timer0
 
-Main:
 
+Main:
+     Test = Log(100)
      Do
 
 
@@ -364,7 +375,8 @@ Sub Checkanswer
 
                              Next
                           End If
-                Else
+
+                End If
                     For I = 1 To 8
                         If Id = 0 Or Id > 100 Then Return
                         If Outid1(i) = Id Or Outid2(i) = Id Or Outid3(i) = Id Then
@@ -379,7 +391,6 @@ Sub Checkanswer
                            End If
                         End If
                     Next
-                End If
 
            Case 181
                     For I = 1 To 8
