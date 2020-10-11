@@ -10,18 +10,18 @@ Configs:
         'Enable Timer1
         'on Timer1 T1rutin
         'Start Timer1
-        Enable Timer0
-        Start Timer0
+        'Enable Timer0
+        'Start Timer0
         On Ovf0 T0rutin
-        'Config Int1 = Rising
-        'Enable Int1
-        'On Int1 Int1rutin
+        Config Int1 = Rising
+        Enable Int1
+        On Int1 Int1rutin
 
 
 
 
 Defports:
-        Config Portb.2 = Output : Buz Alias Portb.2
+        Config Portb.3 = Output : Buz Alias Portb.3
 
         Config Portd.3 = Input : Ziro Alias Pind.3
 
@@ -58,6 +58,7 @@ Maxconfig:
           Const Relaymodule = 110
           Const Pwmmodule = 111
           Const Remote = 104
+          Const Keyin = 101
 
           Dim Inok As Boolean
           Dim Wic As Byte
@@ -133,14 +134,15 @@ Main:
 
 
        If Key = 1 Then
+          Disable Int1
           Test = 0
           Do
             Waitms 100
             Incr Test
-            Set Buz
+            Set Rxtx
             If Test > 30 Then
              For I = 1 To 8
-                 Toggle Buz
+                 Toggle Rxtx
                  Waitms 200
              Next
                Call Getid
@@ -148,10 +150,11 @@ Main:
           Loop Until Key = 0
           If Test < 10 Then
              For I = 1 To 4
-                 Toggle Buz
+                 Toggle Rxtx
                  Waitms 500
              Next
           End If
+          Enable Int1
        End If
 
 
@@ -177,7 +180,7 @@ Rx:
         Toggle Rxtx
         Id = Din(4)
         Typ = Din(2)
-        If Typ = Remote Or Typ = Relaymodule Then Call Checkanswer
+        If Typ = Remote Or Typ = Keyin Or Typ = Relaymodule Then Call Checkanswer
         I = 0
         Reset Inok
       End If
@@ -189,28 +192,8 @@ T0rutin:
 
           Stop Timer1
 
-'(
-          Incr Test
 
-          If Test = 300 Then
-             Test = 0
-             Toggle buz
-             Incr I
-             If I = 5 Then I = 1
 
-                Select Case I
-                       Case 1
-                            Light = 0
-                       Case 2
-                            Light = 8800
-                       Case 3
-                            Light = 12000
-                       Case 4
-                            Light = 65535
-
-                End Select
-          End If
-')
 
 
           Reset Out1
@@ -223,28 +206,13 @@ Return
 Int1rutin:
           Stop Timer1
 
-'(
+
           Incr Test
 
-          If Test = 300 Then
+          If Test = 100 Then
              Test = 0
-             Toggle buz
-             Incr I
-             If I = 5 Then I = 1
-
-                Select Case I
-                       Case 1
-                            Light = 0
-                       Case 2
-                            Light = 8800
-                       Case 3
-                            Light = 12000
-                       Case 4
-                            Light = 65535
-
-                End Select
+             Toggle Buz
           End If
-')
 
 
           Reset Out1
@@ -322,9 +290,9 @@ Sub Checkanswer
     Select Case Cmd
            Case 151
                 Set Wantid
-                Set Buz
+                Set Rxtx
                 Waitms 500
-                Reset Buz
+                Reset Rxtx
 
            Case 158
                     For I = 1 To 8
@@ -335,11 +303,16 @@ Sub Checkanswer
                         Eoutid3(i) = 0
                         Waitms 2
                         Light(i) = Dark
-                        Waitms 2
+                        Waitms 200
+                        Toggle Buz
+                        Outid1(i) = 0
+                        Outid2(i) = 0
+                        Outid3(i) = 0
                     Next
                                  For I = 1 To 8
-                                     Toggle Buz
+                                     Toggle Rxtx
                                      Waitms 200
+
                                  Next
            Case 180
                 If Wantid = 1 Then
