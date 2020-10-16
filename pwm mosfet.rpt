@@ -1,6 +1,6 @@
 Report       : pwm mosfet
-Date         : 10-09-2020
-Time         : 13:51:25
+Date         : 10-16-2020
+Time         : 13:05:47
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : F66 hex  -> Will fit into ROM
-ROMIMAGE     :  3942 dec
-FLASH USED   :  48  %
+ROMIMAGE     : 1820 hex  -> Will fit into ROM
+ROMIMAGE     :  6176 dec
+FLASH USED   :  75  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  860  dec
+Space left   :  828  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -90,38 +90,48 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-DIN                              Byte(5)           0060          96 
-MAXIN                            Byte              0065          101 
-TYP                              Byte              0066          102 
-CMD                              Byte              0067          103 
-ID                               Byte              0068          104 
-WANTID                           Bit [7]           0069          105 
-INOK                             Bit [6]           0069          105 
-WIC                              Byte              006A          106 
-TEST                             Word              006B          107 
+AD30                             Word              0060          96 
+TEMP                             Single            0062          98 
+VO                               Single            0066          102 
+RT                               Single            006A          106 
+ADCIN                            Word              006E          110 
+W                                Single            0070          112 
+Y                                Single            0074          116 
+Z                                Single            0078          120 
+LNRT                             Single            007C          124 
+ALLOFF                           Bit [7]           0080          128 
+DIN                              Byte(5)           0081          129 
+MAXIN                            Byte              0086          134 
+TYP                              Byte              0087          135 
+CMD                              Byte              0088          136 
+ID                               Byte              0089          137 
+WANTID                           Bit [6]           0080          128 
+INOK                             Bit [5]           0080          128 
+WIC                              Byte              008A          138 
+TEST                             Word              008B          139 
 ELIGHT                           EEPROM Word(8)    0000          0 
-LIGHT                            Word(8)           006D          109 
+LIGHT                            Word(8)           008D          141 
 ALLLIGHT                         EEPROM Word       0010          16 
-PLUS                             Byte              007D          125 
-UPDOWN                           Bit [5]           0069          105 
-SECC                             Word              007E          126 
-TERM                             Byte              0080          128 
-PW                               Word              0081          129 
-STEPS                            Byte              0083          131 
-DELAY_                           Word              0084          132 
-I                                Byte              0086          134 
+PLUS                             Byte              009D          157 
+UPDOWN                           Bit [4]           0080          128 
+SECC                             Word              009E          158 
+TERM                             Byte              00A0          160 
+PW                               Word              00A1          161 
+STEPS                            Byte              00A3          163 
+DELAY_                           Word              00A4          164 
+I                                Byte              00A6          166 
 EOUTID1                          EEPROM Byte(8)    0012          18 
 EOUTID2                          EEPROM Byte(8)    001A          26 
 EOUTID3                          EEPROM Byte(8)    0022          34 
-OUTID1                           Byte(8)           0087          135 
-OUTID2                           Byte(8)           008F          143 
-OUTID3                           Byte(8)           0097          151 
-GOTID                            Bit [4]           0069          105 
-K                                Byte              009F          159 
-J                                Byte              00A0          160 
-X                                Byte              00A1          161 
-OUTS                             Byte(8)           00A2          162 
-STATUS                           Byte              00AA          170 
+OUTID1                           Byte(8)           00A7          167 
+OUTID2                           Byte(8)           00AF          175 
+OUTID3                           Byte(8)           00B7          183 
+GOTID                            Bit [3]           0080          128 
+K                                Byte              00BF          191 
+J                                Byte              00C0          192 
+X                                Byte              00C1          193 
+OUTS                             Byte(8)           00C2          194 
+STATUS                           Byte              00CA          202 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -477,7 +487,7 @@ _ROMSIZE                         8192
 _DOSFILEWRITE                    0
 _DOSDIRWRITE                     0
 _1WEXT                           0
-_ADC_REFMODEL                    0
+_ADC_REFMODEL                    8
 _UARTS                           1
 _HWSTACKSTART                    1119
 _TIMEOUT                         0
@@ -490,6 +500,9 @@ _HWSTACK_LOW                     &H0437
 _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
+A                                 .001009249522
+B                                 .0002378405444
+C                                 2.019202697E-7
 MAXLIGHT                         0
 DARK                             65535
 MIDLIGHT                         10500
@@ -564,6 +577,7 @@ R31                              not used
 ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
+AD30                             not used
 WIC                              not used
 PLUS                             not used
 UPDOWN                           not used

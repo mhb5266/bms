@@ -5,44 +5,65 @@ $baud = 115200
 Configs:
         'Config Timer1 = Pwm , Pwm = 10 , Compare_A_Pwm = Clear_Up , Compare_B_Pwm = Clear_Down , Prescale = 1
         Config Timer1 = Timer , Prescale = 8
-        Config Timer0 = Timer , Prescale = 1024
+        'Config Timer0 = Timer , Prescale = 1024
         Enable Interrupts
         'Enable Timer1
         'on Timer1 T1rutin
         'Start Timer1
         'Enable Timer0
         'Start Timer0
-        On Ovf0 T0rutin
+        'On Ovf0 T0rutin
         Config Int1 = Rising
         Enable Int1
         On Int1 Int1rutin
 
 
+Configntc:
 
+Config Adc = Single , Prescaler = Auto
+
+Dim Ad30 As Word
+Dim Temp As Single
+
+Dim Vo As Single
+Dim Rt As Single
+Dim Adcin As Word
+
+Dim W As Single
+Dim Y As Single
+Dim Z As Single
+Dim Lnrt As Single
+Dim Alloff As Boolean
+
+Fan Alias Portd.5
+
+Const A = 1.009249522 * 10 ^ -3
+Const B = 2.378405444 * 10 ^ -4
+Const C = 2.019202697 * 10 ^ -7
 
 Defports:
-        Config Portb.3 = Output : Buz Alias Portb.3
+        Config Portd.7 = Output : Buz Alias Portd.7
 
         Config Portd.3 = Input : Ziro Alias Pind.3
 
 
 
-        Config Portc.5 = Output : Out1 Alias Portc.5
+        Config Portc.3 = Output : Out1 Alias Portc.3
         Config Portc.4 = Output : Out2 Alias Portc.4
-        Config Portc.3 = Output : Out3 Alias Portc.3
-        Config Portc.2 = Output : Out4 Alias Portc.2
-        Config Portc.1 = Output : Out5 Alias Portc.1
-        Config Portc.0 = Output : Out6 Alias Portc.0
-        Config Portd.7 = Output : Out7 Alias Portd.7
-        Config Portd.6 = Output : Out8 Alias Portd.6
+        Config Portc.5 = Output : Out3 Alias Portc.5
+        Config Portc.2 = Output : Out4 Alias Portd.4
+        Config Portc.1 = Output : Out5 Alias Portc.2
+        Config Portc.0 = Output : Out6 Alias Portc.1
+        Config Portc.0 = Output : Out7 Alias Portc.0
+        Config Portd.6 = Output : Out8 Alias Portb.2
 
-        Config Portb.1 = Input : Key Alias Pinb.1
+        Config Portd.6 = Input : Key Alias Pind.6
 
 Maxconfig:
           Enable Urxc
           On Urxc Rx
 
-          Rxtx Alias Portb.2 : Config Portb.2 = Output
+          Rxtx Alias Portb.0 : Config Portb.0 = Output
           En Alias Portd.2 : Config Portd.2 = Output : Reset En
           Dim Din(5) As Byte
           Dim Maxin As Byte
@@ -59,6 +80,8 @@ Maxconfig:
           Const Pwmmodule = 111
           Const Remote = 104
           Const Keyin = 101
+
+          Dim Q As Byte
 
           Dim Inok As Boolean
           Dim Wic As Byte
@@ -130,7 +153,6 @@ Start Timer0
 
 
 Main:
-     Test = Log(100)
      Do
 
 
@@ -144,24 +166,24 @@ Main:
        If Timer1 > Light(8) Then Set Out8 Else Reset Out8
 
 
-       If Key = 1 Then
+       If Key = 0 Then
           Disable Int1
           Test = 0
           Do
             Waitms 100
             Incr Test
-            Set Rxtx
+            Set Buz
             If Test > 30 Then
              For I = 1 To 8
-                 Toggle Rxtx
+                 Toggle Buz
                  Waitms 200
              Next
                Call Getid
             End If
-          Loop Until Key = 0
+          Loop Until Key = 1
           If Test < 10 Then
              For I = 1 To 4
-                 Toggle Rxtx
+                 Toggle Buz
                  Waitms 500
              Next
           End If
@@ -173,6 +195,27 @@ Main:
 
 Gosub Main
 
+Ntc:
+       Adcin = Getadc(7)
+       Vo = 1023 / Adcin
+       Vo = Vo - 1
+       Rt = Vo * 10000
+       Lnrt = Log(rt)
+       W = Lnrt
+       W = W ^ 3
+       W = W * C
+       Y = B * Lnrt
+       Z = A + Y
+       Z = Z + W
+
+       Temp = 1 / Z
+       Temp = Temp - 273
+
+       If Temp < 45 Then Reset Fan
+       If Temp > 50 Then Set Fan
+       If Temp > 120 Then Set Alloff Else Reset Alloff
+
+Return
 
 Rx:
 
@@ -207,7 +250,7 @@ T0rutin:
 
 
 
-          Reset Out1
+          'Reset Out1
           Timer1 = 0
           Timer0 = 147
           Start Timer1
@@ -216,13 +259,30 @@ Return
 
 Int1rutin:
           Stop Timer1
-
-
+'(
+          Incr Z
+          If Z = 500 Then
+             Z = 0
+             Incr Q
+             Select Case Q
+                    Case 1
+                         Light(1) = Minlight
+                    Case 2
+                         Light(1) = Midlight
+                    Case 3
+                         Light(1) = Maxlight
+                    Case 4
+                         Light(1) = Dark
+                    Case 5
+                    Q = 0
+             End Select
+          End If
+')
           Incr Test
-
           If Test = 100 Then
              Test = 0
              Toggle Buz
+             'Gosub Ntc
           End If
 
 
@@ -251,7 +311,7 @@ Sub Getid
        Do
 
          Do
-         Loop Until Key = 1
+         Loop Until Key = 0
          Portc = 0
          Portd = 0
          Waitms 30
@@ -265,9 +325,10 @@ Sub Getid
                  Toggle Buz
                  Waitms 200
              Next
+              Reset Wantid
               Return
            End If
-         Loop Until Key = 0
+         Loop Until Key = 1
          Incr K
          If K > 8 Then K = 1
          Select Case K
@@ -291,6 +352,11 @@ Sub Getid
 
        Loop
     Else
+             For I = 1 To 8
+                 Toggle Buz
+                 Waitms 200
+             Next
+             Reset Wantid
         Return
     End If
 

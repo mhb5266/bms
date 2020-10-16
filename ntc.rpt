@@ -1,6 +1,6 @@
 Report       : ntc
-Date         : 10-15-2020
-Time         : 13:51:59
+Date         : 10-16-2020
+Time         : 12:38:19
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M16
@@ -8,12 +8,12 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : 98A hex  -> Will fit into ROM
-ROMIMAGE     :  2442 dec
-FLASH USED   :  14  %
+ROMIMAGE     : E08 hex  -> Will fit into ROM
+ROMIMAGE     :  3592 dec
+FLASH USED   :  21  %
 BAUD         : 115200 Baud
-XTAL         : 11059200 Hz
-BAUD error   : 0.%
+XTAL         : 8000000 Hz
+BAUD error   : 3.55%
 
 Stack start  : 45F hex
 Stack size   : 28 hex
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  907  dec
+Space left   :  902  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -96,9 +96,11 @@ TEMP                             Single            0062          98
 VO                               Single            0066          102 
 RT                               Single            006A          106 
 ADCIN                            Word              006E          110 
-X                                Single            0070          112 
+W                                Single            0070          112 
 Y                                Single            0074          116 
 Z                                Single            0078          120 
+LNRT                             Single            007C          124 
+ALLOFF                           Bit [7]           0080          128 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -478,7 +480,7 @@ _ERAMSIZE                        512
 _SIM                             0
 _HUGE                            0
 _BASE                            1
-_XTAL                            11059200
+_XTAL                            8000000
 _BUILD                           20781
 _COMPILER                        90
 _HWMUL                           1
@@ -517,9 +519,9 @@ _LCDDBEDIR                       &H17
 _LCDDBRS                         &H18
 _LCDDBRS_PIN                     2
 _LCDDBRSDIR                      &H17
-A                                 1009.249522
-B                                 23784.05444
-C                                 20192026.97
+A                                 .001009249522
+B                                 .0002378405444
+C                                 2.019202697E-7
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -586,3 +588,4 @@ PWM1B                            not used
 PWM0                             not used
 AD30                             not used
 
+Length of string might not be enough to hold the result. A length of 16 is desir  in line  0 

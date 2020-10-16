@@ -17,8 +17,28 @@ Configs:
         'Enable Int1
         'On Int1 Int1rutin
 
+Configntc:
 
+Config Adc = Single , Prescaler = Auto
 
+Dim Ad30 As Word
+Dim Temp As Single
+
+Dim Vo As Single
+Dim Rt As Single
+Dim Adcin As Word
+
+Dim W As Single
+Dim Y As Single
+Dim Z As Single
+Dim Lnrt As Single
+Dim Alloff As Boolean
+
+Fan Alias Portd.5
+
+Const A = 1.009249522 * 10 ^ -3
+Const B = 2.378405444 * 10 ^ -4
+Const C = 2.019202697 * 10 ^ -7
 Defports:
         Config Portb.2 = Output : Buz Alias Portb.2
 
@@ -125,6 +145,18 @@ Main:
 
      Do
 
+       If Alloff = 1 Then
+          Do
+            Reset Out1
+            Reset Out2
+            Reset Out3
+            Reset Out4
+            Reset Out5
+            Reset Out6
+            Reset Out7
+            Reset Out8
+          Loop Until Alloff = 0
+       End If
 
        If Timer1 > Light(1) Then Set Out1 Else Reset Out1
        If Timer1 > Light(2) Then Set Out2 Else Reset Out2
@@ -163,6 +195,26 @@ Main:
 
 Gosub Main
 
+Ntc:
+       Adcin = Getadc(7)
+       Vo = 1023 / Adcin
+       Vo = Vo - 1
+       Rt = Vo * 10000
+       Lnrt = Log(rt)
+       W = Lnrt
+       W = W ^ 3
+       W = W * C
+       Y = B * Lnrt
+       Z = A + Y
+       Z = Z + W
+
+       Temp = 1 / Z
+       Temp = Temp - 273
+       If Temp < 45 Then Reset Fan
+       If Temp > 50 Then Set Fan
+       If Temp > 120 Then Set Alloff Else Reset Alloff
+
+Return
 
 Rx:
 
@@ -193,28 +245,13 @@ T0rutin:
 
           Stop Timer1
 
-'(
+
           Incr Test
-
-          If Test = 300 Then
+          If Test = 100 Then
              Test = 0
-             Toggle buz
-             Incr I
-             If I = 5 Then I = 1
-
-                Select Case I
-                       Case 1
-                            Light = 0
-                       Case 2
-                            Light = 8800
-                       Case 3
-                            Light = 12000
-                       Case 4
-                            Light = 65535
-
-                End Select
+             Gosub Ntc
           End If
-')
+
 
 
           Reset Out1
