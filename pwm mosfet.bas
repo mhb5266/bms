@@ -249,7 +249,7 @@ T0rutin:
           Incr Test
           If Test = 100 Then
              Test = 0
-             Gosub Ntc
+             'Gosub Ntc
           End If
 
 

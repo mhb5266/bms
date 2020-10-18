@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 10-09-2020
-Time         : 14:08:02
+Date         : 10-18-2020
+Time         : 17:04:03
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,8 +8,8 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : 9F34 hex  -> Will fit into ROM
-ROMIMAGE     :  40756 dec
+ROMIMAGE     : 9EF6 hex  -> Will fit into ROM
+ROMIMAGE     :  40694 dec
 FLASH USED   :  31  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz

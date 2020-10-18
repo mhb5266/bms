@@ -1,4 +1,6 @@
 
+
+
 $regfile = "m128def.dat"
 
 
@@ -334,6 +336,8 @@ Main:
        'Showpic 72 , 48 , Nexticon
        'Showpic 104 , 48 , Menuicon
 
+       'Showpic 1 , 32 , Tempicon , 1
+       'Wait 1
 
      Do
        Gosub Read_date_time
@@ -767,6 +771,8 @@ $bgf "watersystem.bgf"
 Kelidha:
 $bgf "kelidha.bgf"
 
+Tempicon:
+$bgf "temp.bgf"
 
 End
 
@@ -1815,13 +1821,17 @@ Sub Show
        If Showtemp = 0 Then
           Showtemp = _sec Mod 10
           If Showtemp = 0 Then
-             Lcdat 3 , 40 , Farsi( "œ„«Ì ÃòÊ“Ì ")
-             Setfont Fontdig12x16_f
-             Lcdat 5 , 1 , Sens1 ; " !  "
+             'Lcdat 3 , 40 , Farsi( "œ„«Ì ÃòÊ“Ì ")
+             'Setfont Fontdig12x16_f
+             'Showpic 1 , 16 , Jaccuziicon , 1
+             Setfont Font16x16en
+             Lcdat 3 , 40 , Sens1 ; " !  " , 1
           Else
-              Lcdat 3 , 40 , Farsi( " œ„«Ì „ÕÌÿ ")
-              Setfont Fontdig12x16_f
-              Lcdat 5 , 1 , Sens2 ; " !  "
+              'Lcdat 3 , 40 , Farsi( "œ„«Ì „ÕÌÿ ")
+              'Setfont Fontdig12x16_f
+             'Showpic 1 , 16 , Tempicon , 1
+              Setfont Font16x16en
+              Lcdat 5 , 40 , Sens2 ; " !  "
           End If
        End If
 

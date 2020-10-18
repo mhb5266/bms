@@ -20,7 +20,7 @@ Configs:
 
 Configntc:
 
-Config Adc = Single , Prescaler = Auto
+Config Adc = Free , Prescaler = Auto
 
 Dim Ad30 As Word
 Dim Temp As Single
@@ -51,11 +51,11 @@ Defports:
         Config Portc.3 = Output : Out1 Alias Portc.3
         Config Portc.4 = Output : Out2 Alias Portc.4
         Config Portc.5 = Output : Out3 Alias Portc.5
-        Config Portc.2 = Output : Out4 Alias Portd.4
-        Config Portc.1 = Output : Out5 Alias Portc.2
-        Config Portc.0 = Output : Out6 Alias Portc.1
+        Config Portd.4 = Output : Out4 Alias Portd.4
+        Config Portc.2 = Output : Out5 Alias Portc.2
+        Config Portc.1 = Output : Out6 Alias Portc.1
         Config Portc.0 = Output : Out7 Alias Portc.0
-        Config Portd.6 = Output : Out8 Alias Portb.2
+        Config Portb.2 = Output : Out8 Alias Portb.2
 
         Config Portd.6 = Input : Key Alias Pind.6
 
@@ -75,7 +75,7 @@ Maxconfig:
           Const Maxlight = 0
           Const Dark = 65535
           Const Midlight = 8800
-          Const Minlight = 11800
+          Const Minlight = 10800
           Const Relaymodule = 110
           Const Pwmmodule = 111
           Const Remote = 104
@@ -89,6 +89,7 @@ Maxconfig:
           Declare Sub Checkanswer
           Declare Sub Getid
           Declare Sub Keyorder
+         ' Declare Sub Ntc
 
 
 Defvals:
@@ -155,6 +156,11 @@ Start Timer0
 Main:
      Do
 
+       If Alloff = 1 Then
+          For I = 1 To 8
+              Light(i) = Dark
+          Next
+       End If
 
        If Timer1 > Light(1) Then Set Out1 Else Reset Out1
        If Timer1 > Light(2) Then Set Out2 Else Reset Out2
@@ -195,27 +201,7 @@ Main:
 
 Gosub Main
 
-Ntc:
-       Adcin = Getadc(7)
-       Vo = 1023 / Adcin
-       Vo = Vo - 1
-       Rt = Vo * 10000
-       Lnrt = Log(rt)
-       W = Lnrt
-       W = W ^ 3
-       W = W * C
-       Y = B * Lnrt
-       Z = A + Y
-       Z = Z + W
 
-       Temp = 1 / Z
-       Temp = Temp - 273
-
-       If Temp < 45 Then Reset Fan
-       If Temp > 50 Then Set Fan
-       If Temp > 120 Then Set Alloff Else Reset Alloff
-
-Return
 
 Rx:
 
@@ -259,41 +245,48 @@ Return
 
 Int1rutin:
           Stop Timer1
-'(
-          Incr Z
-          If Z = 500 Then
-             Z = 0
-             Incr Q
-             Select Case Q
-                    Case 1
-                         Light(1) = Minlight
-                    Case 2
-                         Light(1) = Midlight
-                    Case 3
-                         Light(1) = Maxlight
-                    Case 4
-                         Light(1) = Dark
-                    Case 5
-                    Q = 0
-             End Select
-          End If
-')
+          Disable Int1
           Incr Test
-          If Test = 100 Then
-             Test = 0
-             Toggle Buz
-             'Gosub Ntc
+          Q = Test Mod 100
+          If Q = 0 Then
+             Toggle Rxtx
+             'Adcin = Getadc(7)
           End If
+          If Test = 200 Then
 
+             Toggle Buz
+                    Adcin = Getadc(7)
+                    Vo = 1023 / Adcin
+                    Vo = Vo - 1
+                    Rt = Vo * 10000
+                    Lnrt = Log(rt)
+                    W = Lnrt
+                    W = W ^ 3
+                    W = W * C
+                    Y = B * Lnrt
+                    Z = A + Y
+                    Z = Z + W
+
+                    Temp = 1 / Z
+                    Temp = Temp - 273
+
+                    If Temp < 50 Then Reset Fan
+                    If Temp > 65 Then Set Fan
+                    If Temp > 100 Then Set Alloff
+                    If Temp < 90 Then Reset Alloff
+
+             Test = 0
+          End If
 
           Reset Out1
           Timer1 = 0
           Start Timer1
-
+          Enable Int1
 Return
 
-End
 
+
+End
 
 
 Sub Keyorder
