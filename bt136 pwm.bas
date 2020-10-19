@@ -35,7 +35,7 @@ Dim Z As Single
 Dim Lnrt As Single
 Dim Alloff As Boolean
 
-Fan Alias Portd.5
+Fan Alias Portd.5 : Config Portd.5 = Output
 
 Const A = 1.009249522 * 10 ^ -3
 Const B = 2.378405444 * 10 ^ -4
@@ -77,7 +77,7 @@ Maxconfig:
           Const Midlight = 8800
           Const Minlight = 10800
           Const Relaymodule = 110
-          Const Pwmmodule = 111
+          Const Triacmodule = 111
           Const Remote = 104
           Const Keyin = 101
 
@@ -249,12 +249,12 @@ Int1rutin:
           Incr Test
           Q = Test Mod 100
           If Q = 0 Then
-             Toggle Rxtx
+             Toggle Buz
              'Adcin = Getadc(7)
           End If
-          If Test = 200 Then
+          If Test = 65535 Then
 
-             Toggle Buz
+             Toggle Rxtx
                     Adcin = Getadc(7)
                     Vo = 1023 / Adcin
                     Vo = Vo - 1
@@ -295,97 +295,14 @@ Sub Keyorder
 End Sub
 
 Sub Getid
+    K = 0
     Reset En
     Set Buz
     Wait 3
     Reset Buz
-    If Wantid = 1 Then
-       'K = Idgot
+    Set Wantid
        Do
-
-         Do
-         Loop Until Key = 0
-         Portc = 0
-         Portd = 0
-         Waitms 30
-         Test = 0
-         Do
-           Waitms 100
-           Incr Test
-           If Test > 30 Then
-             Reset Wantid
-             For I = 1 To 8
-                 Toggle Buz
-                 Waitms 200
-             Next
-              Reset Wantid
-              Return
-           End If
-         Loop Until Key = 1
-         Incr K
-         If K > 8 Then K = 1
-         Select Case K
-                Case 1
-                     Set Out1
-                Case 2
-                     Set Out2
-                Case 3
-                     Set Out3
-                Case 4
-                     Set Out4
-                Case 5
-                     Set Out5
-                Case 6
-                     Set Out6
-                Case 7
-                     Set Out7
-                Case 8
-                     Set Out8
-         End Select
-
-       Loop
-    Else
-             For I = 1 To 8
-                 Toggle Buz
-                 Waitms 200
-             Next
-             Reset Wantid
-        Return
-    End If
-
-End Sub
-
-Sub Checkanswer
-    Cmd = Din(3)
-    Select Case Cmd
-           Case 151
-                Set Wantid
-                Set Rxtx
-                Waitms 500
-                Reset Rxtx
-
-           Case 158
-                    For I = 1 To 8
-                        Eoutid1(i) = 0
-                        Waitms 2
-                        Eoutid2(i) = 0
-                        Waitms 2
-                        Eoutid3(i) = 0
-                        Waitms 2
-                        Light(i) = Dark
-                        Waitms 200
-                        Toggle Buz
-                        Outid1(i) = 0
-                        Outid2(i) = 0
-                        Outid3(i) = 0
-                    Next
-                                 For I = 1 To 8
-                                     Toggle Rxtx
-                                     Waitms 200
-
-                                 Next
-           Case 180
-                If Wantid = 1 Then
+         If Cmd = 180 And Id > 0 And Id < 100 Then
                           Reset Gotid
                           If Outid1(k) > 100 Or Outid1(k) = 0 Then
                              Outid1(k) = Id
@@ -434,8 +351,84 @@ Sub Checkanswer
 
                              Next
                           End If
+                          Cmd = 0
+                          Id = 0
+         End If
+         If Key = 0 Then
+            Waitms 50
+            If Key = 0 Then
+               Reset Wantid
+               Exit Do
+            End If
+         End If
+       Loop
 
+       For I = 1 To 8
+          Toggle Buz
+          Waitms 200
+       Next
+
+       Reset Wantid
+       Return
+
+End Sub
+
+Sub Checkanswer
+    Cmd = Din(3)
+    Select Case Cmd
+           Case 151
+                If Wantid = 1 Then
+                                Incr K
+                                Reset Out1
+                                Reset Out2
+                                Reset Out3
+                                Reset Out4
+                                Reset Out5
+                                Reset Out6
+                                Reset Out7
+                                Reset Out8
+                                If K > 8 Then K = 1
+                                Select Case K
+                                       Case 1
+                                            Set Out1
+                                       Case 2
+                                            Set Out2
+                                       Case 3
+                                            Set Out3
+                                       Case 4
+                                            Set Out4
+                                       Case 5
+                                            Set Out5
+                                       Case 6
+                                            Set Out6
+                                       Case 7
+                                            Set Out7
+                                       Case 8
+                                            Set Out8
+                                End Select
                 End If
+
+           Case 158
+                    For I = 1 To 8
+                        Eoutid1(i) = 0
+                        Waitms 2
+                        Eoutid2(i) = 0
+                        Waitms 2
+                        Eoutid3(i) = 0
+                        Waitms 2
+                        Light(i) = Dark
+                        Waitms 200
+                        Toggle Buz
+                        Outid1(i) = 0
+                        Outid2(i) = 0
+                        Outid3(i) = 0
+                    Next
+                                 For I = 1 To 8
+                                     Toggle Rxtx
+                                     Waitms 200
+
+                                 Next
+           Case 180
                     For I = 1 To 8
                         If Id = 0 Or Id > 100 Then Return
                         If Outid1(i) = Id Or Outid2(i) = Id Or Outid3(i) = Id Then

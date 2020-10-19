@@ -27,9 +27,11 @@ Ds18b20_id_2(1) = 1wsearchnext()
 Dim Temperature As String * 6
 Dim Sens1 As String * 6
 Dim Sens2 As String * 6
-Dim Dahom As Word
-Dim Sahih As Word
+
 Dim Buffer_digital As Integer
+Dim Tmpread As Boolean
+Dim Tmp1 As Integer
+Dim Tmp2 As Integer
 
 Lcdconfig:
 '-----------------------------------------------------
@@ -336,14 +338,12 @@ Main:
        'Showpic 72 , 48 , Nexticon
        'Showpic 104 , 48 , Menuicon
 
-       'Showpic 1 , 32 , Tempicon , 1
-       'Wait 1
-
      Do
        Gosub Read_date_time
        Gosub M_to_sh
        Showtemp = _sec Mod 15
        If Showtemp = 0 Then
+          Set Tmpread
           Call Temp
        End If
        Call Show
@@ -385,21 +385,25 @@ End If
              Cls
              Call Main_menu
           Elseif Poosh < 20 Then
-                 Set Ok1
-                 Reset Ok2
-                 Reset Ok3
-                 Reset Ok4
-                 Cls
-                 Showpic 1 , 1 , Night
-                 If Poosh < 20 And Ok1 = 0 Then
+
+                 If Poosh < 20 And Ok1 = 1 Then
                     Cls
-                    Lcdat 5 , 1 , "night is set"
+                    Showpic 0 , 0 , Night , 1
                     Setlight = Minlight
                     Findorder = Pwmlight
                     Call Order
-                    Return
+                    Wait 2
+                    Cls
+                    Exit Do
                  End If
-
+                 If Poosh < 20 And Ok1 = 0 Then
+                    Set Ok1
+                    Reset Ok2
+                    Reset Ok3
+                    Reset Ok4
+                    Cls
+                    Showpic 0 , 0 , Night
+                 End If
           End If
           Poosh = 0
        End If
@@ -411,7 +415,7 @@ End If
                  Reset Ok3
                  Reset Ok4
                  Cls
-                 Showpic 1 , 1 , Party
+                 Showpic 0 , 0 , Party
                  Do
                  Loop Until Touch2 = 0
 
@@ -420,13 +424,13 @@ End If
                  Poosh = 0
                  Do
                     Cls
-                    Lcdat 5 , 1 , "party is set"
+                    Showpic 0 , 0 , Party , 1
                     Setlight = Maxlight
                     Findorder = Pwmlight
                     Call Order
-
                     Wait 2
-                    Return
+                    Cls
+                    Exit Do
                  Loop Until Touch2 = 0
        End If
 
@@ -438,7 +442,7 @@ End If
                  Reset Ok2
                  Reset Ok4
                  Cls
-                 Showpic 1 , 1 , Rutin
+                 Showpic 0 , 0 , Rutin
                  Do
                  Loop Until Touch3 = 0
 
@@ -447,12 +451,13 @@ End If
        Poosh = 0
                  Do
                     Cls
-                    Lcdat 5 , 1 , "rutin is set"
+                    Showpic 0 , 0 , Rutin , 1
                     Setlight = Midlight
                     Findorder = Pwmlight
                     Call Order
                     Wait 2
-                    Return
+                    Cls
+                    Exit Do
                  Loop Until Touch3 = 0
        End If
 
@@ -470,21 +475,25 @@ End If
              Cls
              Return
           Elseif Poosh < 20 Then
-                 Reset Ok1
-                 Reset Ok2
-                 Reset Ok3
-                 Set Ok4
-                 Cls
-                 Showpic 1 , 1 , Tv
-                 If Poosh < 20 And Ok1 = 0 Then
+
+                 If Poosh < 20 And Ok4 = 1 Then
                     Cls
-                    Lcdat 5 , 1 , "tv is set"
+                    Showpic 0 , 0 , Tv , 1
                     Setlight = Minlight
                     Findorder = Pwmlight
                     Call Order
-                    Return
+                    Wait 2
+                    Cls
+                    Exit Do
                  End If
-
+                 If Poosh < 20 And Ok4 = 0 Then
+                                  Reset Ok1
+                                  Reset Ok2
+                                  Reset Ok3
+                                  Set Ok4
+                                  Cls
+                                  Showpic 0 , 0 , Tv
+                 End If
           End If
           Poosh = 0
        End If
@@ -514,7 +523,9 @@ Return
 
 Conversion:
    Buffer_digital = Buffer_digital * 10 : Buffer_digital = Buffer_digital \ 16
-   Temperature = Str(buffer_digital) : Temperature = Format(temperature , "0.0")
+
+   Temperature = Str(buffer_digital)
+   Temperature = Format(temperature , "0.0")
 Return
 
 
@@ -731,7 +742,8 @@ M_day = Kole_roz_m
 
 Return
 
-
+Tempicon:
+$bgf "tempicon.bgf"
 
 Cancelicon:
       $bgf "cancel.bgf"
@@ -752,27 +764,26 @@ Rutin:
 Night:
       $bgf "night.bgf"
 Logo:
-$bgf "logo.bgf"
+     $bgf "logo.bgf"
 Settingicon:
-$bgf "setting5.bgf"
- '$bgf "emtech1.bgf"
+            $bgf "setting5.bgf"
+            '$bgf "emtech1.bgf"
 Setclockicon:
-$bgf "clock.bgf"
+             $bgf "clock.bgf"
 Remoteicon:
-$bgf "remote.bgf"
+           $bgf "remote.bgf"
 Planticon:
-$bgf "plant.bgf"
+          $bgf "plant.bgf"
 Lighticon:
-$bgf "light.bgf"
+          $bgf "light.bgf"
 Jaccuziicon:
-$bgf "jaccuzi.bgf"
+            $bgf "jaccuzi.bgf"
 Watersystemicon:
-$bgf "watersystem.bgf"
+                $bgf "watersystem.bgf"
 Kelidha:
-$bgf "kelidha.bgf"
+        $bgf "kelidha.bgf"
 
-Tempicon:
-$bgf "temp.bgf"
+
 
 End
 
@@ -821,7 +832,7 @@ Sub Main_menu
                    Call Order
                    Touch = 0
                    Cls
-                   Return
+                   Gosub Main
             End If
             If Touch = 2 Or Touch = 3 Then
                         Select Case Count
@@ -938,14 +949,6 @@ Sub Setting_menu
 
                     Lcdat 3 , 1 , "Set Module ID"
 
-               Case 5
-
-                    Lcdat 3 , 1 , "Config Relay"
-
-               Case 6
-
-                    Lcdat 3 , 1 , "Config Pwm"
-
         End Select
 
         Call Readtouch
@@ -963,8 +966,8 @@ Sub Setting_menu
            Cls
         End If
         Lcdat 1 , 1 , "Setting Menu    " , 1
-        If Count = 0 Then Count = 6
-        If Count > 6 Then Count = 1
+        If Count = 0 Then Count = 4
+        If Count > 4 Then Count = 1
         If Touch = 1 Then
            Select Case Count
                   Case 1
@@ -998,13 +1001,6 @@ Sub Setting_menu
                   Case 4
                        Call Set_id_modules
 
-                  Case 5
-                       Configmode = Relaymodule
-                       Call Module_config
-
-                  Case 6
-                       Configmode = Pwmmodule
-                       Call Module_config
            End Select
         End If
     Loop
@@ -1067,26 +1063,32 @@ Sub Set_id_modules
                  Call Order
                  Findorder = Readallinput
                  Call Order
-         Typ = 110 : Id = Relaymodulecounter
-         Lcdat 5 , 1 , "relay " ; Id
-         Findorder = Setidformodules
-         Call Order
-         Typ = 111 : Id = Pwmmodulecounter
-         Lcdat 6 , 1 , "pwm " ; Id
-         Findorder = Setidformodules
-         Call Order
-         Findorder = Setidformodules
-         Call Order
-         Lcdat 5 , 1 , "   Pls select   "
-         Lcdat 6 , 1 , "output Module & "
-         Lcdat 7 , 1 , "syc with inputs "
+                 Findorder = Setidformodules
+                 Typ = Relaymodule
+                 Call Order
+                 Findorder = Setidformodules
+                 Typ = Pwmmodule
+                 Call Order
+
+                 Lcdat 5 , 1 , Farsi( "Â„«Â‰ê ò—œ‰")
+                 Lcdat 7 , 1 , Farsi( "Ê—ÊœÌ Ê Œ—ÊÃÌ")
     Do
       Call Readtouch
       If Touch = 4 Then
          Cls
          Exit Do
       End If
-
+      If Touch = 1 Then
+                 Cls
+                 Lcdat 5 , 1 , Farsi( "Œ—ÊÃÌ »⁄œÌ")
+                 Lcdat 7 , 1 , Farsi( "—« «‰ Œ«» ò‰Ìœ")
+                 Findorder = Setidformodules
+                 Typ = Relaymodule
+                 Call Order
+                 Findorder = Setidformodules
+                 Typ = Pwmmodule
+                 Call Order
+      End If
     Loop
 
 End Sub
@@ -1817,24 +1819,32 @@ Sub Show
        Call Ifcheck
        Setfont Font8x8
 
-       Showtemp = _sec Mod 5
-       If Showtemp = 0 Then
-          Showtemp = _sec Mod 10
-          If Showtemp = 0 Then
-             'Lcdat 3 , 40 , Farsi( "œ„«Ì ÃòÊ“Ì ")
-             'Setfont Fontdig12x16_f
-             'Showpic 1 , 16 , Jaccuziicon , 1
-             Setfont Font16x16en
-             Lcdat 3 , 40 , Sens1 ; " !  " , 1
-          Else
-              'Lcdat 3 , 40 , Farsi( "œ„«Ì „ÕÌÿ ")
-              'Setfont Fontdig12x16_f
-             'Showpic 1 , 16 , Tempicon , 1
-              Setfont Font16x16en
-              Lcdat 5 , 40 , Sens2 ; " !  "
-          End If
-       End If
-
+       If Tmpread = 1 Then
+              Showtemp = _sec Mod 5
+              Line(0 , 15) -(128 , 15) , 255
+              If Showtemp = 0 Then
+                 Showtemp = _sec Mod 10
+                 If Showtemp = 0 Then
+                    'Lcdat 3 , 40 , Farsi( "œ„«Ì ÃòÊ“Ì ")
+                    'Setfont Fontdig12x16_f
+                    Showpic 96 , 16 , Jaccuziicon , 1
+                    Setfont Font16x16en
+                    If Tmp1 < -10 Then Lcdat 3 , 1 , Sens1 ; "!" , 1
+                    If Tmp1 < 0 And Tmp1 > -10 Then Lcdat 3 , 1 , Sens1 ; "! " , 1
+                    If Tmp1 < 10 And Tmp1 > 0 Then Lcdat 3 , 1 , Sens1 ; "!  " , 1
+                    If Tmp1 > 9 Then Lcdat 3 , 1 , Sens1 ; "! " , 1
+                 Else
+                     'Lcdat 3 , 40 , Farsi( "œ„«Ì „ÕÌÿ ")
+                     'Setfont Fontdig12x16_f
+                     Showpic 96 , 16 , Tempicon , 1
+                     Setfont Font16x16en
+                    If Tmp2 < -10 Then Lcdat 3 , 1 , Sens2 ; "!" , 1
+                    If Tmp2 < 0 And Tmp2 > -10 Then Lcdat 3 , 1 , Sens2 ; "! " , 1
+                    If Tmp2 < 10 And Tmp2 > 0 Then Lcdat 3 , 1 , Sens2 ; "!  " , 1
+                    If Tmp2 > 9 Then Lcdat 3 , 1 , Sens2 ; "! " , 1
+                 End If
+              End If
+        End If
 
 
        Setfont Font8x8
@@ -1947,18 +1957,8 @@ Sub Temp
    1wwrite &HBE
    Buffer_digital = 1wread(2)
    Gosub Conversion
+   Tmp1 = Buffer_digital
    Sens1 = Temperature
-
-
-   Dahom = Buffer_digital
-   Do
-   Dahom = Dahom - 10
-   Loop Until Dahom < 10
-   Sahih = Buffer_digital - Dahom
-   Sahih = Sahih / 10
-
-
-
 
    1wreset
    1wwrite &H55
@@ -1966,6 +1966,7 @@ Sub Temp
    1wwrite &HBE
    Buffer_digital = 1wread(2)
    Gosub Conversion
+   Tmp2 = Buffer_digital
    Sens2 = Temperature
 End Sub
 

@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 10-18-2020
-Time         : 17:04:03
+Date         : 10-19-2020
+Time         : 15:03:42
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,8 +8,8 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : 9EF6 hex  -> Will fit into ROM
-ROMIMAGE     :  40694 dec
+ROMIMAGE     : A1F6 hex  -> Will fit into ROM
+ROMIMAGE     :  41462 dec
 FLASH USED   :  31  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
@@ -130,44 +130,45 @@ ACTION                           Byte              0112          274
 TEMPERATURE                      String * 6        011F          287 
 SENS1                            String * 6        0126          294 
 SENS2                            String * 6        012D          301 
-DAHOM                            Word              0134          308 
-SAHIH                            Word              0136          310 
-BUFFER_DIGITAL                   Integer           0138          312 
+BUFFER_DIGITAL                   Integer           0134          308 
+TMPREAD                          Bit [7]           0136          310 
+TMP1                             Integer           0137          311 
+TMP2                             Integer           0139          313 
 EDAY                             EEPROM Byte       0000          0 
-DAY                              Byte              0140          320 
-WEEKDAY                          Byte              0146          326 
-M_DAY                            Word              0147          327 
-SH_DAY                           Word              0149          329 
-M_YEAR                           Word              014B          331 
-SH_YEAR                          Word              014D          333 
-M_MONTH                          Word              014F          335 
-SH_MONTH                         Word              0151          337 
-KABISE                           Byte              0153          339 
-KOLE_ROZ_M                       Word              0154          340 
-KOLE_ROZ_SH                      Word              0156          342 
-CONTER1                          Word              0158          344 
-CONTER2                          Word              015A          346 
-CONTER3                          Word              015C          348 
-CONTER4                          Word              015E          350 
-DAY_OF_MONTH                     Byte(12)          0160          352 
-TEMP1                            Integer           016C          364 
-TEMP2                            Integer           016E          366 
-TEMP3                            Word              0170          368 
-TEMP4                            Word              0172          370 
-TEMP5                            Byte              0174          372 
-SHOWTEMP                         Byte              0175          373 
-MENU                             Byte              0176          374 
-TEST                             Byte              0177          375 
-TIMER_1                          Word              0178          376 
-S1                               String * 16       017A          378 
-S2                               String * 16       018B          395 
-S3                               String * 16       019C          412 
-S4                               String * 16       01AD          429 
-S                                String * 10       01BE          446 
-BLINK_                           Bit [7]           01C9          457 
+DAY                              Byte              0141          321 
+WEEKDAY                          Byte              0147          327 
+M_DAY                            Word              0148          328 
+SH_DAY                           Word              014A          330 
+M_YEAR                           Word              014C          332 
+SH_YEAR                          Word              014E          334 
+M_MONTH                          Word              0150          336 
+SH_MONTH                         Word              0152          338 
+KABISE                           Byte              0154          340 
+KOLE_ROZ_M                       Word              0155          341 
+KOLE_ROZ_SH                      Word              0157          343 
+CONTER1                          Word              0159          345 
+CONTER2                          Word              015B          347 
+CONTER3                          Word              015D          349 
+CONTER4                          Word              015F          351 
+DAY_OF_MONTH                     Byte(12)          0161          353 
+TEMP1                            Integer           016D          365 
+TEMP2                            Integer           016F          367 
+TEMP3                            Word              0171          369 
+TEMP4                            Word              0173          371 
+TEMP5                            Byte              0175          373 
+SHOWTEMP                         Byte              0176          374 
+MENU                             Byte              0177          375 
+TEST                             Byte              0178          376 
+TIMER_1                          Word              0179          377 
+S1                               String * 16       017B          379 
+S2                               String * 16       018C          396 
+S3                               String * 16       019D          413 
+S4                               String * 16       01AE          430 
+S                                String * 10       01BF          447 
+BLINK_                           Bit [6]           0136          310 
 SELECTION                        Byte              01CA          458 
 A                                Byte              01CB          459 
-BACKTIME                         Bit [6]           01C9          457 
+BACKTIME                         Bit [5]           0136          310 
 MAXIN                            Byte              01CC          460 
 ID                               Byte              01CD          461 
 TYP                              Byte              01CE          462 
@@ -203,11 +204,11 @@ OFFMIN                           Byte              01D9          473
 STATUS                           Byte              01DA          474 
 SETLIGHT                         Byte              01DB          475 
 DIN                              Byte(5)           01DC          476 
-INOK                             Bit [5]           01C9          457 
-LEARNOK                          Bit [4]           01C9          457 
-LEARNDONE                        Bit [3]           01C9          457 
+INOK                             Bit [4]           0136          310 
+LEARNOK                          Bit [3]           0136          310 
+LEARNDONE                        Bit [2]           0136          310 
 CLEARDONE                        Byte              01E1          481 
-SETREMOTEDONE                    Bit [2]           01C9          457 
+SETREMOTEDONE                    Bit [1]           0136          310 
 DIRECT                           Byte              01E2          482 
 X                                Word              01E3          483 
 W                                Word              01E5          485 
@@ -220,7 +221,7 @@ PLANT_STOP_MIN                   Byte              01ED          493
 PLANT_DAYS                       Byte(7)           01EE          494 
 POOSH                            Word              01F5          501 
 TOUCH                            Byte              01F7          503 
-NEXTDAY                          Bit [1]           01C9          457 
+NEXTDAY                          Bit [0]           0136          310 
 COUNT                            Byte              01F8          504 
 INPUTCOUNTER                     Byte              01F9          505 
 RELAYMODULECOUNTER               EEPROM Byte       0013          19 
@@ -228,10 +229,10 @@ PWMMODULECOUNTER                 EEPROM Byte       0014          20
 EINPUTCOUNTER                    EEPROM Byte       0015          21 
 SYCNUM                           EEPROM Byte       0016          22 
 CONFIGMODE                       Byte              01FA          506 
-OK1                              Bit [0]           01C9          457 
-OK2                              Bit [7]           01FB          507 
-OK3                              Bit [6]           01FB          507 
-OK4                              Bit [5]           01FB          507 
+OK1                              Bit [7]           01FB          507 
+OK2                              Bit [6]           01FB          507 
+OK3                              Bit [5]           01FB          507 
+OK4                              Bit [4]           01FB          507 
 I                                Byte              01FC          508 
 J                                Byte              01FD          509 
 
