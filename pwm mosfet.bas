@@ -304,62 +304,81 @@ Sub Keyorder
 End Sub
 
 Sub Getid
+    K = 0
     Reset En
     Set Buz
     Wait 3
     Reset Buz
-    If Wantid = 1 Then
-       'K = Idgot
+    Set Wantid
        Do
+         If Cmd = 180 And Id > 0 And Id < 100 Then
+                          Reset Gotid
+                          If Outid1(k) > 100 Or Outid1(k) = 0 Then
+                             Outid1(k) = Id
+                             Set Gotid
+                          Else
+                              If Outid2(k) > 100 Or Outid2(k) = 0 Then
+                                 If Outid1(k) <> Id Then
+                                    Outid2(k) = Id
+                                    Set Gotid
+                                 End If
+                              Else
+                                  If Outid3(k) > 100 Or Outid3(k) = 0 Then
+                                     If Outid1(k) <> Id And Outid2(k) <> Id Then
+                                        Outid3(k) = Id
+                                        Set Gotid
+                                     End If
+                                  End If
+                              End If
+                          End If
+                          If Gotid = 1 Then
+                             For I = 1 To 8
+                                 Select Case K
+                                         Case 1
+                                              Toggle Out1
+                                         Case 2
+                                              Toggle Out2
+                                         Case 3
+                                              Toggle Out3
+                                         Case 4
+                                              Toggle Out4
+                                         Case 5
+                                              Toggle Out5
+                                         Case 6
+                                              Toggle Out6
+                                         Case 7
+                                              Toggle Out7
+                                         Case 8
+                                              Toggle Out8
+                                 End Select
+                                 Eoutid1(i) = Outid1(i)
+                                 Waitms 4
+                                 Eoutid2(i) = Outid2(i)
+                                 Waitms 4
+                                 Eoutid3(i) = Outid3(i)
+                                 Waitms 250
 
-         Do
-         Loop Until Key = 1
-         Portc = 0
-         Portd = 0
-         Waitms 30
-         Test = 0
-         Do
-           Waitms 100
-           Incr Test
-           If Test > 30 Then
-             Reset Wantid
-             For I = 1 To 8
-                 Toggle Buz
-                 Waitms 200
-             Next
-              Return
-           End If
-         Loop Until Key = 0
-         Incr K
-         If K > 8 Then K = 1
-         Select Case K
-                Case 1
-                     Set Out1
-                Case 2
-                     Set Out2
-                Case 3
-                     Set Out3
-                Case 4
-                     Set Out4
-                Case 5
-                     Set Out5
-                Case 6
-                     Set Out6
-                Case 7
-                     Set Out7
-                Case 8
-                     Set Out8
-         End Select
-
+                             Next
+                          End If
+                          Cmd = 0
+                          Id = 0
+         End If
+         If Key = 0 Then
+            Waitms 50
+            If Key = 0 Then
+               Reset Wantid
+               Exit Do
+            End If
+         End If
        Loop
-    Else
-        For I = 1 To 8
-            Toggle Buz
-            Waitms 100
-        Next
-        Reset Wantid
-        Return
-    End If
+
+       For I = 1 To 8
+          Toggle Buz
+          Waitms 200
+       Next
+
+       Reset Wantid
+       Return
 
 End Sub
 
@@ -367,15 +386,37 @@ Sub Checkanswer
     Cmd = Din(3)
     Select Case Cmd
            Case 150
-                Reset Wantid
+
            Case 151
-                If Typ = Mytyp Then
-                                Set Wantid
-                                For I = 1 To 4
-                                    Toggle Buz
-                                    Waitms 500
-                                Next
-                                Reset Buz
+                If Wantid = 1 Then
+                                Incr K
+                                Reset Out1
+                                Reset Out2
+                                Reset Out3
+                                Reset Out4
+                                Reset Out5
+                                Reset Out6
+                                Reset Out7
+                                Reset Out8
+                                If K > 8 Then K = 1
+                                Select Case K
+                                       Case 1
+                                            Set Out1
+                                       Case 2
+                                            Set Out2
+                                       Case 3
+                                            Set Out3
+                                       Case 4
+                                            Set Out4
+                                       Case 5
+                                            Set Out5
+                                       Case 6
+                                            Set Out6
+                                       Case 7
+                                            Set Out7
+                                       Case 8
+                                            Set Out8
+                                End Select
                 End If
 
            Case 158

@@ -210,6 +210,9 @@ Plant_def:
 
 Defines:
 
+Dim Pass(4) As Byte
+Dim Reerror As Byte
+
 Dim Poosh As Word
 Dim Touch As Byte
 Dim Nextday As Boolean
@@ -348,9 +351,12 @@ Main:
        End If
        Call Show
        If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
-          Poosh = 0
-          Call Beep
-          Gosub Choose_senario
+          Waitms 50
+          If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
+             Poosh = 0
+             Call Beep
+             Gosub Choose_senario
+          End If
        End If
        Call Readtouch
 
@@ -930,6 +936,72 @@ End Sub
 Sub Setting_menu
     Touch = 0
     Count = 1
+    Cls
+    Do
+      For I = 1 To 4
+       Do
+               Select Case I
+                Case 1
+                     If Blink_ = 1 Then
+                        Lcdat 4 , 48 , "*"
+                     Else
+                        Lcdat 4 , 48 , " "
+                     End If
+                Case 2
+                     If Blink_ = 1 Then
+                        Lcdat 4 , 48 , "**"
+                     Else
+                        Lcdat 4 , 48 , "* "
+                     End If
+                Case 3
+                     If Blink_ = 1 Then
+                        Lcdat 4 , 48 , "***"
+                     Else
+                        Lcdat 4 , 48 , "** "
+                     End If
+                Case 4
+                     If Blink_ = 1 Then
+                        Lcdat 4 , 48 , "****"
+                     Else
+                        Lcdat 4 , 48 , "*** "
+                     End If
+               End Select
+                   Incr Timer_1
+                   If Timer_1 > 5 Then
+                    Timer_1 = 0
+                    Toggle Blink_
+                   End If
+                   Waitms 50
+        Call Readtouch
+        If Touch > 0 Then Exit Do
+       Loop
+       Pass(i) = Touch
+       Do
+         Call Readtouch
+       Loop Until Touch = 0
+      Next
+      Lcdat 4 , 48 , "****"       
+      If Pass(1) = 1 And Pass(2) = 4 And Pass(3) = 2 And Pass(4) = 3 Then
+         Call Beep
+         Waitms 50
+         Call Beep
+         Cls
+         Exit Do
+      Else
+          Call Errorbeep
+          Incr Reerror
+          If Reerror > 2 Then
+             Cls
+             Lcdat 4 , 1 , " Wrong Password "
+             Do
+               Wait 1
+               Incr Reerror
+             Loop Until Reerror > 14
+             Reerror = 0
+          End If
+          Cls
+      End If
+    Loop
     Do
 
         Select Case Count
@@ -1063,12 +1135,7 @@ Sub Set_id_modules
                  Call Order
                  Findorder = Readallinput
                  Call Order
-                 Findorder = Setidformodules
-                 Typ = Relaymodule
-                 Call Order
-                 Findorder = Setidformodules
-                 Typ = Pwmmodule
-                 Call Order
+
 
                  Lcdat 5 , 1 , Farsi( "Â„«Â‰ê ò—œ‰")
                  Lcdat 7 , 1 , Farsi( "Ê—ÊœÌ Ê Œ—ÊÃÌ")

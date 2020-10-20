@@ -118,16 +118,7 @@ Defvals:
         Dim Outid2(8) As Byte
         Dim Outid3(8) As Byte
 
-        For I = 1 To 8
-            Outid1(i) = Eoutid1(i)
-            Waitms 2
-            Outid2(i) = Eoutid2(i)
-            Waitms 2
-            Outid3(i) = Eoutid3(i)
-            Waitms 2
-            Light(i) = Elight(i)
-            Waitms 2
-        Next
+
         Dim Gotid As Boolean
         'Dim Idgot As Boolean
         Dim K As Byte
@@ -138,7 +129,7 @@ Defvals:
         Const Refreshall = 1
         Const Stopall = 2
 
-
+'(
         For I = 1 To 8
             Outid1(i) = Eoutid1(i)
             Waitms 2
@@ -150,18 +141,33 @@ Defvals:
             Waitms 2
         Next
 
+        For I = 1 To 8
+            Outid1(i) = Eoutid1(i)
+            Waitms 2
+            Outid2(i) = Eoutid2(i)
+            Waitms 2
+            Outid3(i) = Eoutid3(i)
+            Waitms 2
+            Light(i) = Elight(i)
+            Waitms 2
+        Next
+ ')
 Start Timer0
 
+Light(1) = Minlight
+Do
+       If Timer1 > Light(1) Then Set Out1 Else Reset Out1
+Loop
 
 Main:
      Do
-
+       '(
        If Alloff = 1 Then
           For I = 1 To 8
               Light(i) = Dark
           Next
        End If
-
+         ')
        If Timer1 > Light(1) Then Set Out1 Else Reset Out1
        If Timer1 > Light(2) Then Set Out2 Else Reset Out2
        If Timer1 > Light(3) Then Set Out3 Else Reset Out3
@@ -173,27 +179,16 @@ Main:
 
 
        If Key = 0 Then
-          Disable Int1
-          Test = 0
-          Do
-            Waitms 100
-            Incr Test
-            Set Buz
-            If Test > 30 Then
+          Waitms 50
+          If Key = 0 Then
+             Disable Int1
              For I = 1 To 8
-                 Toggle Buz
+                 Toggle Rxtx
                  Waitms 200
-             Next
-               Call Getid
-            End If
-          Loop Until Key = 1
-          If Test < 10 Then
-             For I = 1 To 4
-                 Toggle Buz
-                 Waitms 500
-             Next
+             Next I
+             Call Getid
+             Enable Int1
           End If
-          Enable Int1
        End If
 
 
@@ -217,7 +212,7 @@ Rx:
       Din(i) = Maxin
 
       If Inok = 1 Then
-        Toggle Rxtx
+
         Id = Din(4)
         Typ = Din(2)
         If Typ = Remote Or Typ = Keyin Or Typ = Relaymodule Then Call Checkanswer
@@ -245,13 +240,12 @@ Return
 
 Int1rutin:
           Stop Timer1
-          Disable Int1
-          Incr Test
-          Q = Test Mod 100
-          If Q = 0 Then
+          Incr Q
+          If Q = 100 Then
+             Q = 0
              Toggle Buz
-             'Adcin = Getadc(7)
           End If
+'(
           If Test = 65535 Then
 
              Toggle Rxtx
@@ -277,11 +271,18 @@ Int1rutin:
 
              Test = 0
           End If
-
+')
           Reset Out1
+          Reset Out2
+          Reset Out3
+          Reset Out4
+          Reset Out5
+          Reset Out6
+          Reset Out7
+          Reset Out8
+
           Timer1 = 0
           Start Timer1
-          Enable Int1
 Return
 
 
@@ -297,9 +298,9 @@ End Sub
 Sub Getid
     K = 0
     Reset En
-    Set Buz
+    Set Rxtx
     Wait 3
-    Reset Buz
+    Reset Rxtx
     Set Wantid
        Do
          If Cmd = 180 And Id > 0 And Id < 100 Then
@@ -343,9 +344,9 @@ Sub Getid
                                               Toggle Out8
                                  End Select
                                  Eoutid1(i) = Outid1(i)
-                                 Waitms 2
+                                 Waitms 4
                                  Eoutid2(i) = Outid2(i)
-                                 Waitms 2
+                                 Waitms 4
                                  Eoutid3(i) = Outid3(i)
                                  Waitms 250
 
@@ -364,7 +365,7 @@ Sub Getid
        Loop
 
        For I = 1 To 8
-          Toggle Buz
+          Toggle Rxtx
           Waitms 200
        Next
 
@@ -374,6 +375,7 @@ Sub Getid
 End Sub
 
 Sub Checkanswer
+    Toggle Rxtx
     Cmd = Din(3)
     Select Case Cmd
            Case 151
@@ -418,16 +420,12 @@ Sub Checkanswer
                         Waitms 2
                         Light(i) = Dark
                         Waitms 200
-                        Toggle Buz
+                        Toggle Rxtx
                         Outid1(i) = 0
                         Outid2(i) = 0
                         Outid3(i) = 0
                     Next
-                                 For I = 1 To 8
-                                     Toggle Rxtx
-                                     Waitms 200
 
-                                 Next
            Case 180
                     For I = 1 To 8
                         If Id = 0 Or Id > 100 Then Return
