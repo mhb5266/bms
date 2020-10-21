@@ -30,6 +30,11 @@ Touch2 Alias Pinb.0 : Config Portb.0 = Input
 Touch3 Alias Pinb.1 : Config Portb.1 = Input
 Touch4 Alias Pinb.2 : Config Portb.2 = Input
 
+Led1 Alias Portb.3 : Config Portb.3 = Output
+Led2 Alias Portb.4 : Config Portb.4 = Output
+Led3 Alias Portb.5 : Config Portb.5 = Output
+Led4 Alias Portd.4 : Config Portd.4 = Output
+
 Sensor Alias Pinc.4 : Config Portc.4 = Input
 
 Led Alias Portc.2 : Config Portc.2 = Output
@@ -166,24 +171,28 @@ Sub Refreshkey
             Waitms 25
             If Touch1 = 1 Then
                Touch = 1
+               Set Led1
             End If
          End If
          If Touch2 = 1 Then
             Waitms 25
             If Touch2 = 1 Then
                Touch = 2
+               Set Led2
             End If
          End If
          If Touch3 = 1 Then
             Waitms 25
             If Touch3 = 1 Then
                Touch = 3
+               Set Led3
             End If
          End If
          If Touch4 = 1 Then
             Waitms 25
             If Touch4 = 1 Then
                Touch = 4
+               Set Led4
             End If
          End If
 
@@ -272,7 +281,6 @@ Sub Keytouched:
                             If Tempen = 0 Then Set Sendok
                             Set Tempen
                             Tempon = 300
-
                          End If
              End Select
 
@@ -284,6 +292,11 @@ Sub Keytouched:
           Do
             Call Refreshkey
           Loop Until Touch = 0
+          Waitms 500
+          Reset Led1
+          Reset Led2
+          Reset Led3
+          Reset Led4
 End Sub
 
 Sub Tx

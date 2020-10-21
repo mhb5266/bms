@@ -980,11 +980,12 @@ Sub Setting_menu
          Call Readtouch
        Loop Until Touch = 0
       Next
-      Lcdat 4 , 48 , "****"       
+      Lcdat 4 , 48 , "****"
       If Pass(1) = 1 And Pass(2) = 4 And Pass(3) = 2 And Pass(4) = 3 Then
          Call Beep
          Waitms 50
          Call Beep
+         Reerror = 0
          Cls
          Exit Do
       Else
@@ -1888,8 +1889,9 @@ Sub Show
 
        If Tmpread = 1 Then
               Showtemp = _sec Mod 5
-              Line(0 , 15) -(128 , 15) , 255
+
               If Showtemp = 0 Then
+                 Line(0 , 15) -(128 , 15) , 255
                  Showtemp = _sec Mod 10
                  If Showtemp = 0 Then
                     'Lcdat 3 , 40 , Farsi( "œ„«Ì ÃòÊ“Ì ")

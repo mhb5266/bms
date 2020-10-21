@@ -1,6 +1,6 @@
-Report       : slave485
+Report       : test key in out
 Date         : 10-21-2020
-Time         : 12:39:04
+Time         : 14:09:29
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,12 +8,12 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 906 hex  -> Will fit into ROM
-ROMIMAGE     :  2310 dec
-FLASH USED   :  28  %
-BAUD         : 115200 Baud
-XTAL         : 11059200 Hz
-BAUD error   : 0.%
+ROMIMAGE     : F0 hex  -> Will fit into ROM
+ROMIMAGE     :  240 dec
+FLASH USED   :  2  %
+BAUD         : 9600 Baud
+XTAL         : 8000000 Hz
+BAUD error   : 0.16%
 
 Stack start  : 45F hex
 Stack size   : 28 hex
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  908  dec
+Space left   :  933  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -90,41 +90,7 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-MAXIN                            Byte              0060          96 
-TYP                              Byte              0061          97 
-CMD                              Byte              0062          98 
-ID                               Byte              0063          99 
-TOUCHID1                         EEPROM Byte       0000          0 
-TOUCHID2                         EEPROM Byte       0001          1 
-TOUCHID3                         EEPROM Byte       0002          2 
-ALLOFFON                         Bit [7]           0064          100 
-TEMPID                           Byte              0065          101 
-S1                               Bit [6]           0064          100 
-S2                               Bit [5]           0064          100 
-S3                               Bit [4]           0064          100 
-S4                               Bit [3]           0064          100 
-TEMPON                           Word              0066          102 
-TEMPEN                           Bit [2]           0064          100 
-EID                              EEPROM Byte       0003          3 
-DIRECT                           Byte              0068          104 
-ENDBIT                           Byte              0069          105 
-I                                Byte              006A          106 
-J                                Long              006B          107 
-A                                Byte              006F          111 
-REPLY                            Byte              0070          112 
-INOK                             Bit [1]           0064          100 
-TOUCH                            Byte              0071          113 
-SENDOK                           Bit [0]           0064          100 
-ISREQUEST                        Bit [7]           0072          114 
-TIMEOUT                          Bit [6]           0072          114 
-ENBUZ                            Bit [5]           0072          114 
-ENSENSOR                         Bit [4]           0072          114 
-ENKEY                            Bit [3]           0072          114 
-WANTID                           Bit [2]           0072          114 
-BACKTYP                          Byte              0073          115 
-BACKCMD                          Byte              0074          116 
-BACKID                           Byte              0075          117 
-DIN                              Byte(5)           0076          118 
+TIMEE                            Word              0060          96 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -472,7 +438,7 @@ _ERAMSIZE                        512
 _SIM                             0
 _HUGE                            0
 _BASE                            1
-_XTAL                            11059200
+_XTAL                            8000000
 _BUILD                           20781
 _COMPILER                        90
 _HWMUL                           1
@@ -493,13 +459,6 @@ _HWSTACK_LOW                     &H0437
 _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
-TOMASTER                         252
-TOOUTPUT                         232
-TOINPUT                          242
-ALLID                            99
-ALLTYP                           115
-NONID                            0
-MYTYP                            101
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -563,16 +522,4 @@ R31                              not used
 ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
-S1                               not used
-S2                               not used
-S3                               not used
-S4                               not used
-EID                              not used
-J                                not used
-A                                not used
-REPLY                            not used
-TIMEOUT                          not used
-BACKTYP                          not used
-BACKCMD                          not used
-BACKID                           not used
 
