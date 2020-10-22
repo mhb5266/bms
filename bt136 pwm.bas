@@ -1,4 +1,4 @@
-$regfile = "m8def.dat"
+$regfile = "m16def.dat"
 $crystal = 11059200
 $baud = 115200
 
@@ -151,7 +151,7 @@ Defvals:
             Light(i) = Elight(i)
             Waitms 2
         Next
- ')
+')
 Start Timer0
 
 Light(1) = Minlight
@@ -167,7 +167,7 @@ Main:
               Light(i) = Dark
           Next
        End If
-         ')
+')
        If Timer1 > Light(1) Then Set Out1 Else Reset Out1
        If Timer1 > Light(2) Then Set Out2 Else Reset Out2
        If Timer1 > Light(3) Then Set Out3 Else Reset Out3

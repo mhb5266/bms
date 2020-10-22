@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 10-21-2020
-Time         : 12:14:36
+Date         : 10-22-2020
+Time         : 14:50:06
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,9 +8,9 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : A582 hex  -> Will fit into ROM
-ROMIMAGE     :  42370 dec
-FLASH USED   :  32  %
+ROMIMAGE     : ADA8 hex  -> Will fit into ROM
+ROMIMAGE     :  44456 dec
+FLASH USED   :  33  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 64 hex
 S-Stackstart : 10C0 hex
 Framesize    : 64 hex
 Framestart   : FF8 hex
-Space left   :  3572  dec
+Space left   :  3571  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -134,57 +134,58 @@ BUFFER_DIGITAL                   Integer           0134          308
 TMPREAD                          Bit [7]           0136          310 
 TMP1                             Integer           0137          311 
 TMP2                             Integer           0139          313 
+ALARMTEMP                        Byte              013B          315 
 EDAY                             EEPROM Byte       0000          0 
-DAY                              Byte              0141          321 
-WEEKDAY                          Byte              0147          327 
-M_DAY                            Word              0148          328 
-SH_DAY                           Word              014A          330 
-M_YEAR                           Word              014C          332 
-SH_YEAR                          Word              014E          334 
-M_MONTH                          Word              0150          336 
-SH_MONTH                         Word              0152          338 
-KABISE                           Byte              0154          340 
-KOLE_ROZ_M                       Word              0155          341 
-KOLE_ROZ_SH                      Word              0157          343 
-CONTER1                          Word              0159          345 
-CONTER2                          Word              015B          347 
-CONTER3                          Word              015D          349 
-CONTER4                          Word              015F          351 
-DAY_OF_MONTH                     Byte(12)          0161          353 
-TEMP1                            Integer           016D          365 
-TEMP2                            Integer           016F          367 
-TEMP3                            Word              0171          369 
-TEMP4                            Word              0173          371 
-TEMP5                            Byte              0175          373 
-SHOWTEMP                         Byte              0176          374 
-MENU                             Byte              0177          375 
-TEST                             Byte              0178          376 
-TIMER_1                          Word              0179          377 
-S1                               String * 16       017B          379 
-S2                               String * 16       018C          396 
-S3                               String * 16       019D          413 
-S4                               String * 16       01AE          430 
-S                                String * 10       01BF          447 
+DAY                              Byte              0142          322 
+WEEKDAY                          Byte              0148          328 
+M_DAY                            Word              0149          329 
+SH_DAY                           Word              014B          331 
+M_YEAR                           Word              014D          333 
+SH_YEAR                          Word              014F          335 
+M_MONTH                          Word              0151          337 
+SH_MONTH                         Word              0153          339 
+KABISE                           Byte              0155          341 
+KOLE_ROZ_M                       Word              0156          342 
+KOLE_ROZ_SH                      Word              0158          344 
+CONTER1                          Word              015A          346 
+CONTER2                          Word              015C          348 
+CONTER3                          Word              015E          350 
+CONTER4                          Word              0160          352 
+DAY_OF_MONTH                     Byte(12)          0162          354 
+TEMP1                            Integer           016E          366 
+TEMP2                            Integer           0170          368 
+TEMP3                            Word              0172          370 
+TEMP4                            Word              0174          372 
+TEMP5                            Byte              0176          374 
+SHOWTEMP                         Byte              0177          375 
+MENU                             Byte              0178          376 
+TEST                             Byte              0179          377 
+TIMER_1                          Word              017A          378 
+S1                               String * 16       017C          380 
+S2                               String * 16       018D          397 
+S3                               String * 16       019E          414 
+S4                               String * 16       01AF          431 
+S                                String * 10       01C0          448 
 BLINK_                           Bit [6]           0136          310 
-SELECTION                        Byte              01CA          458 
-A                                Byte              01CB          459 
+SELECTION                        Byte              01CB          459 
+A                                Byte              01CC          460 
 BACKTIME                         Bit [5]           0136          310 
-MAXIN                            Byte              01CC          460 
-ID                               Byte              01CD          461 
-TYP                              Byte              01CE          462 
-CMD                              Byte              01CF          463 
-STARTBIT                         Byte              01D0          464 
-ENDBIT                           Byte              01D1          465 
-FINDORDER                        Byte              01D2          466 
-REMOTEID                         Byte              01D3          467 
-REMOTEKEYID                      Byte              01D4          468 
+MAXIN                            Byte              01CD          461 
+ID                               Byte              01CE          462 
+TYP                              Byte              01CF          463 
+CMD                              Byte              01D0          464 
+STARTBIT                         Byte              01D1          465 
+ENDBIT                           Byte              01D2          466 
+FINDORDER                        Byte              01D3          467 
+REMOTEID                         Byte              01D4          468 
+REMOTEKEYID                      Byte              01D5          469 
 LSTATUS                          EEPROM Byte       0001          1 
 PSTATUS                          EEPROM Byte       0002          2 
 WSTATUS                          EEPROM Byte       0003          3 
 LDAYS                            EEPROM Byte       0004          4 
 PDAYS                            EEPROM Byte       0005          5 
 WDAYS                            EEPROM Byte       0006          6 
-DAYS                             Byte              01D5          469 
+DAYS                             Byte              01D6          470 
 LONHOUR                          EEPROM Byte       0007          7 
 LONMIN                           EEPROM Byte       0008          8 
 LOFFHOUR                         EEPROM Byte       0009          9 
@@ -197,46 +198,47 @@ WONHOUR                          EEPROM Byte       000F          15
 WONMIN                           EEPROM Byte       0010          16 
 WOFFHOUR                         EEPROM Byte       0011          17 
 WOFFMIN                          EEPROM Byte       0012          18 
-ONHOUR                           Byte              01D6          470 
-ONMIN                            Byte              01D7          471 
-OFFHOUR                          Byte              01D8          472 
-OFFMIN                           Byte              01D9          473 
-STATUS                           Byte              01DA          474 
-SETLIGHT                         Byte              01DB          475 
-DIN                              Byte(5)           01DC          476 
+ONHOUR                           Byte              01D7          471 
+ONMIN                            Byte              01D8          472 
+OFFHOUR                          Byte              01D9          473 
+OFFMIN                           Byte              01DA          474 
+STATUS                           Byte              01DB          475 
+SETLIGHT                         Byte              01DC          476 
+DIN                              Byte(5)           01DD          477 
 INOK                             Bit [4]           0136          310 
 LEARNOK                          Bit [3]           0136          310 
 LEARNDONE                        Bit [2]           0136          310 
-CLEARDONE                        Byte              01E1          481 
+CLEARDONE                        Byte              01E2          482 
 SETREMOTEDONE                    Bit [1]           0136          310 
-DIRECT                           Byte              01E2          482 
-X                                Word              01E3          483 
-W                                Word              01E5          485 
-Z                                Word              01E7          487 
-PLANT_STATUS                     Byte              01E9          489 
-PLANT_START_HOUR                 Byte              01EA          490 
-PLANT_START_MIN                  Byte              01EB          491 
-PLANT_STOP_HOUR                  Byte              01EC          492 
-PLANT_STOP_MIN                   Byte              01ED          493 
-PLANT_DAYS                       Byte(7)           01EE          494 
-PASS                             Byte(4)           01F5          501 
-REERROR                          Byte              01F9          505 
-POOSH                            Word              01FA          506 
-TOUCH                            Byte              01FC          508 
-NEXTDAY                          Bit [0]           0136          310 
-COUNT                            Byte              01FD          509 
-INPUTCOUNTER                     Byte              01FE          510 
+DIRECT                           Byte              01E3          483 
+X                                Word              01E4          484 
+W                                Word              01E6          486 
+Z                                Word              01E8          488 
+PLANT_STATUS                     Byte              01EA          490 
+PLANT_START_HOUR                 Byte              01EB          491 
+PLANT_START_MIN                  Byte              01EC          492 
+PLANT_STOP_HOUR                  Byte              01ED          493 
+PLANT_STOP_MIN                   Byte              01EE          494 
+PLANT_DAYS                       Byte(7)           01EF          495 
+BACKMENU                         Bit [0]           0136          310 
+PASS                             Byte(4)           01F6          502 
+REERROR                          Byte              01FA          506 
+POOSH                            Word              01FB          507 
+TOUCH                            Byte              01FD          509 
+NEXTDAY                          Bit [7]           01FE          510 
+COUNT                            Byte              01FF          511 
+INPUTCOUNTER                     Byte              0200          512 
 RELAYMODULECOUNTER               EEPROM Byte       0013          19 
 PWMMODULECOUNTER                 EEPROM Byte       0014          20 
 EINPUTCOUNTER                    EEPROM Byte       0015          21 
 SYCNUM                           EEPROM Byte       0016          22 
-CONFIGMODE                       Byte              01FF          511 
-OK1                              Bit [7]           0200          512 
-OK2                              Bit [6]           0200          512 
-OK3                              Bit [5]           0200          512 
-OK4                              Bit [4]           0200          512 
-I                                Byte              0201          513 
-J                                Byte              0202          514 
+CONFIGMODE                       Byte              0201          513 
+OK1                              Bit [6]           01FE          510 
+OK2                              Bit [5]           01FE          510 
+OK3                              Bit [4]           01FE          510 
+OK4                              Bit [3]           01FE          510 
+I                                Byte              0202          514 
+J                                Byte              0203          515 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -1116,10 +1118,8 @@ PLANT_DAYS                       not used
 Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
-Source string could be too big to fit into target string [S1>___XL]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
-Source string could be too big to fit into target string [S1>___XL]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 
 Source string could be too big to fit into target string [S>___STRBUF]  in line  0 

@@ -1,10 +1,5 @@
 
-
-
 $regfile = "m128def.dat"
-
-
-
 $crystal = 11059200
 
 $hwstack = 64
@@ -32,6 +27,8 @@ Dim Buffer_digital As Integer
 Dim Tmpread As Boolean
 Dim Tmp1 As Integer
 Dim Tmp2 As Integer
+
+Dim Alarmtemp As Byte
 
 Lcdconfig:
 '-----------------------------------------------------
@@ -210,6 +207,8 @@ Plant_def:
 
 Defines:
 
+Dim Backmenu As Boolean
+
 Dim Pass(4) As Byte
 Dim Reerror As Byte
 
@@ -344,11 +343,10 @@ Main:
      Do
        Gosub Read_date_time
        Gosub M_to_sh
-       Showtemp = _sec Mod 15
-       If Showtemp = 0 Then
-          Set Tmpread
-          Call Temp
-       End If
+
+
+       Call Temp
+
        Call Show
        If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
           Waitms 50
@@ -811,14 +809,32 @@ Sub Main_menu
 
      Touch = 0
      Do
-     Loop Until Touch1 = 0
+        Call Readtouch
+     Loop Until Touch = 0
      Waitms 100
      Cls
      Count = 1
      Showpic 50 , 20 , Jaccuziicon
 
      Do
-            'Disable Urxc
+            If Backmenu = 1 Then
+               Reset Backmenu
+               If Count < 1 Or Count > 6 Then Count = 1
+                        Select Case Count
+                               Case 1
+                                    Showpic 50 , 20 , Jaccuziicon
+                               Case 2
+                                    Showpic 50 , 20 , Planticon
+                               Case 3
+                                    Showpic 50 , 20 , Watersystemicon
+                               Case 4
+                                    Showpic 50 , 20 , Lighticon
+                               Case 5
+                                    Showpic 50 , 20 , Setclockicon
+                               Case 6
+                                    Showpic 50 , 20 , Settingicon
+                        End Select
+            End If
             If Touch = 2 Then
                    Incr Count
                    If Count > Main_menu_counter Then Count = 1
@@ -854,7 +870,6 @@ Sub Main_menu
                                     Showpic 50 , 20 , Setclockicon
                                Case 6
                                     Showpic 50 , 20 , Settingicon
-                                    'Lcdat 1 , 1 , "Setting"
                         End Select
                         Touch = 0
             End If
@@ -930,6 +945,72 @@ Sub Ifcheck
        Incr Day
        Eday = Day
     End If
+
+
+    If Ponhour = _hour And Ponmin = _min Then
+       Days = Pdays
+       If Days.day = 1 Then
+          Cmd = 180
+          Id = Idplant
+          Typ = Relaymodule
+          Direct = Tooutput
+          Call Tx
+       End If
+    End If
+
+    If Lonhour = _hour And Lonmin = _min Then
+       Days = Ldays
+       If Days.day = 1 Then
+          Cmd = 180
+          Id = Idlight
+          Typ = Relaymodule
+          Direct = Tooutput
+          Call Tx
+       End If
+    End If
+
+    If Wonhour = _hour And Wonmin = _min Then
+       Days = Wdays
+       If Days.day = 1 Then
+          Cmd = 180
+          Id = Idwater
+          Typ = Relaymodule
+          Direct = Tooutput
+          Call Tx
+       End If
+    End If
+
+    If Poffhour = _hour And Poffmin = _min Then
+       Days = Pdays
+       If Days.day = 1 Then
+          Cmd = 181
+          Id = Idplant
+          Typ = Relaymodule
+          Direct = Tooutput
+          Call Tx
+       End If
+    End If
+    If Loffhour = _hour And Loffmin = _min Then
+       Days = Ldays
+       If Days.day = 1 Then
+          Cmd = 181
+          Id = Idlight
+          Typ = Relaymodule
+          Direct = Tooutput
+          Call Tx
+       End If
+    End If
+
+    If Woffhour = _hour And Woffmin = _min Then
+       Days = Wdays
+       If Days.day = 1 Then
+          Cmd = 181
+          Id = Idwater
+          Typ = Relaymodule
+          Direct = Tooutput
+          Call Tx
+       End If
+    End If
 End Sub
 
 
@@ -937,6 +1018,7 @@ Sub Setting_menu
     Touch = 0
     Count = 1
     Cls
+    Setfont Font8x8
     Do
       For I = 1 To 4
        Do
@@ -1005,6 +1087,8 @@ Sub Setting_menu
     Loop
     Do
 
+
+        If Count > 4 Or Count < 1 Then Count = 1
         Select Case Count
                Case 1
 
@@ -1027,6 +1111,7 @@ Sub Setting_menu
         Call Readtouch
         If Touch = 4 Then
            Cls
+           Set Backmenu
            Return
         End If
 
@@ -1168,6 +1253,7 @@ Do
         Call Readtouch
         If Touch = 4 Then
            Cls
+           Set Backmenu
            Return
         End If
 
@@ -1233,6 +1319,7 @@ Sub Remote_menu
         If Touch = 4 Then
            Findorder = Readremote
            Call Order
+           Set Backmenu
            Cls
            Return
         End If
@@ -1286,20 +1373,20 @@ Sub Remote_menu
 End Sub
 
 Sub Pwlsetting
-    Selection = 0
+    Selection = 1
     Cls
-
+    Status = 1
 
     Do
 
-    Select Case Id
-           Case Idlight
-                Lcdat 1 , 1 , Farsi( "         äæÑ äãÇ") , 1
-           Case Idplant
-                Lcdat 1 , 1 , Farsi( "       ÑÔÏ íÇå ") , 1
-           Case Idwater
-                Lcdat 1 , 1 , Farsi( "          ÂÈíÇÑí" ) , 1
-    End Select
+        Select Case Id
+               Case Idlight
+                    Lcdat 1 , 1 , Farsi( " ÑæÔäÇíí äãÇ    ") , 1
+               Case Idplant
+                    Lcdat 1 , 1 , Farsi( " ÑÔÏ íÇå       ") , 1
+               Case Idwater
+                    Lcdat 1 , 1 , Farsi( " ÂÈíÇÑí         " ) , 1
+        End Select
 
 
         Incr Timer_1
@@ -1318,23 +1405,22 @@ Sub Pwlsetting
         If Offhour > 59 Then Offhour = 0
         If Offmin > 59 Then Offmin = 0
 
-        S1 = ""
         '-----------------------------
         If Selection = 1 And Blink_ = 0 Then
-           S1 = S1 + "      "
+           S1 = "     "
         Else
-           If Status = 1 Then S1 = S1 + "  ÑæÔä  "
-           If Status = 2 Then S1 = S1 + " ÎÇãæÔ  "
-           If Status = 3 Then S1 = S1 + "ÇÊæãÇÊí˜"
+           If Status = 1 Then S1 = " ON  "
+           If Status = 2 Then S1 = " OFF "
+           If Status = 3 Then S1 = " AUTO"
         End If
 
-        Setfont Font8x8
+        Setfont Font16x16en
         Lcdat 3 , 1 , S1
         Setfont Font8x8
-
+        S1 = "     "
         If Status = 3 Then
 
-                  S1 = "ÑæÔä :"
+                  S1 = "ON :"
 
 
                  '-----------------------------
@@ -1361,9 +1447,9 @@ Sub Pwlsetting
 
                  End If
 
-                 Lcdat 6 , 1 , Farsi(s1)
+                 Lcdat 6 , 1 , S1
 
-                 S1 = "ÎÇãæÔ:"
+                 S1 = "OFF:"
                  '------------------------------
                  If Selection = 4 And Blink_ = 0 Then
 
@@ -1389,7 +1475,7 @@ Sub Pwlsetting
                  End If
 
 
-                 Lcdat 7 , 1 , Farsi(s1 )
+                 Lcdat 7 , 1 , S1
 
 
 
@@ -1505,6 +1591,8 @@ Sub Pwlsetting
 
         If Touch = 4 Then
            Cls
+           Setfont Font8x8
+           Set Backmenu
            Return
         End If
 
@@ -1551,6 +1639,7 @@ Sub Pwlsetting
 
         Waitms 50
 
+
         If Selection > 12 Then
            Cls
            Exit Do
@@ -1562,8 +1651,93 @@ Sub Jacuzi_menu
 
     Id = Idjacuzi
 
+    Selection = 1
+    Cls
+    Lcdat 1 , 1 , Farsi( " Ì˜æÒí          ") , 1
 
 
+    Do
+
+
+        Incr Timer_1
+        If Timer_1 > 5 Then
+         Timer_1 = 0
+         Toggle Blink_
+        End If
+
+
+
+
+        S1 = ""
+        '-----------------------------
+        If Selection = 1 And Blink_ = 0 Then
+           S1 = S1 + "      "
+        Else
+           If Status = 1 Then S1 = S1 + " ON  "
+           If Status = 2 Then S1 = S1 + " OFF "
+        End If
+        S2 = ""
+        If Selection = 2 And Blink_ = 0 Then
+           S2 = S2 + "   "
+        Else
+           S2 = " " + Str(alarmtemp) + "!"
+        End If
+        Setfont Font16x16en
+        Lcdat 3 , 1 , S1
+
+        Lcdat 5 , 1 , S2
+
+
+        Call Readtouch
+
+        If Touch = 1 Then
+           Incr Selection
+           If Selection > 2 Then Selection = 1
+           Touch = 0
+        End If
+
+        If Touch = 4 Then
+           Cls
+           Set Backmenu
+           Setfont Font8x8
+           Exit Do
+        End If
+
+        '-----------------------------------
+        If Touch = 2 Then
+
+              If Selection = 1 Then Incr Status
+              If Selection = 2 Then Incr Alarmtemp
+              Touch = 0
+        End If
+        '------------------------------------
+        If Touch = 3 Then
+           If Selection = 1 Then Decr Status
+           If Selection = 2 Then Decr Alarmtemp
+             Touch = 0
+        End If
+
+        '--------------------------------------
+
+        If Status > 2 Then Status = 1
+        If Status < 1 Then Status = 2
+
+        If Alarmtemp > 40 Then Alarmtemp = 25
+        If Alarmtemp < 25 Then Alarmtemp = 40
+
+
+        Waitms 50
+
+    Loop
+       Direct = Tooutput
+       Typ = Relaymodule
+    If Status = 1 Then
+       Cmd = 180
+    End If
+    If Status = 2 Then
+       Cmd = 181
+    End If
+       Call Tx
 End Sub
 
 Sub Plant_menu
@@ -1888,6 +2062,8 @@ Sub Show
        Setfont Font8x8
 
        If Tmpread = 1 Then
+              Reset Tmpread
+
               Showtemp = _sec Mod 5
 
               If Showtemp = 0 Then
@@ -2037,6 +2213,9 @@ Sub Temp
    Gosub Conversion
    Tmp2 = Buffer_digital
    Sens2 = Temperature
+
+   Set Tmpread
+
 End Sub
 
 
@@ -2131,7 +2310,7 @@ Sub Clock_menu
     End If
 
     If Selection = 7 And Blink_ = 0 Then
-       S2 = "   "
+       S2 = "    "
        Eday = Day
     Else
         Select Case Day
@@ -2171,6 +2350,7 @@ Sub Clock_menu
     If Touch = 4 Then
        Cls
        Touch = 0
+       Set Backmenu
        Return
     End If
     '-----------------------------------
@@ -2228,6 +2408,7 @@ Sub Clock_menu
 
  Cls
  Lcdat 1 , 1 , " SAVEING"
+ Set Backmenu
  Wait 1
  Cls
  Gosub Sh_to_m
@@ -2307,25 +2488,30 @@ Touch = 0
   'reset watchdog
     If Touch1 = 1 Then
        Do
-
+       Waitms 30
        Loop Until Touch1 = 0
        Touch = 1
     End If
 
     If Touch2 = 1 Then
+
        Do
+       Waitms 30
        Loop Until Touch2 = 0
        Touch = 2
     End If
 
     If Touch3 = 1 Then
+
        Do
+       Waitms 30
        Loop Until Touch3 = 0
        Touch = 3
     End If
 
     If Touch4 = 1 Then
        Do
+       Waitms 30
        Loop Until Touch4 = 0
        Touch = 4
     End If
