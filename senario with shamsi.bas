@@ -116,6 +116,14 @@ Dim Selection As Byte
 Dim A As Byte
 Dim Backtime As Boolean
 
+Dim Sunseth As Byte
+Dim Sunsetm As Byte
+
+Dim Sunriseh As Byte
+Dim Sunrisem As Byte
+Dim U As Byte
+Dim D As Byte
+
 
 Maxconfig:
 
@@ -950,7 +958,7 @@ Sub Ifcheck
     If Ponhour = _hour And Ponmin = _min Then
        Days = Pdays
        If Days.day = 1 Then
-          Cmd = 180
+          Cmd = 182
           Id = Idplant
           Typ = Relaymodule
           Direct = Tooutput
@@ -961,7 +969,7 @@ Sub Ifcheck
     If Lonhour = _hour And Lonmin = _min Then
        Days = Ldays
        If Days.day = 1 Then
-          Cmd = 180
+          Cmd = 182
           Id = Idlight
           Typ = Relaymodule
           Direct = Tooutput
@@ -972,7 +980,7 @@ Sub Ifcheck
     If Wonhour = _hour And Wonmin = _min Then
        Days = Wdays
        If Days.day = 1 Then
-          Cmd = 180
+          Cmd = 182
           Id = Idwater
           Typ = Relaymodule
           Direct = Tooutput
@@ -1011,7 +1019,101 @@ Sub Ifcheck
           Call Tx
        End If
     End If
+
+    If _hour = 1 And _min = 1 Then
+
+       Select Case Sh_day
+              Case 1 To 10
+                   U = 0
+              Case 11 To 20
+                   U = 1
+              Case Is > 20
+                   U = 2
+       End Select
+       D = U + 3
+
+       Select Case Sh_month
+              Case 1
+                   Sunriseh = Lookup(u , 1h)
+                   Sunrisem = Lookup(d , 1m)
+                   Sunseth = Lookup(u , 1h)
+                   Sunsetm = Lookup(d , 1m)
+              Case 2
+                   Sunriseh = Lookup(u , 2h)
+                   Sunrisem = Lookup(d , 2m)
+                   Sunseth = Lookup(u , 2h)
+                   Sunsetm = Lookup(d , 2m)
+              Case 3
+                   Sunriseh = Lookup(u , 3h)
+                   Sunrisem = Lookup(d , 3m)
+                   Sunseth = Lookup(u , 3h)
+                   Sunsetm = Lookup(d , 3m)
+              Case 4
+                   Sunriseh = Lookup(u , 4h)
+                   Sunrisem = Lookup(d , 4m)
+                   Sunseth = Lookup(u , 4h)
+                   Sunsetm = Lookup(d , 4m)
+              Case 5
+                   Sunriseh = Lookup(u , 5h)
+                   Sunrisem = Lookup(d , 5m)
+                   Sunseth = Lookup(u , 5h)
+                   Sunsetm = Lookup(d , 5m)
+              Case 6
+                   Sunriseh = Lookup(u , 6h)
+                   Sunrisem = Lookup(d , 6m)
+                   Sunseth = Lookup(u , 6h)
+                   Sunsetm = Lookup(d , 6m)
+              Case 7
+                   Sunriseh = Lookup(u , 7h)
+                   Sunrisem = Lookup(d , 7m)
+                   Sunseth = Lookup(u , 7h)
+                   Sunsetm = Lookup(d , 7m)
+              Case 8
+                   Sunriseh = Lookup(u , 8h)
+                   Sunrisem = Lookup(d , 8m)
+                   Sunseth = Lookup(u , 8h)
+                   Sunsetm = Lookup(d , 8m)
+              Case 9
+                   Sunriseh = Lookup(u , 9h)
+                   Sunrisem = Lookup(d , 9m)
+                   Sunseth = Lookup(u , 9h)
+                   Sunsetm = Lookup(d , 9m)
+              Case 10
+                   Sunriseh = Lookup(u , 10h)
+                   Sunrisem = Lookup(d , 10m)
+                   Sunseth = Lookup(u , 10h)
+                   Sunsetm = Lookup(d , 10m)
+              Case 11
+                   Sunriseh = Lookup(u , 11h)
+                   Sunrisem = Lookup(d , 11m)
+                   Sunseth = Lookup(u , 11h)
+                   Sunsetm = Lookup(d , 11m)
+              Case 12
+                   Sunriseh = Lookup(u , 12h)
+                   Sunrisem = Lookup(d , 12m)
+                   Sunseth = Lookup(u , 12h)
+                   Sunsetm = Lookup(d , 12m)
+       End Select
+    End If
+
+
+    If Sunriseh = _hour And Sunrisem = _min And _sec = 0 Then
+       Id = Idlight
+       Cmd = 181
+       Typ = Relaymodule
+       Call Tx
+
+    End If
+
+    If Sunseth = _hour And Sunsetm = _min And _sec = 0 Then
+       Id = Idlight
+       Cmd = 182
+       Typ = Relaymodule
+       Call Tx
+    End If
+
 End Sub
+
 
 
 Sub Setting_menu
@@ -2519,3 +2621,63 @@ Touch = 0
  If Touch > 0 Then Call Beep
 'loop until touch > 0
 End Sub
+
+1h:
+Data 6 , 6 , 6 , 18 , 18 , 19
+1m:
+Data 29 , 14 , 0 , 46 , 55 , 3
+
+2h:
+Data 5 , 5 , 5 , 19 , 19 , 19
+2m:
+Data 29 , 14 , 0 , 46 , 55 , 3
+
+3h:
+Data 5 , 5 , 5 , 19 , 19 , 19
+3m:
+Data 18 , 14 , 13 , 38 , 45 , 49
+
+4h:
+Data 5 , 5 , 5 , 19 , 19 , 19
+4m:
+Data 16 , 20 , 26 , 52 , 51 , 48
+
+5h:
+Data 5 , 5 , 5 , 19 , 19 , 19
+5m:
+Data 34 , 42 , 50 , 41 , 31 , 20
+
+6h:
+Data 5 , 6 , 6 , 19 , 18 , 18
+6m:
+Data 59 , 7 , 14 , 6 , 52 , 37
+
+7h:
+Data 5 , 5 , 5 , 17 , 17 , 16
+7m:
+Data 23 , 31 , 40 , 20 , 6 , 52
+
+8h:
+Data 5 , 5 , 6 , 16 , 16 , 16
+8m:
+Data 49 , 59 , 9 , 40 , 30 , 22
+
+9h:
+Data 6 , 6 , 6 , 16 , 16 , 16
+9m:
+Data 19 , 29 , 36 , 17 , 15 , 17
+
+10h:
+Data 6 , 6 , 6 , 16 , 16 , 16
+10m:
+Data 41 , 44 , 43 , 22 , 29 , 38
+
+11h:
+Data 6 , 6 , 6 , 16 , 16 , 17
+11m:
+Data 38 , 31 , 21 , 49 , 59 , 10
+
+12h:
+Data 6 , 5 , 5 , 17 , 17 , 17
+12m:
+Data 9 , 56 , 42 , 20 , 29 , 38
