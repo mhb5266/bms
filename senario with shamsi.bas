@@ -23,12 +23,19 @@ Dim Temperature As String * 6
 Dim Sens1 As String * 6
 Dim Sens2 As String * 6
 
-Dim Buffer_digital As Integer
+
+Dim readsens As Integer
 Dim Tmpread As Boolean
 Dim Tmp1 As Integer
 Dim Tmp2 As Integer
 
 Dim Alarmtemp As Byte
+
+Dim Sahih1 As Byte
+Dim Sahih2 As Byte
+
+Dim Ashar1 As Byte
+Dim Ashar2 As Byte
 
 Lcdconfig:
 '-----------------------------------------------------
@@ -214,6 +221,11 @@ Plant_def:
           Dim Plant_days(7) As Byte
 
 Defines:
+
+Dim Jstatus As Boolean
+
+
+
 
 Dim Backmenu As Boolean
 
@@ -534,10 +546,8 @@ Return
 
 
 Conversion:
-   Buffer_digital = Buffer_digital * 10 : Buffer_digital = Buffer_digital \ 16
-
-   Temperature = Str(buffer_digital)
-   Temperature = Format(temperature , "0.0")
+   readsens = readsens * 10 : readsens = readsens \ 16
+   Temperature = Str(readsens) : Temperature = Format(temperature , "0.0")
 Return
 
 
@@ -605,6 +615,7 @@ Return
 
 
 Settime:
+  _sec = 0
   _sec = Makebcd(_sec) : _min = Makebcd(_min) : _hour = Makebcd(_hour)
   I2cstart                                                  ' Generate start code
   I2cwbyte Ds1307w                                          ' send address
@@ -1835,9 +1846,11 @@ Sub Jacuzi_menu
        Typ = Relaymodule
     If Status = 1 Then
        Cmd = 180
+       Jstatus = 1
     End If
     If Status = 2 Then
        Cmd = 181
+       Jstatus = 0
     End If
        Call Tx
 End Sub
@@ -2161,40 +2174,40 @@ End Sub
 Sub Show
 
        Call Ifcheck
+       Setfont Font32x32
+       If Tmp1 < 0 Then
+          Lcdat 3 , 0 , "!"
+          If Tmp1 > -100 And Tmp1 < 0 Then
+              Lcdat 3 , 9 , Str(sahih1)
+              Setfont Font16x16en
+              Lcdat 5 , 41 , Str(ashar1) ; "  "
+              Lcdat 3 , 41 , "!  "
+          Else
+              Setfont Font32x32
+              Lcdat 3 , 9 , Str(sahih1)
+              Setfont Font16x16en
+              Lcdat 5 , 73 , Str(ashar1) ; "  "
+              Lcdat 3 , 73 , "!  "
+          End If
+       Else
+          If Tmp1 < 100 Then
+              Setfont Font32x32
+              Lcdat 3 , 1 , Str(sahih1)
+              Setfont Font16x16en
+              Lcdat 5 , 33 , Str(ashar1) ; "  "
+              Lcdat 3 , 33 , "!  "
+          Else
+              Setfont Font32x32
+              Lcdat 3 , 1 , Str(sahih1)
+              Setfont Font16x16en
+              Lcdat 5 , 64 , Str(ashar1) ; "  "
+              Lcdat 3 , 64 , "!  "
+          End If
+       End If
+
+
        Setfont Font8x8
 
-       If Tmpread = 1 Then
-              Reset Tmpread
-
-              Showtemp = _sec Mod 5
-
-              If Showtemp = 0 Then
-                 Line(0 , 15) -(128 , 15) , 255
-                 Showtemp = _sec Mod 10
-                 If Showtemp = 0 Then
-                    'Lcdat 3 , 40 , Farsi( "œ„«Ì ÃòÊ“Ì ")
-                    'Setfont Fontdig12x16_f
-                    Showpic 96 , 16 , Jaccuziicon , 1
-                    Setfont Font16x16en
-                    If Tmp1 < -10 Then Lcdat 3 , 1 , Sens1 ; "!" , 1
-                    If Tmp1 < 0 And Tmp1 > -10 Then Lcdat 3 , 1 , Sens1 ; "! " , 1
-                    If Tmp1 < 10 And Tmp1 > 0 Then Lcdat 3 , 1 , Sens1 ; "!  " , 1
-                    If Tmp1 > 9 Then Lcdat 3 , 1 , Sens1 ; "! " , 1
-                 Else
-                     'Lcdat 3 , 40 , Farsi( "œ„«Ì „ÕÌÿ ")
-                     'Setfont Fontdig12x16_f
-                     Showpic 96 , 16 , Tempicon , 1
-                     Setfont Font16x16en
-                    If Tmp2 < -10 Then Lcdat 3 , 1 , Sens2 ; "!" , 1
-                    If Tmp2 < 0 And Tmp2 > -10 Then Lcdat 3 , 1 , Sens2 ; "! " , 1
-                    If Tmp2 < 10 And Tmp2 > 0 Then Lcdat 3 , 1 , Sens2 ; "!  " , 1
-                    If Tmp2 > 9 Then Lcdat 3 , 1 , Sens2 ; "! " , 1
-                 End If
-              End If
-        End If
-
-
-       Setfont Font8x8
 
 
 
@@ -2283,11 +2296,6 @@ Sub Show
 
         End Select
 
-        'Lcdat 8 , 10 , X
-
-
-
-       'Call Ifcheck
 End Sub
 
 
@@ -2302,18 +2310,26 @@ Sub Temp
    1wwrite &H55
    1wverify Ds18b20_id_1(1)
    1wwrite &HBE
-   Buffer_digital = 1wread(2)
-   Gosub Conversion
-   Tmp1 = Buffer_digital
+   Readsens = 1wread(2)
+   Readsens = Readsens * 10 : Readsens = Readsens \ 16
+   Tmp1 = Readsens
+   Readsens = Abs(readsens)
+   Sahih1 = 0
+   If Readsens > 9 Then
+      Sahih1 = Readsens / 10
+      Ashar1 = Readsens Mod 10
+   End If
+
+
+   'Gosub Conversion
    Sens1 = Temperature
 
    1wreset
    1wwrite &H55
    1wverify Ds18b20_id_2(1)
    1wwrite &HBE
-   Buffer_digital = 1wread(2)
+   Readsens = 1wread(2)
    Gosub Conversion
-   Tmp2 = Buffer_digital
    Sens2 = Temperature
 
    Set Tmpread
@@ -2630,7 +2646,7 @@ Data 29 , 14 , 0 , 46 , 55 , 3
 2h:
 Data 5 , 5 , 5 , 19 , 19 , 19
 2m:
-Data 29 , 14 , 0 , 46 , 55 , 3
+Data 46 , 35 , 26 , 13 , 21 , 30
 
 3h:
 Data 5 , 5 , 5 , 19 , 19 , 19
