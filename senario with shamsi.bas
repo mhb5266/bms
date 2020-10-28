@@ -13,7 +13,9 @@ $lib "glcdKS108.lib"
 
 Tempconfig:
 
- Config 1wire = Portc.1
+Config 1wire = Portc.1
+
+
 Dim Ds18b20_id_1(9) As Byte
 Dim Ds18b20_id_2(8) As Byte
 Dim Action As Byte
@@ -24,7 +26,13 @@ Dim Sens1 As String * 6
 Dim Sens2 As String * 6
 
 
-Dim readsens As Integer
+Dim Readsens As Integer
+
+Dim Diftemp1(3) As Integer
+Dim Diftemp2(3) As Integer
+Dim P As Byte
+Dim Tempok As Bit
+
 Dim Tmpread As Boolean
 Dim Tmp1 As Integer
 Dim Tmp2 As Integer
@@ -355,11 +363,6 @@ Call Order
 
 Main:
 
-       'Showpic 8 , 48 , Cancelicon
-       'Showpic 40 , 48 , Perviousicon
-       'Showpic 72 , 48 , Nexticon
-       'Showpic 104 , 48 , Menuicon
-
      Do
        Gosub Read_date_time
        Gosub M_to_sh
@@ -546,7 +549,7 @@ Return
 
 
 Conversion:
-   readsens = readsens * 10 : readsens = readsens \ 16
+   Readsens = Readsens * 10 : Readsens = Readsens \ 16
    Temperature = Str(readsens) : Temperature = Format(temperature , "0.0")
 Return
 
@@ -2174,6 +2177,8 @@ End Sub
 Sub Show
 
        Call Ifcheck
+
+       '(
        Setfont Font32x32
        If Tmp1 < 0 Then
           Lcdat 3 , 0 , "!"
@@ -2205,7 +2210,10 @@ Sub Show
           End If
        End If
 
-
+')
+       Setfont Font16x16en
+       Lcdat 3 , 1 , Sens1 ; "!   "
+       Lcdat 5 , 1 , Sens2 ; "!   "
        Setfont Font8x8
 
 
@@ -2313,12 +2321,23 @@ Sub Temp
    Readsens = 1wread(2)
    Readsens = Readsens * 10 : Readsens = Readsens \ 16
    Tmp1 = Readsens
-   Readsens = Abs(readsens)
-   Sahih1 = 0
-   If Readsens > 9 Then
-      Sahih1 = Readsens / 10
-      Ashar1 = Readsens Mod 10
-   End If
+   Gosub Conversion
+   Sens1 = Temperature
+
+'(
+         Readsens = Abs(readsens)
+         Sahih1 = 0
+         If Readsens > 9 Then
+            Sahih1 = Readsens / 10
+            Ashar1 = Readsens Mod 10
+         End If
+
+')
+
+
+
+
+
 
 
    'Gosub Conversion

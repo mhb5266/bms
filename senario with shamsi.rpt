@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 10-27-2020
-Time         : 17:05:19
+Date         : 10-28-2020
+Time         : 13:50:07
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,9 +8,9 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : B43C hex  -> Will fit into ROM
-ROMIMAGE     :  46140 dec
-FLASH USED   :  35  %
+ROMIMAGE     : B168 hex  -> Will fit into ROM
+ROMIMAGE     :  45416 dec
+FLASH USED   :  34  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 64 hex
 S-Stackstart : 10C0 hex
 Framesize    : 64 hex
 Framestart   : FF8 hex
-Space left   :  3561  dec
+Space left   :  3548  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -131,71 +131,75 @@ TEMPERATURE                      String * 6        011F          287
 SENS1                            String * 6        0126          294 
 SENS2                            String * 6        012D          301 
 READSENS                         Integer           0134          308 
-TMPREAD                          Bit [7]           0136          310 
-TMP1                             Integer           0137          311 
-TMP2                             Integer           0139          313 
-ALARMTEMP                        Byte              013B          315 
-SAHIH1                           Byte              013C          316 
-SAHIH2                           Byte              013D          317 
-ASHAR1                           Byte              013E          318 
-ASHAR2                           Byte              013F          319 
+DIFTEMP1                         Integer(3)        0136          310 
+DIFTEMP2                         Integer(3)        013C          316 
+P                                Byte              0142          322 
+TEMPOK                           Bit [7]           0143          323 
+TMPREAD                          Bit [6]           0143          323 
+TMP1                             Integer           0144          324 
+TMP2                             Integer           0146          326 
+ALARMTEMP                        Byte              0148          328 
+SAHIH1                           Byte              0149          329 
+SAHIH2                           Byte              014A          330 
+ASHAR1                           Byte              014B          331 
+ASHAR2                           Byte              014C          332 
 EDAY                             EEPROM Byte       0000          0 
-DAY                              Byte              0146          326 
-WEEKDAY                          Byte              014C          332 
-M_DAY                            Word              014D          333 
-SH_DAY                           Word              014F          335 
-M_YEAR                           Word              0151          337 
-SH_YEAR                          Word              0153          339 
-M_MONTH                          Word              0155          341 
-SH_MONTH                         Word              0157          343 
-KABISE                           Byte              0159          345 
-KOLE_ROZ_M                       Word              015A          346 
-KOLE_ROZ_SH                      Word              015C          348 
-CONTER1                          Word              015E          350 
-CONTER2                          Word              0160          352 
-CONTER3                          Word              0162          354 
-CONTER4                          Word              0164          356 
-DAY_OF_MONTH                     Byte(12)          0166          358 
-TEMP1                            Integer           0172          370 
-TEMP2                            Integer           0174          372 
-TEMP3                            Word              0176          374 
-TEMP4                            Word              0178          376 
-TEMP5                            Byte              017A          378 
-SHOWTEMP                         Byte              017B          379 
-MENU                             Byte              017C          380 
-TEST                             Byte              017D          381 
-TIMER_1                          Word              017E          382 
-S1                               String * 16       0180          384 
-S2                               String * 16       0191          401 
-S3                               String * 16       01A2          418 
-S4                               String * 16       01B3          435 
-S                                String * 10       01C4          452 
-BLINK_                           Bit [6]           0136          310 
-SELECTION                        Byte              01CF          463 
-A                                Byte              01D0          464 
-BACKTIME                         Bit [5]           0136          310 
-SUNSETH                          Byte              01D1          465 
-SUNSETM                          Byte              01D2          466 
-SUNRISEH                         Byte              01D3          467 
-SUNRISEM                         Byte              01D4          468 
-U                                Byte              01D5          469 
-D                                Byte              01D6          470 
-MAXIN                            Byte              01D7          471 
-ID                               Byte              01D8          472 
-TYP                              Byte              01D9          473 
-CMD                              Byte              01DA          474 
-STARTBIT                         Byte              01DB          475 
-ENDBIT                           Byte              01DC          476 
-FINDORDER                        Byte              01DD          477 
-REMOTEID                         Byte              01DE          478 
-REMOTEKEYID                      Byte              01DF          479 
+DAY                              Byte              0153          339 
+WEEKDAY                          Byte              0159          345 
+M_DAY                            Word              015A          346 
+SH_DAY                           Word              015C          348 
+M_YEAR                           Word              015E          350 
+SH_YEAR                          Word              0160          352 
+M_MONTH                          Word              0162          354 
+SH_MONTH                         Word              0164          356 
+KABISE                           Byte              0166          358 
+KOLE_ROZ_M                       Word              0167          359 
+KOLE_ROZ_SH                      Word              0169          361 
+CONTER1                          Word              016B          363 
+CONTER2                          Word              016D          365 
+CONTER3                          Word              016F          367 
+CONTER4                          Word              0171          369 
+DAY_OF_MONTH                     Byte(12)          0173          371 
+TEMP1                            Integer           017F          383 
+TEMP2                            Integer           0181          385 
+TEMP3                            Word              0183          387 
+TEMP4                            Word              0185          389 
+TEMP5                            Byte              0187          391 
+SHOWTEMP                         Byte              0188          392 
+MENU                             Byte              0189          393 
+TEST                             Byte              018A          394 
+TIMER_1                          Word              018B          395 
+S1                               String * 16       018D          397 
+S2                               String * 16       019E          414 
+S3                               String * 16       01AF          431 
+S4                               String * 16       01C0          448 
+S                                String * 10       01D1          465 
+BLINK_                           Bit [5]           0143          323 
+SELECTION                        Byte              01DC          476 
+A                                Byte              01DD          477 
+BACKTIME                         Bit [4]           0143          323 
+SUNSETH                          Byte              01DE          478 
+SUNSETM                          Byte              01DF          479 
+SUNRISEH                         Byte              01E0          480 
+SUNRISEM                         Byte              01E1          481 
+U                                Byte              01E2          482 
+D                                Byte              01E3          483 
+MAXIN                            Byte              01E4          484 
+ID                               Byte              01E5          485 
+TYP                              Byte              01E6          486 
+CMD                              Byte              01E7          487 
+STARTBIT                         Byte              01E8          488 
+ENDBIT                           Byte              01E9          489 
+FINDORDER                        Byte              01EA          490 
+REMOTEID                         Byte              01EB          491 
+REMOTEKEYID                      Byte              01EC          492 
 LSTATUS                          EEPROM Byte       0001          1 
 PSTATUS                          EEPROM Byte       0002          2 
 WSTATUS                          EEPROM Byte       0003          3 
 LDAYS                            EEPROM Byte       0004          4 
 PDAYS                            EEPROM Byte       0005          5 
 WDAYS                            EEPROM Byte       0006          6 
-DAYS                             Byte              01E0          480 
+DAYS                             Byte              01ED          493 
 LONHOUR                          EEPROM Byte       0007          7 
 LONMIN                           EEPROM Byte       0008          8 
 LOFFHOUR                         EEPROM Byte       0009          9 
@@ -208,48 +212,48 @@ WONHOUR                          EEPROM Byte       000F          15
 WONMIN                           EEPROM Byte       0010          16 
 WOFFHOUR                         EEPROM Byte       0011          17 
 WOFFMIN                          EEPROM Byte       0012          18 
-ONHOUR                           Byte              01E1          481 
-ONMIN                            Byte              01E2          482 
-OFFHOUR                          Byte              01E3          483 
-OFFMIN                           Byte              01E4          484 
-STATUS                           Byte              01E5          485 
-SETLIGHT                         Byte              01E6          486 
-DIN                              Byte(5)           01E7          487 
-INOK                             Bit [4]           0136          310 
-LEARNOK                          Bit [3]           0136          310 
-LEARNDONE                        Bit [2]           0136          310 
-CLEARDONE                        Byte              01EC          492 
-SETREMOTEDONE                    Bit [1]           0136          310 
-DIRECT                           Byte              01ED          493 
-X                                Word              01EE          494 
-W                                Word              01F0          496 
-Z                                Word              01F2          498 
-PLANT_STATUS                     Byte              01F4          500 
-PLANT_START_HOUR                 Byte              01F5          501 
-PLANT_START_MIN                  Byte              01F6          502 
-PLANT_STOP_HOUR                  Byte              01F7          503 
-PLANT_STOP_MIN                   Byte              01F8          504 
-PLANT_DAYS                       Byte(7)           01F9          505 
-JSTATUS                          Bit [0]           0136          310 
-BACKMENU                         Bit [7]           0200          512 
-PASS                             Byte(4)           0201          513 
-REERROR                          Byte              0205          517 
-POOSH                            Word              0206          518 
-TOUCH                            Byte              0208          520 
-NEXTDAY                          Bit [6]           0200          512 
-COUNT                            Byte              0209          521 
-INPUTCOUNTER                     Byte              020A          522 
+ONHOUR                           Byte              01EE          494 
+ONMIN                            Byte              01EF          495 
+OFFHOUR                          Byte              01F0          496 
+OFFMIN                           Byte              01F1          497 
+STATUS                           Byte              01F2          498 
+SETLIGHT                         Byte              01F3          499 
+DIN                              Byte(5)           01F4          500 
+INOK                             Bit [3]           0143          323 
+LEARNOK                          Bit [2]           0143          323 
+LEARNDONE                        Bit [1]           0143          323 
+CLEARDONE                        Byte              01F9          505 
+SETREMOTEDONE                    Bit [0]           0143          323 
+DIRECT                           Byte              01FA          506 
+X                                Word              01FB          507 
+W                                Word              01FD          509 
+Z                                Word              01FF          511 
+PLANT_STATUS                     Byte              0201          513 
+PLANT_START_HOUR                 Byte              0202          514 
+PLANT_START_MIN                  Byte              0203          515 
+PLANT_STOP_HOUR                  Byte              0204          516 
+PLANT_STOP_MIN                   Byte              0205          517 
+PLANT_DAYS                       Byte(7)           0206          518 
+JSTATUS                          Bit [7]           020D          525 
+BACKMENU                         Bit [6]           020D          525 
+PASS                             Byte(4)           020E          526 
+REERROR                          Byte              0212          530 
+POOSH                            Word              0213          531 
+TOUCH                            Byte              0215          533 
+NEXTDAY                          Bit [5]           020D          525 
+COUNT                            Byte              0216          534 
+INPUTCOUNTER                     Byte              0217          535 
 RELAYMODULECOUNTER               EEPROM Byte       0013          19 
 PWMMODULECOUNTER                 EEPROM Byte       0014          20 
 EINPUTCOUNTER                    EEPROM Byte       0015          21 
 SYCNUM                           EEPROM Byte       0016          22 
-CONFIGMODE                       Byte              020B          523 
-OK1                              Bit [5]           0200          512 
-OK2                              Bit [4]           0200          512 
-OK3                              Bit [3]           0200          512 
-OK4                              Bit [2]           0200          512 
-I                                Byte              020C          524 
-J                                Byte              020D          525 
+CONFIGMODE                       Byte              0218          536 
+OK1                              Bit [4]           020D          525 
+OK2                              Bit [3]           020D          525 
+OK3                              Bit [2]           020D          525 
+OK4                              Bit [1]           020D          525 
+I                                Byte              0219          537 
+J                                Byte              021A          538 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -1104,8 +1108,14 @@ PWM3C                            not used
 COMPARE3C                        not used
 PWM0                             not used
 ACTION                           not used
+DIFTEMP1                         not used
+DIFTEMP2                         not used
+P                                not used
+TEMPOK                           not used
 TMP2                             not used
+SAHIH1                           not used
 SAHIH2                           not used
+ASHAR1                           not used
 ASHAR2                           not used
 KABISE                           not used
 CONTER3                          not used
