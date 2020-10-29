@@ -324,7 +324,8 @@ Declare Sub Module_config
 Declare Sub Sync_io
 
 Declare Function M_kabise(byref Sal As Word)as Byte
-Declare Function Sh_kabise(byref Sal As Word)as Byte
+
+declare function sh_kabise(byref sal as word) as byte
 
 Declare Sub Beep
 Declare Sub Errorbeep
@@ -332,7 +333,7 @@ Declare Sub Temp
 Declare Sub Readtouch
 Declare Sub Show
 Declare Sub Main_menu
-Declare Sub Input_menu
+declare Sub Input_menu
 Declare Sub Tx
 Declare Sub Order
 Declare Sub Checkanswer
