@@ -26,10 +26,11 @@ Dim Sens1 As String * 6
 Dim Sens2 As String * 6
 
 
-Dim Readsens As Integer
+Dim Refreshtemp As Byte
 
-Dim Diftemp1(3) As Integer
-Dim Diftemp2(3) As Integer
+Dim Readsens As Integer
+Dim Dift As Integer
+
 Dim P As Byte
 Dim Tempok As Bit
 
@@ -37,13 +38,16 @@ Dim Tmpread As Boolean
 Dim Tmp1 As Integer
 Dim Tmp2 As Integer
 
+Dim St1(2) As Integer
+Dim St2(2) As Integer
+
 Dim Alarmtemp As Byte
 
-Dim Sahih1 As Byte
-Dim Sahih2 As Byte
+Dim Sahih1 As Integer
+Dim Sahih2 As Integer
 
-Dim Ashar1 As Byte
-Dim Ashar2 As Byte
+Dim Ashar1 As Integer
+Dim Ashar2 As Integer
 
 Lcdconfig:
 '-----------------------------------------------------
@@ -368,8 +372,11 @@ Main:
        Gosub M_to_sh
 
 
-       Call Temp
+       If Refreshtemp <> _sec Then
+          Call Temp
 
+          Refreshtemp = _sec
+       End If
        Call Show
        If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
           Waitms 50
@@ -2178,42 +2185,49 @@ Sub Show
 
        Call Ifcheck
 
-       '(
-       Setfont Font32x32
-       If Tmp1 < 0 Then
-          Lcdat 3 , 0 , "!"
-          If Tmp1 > -100 And Tmp1 < 0 Then
-              Lcdat 3 , 9 , Str(sahih1)
-              Setfont Font16x16en
-              Lcdat 5 , 41 , Str(ashar1) ; "  "
-              Lcdat 3 , 41 , "!  "
-          Else
-              Setfont Font32x32
-              Lcdat 3 , 9 , Str(sahih1)
-              Setfont Font16x16en
-              Lcdat 5 , 73 , Str(ashar1) ; "  "
-              Lcdat 3 , 73 , "!  "
-          End If
-       Else
-          If Tmp1 < 100 Then
-              Setfont Font32x32
-              Lcdat 3 , 1 , Str(sahih1)
-              Setfont Font16x16en
-              Lcdat 5 , 33 , Str(ashar1) ; "  "
-              Lcdat 3 , 33 , "!  "
-          Else
-              Setfont Font32x32
-              Lcdat 3 , 1 , Str(sahih1)
-              Setfont Font16x16en
-              Lcdat 5 , 64 , Str(ashar1) ; "  "
-              Lcdat 3 , 64 , "!  "
-          End If
+ '
+       Setfont Font16x16en
+
+       Dift = St1(2) - St1(1)
+
+       If Dift < 30 And Dift > -30 Then
+
+            If Tmp1 < 0 Then
+                 Lcdat 3 , 0 , "!"
+                 If Tmp1 > -100 And Tmp1 < 0 Then
+                     Lcdat 3 , 9 , Sahih1
+                     Setfont Font16x16en
+                     Lcdat 5 , 41 , Ashar1 ; "  "
+                     Lcdat 3 , 41 , " ! "
+                 Else
+                     Setfont Font32x32
+                     Lcdat 3 , 9 , Sahih1
+                     Setfont Font16x16en
+                     Lcdat 5 , 73 , Ashar1 ; "  "
+                     Lcdat 3 , 73 , " ! "
+                 End If
+              Else
+                 If Tmp1 < 100 Then
+                     Setfont Font32x32
+                     Lcdat 3 , 1 , Sahih1
+                     Setfont Font16x16en
+                     Lcdat 5 , 33 , Ashar1 ; "  "
+                     Lcdat 3 , 33 , " ! "
+                 Else
+                     Setfont Font32x32
+                     Lcdat 3 , 1 , Sahih1
+                     Setfont Font16x16en
+                     Lcdat 5 , 64 , Ashar1 ; "  "
+                     Lcdat 3 , 64 , " ! "
+                 End If
+              End If
+
+
        End If
 
-')
-       Setfont Font16x16en
-       Lcdat 3 , 1 , Sens1 ; "!   "
-       Lcdat 5 , 1 , Sens2 ; "!   "
+
+
+
        Setfont Font8x8
 
 
@@ -2308,7 +2322,8 @@ End Sub
 
 
 Sub Temp
-
+   Incr P
+   If P > 2 Then P = 1
    'reset watchdog
    1wreset
    1wwrite &HCC
@@ -2319,29 +2334,21 @@ Sub Temp
    1wverify Ds18b20_id_1(1)
    1wwrite &HBE
    Readsens = 1wread(2)
-   Readsens = Readsens * 10 : Readsens = Readsens \ 16
+
+
    Tmp1 = Readsens
+   St1(p) = Readsens
    Gosub Conversion
    Sens1 = Temperature
 
-'(
-         Readsens = Abs(readsens)
+
+         If Tmp1 < 0 Then Tmp1 = Tmp1 * -1
          Sahih1 = 0
-         If Readsens > 9 Then
-            Sahih1 = Readsens / 10
-            Ashar1 = Readsens Mod 10
+         If Tmp1 > 9 Then
+            Sahih1 = Tmp1 / 10
+            Ashar1 = Tmp1 Mod 10
          End If
 
-')
-
-
-
-
-
-
-
-   'Gosub Conversion
-   Sens1 = Temperature
 
    1wreset
    1wwrite &H55
