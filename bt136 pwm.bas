@@ -1,25 +1,24 @@
-$regfile = "m16def.dat"
+$regfile = "m8def.dat"
 $crystal = 11059200
 $baud = 115200
 
 Configs:
         'Config Timer1 = Pwm , Pwm = 10 , Compare_A_Pwm = Clear_Up , Compare_B_Pwm = Clear_Down , Prescale = 1
         Config Timer1 = Timer , Prescale = 8
-        'Config Timer0 = Timer , Prescale = 1024
+        Config Timer0 = Timer , Prescale = 1024
         Enable Interrupts
         'Enable Timer1
         'on Timer1 T1rutin
         'Start Timer1
-        'Enable Timer0
-        'Start Timer0
-        'On Ovf0 T0rutin
+        'Enable Ovf0
+       ' On Ovf0 T0rutin
         Config Int1 = Rising
         Enable Int1
         On Int1 Int1rutin
 
 
 Configntc:
-
+'(
 Config Adc = Free , Prescaler = Auto
 
 Dim Ad30 As Word
@@ -40,7 +39,7 @@ Fan Alias Portd.5 : Config Portd.5 = Output
 Const A = 1.009249522 * 10 ^ -3
 Const B = 2.378405444 * 10 ^ -4
 Const C = 2.019202697 * 10 ^ -7
-
+')
 Defports:
         Config Portd.7 = Output : Buz Alias Portd.7
 
@@ -74,15 +73,15 @@ Maxconfig:
 
           Const Maxlight = 0
           Const Dark = 65535
-          Const Midlight = 8800
-          Const Minlight = 10800
+          Const Midlight = 6500
+          Const Minlight = 9500
           Const Relaymodule = 110
           Const Triacmodule = 111
           Const Remote = 104
           Const Keyin = 101
 
           Dim Q As Byte
-
+          Dim T0back As Boolean
           Dim Inok As Boolean
           Dim Wic As Byte
 
@@ -118,6 +117,7 @@ Defvals:
         Dim Outid2(8) As Byte
         Dim Outid3(8) As Byte
 
+        Dim Rxtxoff As Byte
 
         Dim Gotid As Boolean
         'Dim Idgot As Boolean
@@ -129,36 +129,27 @@ Defvals:
         Const Refreshall = 1
         Const Stopall = 2
 
+
+        For I = 1 To 8
+            Outid1(i) = Eoutid1(i)
+            Waitms 2
+            Outid2(i) = Eoutid2(i)
+            Waitms 2
+            Outid3(i) = Eoutid3(i)
+            Waitms 2
+            Light(i) = Elight(i)
+            Waitms 2
+        Next
+
+
+
+
 '(
-        For I = 1 To 8
-            Outid1(i) = Eoutid1(i)
-            Waitms 2
-            Outid2(i) = Eoutid2(i)
-            Waitms 2
-            Outid3(i) = Eoutid3(i)
-            Waitms 2
-            Light(i) = Elight(i)
-            Waitms 2
-        Next
-
-        For I = 1 To 8
-            Outid1(i) = Eoutid1(i)
-            Waitms 2
-            Outid2(i) = Eoutid2(i)
-            Waitms 2
-            Outid3(i) = Eoutid3(i)
-            Waitms 2
-            Light(i) = Elight(i)
-            Waitms 2
-        Next
-')
-Start Timer0
-
 Light(1) = Minlight
 Do
        If Timer1 > Light(1) Then Set Out1 Else Reset Out1
 Loop
-
+')
 Main:
      Do
        '(
@@ -177,18 +168,26 @@ Main:
        If Timer1 > Light(7) Then Set Out7 Else Reset Out7
        If Timer1 > Light(8) Then Set Out8 Else Reset Out8
 
+       If Timer1 > 13900 Then
+          Timer1 = 0
+          Start Timer1
+       End If
 
        If Key = 0 Then
           Waitms 50
           If Key = 0 Then
              Disable Int1
+             Stop Timer0
              For I = 1 To 8
                  Toggle Rxtx
                  Waitms 200
              Next I
              Call Getid
              Enable Int1
+             Start Timer0
           End If
+          Do
+          Loop Until Key = 1
        End If
 
 
@@ -198,10 +197,52 @@ Gosub Main
 
 
 
+
+
+T0rutin:
+
+
+Return
+
+Int1rutin:
+
+
+          Incr Q
+          If Q = 100 Then
+             Q = 0
+             Toggle Buz
+          End If
+
+          If Rxtx = 1 Then
+             Incr Rxtxoff
+             If Rxtxoff = 20 Then
+                Reset Rxtx
+                Rxtxoff = 0
+             End If
+          End If
+
+
+          Reset Out1
+          Reset Out2
+          Reset Out3
+          Reset Out4
+          Reset Out5
+          Reset Out6
+          Reset Out7
+          Reset Out8
+
+          Timer1 = 0
+
+Return
+
+
 Rx:
+
+
 
       Incr I
       Inputbin Maxin
+
 
 
       If I = 5 Then
@@ -221,79 +262,15 @@ Rx:
       End If
 
 
-Return
 
-T0rutin:
-
-          Stop Timer1
-
-
-
-
-
-          'Reset Out1
-          Timer1 = 0
-          Timer0 = 147
-          Start Timer1
 
 Return
-
-Int1rutin:
-          Stop Timer1
-          Incr Q
-          If Q = 100 Then
-             Q = 0
-             Toggle Buz
-          End If
-'(
-          If Test = 65535 Then
-
-             Toggle Rxtx
-                    Adcin = Getadc(7)
-                    Vo = 1023 / Adcin
-                    Vo = Vo - 1
-                    Rt = Vo * 10000
-                    Lnrt = Log(rt)
-                    W = Lnrt
-                    W = W ^ 3
-                    W = W * C
-                    Y = B * Lnrt
-                    Z = A + Y
-                    Z = Z + W
-
-                    Temp = 1 / Z
-                    Temp = Temp - 273
-
-                    If Temp < 50 Then Reset Fan
-                    If Temp > 65 Then Set Fan
-                    If Temp > 100 Then Set Alloff
-                    If Temp < 90 Then Reset Alloff
-
-             Test = 0
-          End If
-')
-          Reset Out1
-          Reset Out2
-          Reset Out3
-          Reset Out4
-          Reset Out5
-          Reset Out6
-          Reset Out7
-          Reset Out8
-
-          Timer1 = 0
-          Start Timer1
-Return
-
 
 
 End
 
 
-Sub Keyorder
 
-
-End Sub
 
 Sub Getid
     K = 0
@@ -370,7 +347,6 @@ Sub Getid
        Next
 
        Reset Wantid
-       Return
 
 End Sub
 
@@ -420,7 +396,7 @@ Sub Checkanswer
                         Waitms 2
                         Light(i) = Dark
                         Waitms 200
-                        Toggle Rxtx
+                        Toggle Buz
                         Outid1(i) = 0
                         Outid2(i) = 0
                         Outid3(i) = 0

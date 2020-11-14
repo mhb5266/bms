@@ -1,4 +1,5 @@
 
+
 $regfile = "m128def.dat"
 $crystal = 11059200
 
@@ -38,8 +39,8 @@ Dim Tmpread As Boolean
 Dim Tmp1 As Integer
 Dim Tmp2 As Integer
 
-Dim St1(2) As Integer
-Dim St2(2) As Integer
+Dim St1(10) As Integer
+Dim St2(10) As Integer
 
 Dim Alarmtemp As Byte
 
@@ -375,7 +376,7 @@ Main:
        If Refreshtemp <> _sec Then
           Call Temp
 
-          Refreshtemp = _sec
+         Refreshtemp = _sec
        End If
        Call Show
        If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
@@ -406,6 +407,7 @@ If Poosh > 600 Then
 End If
 
        If Touch1 = 1 Then
+       Call Beep
           Poosh = 0
           Do
             Waitms 50
@@ -443,6 +445,7 @@ End If
        End If
 
        If Touch2 = 1 And Ok2 = 0 Then
+       Call Beep
                  Poosh = 0
                  Set Ok2
                  Reset Ok1
@@ -482,6 +485,7 @@ End If
 
 
        Elseif Touch3 = 1 And Ok3 = 1 Then
+       Call Beep
        Poosh = 0
                  Do
                     Cls
@@ -496,6 +500,7 @@ End If
        End If
 
        If Touch4 = 1 Then
+       Call Beep
           Poosh = 0
           Do
             Waitms 50
@@ -2190,11 +2195,23 @@ Sub Show
 
        Dift = St1(2) - St1(1)
 
-       If Dift < 30 And Dift > -30 Then
+'       If Dift < 30 And Dift > -30  Then
+        If P = 10 Then
 
+
+'(
+          Setfont Font16x16en
+          Lcdat 3 , 1 , Sens1 ; "!   "
+          Lcdat 5 , 1 , Sens2 ; "!   "
+          Setfont Font8x8
+          Lcdat 7 , 1 , Tmp1 ; "   "
+          Lcdat 8 , 1 , Tmp2 ; "   "
+ ')
+ '
             If Tmp1 < 0 Then
-                 Lcdat 3 , 0 , "!"
+                 Lcdat 3 , 0 , "-"
                  If Tmp1 > -100 And Tmp1 < 0 Then
+                     Setfont Font 32x32
                      Lcdat 3 , 9 , Sahih1
                      Setfont Font16x16en
                      Lcdat 5 , 41 , Ashar1 ; "  "
@@ -2241,9 +2258,9 @@ Sub Show
        A = _sec Mod 2
        If A = 1 Then Lcdat 1 , 16 , " " Else Lcdat 1 , 16 , ":"
        If _min > 9 Then
-          Lcdat 1 , 24 , _min
+          Lcdat 1 , 24 , _min ; " "
        Else
-          Lcdat 1 , 24 , "0" ; _min ; "    "
+          Lcdat 1 , 24 , "0" ; _min ; " "
        End If
 
 
@@ -2323,7 +2340,7 @@ End Sub
 
 Sub Temp
    Incr P
-   If P > 2 Then P = 1
+   If P > 12 Then P = 1
    'reset watchdog
    1wreset
    1wwrite &HCC
@@ -2337,16 +2354,18 @@ Sub Temp
 
 
    Tmp1 = Readsens
-   St1(p) = Readsens
-   Gosub Conversion
-   Sens1 = Temperature
+
+      Gosub Conversion
+      Sens1 = Temperature
 
 
-         If Tmp1 < 0 Then Tmp1 = Tmp1 * -1
+
+
+         If Readsens < 0 Then Readsens = Readsens * -1
          Sahih1 = 0
-         If Tmp1 > 9 Then
-            Sahih1 = Tmp1 / 10
-            Ashar1 = Tmp1 Mod 10
+         If Readsens > 9 Then
+            Sahih1 = Readsens / 10
+            Ashar1 = Readsens Mod 10
          End If
 
 
@@ -2355,10 +2374,14 @@ Sub Temp
    1wverify Ds18b20_id_2(1)
    1wwrite &HBE
    Readsens = 1wread(2)
-   Gosub Conversion
-   Sens2 = Temperature
+   Tmp2 = Readsens
 
-   Set Tmpread
+      Gosub Conversion
+      Sens2 = Temperature
+
+
+
+
 
 End Sub
 

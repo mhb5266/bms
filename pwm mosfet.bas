@@ -140,7 +140,11 @@ Defvals:
 
 Start Timer0
 
+Do
+  Toggle Portc.4
 
+  Wait 1
+Loop
 Main:
 
      Do
@@ -419,6 +423,7 @@ Sub Checkanswer
                                 End Select
                 End If
 
+
            Case 158
                     For I = 1 To 8
                         Eoutid1(i) = 0
@@ -445,53 +450,7 @@ Sub Checkanswer
                     Next
 
            Case 180
-                If Wantid = 1 Then
-                          Reset Gotid
-                          If Outid1(k) > 100 Or Outid1(k) = 0 Then
-                             Outid1(k) = Id
-                             Eoutid1(k) = Outid1(k)
-                             Set Gotid
-                          Else
-                              If Outid2(k) > 100 Or Outid2(k) = 0 Then
-                                 If Outid1(k) <> Id Then
-                                    Outid2(k) = Id
-                                    Eoutid2(k) = Outid2(k)
-                                    Set Gotid
-                                 End If
-                              Else
-                                  If Outid3(k) > 100 Or Outid3(k) = 0 Then
-                                     If Outid1(k) <> Id And Outid2(k) <> Id Then
-                                        Outid3(k) = Id
-                                        Eoutid3(k) = Outid3(k)
-                                        Set Gotid
-                                     End If
-                                  End If
-                              End If
-                          End If
-                          If Gotid = 1 Then
-                             For I = 1 To 8
-                                 Select Case K
-                                         Case 1
-                                              Toggle Out1
-                                         Case 2
-                                              Toggle Out2
-                                         Case 3
-                                              Toggle Out3
-                                         Case 4
-                                              Toggle Out4
-                                         Case 5
-                                              Toggle Out5
-                                         Case 6
-                                              Toggle Out6
-                                         Case 7
-                                              Toggle Out7
-                                         Case 8
-                                              Toggle Out8
-                                 End Select
-                                 Waitms 250
-                             Next
-                          End If
-                    End If
+
                     For I = 1 To 8
                         If Id = 0 Or Id > 100 Then Return
                         If Outid1(i) = Id Or Outid2(i) = Id Or Outid3(i) = Id Then

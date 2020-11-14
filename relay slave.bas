@@ -74,6 +74,11 @@ Dim Eoutnum(28) As Eram Byte
 Dim Eoutid1(28) As Eram Byte
 Dim Eoutid2(28) As Eram Byte
 Dim Eoutid3(28) As Eram Byte
+
+Dim Outid1(28) As Byte
+Dim Outid2(28) As Byte
+Dim Outid3(28) As Byte
+
 Dim Eouts(28) As Eram Byte
 Dim Idgot As Eram Byte
 Dim D As Byte
@@ -243,41 +248,81 @@ Gosub Main
 
 
 Sub Getid
+    K = 0
     Reset En
-    Set Out1
-    Wait 1
-    Reset Out1
-    If Wantid = 1 Then
-       K = Idgot
+    'set buz
+    Wait 3
+    'Reset buz
+    Set Wantid
        Do
+         If Cmd = 180 And Id > 0 And Id < 100 Then
+                          Reset Gotid
+                          If Outid1(k) > 100 Or Outid1(k) = 0 Then
+                             Outid1(k) = Id
+                             Set Gotid
+                          Else
+                              If Outid2(k) > 100 Or Outid2(k) = 0 Then
+                                 If Outid1(k) <> Id Then
+                                    Outid2(k) = Id
+                                    Set Gotid
+                                 End If
+                              Else
+                                  If Outid3(k) > 100 Or Outid3(k) = 0 Then
+                                     If Outid1(k) <> Id And Outid2(k) <> Id Then
+                                        Outid3(k) = Id
+                                        Set Gotid
+                                     End If
+                                  End If
+                              End If
+                          End If
+                          If Gotid = 1 Then
+                             For I = 1 To 8
+                                 Select Case K
+                                         Case 1
+                                              Toggle Out1
+                                         Case 2
+                                              Toggle Out2
+                                         Case 3
+                                              Toggle Out3
+                                         Case 4
+                                              Toggle Out4
+                                         Case 5
+                                              Toggle Out5
+                                         Case 6
+                                              Toggle Out6
+                                         Case 7
+                                              Toggle Out7
+                                         Case 8
+                                              Toggle Out8
+                                 End Select
+                                 Eoutid1(i) = Outid1(i)
+                                 Waitms 4
+                                 Eoutid2(i) = Outid2(i)
+                                 Waitms 4
+                                 Eoutid3(i) = Outid3(i)
+                                 Waitms 250
 
-         Do
-         Loop Until Key = 1
-         Waitms 30
-         Test = 0
-         Do
-           Waitms 100
-           Incr Test
-           If Test > 30 Then
-              Reset Wantid
-              Status = Resetall
-              Call Keyorder
-              Return
-           End If
-         Loop Until Key = 0
-         Incr K
-         If K > 28 Then K = 1
-         Status = Resetall
-         Call Keyorder
-         J = K
-         Outs(j) = 1
-         Call Setouts
-
+                             Next
+                          End If
+                          Cmd = 0
+                          Id = 0
+         End If
+         If Key = 0 Then
+            Waitms 50
+            If Key = 0 Then
+               Reset Wantid
+               Exit Do
+            End If
+         End If
        Loop
-    Else
-        Return
-    End If
 
+       For I = 1 To 8
+          'Toggle Buz
+          Waitms 200
+       Next
+
+       Reset Wantid
+       Return
 End Sub
 
 Sub Tx
@@ -399,9 +444,36 @@ Sub Findorder
 
         Select Case Cmd
                Case 151
-                    If Typ = Mytyp Then
-                       Set Wantid
-                    End If
+                If Wantid = 1 Then
+                                Incr K
+                                Reset Out1
+                                Reset Out2
+                                Reset Out3
+                                Reset Out4
+                                Reset Out5
+                                Reset Out6
+                                Reset Out7
+                                Reset Out8
+                                If K > 8 Then K = 1
+                                Select Case K
+                                       Case 1
+                                            Set Out1
+                                       Case 2
+                                            Set Out2
+                                       Case 3
+                                            Set Out3
+                                       Case 4
+                                            Set Out4
+                                       Case 5
+                                            Set Out5
+                                       Case 6
+                                            Set Out6
+                                       Case 7
+                                            Set Out7
+                                       Case 8
+                                            Set Out8
+                                End Select
+                End If
                Case 158
                     For I = 1 To Counterid
                         Eoutid1(i) = 0
@@ -434,36 +506,6 @@ Sub Findorder
                Case 160
 
                Case 180
-                       If Wantid = 1 Then
-                          Reset Gotid
-                          If Eoutid1(k) > 100 Or Eoutid1(k) = 0 Then
-                             Eoutid1(k) = Id
-                             Set Gotid
-                          Else
-                              If Eoutid2(k) > 100 Or Eoutid2(k) = 0 Then
-                                 If Eoutid1(k) <> Id Then
-                                    Eoutid2(k) = Id
-                                    Set Gotid
-                                 End If
-                              Else
-                                  If Eoutid3(k) > 100 Or Eoutid3(k) = 0 Then
-                                     If Eoutid1(k) <> Id And Eoutid2(k) <> Id Then
-                                        Eoutid3(k) = Id
-                                        Set Gotid
-                                     End If
-                                  End If
-                              End If
-                          End If
-                          If Gotid = 1 Then
-                             For I = 1 To 4
-                                 Toggle Onoff
-                                 Outs(k) = Onoff
-                                 Call Setouts
-                                 Waitms 250
-
-                             Next
-                          End If
-                       End If
 
                            If Id > 0 And Id < 100 Then
                            For I = 1 To Counterid
