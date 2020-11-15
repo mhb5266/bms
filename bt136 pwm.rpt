@@ -1,6 +1,6 @@
 Report       : bt136 pwm
-Date         : 11-04-2020
-Time         : 16:05:52
+Date         : 11-15-2020
+Time         : 18:16:25
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : E94 hex  -> Will fit into ROM
-ROMIMAGE     :  3732 dec
-FLASH USED   :  45  %
+ROMIMAGE     : ED8 hex  -> Will fit into ROM
+ROMIMAGE     :  3800 dec
+FLASH USED   :  46  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  858  dec
+Space left   :  856  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -100,31 +100,32 @@ Q                                Byte              006A          106
 T0BACK                           Bit [6]           0069          105 
 INOK                             Bit [5]           0069          105 
 WIC                              Byte              006B          107 
-TEST                             Word              006C          108 
+P                                Word              006C          108 
+TEST                             Word              006E          110 
 ELIGHT                           EEPROM Word(8)    0000          0 
-LIGHT                            Word(8)           006E          110 
+LIGHT                            Word(8)           0070          112 
 ALLLIGHT                         EEPROM Word       0010          16 
-PLUS                             Byte              007E          126 
+PLUS                             Byte              0080          128 
 UPDOWN                           Bit [4]           0069          105 
-SECC                             Word              007F          127 
-TERM                             Byte              0081          129 
-PW                               Word              0082          130 
-STEPS                            Byte              0084          132 
-DELAY_                           Word              0085          133 
-I                                Byte              0087          135 
+SECC                             Word              0081          129 
+TERM                             Byte              0083          131 
+PW                               Word              0084          132 
+STEPS                            Byte              0086          134 
+DELAY_                           Word              0087          135 
+I                                Byte              0089          137 
 EOUTID1                          EEPROM Byte(8)    0012          18 
 EOUTID2                          EEPROM Byte(8)    001A          26 
 EOUTID3                          EEPROM Byte(8)    0022          34 
-OUTID1                           Byte(8)           0088          136 
-OUTID2                           Byte(8)           0090          144 
-OUTID3                           Byte(8)           0098          152 
-RXTXOFF                          Byte              00A0          160 
+OUTID1                           Byte(8)           008A          138 
+OUTID2                           Byte(8)           0092          146 
+OUTID3                           Byte(8)           009A          154 
+RXTXOFF                          Byte              00A2          162 
 GOTID                            Bit [3]           0069          105 
-K                                Byte              00A1          161 
-J                                Byte              00A2          162 
-X                                Byte              00A3          163 
-OUTS                             Byte(8)           00A4          164 
-STATUS                           Byte              00AC          172 
+K                                Byte              00A3          163 
+J                                Byte              00A4          164 
+X                                Byte              00A5          165 
+OUTS                             Byte(8)           00A6          166 
+STATUS                           Byte              00AE          174 
 
 --------------------------------------------------------------------------------
 Constant                         Value

@@ -85,6 +85,8 @@ Maxconfig:
           Dim Inok As Boolean
           Dim Wic As Byte
 
+          Dim P As Word
+
           Declare Sub Checkanswer
           Declare Sub Getid
           Declare Sub Keyorder
@@ -132,13 +134,13 @@ Defvals:
 
         For I = 1 To 8
             Outid1(i) = Eoutid1(i)
-            Waitms 2
+            Waitms 4
             Outid2(i) = Eoutid2(i)
-            Waitms 2
+            Waitms 4
             Outid3(i) = Eoutid3(i)
-            Waitms 2
+            Waitms 4
             Light(i) = Elight(i)
-            Waitms 2
+            Waitms 4
         Next
 
 
@@ -280,6 +282,12 @@ Sub Getid
     Reset Rxtx
     Set Wantid
        Do
+          Incr P
+          Waitus 10
+          If P = 10000 Then
+             P = 0
+             Toggle Buz
+          End If
          If Cmd = 180 And Id > 0 And Id < 100 Then
                           Reset Gotid
                           If Outid1(k) > 100 Or Outid1(k) = 0 Then
