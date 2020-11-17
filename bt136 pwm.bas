@@ -28,13 +28,13 @@ Dim Vo As Single
 Dim Rt As Single
 Dim Adcin As Word
 
-Dim W As Single
+111111111111111111111111111Dim W As Single
 Dim Y As Single
 Dim Z As Single
 Dim Lnrt As Single
 Dim Alloff As Boolean
 
-Fan Alias Portd.5 : Config Portd.5 = Output
+
 
 Const A = 1.009249522 * 10 ^ -3
 Const B = 2.378405444 * 10 ^ -4
@@ -45,6 +45,7 @@ Defports:
 
         Config Portd.3 = Input : Ziro Alias Pind.3
 
+        Fan Alias Portd.5 : Config Portd.5 = Output
 
 
         Config Portc.3 = Output : Out1 Alias Portc.3
@@ -84,12 +85,14 @@ Maxconfig:
           Dim T0back As Boolean
           Dim Inok As Boolean
           Dim Wic As Byte
-
+          Dim F As Byte
+          Dim Heat As Byte
           Dim P As Word
 
           Declare Sub Checkanswer
           Declare Sub Getid
           Declare Sub Keyorder
+          Declare Sub Pfrutin
          ' Declare Sub Ntc
 
 
@@ -114,6 +117,8 @@ Defvals:
         Dim Eoutid1(8) As Eram Byte
         Dim Eoutid2(8) As Eram Byte
         Dim Eoutid3(8) As Eram Byte
+
+        Dim Poweroff As Byte
 
         Dim Outid1(8) As Byte
         Dim Outid2(8) As Byte
@@ -146,12 +151,8 @@ Defvals:
 
 
 
-'(
-Light(1) = Minlight
-Do
-       If Timer1 > Light(1) Then Set Out1 Else Reset Out1
-Loop
-')
+
+
 Main:
      Do
        '(
@@ -169,12 +170,21 @@ Main:
        If Timer1 > Light(6) Then Set Out6 Else Reset Out6
        If Timer1 > Light(7) Then Set Out7 Else Reset Out7
        If Timer1 > Light(8) Then Set Out8 Else Reset Out8
-
+       Heat = 0
+       For I = 1 To 8
+           If Light(i) < Dark Then
+              Incr Heat
+           End If
+       Next
+       If Heat > 2 Then Set Fan Else Reset Fan
+'(
        If Timer1 > 13900 Then
           Timer1 = 0
+          Incr Poweroff
+          If Poweroff > 100 Then Call Pfrutin
           Start Timer1
        End If
-
+')
        If Key = 0 Then
           Waitms 50
           If Key = 0 Then
@@ -210,11 +220,13 @@ Int1rutin:
 
 
           Incr Q
+          Poweroff = 0
           If Q = 100 Then
              Q = 0
              Toggle Buz
-          End If
 
+          End If
+'(
           If Rxtx = 1 Then
              Incr Rxtxoff
              If Rxtxoff = 20 Then
@@ -223,7 +235,7 @@ Int1rutin:
              End If
           End If
 
-
+')
           Reset Out1
           Reset Out2
           Reset Out3
@@ -242,24 +254,24 @@ Rx:
 
 
 
-      Incr I
+      Incr F
       Inputbin Maxin
 
 
 
-      If I = 5 Then
+      If F = 5 Then
          If Maxin = 230 Or Maxin = 210 Then Set Inok
       End If
-      If Maxin = 252 Or Maxin = 232 Then I = 1
+      If Maxin = 252 Or Maxin = 232 Then F = 1
 
-      Din(i) = Maxin
+      Din(f) = Maxin
 
       If Inok = 1 Then
 
         Id = Din(4)
         Typ = Din(2)
         If Typ = Remote Or Typ = Keyin Or Typ = Relaymodule Then Call Checkanswer
-        I = 0
+        F = 0
         Reset Inok
       End If
 
@@ -272,7 +284,19 @@ Return
 End
 
 
+Sub Pfrutin
+    Do
+      Reset Out1
+      Reset Out2
+      Reset Out3
+      Reset Out4
+      Reset Out5
+      Reset Out6
+      Reset Out7
+      Reset Out8
 
+    Loop
+End Sub
 
 Sub Getid
     K = 0
@@ -344,6 +368,7 @@ Sub Getid
             Waitms 50
             If Key = 0 Then
                Reset Wantid
+               Enable Int1
                Exit Do
             End If
          End If
@@ -424,6 +449,7 @@ Sub Checkanswer
                               Light(i) = Dark
                            End If
                         End If
+
                     Next
 
            Case 181
