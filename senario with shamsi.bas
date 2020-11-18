@@ -161,14 +161,21 @@ Dim Findorder As Byte
 Dim Remoteid As Byte
 Dim Remotekeyid As Byte
 
+Dim Fstatus As Eram Byte
 Dim Lstatus As Eram Byte
 Dim Pstatus As Eram Byte
 Dim Wstatus As Eram Byte
 
+Dim Fdays As Eram Byte
 Dim Ldays As Eram Byte
 Dim Pdays As Eram Byte
 Dim Wdays As Eram Byte
 Dim Days As Byte
+
+Dim Fonhour As Eram Byte
+Dim Fonmin As Eram Byte
+Dim Foffhour As Eram Byte
+Dim Foffmin As Eram Byte
 
 Dim Lonhour As Eram Byte
 Dim Lonmin As Eram Byte
@@ -218,6 +225,7 @@ Const Idjacuzi = 51
 Const Idwater = 52
 Const Idlight = 53
 Const Idplant = 54
+Const Idfountain = 55
 
 Dim X As Word
 Dim W As Word
@@ -314,9 +322,11 @@ Const Maxlight = 164
 Consts:
 
 
-Const Main_menu_counter = 6
+Const Main_menu_counter = 7
 
 Subs:
+
+Declare Sub Poweroff
 
 Declare Sub Ifcheck
 'Declare Function Farsi(byval S As String * 20) As String * 20
@@ -325,6 +335,7 @@ Declare Sub Clock_menu
 Declare Sub Jacuzi_menu
 Declare Sub Light_menu
 Declare Sub Watersystem_menu
+Declare Sub Fountain_menu
 Declare Sub Plant_menu
 Declare Sub Remote_menu
 Declare Sub Setting_menu
@@ -338,7 +349,7 @@ Declare Sub Sync_io
 
 Declare Function M_kabise(byref Sal As Word)as Byte
 
-declare function sh_kabise(byref sal as word) as byte
+Declare Function Sh_kabise(byref Sal As Word) As Byte
 
 Declare Sub Beep
 Declare Sub Errorbeep
@@ -346,7 +357,7 @@ Declare Sub Temp
 Declare Sub Readtouch
 Declare Sub Show
 Declare Sub Main_menu
-declare Sub Input_menu
+Declare Sub Input_menu
 Declare Sub Tx
 Declare Sub Order
 Declare Sub Checkanswer
@@ -781,6 +792,10 @@ M_day = Kole_roz_m
 
 Return
 
+
+Fountainicon:
+$bgf "fountain.bgf"
+
 Tempicon:
 $bgf "tempicon.bgf"
 
@@ -805,7 +820,7 @@ Night:
 Logo:
      $bgf "logo.bgf"
 Settingicon:
-            $bgf "setting5.bgf"
+            $bgf "settingicon.bgf"
             '$bgf "emtech1.bgf"
 Setclockicon:
              $bgf "clock.bgf"
@@ -849,25 +864,27 @@ Sub Main_menu
      Waitms 100
      Cls
      Count = 1
-     Showpic 50 , 20 , Jaccuziicon
+     Showpic 32 , 0 , Jaccuziicon
 
      Do
             If Backmenu = 1 Then
                Reset Backmenu
-               If Count < 1 Or Count > 6 Then Count = 1
+               If Count < 1 Or Count > 7 Then Count = 1
                         Select Case Count
                                Case 1
-                                    Showpic 50 , 20 , Jaccuziicon
+                                    Showpic 32 , 0 , Jaccuziicon
                                Case 2
-                                    Showpic 50 , 20 , Planticon
+                                    Showpic 32 , 0 , Planticon
                                Case 3
-                                    Showpic 50 , 20 , Watersystemicon
+                                    Showpic 32 , 0 , Watersystemicon
                                Case 4
-                                    Showpic 50 , 20 , Lighticon
+                                    Showpic 32 , 0 , Lighticon
                                Case 5
-                                    Showpic 50 , 20 , Setclockicon
+                                    Showpic 32 , 0 , Setclockicon
                                Case 6
-                                    Showpic 50 , 20 , Settingicon
+                                    Showpic 32 , 0 , Settingicon
+                               Case 7
+                                    Showpic 32 , 0 , Fountainicon
                         End Select
             End If
             If Touch = 2 Then
@@ -894,17 +911,19 @@ Sub Main_menu
             If Touch = 2 Or Touch = 3 Then
                         Select Case Count
                                Case 1
-                                    Showpic 50 , 20 , Jaccuziicon
+                                    Showpic 32 , 0 , Jaccuziicon
                                Case 2
-                                    Showpic 50 , 20 , Planticon
+                                    Showpic 32 , 0 , Planticon
                                Case 3
-                                    Showpic 50 , 20 , Watersystemicon
+                                    Showpic 32 , 0 , Watersystemicon
                                Case 4
-                                    Showpic 50 , 20 , Lighticon
+                                    Showpic 32 , 0 , Lighticon
                                Case 5
-                                    Showpic 50 , 20 , Setclockicon
+                                    Showpic 32 , 0 , Setclockicon
                                Case 6
-                                    Showpic 50 , 20 , Settingicon
+                                    Showpic 32 , 0 , Settingicon
+                               Case 7
+                                    Showpic 32 , 0 , Fountainicon
                         End Select
                         Touch = 0
             End If
@@ -1221,19 +1240,19 @@ Sub Setting_menu
         Select Case Count
                Case 1
 
-                    Lcdat 3 , 1 , "Config Remotes"
+                    Lcdat 3 , 1 , "Config Remotes  "
 
                Case 2
 
-                    Lcdat 3 , 1 , "Clear All"
+                    Lcdat 3 , 1 , "Clear All       "
 
                Case 3
 
-                    Lcdat 3 , 1 , "Set Key ID"
+                    Lcdat 3 , 1 , "Set Key ID      "
 
                Case 4
 
-                    Lcdat 3 , 1 , "Set Module ID"
+                    Lcdat 3 , 1 , "Set Module ID   "
 
         End Select
 
@@ -1320,10 +1339,11 @@ Sub Setkeyid
       If Inputcounter < 1 Then Inputcounter = 1
       Inputcounter = Einputcounter
       Lcdat 1 , 1 , "Set Key IDs     " , 1
-      Lcdat 3 , 1 , "Leran Key " ; Inputcounter ; "  "
+      If Inputcounter = 0 Then Inputcounter = 1
+      Lcdat 3 , 1 , "Learn Key #" ; Inputcounter ; "  "
 
       If Touch = 1 Then
-         Lcdat 3 , 1 , "Press All Key    "
+         Lcdat 3 , 1 , "Press All Key   "
          Touch = 0
          If Inputcounter = 0 Then Inputcounter = 1
          Einputcounter = Inputcounter
@@ -1331,14 +1351,17 @@ Sub Setkeyid
          Do
            Findorder = Readallinput
            Call Order
-           Call Readtouch
            If Inputcounter > 50 Then Inputcounter = 1
            Id = Inputcounter
            Findorder = Setidkey
            Call Order
            Wait 3
-           Lcdat 3 , 1 , "Key number " ; Inputcounter
-         Loop Until Touch = 4
+           Lcdat 3 , 1 , "Key number " ; Inputcounter ; "  "
+           If Touch4 = 1 Then
+              Waitms 50
+              If Touch4 = 1 Then Exit Do
+           End If
+         Loop
          Cls
       End If
     Loop
@@ -1515,6 +1538,8 @@ Sub Pwlsetting
                     Lcdat 1 , 1 , Farsi( " —‘œ êÌ«Â       ") , 1
                Case Idwater
                     Lcdat 1 , 1 , Farsi( " ¬»Ì«—Ì         " ) , 1
+               Case Idfountain
+                    Lcdat 1 , 1 , Farsi( " ¬»‰„«          " ) , 1
         End Select
 
 
@@ -1946,6 +1971,41 @@ Sub Watersystem_menu
 
 End Sub
 
+Sub Fountain_menu
+
+    Id = Idfountain
+
+    Days = Fdays
+    Status = Fstatus
+    Onhour = Fonhour
+    Onmin = Fonmin
+    Offhour = Foffhour
+    Offmin = Foffmin
+
+    Call Pwlsetting
+
+    Fdays = Days
+    Fstatus = Status
+    Fonhour = Onhour
+    Fonmin = Onmin
+    Foffhour = Offhour
+    Foffmin = Offmin
+    If Status = 1 Then
+       Cmd = 180
+       Id = Idfountain
+       Typ = Relaymodule
+       Direct = Tooutput
+       Call Tx
+    End If
+    If Status = 2 Then
+       Cmd = 181
+       Id = Idfountain
+       Typ = Relaymodule
+       Direct = Tooutput
+       Call Tx
+    End If
+End Sub
+
 Sub Light_menu
 
     Id = Idlight
@@ -2050,6 +2110,10 @@ Sub Checkanswer
                    Lcdat 5 , 1 , Id
                    Wait 2
                    Cls
+                End If
+
+                If Cmd = 190 Then
+                   Call Poweroff
                 End If
 
     End Select
@@ -2186,6 +2250,10 @@ Sub Tx
 
 End Sub
 
+Sub Poweroff
+
+
+End Sub
 
 Sub Show
 
@@ -2207,7 +2275,7 @@ Sub Show
           Setfont Font8x8
           Lcdat 7 , 1 , Tmp1 ; "   "
           Lcdat 8 , 1 , Tmp2 ; "   "
- ')
+')
  '
             If Tmp1 < 0 Then
                  Lcdat 3 , 0 , "-"

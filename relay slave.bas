@@ -69,7 +69,7 @@ Dim Test As Byte
 Dim Wantid As Boolean
 Dim Gotid As Boolean
 
-Dim Outs(28) As Byte
+Dim Outs As Dword
 Dim Eoutnum(28) As Eram Byte
 Dim Eoutid1(28) As Eram Byte
 Dim Eoutid2(28) As Eram Byte
@@ -214,7 +214,7 @@ Main:
                  If Tempontime(i) = 120 Then
                     Tempontime = 0
                     Tempon(i) = 0
-                    Outs(i) = 0
+                    Outs.i = 0
                     J = I
                     Call Setouts
                  End If
@@ -222,6 +222,23 @@ Main:
           Next
        End If
 
+       If Key = 1 Then
+          Waitms 50
+          If Key = 1 Then
+             Stop Timer0
+             For I = 1 To 8
+                 Toggle Rxtx
+                 Waitms 200
+             Next I
+             Call Getid
+             Start Timer0
+          End If
+          Do
+          Loop Until Key = 1
+       End If
+
+
+'(
        If Key = 1 Then
           Test = 0
           Do
@@ -240,7 +257,7 @@ Main:
              Call Keyorder
           End If
        End If
-
+')
      Loop
 
 
@@ -250,9 +267,9 @@ Gosub Main
 Sub Getid
     K = 0
     Reset En
-    'set buz
+    Set Rxtx
     Wait 3
-    'Reset buz
+    Reset Rxtx
     Set Wantid
        Do
          If Cmd = 180 And Id > 0 And Id < 100 Then
@@ -294,31 +311,77 @@ Sub Getid
                                               Toggle Out7
                                          Case 8
                                               Toggle Out8
+                                         Case 9
+                                              Toggle Out9
+                                         Case 10
+                                              Toggle Out10
+                                         Case 11
+                                              Toggle Out11
+                                         Case 12
+                                              Toggle Out12
+                                         Case 13
+                                              Toggle Out13
+                                         Case 14
+                                              Toggle Out14
+                                         Case 15
+                                              Toggle Out15
+                                         Case 16
+                                              Toggle Out16
+                                         Case 17
+                                              Toggle Out17
+                                         Case 18
+                                              Toggle Out18
+                                         Case 19
+                                              Toggle Out19
+                                         Case 20
+                                              Toggle Out20
+                                         Case 21
+                                              Toggle Out21
+                                         Case 22
+                                              Toggle Out22
+                                         Case 23
+                                              Toggle Out23
+                                         Case 24
+                                              Toggle Out24
+                                         Case 25
+                                              Toggle Out25
+                                         Case 26
+                                              Toggle Out26
+                                         Case 27
+                                              Toggle Out27
+                                         Case 28
+                                              Toggle Out28
+
+
                                  End Select
+
+                                 Waitms 250
+
+                             Next
+                             For I = 1 To 28
                                  Eoutid1(i) = Outid1(i)
                                  Waitms 4
                                  Eoutid2(i) = Outid2(i)
                                  Waitms 4
                                  Eoutid3(i) = Outid3(i)
-                                 Waitms 250
-
+                                 Waitms 4
                              Next
                           End If
                           Cmd = 0
                           Id = 0
          End If
-         If Key = 0 Then
+         If Key = 1 Then
             Waitms 50
-            If Key = 0 Then
+            If Key = 1 Then
                Reset Wantid
                Exit Do
             End If
          End If
        Loop
 
-       For I = 1 To 8
-          'Toggle Buz
-          Waitms 200
+       For I = 1 To 4
+          Toggle Rxtx
+          Waitms 500
        Next
 
        Reset Wantid
@@ -344,7 +407,7 @@ Sub Keyorder
     Select Case Status
            Case Stopall
                  For J = 1 To 28
-                    Outs(j) = 0
+                    Outs.j = 0
                     Call Setouts
                     Waitms 200
                 Next
@@ -353,13 +416,14 @@ Sub Keyorder
            Case Normal
 
                 For J = 1 To 28
-                    Outs(j) = Eouts(j)
+                    If Eouts(j) = 1 Then Outs.j = 1 Else Outs.j = 0
+
                     Call Setouts
                 Next
 
            Case Refreshall
                 For J = 1 To 28
-                    Outs(j) = 1
+                    Outs.j = 1
                     Call Setouts
                     Waitms 200
                 Next
@@ -376,64 +440,66 @@ End Sub
 
 Sub Setouts
 
-        If Status = Normal Then Eouts(j) = Outs(j)
+        If Status = Normal Then
+           If Outs.j = 1 Then Eouts(j) = 1 Else Eouts(j) = 0
+        End If
         Select Case J
                Case 1
-                    Out1 = Outs(1)
+                    Out1 = Outs.1
                Case 2
-                    Out2 = Outs(2)
+                    Out2 = Outs.2
                Case 3
-                    Out3 = Outs(3)
+                    Out3 = Outs.3
                Case 4
-                    Out4 = Outs(4)
+                    Out4 = Outs.4
                Case 5
-                    Out5 = Outs(5)
+                    Out5 = Outs.5
                Case 6
-                    Out6 = Outs(6)
+                    Out6 = Outs.6
                Case 7
-                    Out7 = Outs(7)
+                    Out7 = Outs.7
                Case 8
-                    Out8 = Outs(8)
+                    Out8 = Outs.8
                Case 9
-                    Out9 = Outs(9)
+                    Out9 = Outs.9
                Case 10
-                    Out10 = Outs(10)
+                    Out10 = Outs.10
                Case 11
-                    Out11 = Outs(11)
+                    Out11 = Outs.11
                Case 12
-                    Out12 = Outs(12)
+                    Out12 = Outs.12
                Case 13
-                    Out13 = Outs(13)
+                    Out13 = Outs.13
                Case 14
-                    Out14 = Outs(14)
+                    Out14 = Outs.14
                Case 15
-                    Out15 = Outs(15)
+                    Out15 = Outs.15
                Case 16
-                    Out16 = Outs(16)
+                    Out16 = Outs.16
                Case 17
-                    Out17 = Outs(17)
+                    Out17 = Outs.17
                Case 18
-                    Out18 = Outs(18)
+                    Out18 = Outs.18
                Case 19
-                    Out19 = Outs(19)
+                    Out19 = Outs.19
                Case 20
-                    Out20 = Outs(20)
+                    Out20 = Outs.20
                Case 21
-                    Out21 = Outs(21)
+                    Out21 = Outs.21
                Case 22
-                    Out22 = Outs(22)
+                    Out22 = Outs.22
                Case 23
-                    Out23 = Outs(23)
+                    Out23 = Outs.23
                Case 24
-                    Out24 = Outs(24)
+                    Out24 = Outs.24
                Case 25
-                    Out25 = Outs(25)
+                    Out25 = Outs.25
                Case 26
-                    Out26 = Outs(26)
+                    Out26 = Outs.26
                Case 27
-                    Out27 = Outs(27)
+                    Out27 = Outs.27
                Case 28
-                    Out28 = Outs(28)
+                    Out28 = Outs.28
         End Select
 
 
@@ -454,52 +520,111 @@ Sub Findorder
                                 Reset Out6
                                 Reset Out7
                                 Reset Out8
-                                If K > 8 Then K = 1
+                                Reset Out9
+                                Reset Out10
+                                Reset Out11
+                                Reset Out12
+                                Reset Out13
+                                Reset Out14
+                                Reset Out15
+                                Reset Out16
+                                Reset Out17
+                                Reset Out18
+                                Reset Out19
+                                Reset Out20
+                                Reset Out21
+                                Reset Out22
+                                Reset Out23
+                                Reset Out24
+                                Reset Out25
+                                Reset Out26
+                                Reset Out27
+                                Reset Out28
+
+                                If K > 28 Then K = 1
                                 Select Case K
-                                       Case 1
-                                            Set Out1
-                                       Case 2
-                                            Set Out2
-                                       Case 3
-                                            Set Out3
-                                       Case 4
-                                            Set Out4
-                                       Case 5
-                                            Set Out5
-                                       Case 6
-                                            Set Out6
-                                       Case 7
-                                            Set Out7
-                                       Case 8
-                                            Set Out8
+                                         Case 1
+                                              set Out1
+                                         Case 2
+                                              set Out2
+                                         Case 3
+                                              set Out3
+                                         Case 4
+                                              set Out4
+                                         Case 5
+                                              set Out5
+                                         Case 6
+                                              set Out6
+                                         Case 7
+                                              set Out7
+                                         Case 8
+                                              set Out8
+                                         Case 9
+                                              set Out9
+                                         Case 10
+                                              set Out10
+                                         Case 11
+                                              set Out11
+                                         Case 12
+                                              set Out12
+                                         Case 13
+                                              set Out13
+                                         Case 14
+                                              set Out14
+                                         Case 15
+                                              set Out15
+                                         Case 16
+                                              set Out16
+                                         Case 17
+                                              set Out17
+                                         Case 18
+                                              set Out18
+                                         Case 19
+                                              set Out19
+                                         Case 20
+                                              set Out20
+                                         Case 21
+                                              set Out21
+                                         Case 22
+                                              Set Out22
+                                         Case 23
+                                              set Out23
+                                         Case 24
+                                              set Out24
+                                         Case 25
+                                              set Out25
+                                         Case 26
+                                              set Out26
+                                         Case 27
+                                              set Out27
+                                         Case 28
+                                              Set Out28
+
                                 End Select
                 End If
                Case 158
                     For I = 1 To Counterid
                         Eoutid1(i) = 0
-                        Waitms 2
+                        Waitms 4
                         Eoutid2(i) = 0
-                        Waitms 2
+                        Waitms 4
                         Eoutid3(i) = 0
-                        Waitms 2
+                        Waitms 4
                         Eoutnum(i) = 0
-                        Waitms 2
+                        Waitms 4
                         Eouts(i) = 0
-                        Waitms 2
+                        Waitms 4
                         Idgot = 0
-                        Waitms 2
-                        For J = 1 To Counterid
-                            Call Setouts
-                        Next
-                        Status = Resetall
-                        Call Keyorder
+                        Waitms 150
+                        Toggle Rxtx
                     Next
+                    Reset Rxtx
                Case 159
                     If Id >= Minid And Id <= Maxid Then
                        For I = 1 To Counterid
                            If Eoutid1(i) = Id Then
                               Set Tempon
-                              If Outs(i) = 0 Then Temponid(i) = 1
+                              If Outs.i = 0 Then Temponid(i) = 1
                            End If
                        Next
                     End If
@@ -514,7 +639,7 @@ Sub Findorder
                                   Tempon(id) = 0
                                   J = I
                                   Status = Normal
-                                  If Outs(j) = 1 Then Outs(j) = 0 Else Outs(j) = 1
+                                  If Outs.j = 1 Then Outs.j = 0 Else Outs.j = 1
                                   Call Setouts
                                End If
                            Next
@@ -528,7 +653,7 @@ Sub Findorder
                                   Tempon(id) = 0
                                   J = I
                                   Status = Normal
-                                  Outs(j) = 0
+                                  Outs.j = 0
                                   Call Setouts
                                End If
                            Next
@@ -541,7 +666,7 @@ Sub Findorder
                                   Tempon(id) = 0
                                   J = I
                                   Status = Normal
-                                  Outs(j) = 1
+                                  Outs.j = 1
                                   Call Setouts
                                End If
                            Next
