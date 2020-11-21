@@ -19,26 +19,11 @@ Configs:
 
 Configntc:
 
-Config Adc = Single , Prescaler = Auto
 
-Dim Ad30 As Word
-Dim Temp As Single
-
-Dim Vo As Single
-Dim Rt As Single
-Dim Adcin As Word
-
-Dim W As Single
-Dim Y As Single
-Dim Z As Single
-Dim Lnrt As Single
 Dim Alloff As Boolean
 
 Fan Alias Portd.5
 
-Const A = 1.009249522 * 10 ^ -3
-Const B = 2.378405444 * 10 ^ -4
-Const C = 2.019202697 * 10 ^ -7
 Defports:
         Config Portb.2 = Output : Buz Alias Portb.2
 
@@ -70,6 +55,8 @@ Maxconfig:
           Dim Cmd As Byte
           Dim Id As Byte
           Dim Wantid As Boolean
+
+          Dim F As Byte
 
           Const Maxlight = 0
           Const Dark = 65535
@@ -199,46 +186,26 @@ Main:
 
 Gosub Main
 
-Ntc:
-       Adcin = Getadc(7)
-       Vo = 1023 / Adcin
-       Vo = Vo - 1
-       Rt = Vo * 10000
-       Lnrt = Log(rt)
-       W = Lnrt
-       W = W ^ 3
-       W = W * C
-       Y = B * Lnrt
-       Z = A + Y
-       Z = Z + W
-
-       Temp = 1 / Z
-       Temp = Temp - 273
-       If Temp < 45 Then Reset Fan
-       If Temp > 50 Then Set Fan
-       If Temp > 120 Then Set Alloff Else Reset Alloff
-
-Return
 
 Rx:
 
-      Incr I
+      Incr F
       Inputbin Maxin
 
 
-      If I = 5 Then
+      If F = 5 Then
          If Maxin = 230 Or Maxin = 210 Then Set Inok
       End If
-      If Maxin = 252 Or Maxin = 232 Then I = 1
+      If Maxin = 252 Or Maxin = 232 Then F = 1
 
-      Din(i) = Maxin
+      Din(f) = Maxin
 
       If Inok = 1 Then
         Toggle Rxtx
         Id = Din(4)
         Typ = Din(2)
         If Typ = Keyin Or Typ = Remote Or Typ = Mytyp Then Call Checkanswer
-        I = 0
+        F = 0
         Reset Inok
       End If
 

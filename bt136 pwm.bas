@@ -226,7 +226,7 @@ Int1rutin:
              Toggle Buz
 
           End If
-'(
+
           If Rxtx = 1 Then
              Incr Rxtxoff
              If Rxtxoff = 20 Then
@@ -235,7 +235,7 @@ Int1rutin:
              End If
           End If
 
-')
+
           Reset Out1
           Reset Out2
           Reset Out3

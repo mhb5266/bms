@@ -21,6 +21,8 @@ Dim Maxin As Byte
 
 Dim Inok As Boolean
 
+Dim F As Byte
+
 Dim Id As Byte
 Dim Typ As Byte
 Dim Cmd As Byte
@@ -31,7 +33,7 @@ Dim Endbit As Byte
 Dim Cmdcode As Byte
 
 Dim Enum As Eram Byte
-Dim num As Byte
+Dim Num As Byte
 Num = Enum
 If Num > 100 Then Num = 0
 Dim Idcounter As Byte
@@ -139,7 +141,7 @@ End If
 Waitms 500
 Set Led1
 Call Beep
-call beep
+Call Beep
 Reset Led1
 Waitms 500
 
@@ -230,7 +232,7 @@ Keys:
      Reset Rel3
      Reset Rel4
      Set Led1
-     Keycheck = 1                                                'hengame learn kardan be releha farman nade
+     Keycheck = 1                                           'hengame learn kardan be releha farman nade
      Waitms 150
      Do
        If Key1 = 0 Then                                     ' agar kelid feshorde bemanad
@@ -265,7 +267,7 @@ Return
 '================================================================ CHECK   code chek ok
 Check:
       Okread = 1
-      If Keycheck = 0 Then                                        'agar keycheck=1 bashad yani be releha farman nade
+      If Keycheck = 0 Then                                  'agar keycheck=1 bashad yani be releha farman nade
          Eaddress = 10
          For I = 1 To Rnumber
              Gosub Ra_r
@@ -294,9 +296,9 @@ Command:
         Reset Hasid
         For I = 1 To 40
             If Remoteid(i) = Raw And Codeid(i) = Code Then
-               If Setid(i) < 100 Or Setid(i) > 0 Then Set Hasid
+               If Setid(i) < 100 Or Setid(i) > 55 Then Set Hasid
                If Hasid = 1 Then
-                       If Isrequest = 1 Then
+                       'If Isrequest = 1 Then
                           For H = 1 To 40
                               If Remoteid(h) = Raw Then
                                     Id = Setid(i)
@@ -308,7 +310,7 @@ Command:
 
                               End If
                           Next H
-                       End If
+                       'End If
                        Exit For
                End If
             End If
@@ -574,21 +576,21 @@ Return
 
 Rx:
 
-      Incr I
+      Incr F
       Inputbin Maxin
 
 
-      If I = 5 And Maxin = 220 Then Set Inok
-      If Maxin = 242 Then I = 1
+      If F = 5 And Maxin = 220 Then Set Inok
+      If Maxin = 242 Then I = F
 
-      Din(i) = Maxin
+      Din(f) = Maxin
 
       If Inok = 1 Then
 
         Reset Inok
         Wic = Din(4)
         Id = Wic
-        I = 0
+        F = 0
         If Din(2) = 104 Then Call Checkanswer
 
 
@@ -682,11 +684,11 @@ Sub Checkanswer
                      Set Led1
                   For I = 1 To 40
                       Eidcounter = 0
-                      Waitms 50
+                      Waitms 5
                       Remoteid(i) = 0
-                      Waitms 50
+                      Waitms 5
                       Codeid(i) = 0
-                      Waitms 50
+                      Waitms 5
                       Setid(i) = 0
                       Waitms 50
                       Toggle Buzz
@@ -695,10 +697,7 @@ Sub Checkanswer
 
                   Reset Learnnew
 
-                            Reset Rel1
-                            Reset Rel2
-                            Reset Rel3
-                            Reset Rel4
+
                                   Rnumber = 0
                                   Gosub Rnumber_ew
 
@@ -774,17 +773,17 @@ Sub Do_learn
         If Okread = 1 Then
            Call Beep
 
-           If Rnumber = 0 Then                                  ' agar avalin remote as ke learn mishavad
+           If Rnumber = 0 Then                              ' agar avalin remote as ke learn mishavad
               Incr Rnumber
               Gosub Rnumber_ew
               Ra = Address
               Gosub Ra_w
               Exit Do
            Else
-               Eaddress = 10                                    'address avalin khane baraye zakhire address remote
+               Eaddress = 10                                'address avalin khane baraye zakhire address remote
                For I = 1 To Rnumber
                    Gosub Ra_r
-                   If Ra = Address Then                         'agar address remote tekrari bod yani ghablan learn shode
+                   If Ra = Address Then                     'agar address remote tekrari bod yani ghablan learn shode
                       Set Buzz
                       Wait 1
                       Reset Buzz
@@ -795,15 +794,15 @@ Sub Do_learn
                    End If
                    Eaddress = Eaddress + 1
                Next
-               If Error = 0 Then                                ' agar tekrari nabod
-                  Incr Rnumber                                  'be meghdare rnumber ke index tedade remote haye learn shode ast yek vahed ezafe kon
-                  If Rnumber > 100 Then                         'agar bishtar az 100 remote learn shavad
+               If Error = 0 Then                            ' agar tekrari nabod
+                  Incr Rnumber                              'be meghdare rnumber ke index tedade remote haye learn shode ast yek vahed ezafe kon
+                  If Rnumber > 100 Then                     'agar bishtar az 100 remote learn shavad
                      Rnumber = 100
                      Set Buzz
                      Wait 5
                      Reset Buzz
-                  Else                                          'agar kamtar az 100 remote bod
-                     Gosub Rnumber_ew                           'meghdare rnumber ra dar eeprom zakhore mikonad
+                  Else                                      'agar kamtar az 100 remote bod
+                     Gosub Rnumber_ew                       'meghdare rnumber ra dar eeprom zakhore mikonad
                      Ra = Address
                      Gosub Ra_w
                   End If
