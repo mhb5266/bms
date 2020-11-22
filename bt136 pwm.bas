@@ -81,6 +81,9 @@ Maxconfig:
           Const Remote = 104
           Const Keyin = 101
 
+          Dim M As Byte
+          Dim Tblank As Byte
+
           Dim Q As Byte
           Dim T0back As Boolean
           Dim Inok As Boolean
@@ -89,6 +92,8 @@ Maxconfig:
           Dim Heat As Byte
           Dim P As Word
 
+
+          Declare Sub Clearids
           Declare Sub Checkanswer
           Declare Sub Getid
           Declare Sub Keyorder
@@ -177,6 +182,34 @@ Main:
            End If
        Next
        If Heat > 2 Then Set Fan Else Reset Fan
+
+
+       If Key = 0 Then
+          Waitms 30
+          If Key = 0 Then
+             Stop Timer0
+             M = 0
+             Do
+               Waitms 50
+               Incr M
+               If M < 80 Then
+                  Tblank = M Mod 10
+                  If Tblank = 0 Then Toggle Rxtx
+               Else
+                  Tblank = M Mod 5
+                  If Tblank = 0 Then Toggle Rxtx
+               End If
+             Loop Until Key = 1
+             Reset Rxtx
+             If M < 80 Then
+                Call Getid
+             Else
+                 Call Clearids
+             End If
+             Start Timer0
+          End If
+       End If
+
 '(
        If Timer1 > 13900 Then
           Timer1 = 0
@@ -185,6 +218,8 @@ Main:
           Start Timer1
        End If
 ')
+
+'(
        If Key = 0 Then
           Waitms 50
           If Key = 0 Then
@@ -201,7 +236,7 @@ Main:
           Do
           Loop Until Key = 1
        End If
-
+')
 
      Loop
 
@@ -296,6 +331,24 @@ Sub Pfrutin
       Reset Out8
 
     Loop
+End Sub
+
+Sub Clearids
+                    For I = 1 To 8
+                        Eoutid1(i) = 0
+                        Waitms 2
+                        Eoutid2(i) = 0
+                        Waitms 2
+                        Eoutid3(i) = 0
+                        Waitms 2
+                        Light(i) = Dark
+                        Waitms 200
+                        Toggle Buz
+                        Outid1(i) = 0
+                        Outid2(i) = 0
+                        Outid3(i) = 0
+                    Next
+
 End Sub
 
 Sub Getid

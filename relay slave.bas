@@ -66,7 +66,8 @@ On Urxc Rx
 Defines:
 
 Dim F As Byte
-
+Dim M As Byte
+Dim Tblank As Byte
 Dim Test As Byte
 Dim Wantid As Boolean
 Dim Gotid As Boolean
@@ -135,7 +136,7 @@ Dim Endbit As Byte
 
 
 Subs:
-
+Declare Sub Clearids
 Declare Sub Findorder
 Declare Sub Getid
 Declare Sub Tx
@@ -224,6 +225,36 @@ Main:
           Next
        End If
 
+
+
+       If Key = 1 Then
+          Waitms 30
+          If Key = 1 Then
+             Stop Timer0
+             M = 0
+             Do
+               Waitms 50
+               Incr M
+               If M < 80 Then
+                  Tblank = M Mod 10
+                  If Tblank = 0 Then Toggle Rxtx
+               Else
+                  Tblank = M Mod 4
+                  If Tblank = 0 Then Toggle Rxtx
+               End If
+             Loop Until Key = 0
+             Reset Rxtx
+             If M < 80 Then
+                Call Getid
+             Else
+                 Call Clearids
+             End If
+             Start Timer0
+          End If
+       End If
+
+'(
+
        If Key = 1 Then
           Waitms 50
           If Key = 1 Then
@@ -237,27 +268,6 @@ Main:
           End If
           Do
           Loop Until Key = 1
-       End If
-
-
-'(
-       If Key = 1 Then
-          Test = 0
-          Do
-            Waitms 100
-            Incr Test
-            If Test > 30 Then
-               Call Getid
-               Exit Do
-            End If
-          Loop Until Key = 0
-          If Test < 10 Then
-             Status = Refreshall
-             Call Keyorder
-             Wait 1
-             Status = Stopall
-             Call Keyorder
-          End If
        End If
 ')
      Loop
@@ -388,6 +398,30 @@ Sub Getid
 
        Reset Wantid
        Return
+End Sub
+
+Sub Clearids
+                    For I = 1 To Counterid
+                        Eoutid1(i) = 0
+                        Waitms 4
+                        Eoutid2(i) = 0
+                        Waitms 4
+                        Eoutid3(i) = 0
+                        Waitms 4
+                        Eoutnum(i) = 0
+                        Waitms 4
+                        Eouts(i) = 0
+                        Waitms 4
+                        Idgot = 0
+                        Waitms 150
+                        Toggle Rxtx
+                    Next
+                    Reset Rxtx
+                Porta = 0
+                Portb = 0
+                Portc = 0
+                Portd = 0
+
 End Sub
 
 Sub Tx
@@ -605,22 +639,7 @@ Sub Findorder
                                 End Select
                 End If
                Case 158
-                    For I = 1 To Counterid
-                        Eoutid1(i) = 0
-                        Waitms 4
-                        Eoutid2(i) = 0
-                        Waitms 4
-                        Eoutid3(i) = 0
-                        Waitms 4
-                        Eoutnum(i) = 0
-                        Waitms 4
-                        Eouts(i) = 0
-                        Waitms 4
-                        Idgot = 0
-                        Waitms 150
-                        Toggle Rxtx
-                    Next
-                    Reset Rxtx
+                    Call Clearids
                Case 159
                     If Id >= Minid And Id <= Maxid Then
                        For I = 1 To Counterid

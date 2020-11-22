@@ -1,6 +1,6 @@
-Report       : pwm mosfet
+Report       : eeprom remote auto id
 Date         : 11-22-2020
-Time         : 14:22:13
+Time         : 15:51:08
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,20 +8,20 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 106C hex  -> Will fit into ROM
-ROMIMAGE     :  4204 dec
-FLASH USED   :  51  %
+ROMIMAGE     : 164E hex  -> Will fit into ROM
+ROMIMAGE     :  5710 dec
+FLASH USED   :  69  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
 
 Stack start  : 45F hex
-Stack size   : 28 hex
-S-Stacksize  : 10 hex
-S-Stackstart : 438 hex
-Framesize    : 20 hex
-Framestart   : 408 hex
-Space left   :  857  dec
+Stack size   : 20 hex
+S-Stacksize  : 8 hex
+S-Stackstart : 440 hex
+Framesize    : 18 hex
+Framestart   : 420 hex
+Space left   :  828  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -90,42 +90,49 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-ALLOFF                           Bit [7]           0060          96 
-DIN                              Byte(5)           0061          97 
-MAXIN                            Byte              0066          102 
-TYP                              Byte              0067          103 
-CMD                              Byte              0068          104 
-ID                               Byte              0069          105 
-WANTID                           Bit [6]           0060          96 
-F                                Byte              006A          106 
-M                                Byte              006B          107 
-TBLANK                           Byte              006C          108 
-INOK                             Bit [5]           0060          96 
-WIC                              Byte              006D          109 
-TEST                             Word              006E          110 
-ELIGHT                           EEPROM Word(8)    0000          0 
-LIGHT                            Word(8)           0070          112 
-ALLLIGHT                         EEPROM Word       0010          16 
-PLUS                             Byte              0080          128 
-UPDOWN                           Bit [4]           0060          96 
-SECC                             Word              0081          129 
-TERM                             Byte              0083          131 
-PW                               Word              0084          132 
-STEPS                            Byte              0086          134 
-DELAY_                           Word              0087          135 
-I                                Byte              0089          137 
-EOUTID1                          EEPROM Byte(8)    0012          18 
-EOUTID2                          EEPROM Byte(8)    001A          26 
-EOUTID3                          EEPROM Byte(8)    0022          34 
-OUTID1                           Byte(8)           008A          138 
-OUTID2                           Byte(8)           0092          146 
-OUTID3                           Byte(8)           009A          154 
-GOTID                            Bit [3]           0060          96 
-K                                Byte              00A2          162 
-J                                Byte              00A3          163 
-X                                Byte              00A4          164 
-OUTS                             Byte(8)           00A5          165 
-STATUS                           Byte              00AD          173 
+MAXIN                            Byte              0060          96 
+INOK                             Bit [7]           0061          97 
+F                                Byte              0062          98 
+NEWLEARN                         Bit [6]           0061          97 
+REMOTEID                         EEPROM Byte(10)   0000          0 
+ID                               Byte              0063          99 
+TYP                              Byte              0064          100 
+CMD                              Byte              0065          101 
+DIN                              Byte(5)           0066          102 
+WIC                              Byte              006B          107 
+DIRECT                           Byte              006C          108 
+ENDBIT                           Byte              006D          109 
+CMDCODE                          Byte              006E          110 
+ENUM                             EEPROM Byte       000A          10 
+NUM                              Byte              006F          111 
+RAW                              Byte              0070          112 
+H                                Byte              0071          113 
+X                                Byte              0072          114 
+W                                Byte              0073          115 
+TEST                             Byte              0074          116 
+ISREQUEST                        Bit [5]           0061          97 
+CLEARALL                         Bit [4]           0061          97 
+LEARNNEW                         Bit [3]           0061          97 
+ENABLE_REMOTE                    Bit [2]           0061          97 
+S                                Word(24)          0075          117 
+I                                Byte              00A5          165 
+SADDRESS                         String * 20       00A6          166 
+SCODE                            String * 4        00BB          187 
+ADDRESS                          Long              00C0          192 
+CODE                             Byte              00C4          196 
+RA                               Long              00C5          197 
+RNUMBER                          Byte              00C9          201 
+OKREAD                           Bit [1]           0061          97 
+ERROR                            Bit [0]           0061          97 
+KEYCHECK                         Bit [7]           00CA          202 
+T                                Word              00CB          203 
+EADDRESS                         Word              00CD          205 
+E_READ                           Byte              00CF          207 
+E_WRITE                          Byte              00D0          208 
+M                                String * 8        00D1          209 
+M1                               String * 2        00DA          218 
+M2                               String * 2        00DD          221 
+M3                               String * 2        00E0          224 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -457,7 +464,7 @@ OCR2UB                           1
 TCR2UB                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
-_GSTRBUF                         1032
+_GSTRBUF                         1056
 _DECIMALPOINT                    46
 _RTSCTS                          0
 _RTSCTS1                         0
@@ -490,21 +497,19 @@ _PBIN_EXTENDED                   0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
-_HWSTACK_LOW                     &H0437
-_SWSTACK_LOW                     &H0428
-_FRAME_HIGH                      &H0429
+_HWSTACK_LOW                     &H043F
+_SWSTACK_LOW                     &H0438
+_FRAME_HIGH                      &H0439
 _XMEGA                           0
-MAXLIGHT                         0
-DARK                             65535
-MIDLIGHT                         10500
-MINLIGHT                         13500
-RELAYMODULE                      110
-MYTYP                            111
-REMOTE                           104
-KEYIN                            101
-D                                0
-REFRESHALL                       1
-STOPALL                          2
+TOMASTER                         252
+TOINPUT                          242
+TOOUTPUT                         232
+MYTYP                            104
+EEWRITE                          160
+EEREAD                           161
+_SDA                             4
+_SCL                             5
+___I2CDELAY                      5
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -568,16 +573,8 @@ R31                              not used
 ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
-WIC                              not used
-PLUS                             not used
-UPDOWN                           not used
-SECC                             not used
-TERM                             not used
-PW                               not used
-STEPS                            not used
-DELAY_                           not used
-J                                not used
+H                                not used
 X                                not used
-OUTS                             not used
-STATUS                           not used
+W                                not used
+TEST                             not used
 

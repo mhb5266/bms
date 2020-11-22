@@ -57,7 +57,8 @@ Maxconfig:
           Dim Wantid As Boolean
 
           Dim F As Byte
-
+          Dim M As Byte
+          Dim Tblank As Byte
           Const Maxlight = 0
           Const Dark = 65535
           Const Midlight = 10500
@@ -69,7 +70,7 @@ Maxconfig:
 
           Dim Inok As Boolean
           Dim Wic As Byte
-
+          Declare Sub Clearids
           Declare Sub Checkanswer
           Declare Sub Getid
           Declare Sub Keyorder
@@ -158,7 +159,33 @@ Main:
        If Timer1 > Light(7) Then Set Out7 Else Reset Out7
        If Timer1 > Light(8) Then Set Out8 Else Reset Out8
 
+       If Key = 0 Then
+          Waitms 30
+          If Key = 0 Then
+             Stop Timer0
+             M = 0
+             Do
+               Waitms 50
+               Incr M
+               If M < 80 Then
+                  Tblank = M Mod 10
+                  If Tblank = 0 Then Toggle Rxtx
+               Else
+                  Tblank = M Mod 5
+                  If Tblank = 0 Then Toggle Rxtx
+               End If
+             Loop Until Key = 1
+             Reset Rxtx
+             If M < 80 Then
+                Call Getid
+             Else
+                 Call Clearids
+             End If
+             Start Timer0
+          End If
+       End If
 
+'(
        If Key = 1 Then
           Test = 0
           Do
@@ -181,7 +208,7 @@ Main:
           End If
        End If
 
-
+  ')
      Loop
 
 Gosub Main
@@ -271,6 +298,25 @@ End
 
 Sub Keyorder
 
+
+End Sub
+
+Sub Clearids
+                    For I = 1 To 8
+                        Eoutid1(i) = 0
+                        Waitms 2
+                        Eoutid2(i) = 0
+                        Waitms 2
+                        Eoutid3(i) = 0
+                        Waitms 2
+                        Light(i) = Dark
+                        Waitms 2
+                        Toggle Buz
+                        Outid1(i) = 0
+                        Outid2(i) = 0
+                        Outid3(i) = 0
+                        Waitms 200
+                    Next
 
 End Sub
 

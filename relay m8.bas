@@ -51,7 +51,8 @@ On Urxc Rx
 Defines:
 
 Dim F As Byte
-
+Dim M As Byte
+Dim Tblank As Byte
 Dim P As Word
 
 Dim Test As Byte
@@ -122,7 +123,7 @@ Dim Endbit As Byte
 
 
 Subs:
-
+Declare Sub Clearids
 Declare Sub Findorder
 Declare Sub Getid
 Declare Sub Tx
@@ -214,6 +215,36 @@ Main:
           Next
        End If
 
+
+
+       If Key = 0 Then
+          Waitms 30
+          If Key = 0 Then
+             Stop Timer0
+             M = 0
+             Do
+               Waitms 50
+               Incr M
+               If M < 80 Then
+                  Tblank = M Mod 10
+                  If Tblank = 0 Then Toggle Rxtx
+               Else
+                  Tblank = M Mod 5
+                  If Tblank = 0 Then Toggle Rxtx
+               End If
+             Loop Until Key = 1
+             Reset Rxtx
+             If M < 80 Then
+                Call Getid
+             Else
+                 Call Clearids
+             End If
+             Start Timer0
+          End If
+       End If
+
+       '(
+
        If Key = 0 Then
           Waitms 50
           If Key = 0 Then
@@ -229,7 +260,7 @@ Main:
           Loop Until Key = 0
        End If
 
-
+         ')
 '(
        If Key = 1 Then
           Test = 0
@@ -347,6 +378,26 @@ Sub Getid
 
        Reset Wantid
        Return
+End Sub
+
+Sub Clearids
+                    For I = 1 To Counterid
+                        Eoutid1(i) = 0
+                        Waitms 4
+                        Eoutid2(i) = 0
+                        Waitms 4
+                        Eoutid3(i) = 0
+                        Waitms 4
+                        Eoutnum(i) = 0
+                        Waitms 4
+                        Eouts(i) = 0
+                        Waitms 4
+                        Idgot = 0
+                        Waitms 150
+                        Toggle Rxtx
+                    Next
+                    Reset Rxtx
+
 End Sub
 
 Sub Tx

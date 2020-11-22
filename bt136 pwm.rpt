@@ -1,6 +1,6 @@
 Report       : bt136 pwm
-Date         : 11-21-2020
-Time         : 14:09:31
+Date         : 11-22-2020
+Time         : 14:15:37
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : F3E hex  -> Will fit into ROM
-ROMIMAGE     :  3902 dec
-FLASH USED   :  47  %
+ROMIMAGE     : 1084 hex  -> Will fit into ROM
+ROMIMAGE     :  4228 dec
+FLASH USED   :  51  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  853  dec
+Space left   :  851  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -96,39 +96,41 @@ TYP                              Byte              0066          102
 CMD                              Byte              0067          103 
 ID                               Byte              0068          104 
 WANTID                           Bit [7]           0069          105 
-Q                                Byte              006A          106 
+M                                Byte              006A          106 
+TBLANK                           Byte              006B          107 
+Q                                Byte              006C          108 
 T0BACK                           Bit [6]           0069          105 
 INOK                             Bit [5]           0069          105 
-WIC                              Byte              006B          107 
-F                                Byte              006C          108 
-HEAT                             Byte              006D          109 
-P                                Word              006E          110 
-TEST                             Word              0070          112 
+WIC                              Byte              006D          109 
+F                                Byte              006E          110 
+HEAT                             Byte              006F          111 
+P                                Word              0070          112 
+TEST                             Word              0072          114 
 ELIGHT                           EEPROM Word(8)    0000          0 
-LIGHT                            Word(8)           0072          114 
+LIGHT                            Word(8)           0074          116 
 ALLLIGHT                         EEPROM Word       0010          16 
-PLUS                             Byte              0082          130 
+PLUS                             Byte              0084          132 
 UPDOWN                           Bit [4]           0069          105 
-SECC                             Word              0083          131 
-TERM                             Byte              0085          133 
-PW                               Word              0086          134 
-STEPS                            Byte              0088          136 
-DELAY_                           Word              0089          137 
-I                                Byte              008B          139 
+SECC                             Word              0085          133 
+TERM                             Byte              0087          135 
+PW                               Word              0088          136 
+STEPS                            Byte              008A          138 
+DELAY_                           Word              008B          139 
+I                                Byte              008D          141 
 EOUTID1                          EEPROM Byte(8)    0012          18 
 EOUTID2                          EEPROM Byte(8)    001A          26 
 EOUTID3                          EEPROM Byte(8)    0022          34 
-POWEROFF                         Byte              008C          140 
-OUTID1                           Byte(8)           008D          141 
-OUTID2                           Byte(8)           0095          149 
-OUTID3                           Byte(8)           009D          157 
-RXTXOFF                          Byte              00A5          165 
+POWEROFF                         Byte              008E          142 
+OUTID1                           Byte(8)           008F          143 
+OUTID2                           Byte(8)           0097          151 
+OUTID3                           Byte(8)           009F          159 
+RXTXOFF                          Byte              00A7          167 
 GOTID                            Bit [3]           0069          105 
-K                                Byte              00A6          166 
-J                                Byte              00A7          167 
-X                                Byte              00A8          168 
-OUTS                             Byte(8)           00A9          169 
-STATUS                           Byte              00B1          177 
+K                                Byte              00A8          168 
+J                                Byte              00A9          169 
+X                                Byte              00AA          170 
+OUTS                             Byte(8)           00AB          171 
+STATUS                           Byte              00B3          179 
 
 --------------------------------------------------------------------------------
 Constant                         Value

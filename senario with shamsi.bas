@@ -793,6 +793,9 @@ M_day = Kole_roz_m
 Return
 
 
+Smalljacuzi:
+$bgf "small jacuzi.bgf"
+
 Fountainicon:
 $bgf "fountain.bgf"
 
@@ -882,9 +885,10 @@ Sub Main_menu
                                Case 5
                                     Showpic 32 , 0 , Setclockicon
                                Case 6
-                                    Showpic 32 , 0 , Settingicon
-                               Case 7
                                     Showpic 32 , 0 , Fountainicon
+                               Case 7
+                                    Showpic 32 , 0 , Settingicon
+
                         End Select
             End If
             If Touch = 2 Then
@@ -921,9 +925,9 @@ Sub Main_menu
                                Case 5
                                     Showpic 32 , 0 , Setclockicon
                                Case 6
-                                    Showpic 32 , 0 , Settingicon
-                               Case 7
                                     Showpic 32 , 0 , Fountainicon
+                               Case 7
+                                    Showpic 32 , 0 , Settingicon
                         End Select
                         Touch = 0
             End If
@@ -942,6 +946,8 @@ Sub Main_menu
                           Case 5
                                Call Clock_menu
                           Case 6
+                               Call Fountain_menu
+                          Case 7
                                Call Setting_menu
 
 
@@ -2265,18 +2271,18 @@ Sub Show
        Dift = St1(2) - St1(1)
 
 '       If Dift < 30 And Dift > -30  Then
-        If P = 10 Then
 
 
-'(
-          Setfont Font16x16en
-          Lcdat 3 , 1 , Sens1 ; "!   "
-          Lcdat 5 , 1 , Sens2 ; "!   "
-          Setfont Font8x8
-          Lcdat 7 , 1 , Tmp1 ; "   "
-          Lcdat 8 , 1 , Tmp2 ; "   "
-')
+
+
+
+        'If P = 10 Then
+
+
+
  '
+
+         If Jstatus = 0 Then
             If Tmp1 < 0 Then
                  Lcdat 3 , 0 , "-"
                  If Tmp1 > -100 And Tmp1 < 0 Then
@@ -2292,7 +2298,7 @@ Sub Show
                      Lcdat 5 , 73 , Ashar1 ; "  "
                      Lcdat 3 , 73 , " ! "
                  End If
-              Else
+            Else
                  If Tmp1 < 100 Then
                      Setfont Font32x32
                      Lcdat 3 , 1 , Sahih1
@@ -2306,10 +2312,18 @@ Sub Show
                      Lcdat 5 , 64 , Ashar1 ; "  "
                      Lcdat 3 , 64 , " ! "
                  End If
-              End If
-
-
-       End If
+            End If
+         Else
+                     Setfont Font 32x32
+                     Lcdat 3 , 0 , Sahih2 , 1
+                     Lcdat 7 , 0 , "  " , 1
+                     Setfont Font16x16en
+                     Lcdat 3 , 64 , "!" , 1
+                     Lcdat 4 , 64 , " " , 1
+                     Lcdat 7 , 0 , "      " , 1
+                     Showpic 90 , 32 , Smalljacuzi , 1
+         End If
+       'End If
 
 
 
@@ -2448,7 +2462,12 @@ Sub Temp
       Gosub Conversion
       Sens2 = Temperature
 
-
+         If Readsens < 0 Then Readsens = Readsens * -1
+         Sahih2 = 0
+         If Readsens > 9 Then
+            Sahih2 = Readsens / 10
+            Ashar2 = Readsens Mod 10
+         End If
 
 
 
