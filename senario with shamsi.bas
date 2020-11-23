@@ -2268,7 +2268,17 @@ Sub Show
  '
        Setfont Font16x16en
 
-       Dift = St1(2) - St1(1)
+
+       If Jstatus = 0 Then
+          Lcdat 3 , 1 , Sens1 ; "!" , 1
+          Showpic 0 , 33 , Tempicon , 1
+
+       Else
+          Lcdat 3 , 1 , Sens2 , 1
+          Showpic 0 , 33 , Smalljacuzi ; "!" , 1
+       End If
+
+       'Dift = St1(2) - St1(1)
 
 '       If Dift < 30 And Dift > -30  Then
 
@@ -2281,7 +2291,7 @@ Sub Show
 
 
  '
-
+'(
          If Jstatus = 0 Then
             If Tmp1 < 0 Then
                  Lcdat 3 , 0 , "-"
@@ -2325,7 +2335,7 @@ Sub Show
          End If
        'End If
 
-
+')
 
 
        Setfont Font8x8

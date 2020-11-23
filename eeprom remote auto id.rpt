@@ -1,6 +1,6 @@
 Report       : eeprom remote auto id
-Date         : 11-22-2020
-Time         : 15:51:08
+Date         : 11-23-2020
+Time         : 13:27:05
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,8 +8,8 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 164E hex  -> Will fit into ROM
-ROMIMAGE     :  5710 dec
+ROMIMAGE     : 163E hex  -> Will fit into ROM
+ROMIMAGE     :  5694 dec
 FLASH USED   :  69  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz

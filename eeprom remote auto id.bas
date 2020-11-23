@@ -1,7 +1,4 @@
-'**************************************
-'LEARNING REMOTE DECODER
-' Program by icpulse.ir
-'**************************************
+
 $regfile = "M8def.dat"
 $crystal = 11059200
 $baud = 115200
@@ -13,10 +10,7 @@ Enable Interrupts
 Enable Urxc
 On Urxc Rx
 
-Rxtx Alias Portd.7 : Config Portd.7 = Output
-Wantid_led Alias Portc.3 : Config Portc.3 = Output
-led Alias Portc.2 : Config Portc.2 = Output
-En Alias Portd.6 : Config Portd.6 = Output
+En Alias Portd.2 : Config Portd.2 = Output
 Dim Maxin As Byte
 
 Dim Inok As Boolean
@@ -85,26 +79,33 @@ Declare Sub Clearids
 
 Config_remote:
 
+_in Alias Pind.3 : Config Portd.3 = Input
+Key1 Alias Pind.6 : Config Portd.6 = Input
+
+Rel1 Alias Portd.7 : Config Portd.7 = Output
+Led Alias Portb.0 : Config Portb.0 = Output
+buzz Alias Portb.1 : Config Portb.1 = Output
+Rxtx Alias Portb.2 : Config Portb.2 = Output
+
+
 '-------------------------------------------------------------------------------
+'(
 Config Pinb.0 = Input                                       'RF INPUT
 Config Pinc.1 = Output                                      'Buzzer B.1
 Config Pind.2 = Output                                      'relay 1
 Config Pind.3 = Output                                      'relay 2
 Config Pind.4 = Output                                      'relay3
 Config Pind.5 = Output                                      'relay4
-Config Pinc.0 = Output                                      'led1 learning led
-Config Pinb.1 = Input                                       'key1
+Config Pinc.0 = Output                                      'buzz learning led
+')                                     'key1
 Config Scl = Portc.5                                        'at24cxx pin6
 Config Sda = Portc.4                                        'at24cxx pin5
 '--------------------------------- Alias  --------------------------------------
-_in Alias Pinb.0                                            'RF input
-Buzz Alias Portc.0                                          'B.1
-Rel1 Alias Portd.2                                          'relay1
-Rel2 Alias Portd.3                                          'relay2
-Rel3 Alias Portd.4                                          'relay3
-Rel4 Alias Portd.5                                          'relay4
-Led1 Alias Portc.1                                          'learning led
-Key1 Alias Pinb.1                                           'learn key
+'_in Alias Pinb.0                                            'RF input
+'Buzz Alias Portc.0                                          'B.1
+'Rel1 Alias Portd.2                                          'relay1
+'buzz Alias Portc.1                                          'learning led
+'Key1 Alias Pinb.1                                           'learn key
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Const Eewrite = 160                                         'eeprom write address
 Const Eeread = 161                                          'eeprom read address
@@ -145,10 +146,10 @@ Gosub Rnumber_ew
 End If
 '------------------- startup
 Waitms 500
-Set Led1
+Set buzz
 Call Beep
 Call Beep
-Reset Led1
+Reset buzz
 Waitms 500
 
 
@@ -234,10 +235,8 @@ Return
 '========================================================================= keys  learning
 Keys:
      Reset Rel1
-     Reset Rel2
-     Reset Rel3
-     Reset Rel4
-     Set Led1
+
+     Set buzz
      Keycheck = 1                                           'hengame learn kardan be releha farman nade
      Waitms 150
      Do
@@ -255,14 +254,14 @@ Keys:
                    Wait 1
                    Wait 1
                    Reset Buzz
-                   Reset Led1
+                   Reset buzz
                    Return
                    Exit While
                 End If
           Wend
           If T < 5000 Then
                     T = 0
-                    Reset Led1
+                    Reset buzz
                     Return
           End If
        End If
@@ -685,12 +684,12 @@ If Clearall = 1 Then
      Next I
      Rnumber = 0
      Rnumber_e = Rnumber
-     Set Led1
+     Set buzz
      Call Beep
      Call Beep
      Call Errorbeep
      Wait 1
-     Reset Led1
+     Reset buzz
      Reset Clearall
 End If
 ')
@@ -704,7 +703,7 @@ Sub Checkanswer
 
 
                 Case 150
-                     Set led
+                     Set Led
                      Set Isrequest
 
                 Case 151
@@ -715,7 +714,7 @@ Sub Checkanswer
                   Cmdcode = 180
 
                   Reset Isrequest
-                  Reset led
+                  Reset Led
                   'Set Wantid_led
 
 
@@ -748,7 +747,7 @@ Sub Checkanswer
                   Wic = Din(4)
                   Cmdcode = 163
 
-                  Reset led
+                  Reset Led
                   'Set Wantid_led
                 Case 164
                   Reset Learnnew
@@ -808,7 +807,7 @@ Sub Do_learn
         End If
     Loop
     Okread = 0
-    Reset Led1
+    Reset buzz
 Return
 End Sub
 
@@ -829,7 +828,7 @@ Sub Clearids:
                             Call Beep
                             Call Errorbeep
                             Wait 1
-                            Reset Led1
+                            Reset Buzz
                             Reset Clearall
                             Din(1) = 0
                             Din(2) = 0
@@ -876,4 +875,3 @@ Data 0 , 88 , 89 , 0 , 90 , 0 , 0 , 0 , 91
 
 5remote4:
 Data 0 , 92 , 93 , 0 , 94 , 0 , 0 , 0 , 95
-
