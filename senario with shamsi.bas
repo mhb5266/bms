@@ -151,6 +151,8 @@ Enable Interrupts
 Enable Urxc
 On Urxc Rx
 
+Dim Senario As Byte
+Dim R As Byte
 Dim Maxin As Byte
 Dim Id As Byte
 Dim Typ As Byte
@@ -215,7 +217,7 @@ Dim Direct As Byte
 
 Const Keyin = 101
 Const Steps = 102
-Const Senario = 103
+'Const Senario = 103
 Const Remote = 104
 Const Relaymodule = 110
 Const Pwmmodule = 111
@@ -440,6 +442,7 @@ End If
                     Setlight = Minlight
                     Findorder = Pwmlight
                     Call Order
+                    Senario = 1
                     Wait 2
                     Cls
                     Exit Do
@@ -477,6 +480,7 @@ End If
                     Setlight = Maxlight
                     Findorder = Pwmlight
                     Call Order
+                    Senario = 2
                     Wait 2
                     Cls
                     Exit Do
@@ -505,6 +509,7 @@ End If
                     Setlight = Midlight
                     Findorder = Pwmlight
                     Call Order
+                    Senario = 3
                     Wait 2
                     Cls
                     Exit Do
@@ -533,6 +538,7 @@ End If
                     Setlight = Minlight
                     Findorder = Pwmlight
                     Call Order
+                    Senario = 4
                     Wait 2
                     Cls
                     Exit Do
@@ -793,11 +799,13 @@ M_day = Kole_roz_m
 Return
 
 
-Smalljacuzi:
-$bgf "small jacuzi.bgf"
+
 
 Fountainicon:
 $bgf "fountain.bgf"
+
+Smalljacuzi:
+$bgf "small jacuzi.bgf"
 
 Tempicon:
 $bgf "tempicon.bgf"
@@ -2268,16 +2276,80 @@ Sub Show
  '
        Setfont Font16x16en
 
+       Select Case Tmp1
+              Case Is <= -10
+                   R = 6 * 16
+              Case 0 To -10
+                   R = 5 * 16
+              Case 0 To 4
+                   R = 4 * 16
+              Case Is >= 10
+                   R = 5 * 16
+       End Select
+       If _sec = 5 Or _sec = 20 Or _sec = 35 Or _sec = 50 Then
+              If Jstatus = 0 Then
+                     Select Case Tmp1
+                            Case Is <= -10
+                                 R = 6 * 16
+                            Case 0 To -10
+                                 R = 5 * 16
+                            Case 0 To 4
+                                 R = 4 * 16
+                            Case Is >= 10
+                                 R = 5 * 16
+                     End Select
+                 Line(0 , 15) -(r -1 , 15) , 1
+                 Lcdat 3 , 1 , Sens1 ; "!" , 1
+                 Showpic 0 , 33 , Tempicon , 1
 
-       If Jstatus = 0 Then
-          Lcdat 3 , 1 , Sens1 ; "!" , 1
-          Showpic 0 , 33 , Tempicon , 1
+              Else
+              Select Case Tmp2
+                     Case Is <= -10
+                          U = 6 * 16
+                     Case 0 To -10
+                          U = 5 * 16
+                     Case 0 To 4
+                          U = 4 * 16
+                     Case Is >= 10
+                          U = 5 * 16
+              End Select
+                 Line(0 , 15) -(r -1 , 15) , 1
+                 Lcdat 3 , 1 , Sens2 ; "!" , 1
+                 Showpic 0 , 33 , Smalljacuzi , 1
+              End If
+        Elseif _sec = 10 Or _sec = 25 Or _sec = 40 Or _sec = 55 Then
+               Select Case Senario
+                      Case 0
+                           Showpic 0 , 33 , Srutinicon , 0
+                           Showpic 33 , 33 , Snight , 0
+                           Showpic 63 , 33 , Sparty , 0
+                           Showpic 95 , 33 , Sexit , 0
+                      Case 1
+                           Showpic 0 , 33 , Srutinicon , 1
+                           Showpic 33 , 33 , Snight , 0
+                           Showpic 63 , 33 , Sparty , 0
+                           Showpic 95 , 33 , Sexit , 0
+                      Case 2
+                           Showpic 0 , 33 , Srutinicon , 0
+                           Showpic 33 , 33 , Snight , 1
+                           Showpic 63 , 33 , Sparty , 0
+                           Showpic 95 , 33 , Sexit , 0
+                      Case 3
+                           Showpic 0 , 33 , Srutinicon , 0
+                           Showpic 33 , 33 , Snight , 0
+                           Showpic 63 , 33 , Sparty , 1
+                           Showpic 95 , 33 , Sexit , 0
+                      Case 4
+                           Showpic 0 , 33 , Srutinicon , 0
+                           Showpic 33 , 33 , Snight , 0
+                           Showpic 63 , 33 , Sparty , 0
+                           Showpic 95 , 33 , Sexit , 1
 
-       Else
-          Lcdat 3 , 1 , Sens2 , 1
-          Showpic 0 , 33 , Smalljacuzi ; "!" , 1
-       End If
+               End Select
 
+        Elseif _sec = 15 Or _sec = 30 Or _sec = 45 Or _sec = 0 Then
+
+        End If
        'Dift = St1(2) - St1(1)
 
 '       If Dift < 30 And Dift > -30  Then
@@ -2446,39 +2518,41 @@ Sub Temp
    Readsens = 1wread(2)
 
 
-   Tmp1 = Readsens
+
 
       Gosub Conversion
+      Tmp1 = Readsens
       Sens1 = Temperature
 
 
 
-
+  '(
          If Readsens < 0 Then Readsens = Readsens * -1
          Sahih1 = 0
          If Readsens > 9 Then
             Sahih1 = Readsens / 10
             Ashar1 = Readsens Mod 10
          End If
-
+')
 
    1wreset
    1wwrite &H55
    1wverify Ds18b20_id_2(1)
    1wwrite &HBE
    Readsens = 1wread(2)
-   Tmp2 = Readsens
+
 
       Gosub Conversion
+      Tmp2 = Readsens
       Sens2 = Temperature
-
+ '(
          If Readsens < 0 Then Readsens = Readsens * -1
          Sahih2 = 0
          If Readsens > 9 Then
             Sahih2 = Readsens / 10
             Ashar2 = Readsens Mod 10
          End If
-
+')
 
 
 End Sub

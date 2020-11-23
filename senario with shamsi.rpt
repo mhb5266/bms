@@ -1,6 +1,6 @@
 Report       : senario with shamsi
 Date         : 11-23-2020
-Time         : 13:53:39
+Time         : 15:23:49
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,9 +8,9 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : BB58 hex  -> Will fit into ROM
-ROMIMAGE     :  47960 dec
-FLASH USED   :  36  %
+ROMIMAGE     : C160 hex  -> Will fit into ROM
+ROMIMAGE     :  49504 dec
+FLASH USED   :  37  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 64 hex
 S-Stackstart : 10C0 hex
 Framesize    : 64 hex
 Framestart   : FF8 hex
-Space left   :  3513  dec
+Space left   :  3511  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -186,15 +186,17 @@ SUNRISEH                         Byte              0203          515
 SUNRISEM                         Byte              0204          516 
 U                                Byte              0205          517 
 D                                Byte              0206          518 
-MAXIN                            Byte              0207          519 
-ID                               Byte              0208          520 
-TYP                              Byte              0209          521 
-CMD                              Byte              020A          522 
-STARTBIT                         Byte              020B          523 
-ENDBIT                           Byte              020C          524 
-FINDORDER                        Byte              020D          525 
-REMOTEID                         Byte              020E          526 
-REMOTEKEYID                      Byte              020F          527 
+SENARIO                          Byte              0207          519 
+R                                Byte              0208          520 
+MAXIN                            Byte              0209          521 
+ID                               Byte              020A          522 
+TYP                              Byte              020B          523 
+CMD                              Byte              020C          524 
+STARTBIT                         Byte              020D          525 
+ENDBIT                           Byte              020E          526 
+FINDORDER                        Byte              020F          527 
+REMOTEID                         Byte              0210          528 
+REMOTEKEYID                      Byte              0211          529 
 FSTATUS                          EEPROM Byte       0001          1 
 LSTATUS                          EEPROM Byte       0002          2 
 PSTATUS                          EEPROM Byte       0003          3 
@@ -203,7 +205,7 @@ FDAYS                            EEPROM Byte       0005          5
 LDAYS                            EEPROM Byte       0006          6 
 PDAYS                            EEPROM Byte       0007          7 
 WDAYS                            EEPROM Byte       0008          8 
-DAYS                             Byte              0210          528 
+DAYS                             Byte              0212          530 
 FONHOUR                          EEPROM Byte       0009          9 
 FONMIN                           EEPROM Byte       000A          10 
 FOFFHOUR                         EEPROM Byte       000B          11 
@@ -220,48 +222,48 @@ WONHOUR                          EEPROM Byte       0015          21
 WONMIN                           EEPROM Byte       0016          22 
 WOFFHOUR                         EEPROM Byte       0017          23 
 WOFFMIN                          EEPROM Byte       0018          24 
-ONHOUR                           Byte              0211          529 
-ONMIN                            Byte              0212          530 
-OFFHOUR                          Byte              0213          531 
-OFFMIN                           Byte              0214          532 
-STATUS                           Byte              0215          533 
-SETLIGHT                         Byte              0216          534 
-DIN                              Byte(5)           0217          535 
+ONHOUR                           Byte              0213          531 
+ONMIN                            Byte              0214          532 
+OFFHOUR                          Byte              0215          533 
+OFFMIN                           Byte              0216          534 
+STATUS                           Byte              0217          535 
+SETLIGHT                         Byte              0218          536 
+DIN                              Byte(5)           0219          537 
 INOK                             Bit [3]           013A          314 
 LEARNOK                          Bit [2]           013A          314 
 LEARNDONE                        Bit [1]           013A          314 
-CLEARDONE                        Byte              021C          540 
+CLEARDONE                        Byte              021E          542 
 SETREMOTEDONE                    Bit [0]           013A          314 
-DIRECT                           Byte              021D          541 
-X                                Word              021E          542 
-W                                Word              0220          544 
-Z                                Word              0222          546 
-PLANT_STATUS                     Byte              0224          548 
-PLANT_START_HOUR                 Byte              0225          549 
-PLANT_START_MIN                  Byte              0226          550 
-PLANT_STOP_HOUR                  Byte              0227          551 
-PLANT_STOP_MIN                   Byte              0228          552 
-PLANT_DAYS                       Byte(7)           0229          553 
-JSTATUS                          Bit [7]           0230          560 
-BACKMENU                         Bit [6]           0230          560 
-PASS                             Byte(4)           0231          561 
-REERROR                          Byte              0235          565 
-POOSH                            Word              0236          566 
-TOUCH                            Byte              0238          568 
-NEXTDAY                          Bit [5]           0230          560 
-COUNT                            Byte              0239          569 
-INPUTCOUNTER                     Byte              023A          570 
+DIRECT                           Byte              021F          543 
+X                                Word              0220          544 
+W                                Word              0222          546 
+Z                                Word              0224          548 
+PLANT_STATUS                     Byte              0226          550 
+PLANT_START_HOUR                 Byte              0227          551 
+PLANT_START_MIN                  Byte              0228          552 
+PLANT_STOP_HOUR                  Byte              0229          553 
+PLANT_STOP_MIN                   Byte              022A          554 
+PLANT_DAYS                       Byte(7)           022B          555 
+JSTATUS                          Bit [7]           0232          562 
+BACKMENU                         Bit [6]           0232          562 
+PASS                             Byte(4)           0233          563 
+REERROR                          Byte              0237          567 
+POOSH                            Word              0238          568 
+TOUCH                            Byte              023A          570 
+NEXTDAY                          Bit [5]           0232          562 
+COUNT                            Byte              023B          571 
+INPUTCOUNTER                     Byte              023C          572 
 RELAYMODULECOUNTER               EEPROM Byte       0019          25 
 PWMMODULECOUNTER                 EEPROM Byte       001A          26 
 EINPUTCOUNTER                    EEPROM Byte       001B          27 
 SYCNUM                           EEPROM Byte       001C          28 
-CONFIGMODE                       Byte              023B          571 
-OK1                              Bit [4]           0230          560 
-OK2                              Bit [3]           0230          560 
-OK3                              Bit [2]           0230          560 
-OK4                              Bit [1]           0230          560 
-I                                Byte              023C          572 
-J                                Byte              023D          573 
+CONFIGMODE                       Byte              023D          573 
+OK1                              Bit [4]           0232          562 
+OK2                              Bit [3]           0232          562 
+OK3                              Bit [2]           0232          562 
+OK4                              Bit [1]           0232          562 
+I                                Byte              023E          574 
+J                                Byte              023F          575 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -967,7 +969,6 @@ DS1307W                          &HD0
 DS1307R                          &HD1
 KEYIN                            101
 STEPS                            102
-SENARIO                          103
 REMOTE                           104
 RELAYMODULE                      110
 PWMMODULE                        111
@@ -1092,7 +1093,6 @@ R20                              not used
 R21                              not used
 R22                              not used
 R23                              not used
-R24                              not used
 R25                              not used
 R26                              not used
 R27                              not used
@@ -1122,6 +1122,10 @@ TEMPOK                           not used
 TMPREAD                          not used
 ST1                              not used
 ST2                              not used
+SAHIH1                           not used
+SAHIH2                           not used
+ASHAR1                           not used
+ASHAR2                           not used
 KABISE                           not used
 CONTER3                          not used
 CONTER4                          not used
