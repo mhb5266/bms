@@ -151,8 +151,9 @@ Enable Interrupts
 Enable Urxc
 On Urxc Rx
 
+
+
 Dim Senario As Byte
-Dim R As Byte
 Dim Maxin As Byte
 Dim Id As Byte
 Dim Typ As Byte
@@ -248,7 +249,9 @@ Defines:
 Dim Jstatus As Boolean
 
 
-
+Dim Pumps As Bit
+Dim Mutes As Bit
+Dim Sensors As Bit
 
 Dim Backmenu As Boolean
 
@@ -324,10 +327,12 @@ Const Maxlight = 164
 Consts:
 
 
-Const Main_menu_counter = 7
+Const Main_menu_counter = 8
 
 Subs:
 
+
+Declare Sub Configmenu
 Declare Sub Poweroff
 
 Declare Sub Ifcheck
@@ -390,6 +395,90 @@ Main:
        If Refreshtemp <> _sec Then
           Call Temp
 
+          If _sec = 5 Or _sec = 20 Or _sec = 35 Or _sec = 50 Then
+            Cls
+            Select Case Senario
+               Case 0
+                  Showpic 0 , 17 , Srutin , 0
+                  Showpic 31 , 17 , Snight , 0
+                  Showpic 63 , 17 , Sparty , 0
+                  Showpic 95 , 17 , Sexiticon , 0
+               Case 1
+                  Showpic 0 , 17 , Srutin , 1
+                  Showpic 31 , 17 , Snight , 0
+                  Showpic 63 , 17 , Sparty , 0
+                  Showpic 95 , 17 , Sexiticon , 0
+               Case 2
+                  Showpic 0 , 17 , Srutin , 0
+                  Showpic 31 , 17 , Snight , 1
+                  Showpic 63 , 17 , Sparty , 0
+                  Showpic 95 , 17 , Sexiticon , 0
+               Case 3
+                  Showpic 0 , 17 , Srutin , 0
+                  Showpic 31 , 17 , Snight , 0
+                  Showpic 63 , 17 , Sparty , 1
+                  Showpic 95 , 17 , Sexiticon , 0
+               Case 4
+                  Showpic 0 , 17 , Srutin , 0
+                  Showpic 31 , 17 , Snight , 0
+                  Showpic 63 , 17 , Sparty , 0
+                  Showpic 95 , 17 , Sexiticon , 1
+            End Select
+          End If
+
+          If _sec = 0 Or _sec = 15 Or _sec = 30 Or _sec = 45 Then
+             Cls
+             Setfont Font16x16en
+             If Jstatus = 0 Then
+                Lcdat 3 , 1 , Sens1 ; "! "
+                Showpic 0 , 33 , Tempicon
+
+             Else
+                Lcdat 3 , 1 , Sens2 ; "! "
+                Showpic 0 , 33 , Smalljacuzi
+             End If
+             If Pumps = 1 Then
+                Showpic 31 , 33 , Spump , 1
+             Else
+                Showpic 31 , 33 , Spump , 0
+             End If
+             If Mutes = 1 Then
+                Showpic 63 , 33 , Smute , 0
+             Else
+                Showpic 63 , 33 , Sunmute , 0
+             End If
+             If Sensors = 1 Then
+                Showpic 95 , 33 , Sensensor , 0
+             Else
+                Showpic 95 , 33 , Sdissensor , 0
+             End If
+             Setfont Font8x8
+
+          End If
+
+          If _sec = 10 Or _sec = 25 Or _sec = 40 Or _sec = 55 Then
+            Cls
+            If Lstatus = 1 Then
+               Showpic 0 , 17 , Slight , 1
+            Else
+               Showpic 0 , 17 , Slight , 0
+            End If
+            If Pstatus = 1 Then
+               Showpic 31 , 17 , Splant , 1
+            Else
+               Showpic 31 , 17 , Splant , 0
+            End If
+            If Wstatus = 1 Then
+               Showpic 63 , 17 , Swatersystem , 1
+            Else
+               Showpic 63 , 17 , Swatersystem , 0
+            End If
+            If Fstatus = 1 Then
+               Showpic 95 , 17 , Sfountain , 1
+            Else
+               Showpic 95 , 17 , Sfountain , 0
+            End If
+          End If
          Refreshtemp = _sec
        End If
        Call Show
@@ -438,11 +527,11 @@ End If
 
                  If Poosh < 20 And Ok1 = 1 Then
                     Cls
-                    Showpic 0 , 0 , Night , 1
+                    Showpic 0 , 0 , Rutin , 1
                     Setlight = Minlight
                     Findorder = Pwmlight
-                    Call Order
                     Senario = 1
+                    Call Order
                     Wait 2
                     Cls
                     Exit Do
@@ -453,7 +542,7 @@ End If
                     Reset Ok3
                     Reset Ok4
                     Cls
-                    Showpic 0 , 0 , Night
+                    Showpic 0 , 0 , Rutin
                  End If
           End If
           Poosh = 0
@@ -467,7 +556,7 @@ End If
                  Reset Ok3
                  Reset Ok4
                  Cls
-                 Showpic 0 , 0 , Party
+                 Showpic 0 , 0 , Night
                  Do
                  Loop Until Touch2 = 0
 
@@ -476,11 +565,11 @@ End If
                  Poosh = 0
                  Do
                     Cls
-                    Showpic 0 , 0 , Party , 1
+                    Showpic 0 , 0 , Night , 1
                     Setlight = Maxlight
                     Findorder = Pwmlight
-                    Call Order
                     Senario = 2
+                    Call Order
                     Wait 2
                     Cls
                     Exit Do
@@ -495,7 +584,7 @@ End If
                  Reset Ok2
                  Reset Ok4
                  Cls
-                 Showpic 0 , 0 , Rutin
+                 Showpic 0 , 0 , Party
                  Do
                  Loop Until Touch3 = 0
 
@@ -505,11 +594,11 @@ End If
        Poosh = 0
                  Do
                     Cls
-                    Showpic 0 , 0 , Rutin , 1
+                    Showpic 0 , 0 , Party , 1
                     Setlight = Midlight
                     Findorder = Pwmlight
-                    Call Order
                     Senario = 3
+                    Call Order
                     Wait 2
                     Cls
                     Exit Do
@@ -534,11 +623,11 @@ End If
 
                  If Poosh < 20 And Ok4 = 1 Then
                     Cls
-                    Showpic 0 , 0 , Tv , 1
+                    Showpic 0 , 0 , Exiticon , 1
                     Setlight = Minlight
                     Findorder = Pwmlight
-                    Call Order
                     Senario = 4
+                    Call Order
                     Wait 2
                     Cls
                     Exit Do
@@ -549,7 +638,7 @@ End If
                                   Reset Ok3
                                   Set Ok4
                                   Cls
-                                  Showpic 0 , 0 , Tv
+                                  Showpic 0 , 0 , Exiticon
                  End If
           End If
           Poosh = 0
@@ -798,14 +887,51 @@ M_day = Kole_roz_m
 
 Return
 
+Spump:
+$bgf "spump.bgf"
+Sdissensor:
+$bgf "sdissensor.bgf"
+Sensensor:
+$bgf "sensensor.bgf"
+Smute:
+$bgf "smute.bgf"
+Sunmute:
+$bgf "sunmute.bgf"
+Configicon:
+$bgf "configicon.bgf"
 
+Sfountain:
+$bgf "sfountain.bgf"
 
+Slight:
+$bgf "slight.bgf"
 
-Fountainicon:
-$bgf "fountain.bgf"
+Swatersystem:
+$bgf "swatersystem.bgf"
+
+Splant:
+$bgf "splant.bgf"
+
+Sparty:
+$bgf "sparty.bgf"
+
+Snight:
+$bgf "snight.bgf"
+
+Srutin:
+$bgf "srutin.bgf"
 
 Smalljacuzi:
 $bgf "small jacuzi.bgf"
+
+Sexiticon:
+$bgf "sexiticon.bgf"
+
+Exiticon:
+$bgf "exiticon.bgf"
+
+Fountainicon:
+$bgf "fountain.bgf"
 
 Tempicon:
 $bgf "tempicon.bgf"
@@ -875,27 +1001,29 @@ Sub Main_menu
      Waitms 100
      Cls
      Count = 1
-     Showpic 32 , 0 , Jaccuziicon
+     Showpic 32 , 0 , Settingicon
 
      Do
             If Backmenu = 1 Then
                Reset Backmenu
-               If Count < 1 Or Count > 7 Then Count = 1
+               If Count < 1 Or Count > 8 Then Count = 1
                         Select Case Count
                                Case 1
-                                    Showpic 32 , 0 , Jaccuziicon
+                                    Showpic 32 , 0 , Settingicon
                                Case 2
-                                    Showpic 32 , 0 , Planticon
+                                    Showpic 32 , 0 , Jaccuziicon
                                Case 3
-                                    Showpic 32 , 0 , Watersystemicon
+                                    Showpic 32 , 0 , Planticon
                                Case 4
-                                    Showpic 32 , 0 , Lighticon
+                                    Showpic 32 , 0 , Watersystemicon
                                Case 5
-                                    Showpic 32 , 0 , Setclockicon
+                                    Showpic 32 , 0 , Lighticon
                                Case 6
                                     Showpic 32 , 0 , Fountainicon
                                Case 7
-                                    Showpic 32 , 0 , Settingicon
+                                    Showpic 32 , 0 , Setclockicon
+                               Case 8
+                                    Showpic 32 , 0 , Configicon
 
                         End Select
             End If
@@ -923,19 +1051,21 @@ Sub Main_menu
             If Touch = 2 Or Touch = 3 Then
                         Select Case Count
                                Case 1
-                                    Showpic 32 , 0 , Jaccuziicon
+                                    Showpic 32 , 0 , Settingicon
                                Case 2
-                                    Showpic 32 , 0 , Planticon
+                                    Showpic 32 , 0 , Jaccuziicon
                                Case 3
-                                    Showpic 32 , 0 , Watersystemicon
+                                    Showpic 32 , 0 , Planticon
                                Case 4
-                                    Showpic 32 , 0 , Lighticon
+                                    Showpic 32 , 0 , Watersystemicon
                                Case 5
-                                    Showpic 32 , 0 , Setclockicon
+                                    Showpic 32 , 0 , Lighticon
                                Case 6
                                     Showpic 32 , 0 , Fountainicon
                                Case 7
-                                    Showpic 32 , 0 , Settingicon
+                                    Showpic 32 , 0 , Setclockicon
+                               Case 8
+                                    Showpic 32 , 0 , Configicon
                         End Select
                         Touch = 0
             End If
@@ -944,19 +1074,21 @@ Sub Main_menu
                    Cls
                    Select Case Count
                           Case 1
-                               Call Jacuzi_menu
+                               Call Setting_menu
                           Case 2
-                               Call Plant_menu
+                               Call Jacuzi_menu
                           Case 3
-                               Call Watersystem_menu
+                               Call Plant_menu
                           Case 4
-                               Call Light_menu
+                               Call Watersystem_menu
                           Case 5
-                               Call Clock_menu
+                               Call Light_menu
                           Case 6
                                Call Fountain_menu
                           Case 7
-                               Call Setting_menu
+                               Call Clock_menu
+                          Case 8
+                               Call Configmenu
 
 
                    End Select
@@ -1174,9 +1306,66 @@ Sub Ifcheck
 
 End Sub
 
-
-
 Sub Setting_menu
+
+   If Pumps = 1 Then
+      Showpic 0 , 17 , Spump , 1
+   Else
+      Showpic 0 , 17 , Spump , 0
+   End If
+
+   If Mutes = 1 Then
+      Showpic 31 , 17 , Smute , 1
+   Else
+      Showpic 31 , 17 , Sunmute , 0
+   End If
+
+   If Sensors = 1 Then
+      Showpic 63 , 17 , Sensensor , 0
+   Else
+      Showpic 63 , 17 , Sdissensor , 0
+   End If
+
+   Showpic 95 , 17 , Sexiticon , 0
+
+   Do
+      Call Readtouch
+      If Touch = 1 Then
+         Toggle Pumps
+         If Pumps = 1 Then
+            Showpic 0 , 17 , Spump , 1
+         Else
+            Showpic 0 , 17 , Spump , 0
+         End If
+      End If
+      If Touch = 2 Then
+         Toggle Mutes
+         If Mutes = 1 Then
+            Showpic 31 , 17 , Smute , 0
+         Else
+            Showpic 31 , 17 , Sunmute , 0
+         End If
+      End If
+      If Touch = 3 Then
+         Toggle Sensors
+         If Sensors = 1 Then
+            Showpic 63 , 17 , Sensensor , 0
+         Else
+            Showpic 63 , 17 , Sdissensor , 0
+         End If
+      End If
+
+      If Touch = 4 Then
+         Showpic 95 , 17 , Sexiticon , 1
+         Waitms 500
+         Cls
+         Return
+      End If
+   Loop
+
+End Sub
+
+Sub Configmenu
     Touch = 0
     Count = 1
     Cls
@@ -2274,82 +2463,17 @@ Sub Show
        Call Ifcheck
 
  '
-       Setfont Font16x16en
 
-       Select Case Tmp1
-              Case Is <= -10
-                   R = 6 * 16
-              Case 0 To -10
-                   R = 5 * 16
-              Case 0 To 4
-                   R = 4 * 16
-              Case Is >= 10
-                   R = 5 * 16
-       End Select
-       If _sec = 5 Or _sec = 20 Or _sec = 35 Or _sec = 50 Then
-              If Jstatus = 0 Then
-                     Select Case Tmp1
-                            Case Is <= -10
-                                 R = 6 * 16
-                            Case 0 To -10
-                                 R = 5 * 16
-                            Case 0 To 4
-                                 R = 4 * 16
-                            Case Is >= 10
-                                 R = 5 * 16
-                     End Select
-                 Line(0 , 15) -(r -1 , 15) , 1
-                 Lcdat 3 , 1 , Sens1 ; "!" , 1
-                 Showpic 0 , 33 , Tempicon , 1
+ '(
+       If Jstatus = 0 Then
+          Lcdat 3 , 1 , Sens1 ; "! " , 1
+          Showpic 0 , 33 , Tempicon , 1
 
-              Else
-              Select Case Tmp2
-                     Case Is <= -10
-                          U = 6 * 16
-                     Case 0 To -10
-                          U = 5 * 16
-                     Case 0 To 4
-                          U = 4 * 16
-                     Case Is >= 10
-                          U = 5 * 16
-              End Select
-                 Line(0 , 15) -(r -1 , 15) , 1
-                 Lcdat 3 , 1 , Sens2 ; "!" , 1
-                 Showpic 0 , 33 , Smalljacuzi , 1
-              End If
-        Elseif _sec = 10 Or _sec = 25 Or _sec = 40 Or _sec = 55 Then
-               Select Case Senario
-                      Case 0
-                           Showpic 0 , 33 , Srutinicon , 0
-                           Showpic 33 , 33 , Snight , 0
-                           Showpic 63 , 33 , Sparty , 0
-                           Showpic 95 , 33 , Sexit , 0
-                      Case 1
-                           Showpic 0 , 33 , Srutinicon , 1
-                           Showpic 33 , 33 , Snight , 0
-                           Showpic 63 , 33 , Sparty , 0
-                           Showpic 95 , 33 , Sexit , 0
-                      Case 2
-                           Showpic 0 , 33 , Srutinicon , 0
-                           Showpic 33 , 33 , Snight , 1
-                           Showpic 63 , 33 , Sparty , 0
-                           Showpic 95 , 33 , Sexit , 0
-                      Case 3
-                           Showpic 0 , 33 , Srutinicon , 0
-                           Showpic 33 , 33 , Snight , 0
-                           Showpic 63 , 33 , Sparty , 1
-                           Showpic 95 , 33 , Sexit , 0
-                      Case 4
-                           Showpic 0 , 33 , Srutinicon , 0
-                           Showpic 33 , 33 , Snight , 0
-                           Showpic 63 , 33 , Sparty , 0
-                           Showpic 95 , 33 , Sexit , 1
-
-               End Select
-
-        Elseif _sec = 15 Or _sec = 30 Or _sec = 45 Or _sec = 0 Then
-
-        End If
+       Else
+          Lcdat 3 , 1 , Sens2 ; "! " , 1
+          Showpic 0 , 33 , Smalljacuzi , 1
+       End If
+')
        'Dift = St1(2) - St1(1)
 
 '       If Dift < 30 And Dift > -30  Then
@@ -2518,41 +2642,39 @@ Sub Temp
    Readsens = 1wread(2)
 
 
-
+   Tmp1 = Readsens
 
       Gosub Conversion
-      Tmp1 = Readsens
       Sens1 = Temperature
 
 
 
-  '(
+
          If Readsens < 0 Then Readsens = Readsens * -1
          Sahih1 = 0
          If Readsens > 9 Then
             Sahih1 = Readsens / 10
             Ashar1 = Readsens Mod 10
          End If
-')
+
 
    1wreset
    1wwrite &H55
    1wverify Ds18b20_id_2(1)
    1wwrite &HBE
    Readsens = 1wread(2)
-
+   Tmp2 = Readsens
 
       Gosub Conversion
-      Tmp2 = Readsens
       Sens2 = Temperature
- '(
+
          If Readsens < 0 Then Readsens = Readsens * -1
          Sahih2 = 0
          If Readsens > 9 Then
             Sahih2 = Readsens / 10
             Ashar2 = Readsens Mod 10
          End If
-')
+
 
 
 End Sub

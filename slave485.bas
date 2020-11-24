@@ -12,6 +12,9 @@ Config Debounce = 30
 
 Enable Interrupts
 
+Config Timer1 = Timer , Prescale = 1024
+Enable Timer1
+On Timer1 T1rutin
 Enable Urxc
 On Urxc Rx
 
@@ -49,7 +52,8 @@ Declare Sub Beep
 Declare Sub Errorbeep
 
 Dim Maxin As Byte
-
+Dim Touchdelay As Byte
+Dim Istouched As Bit
 Dim Typ As Byte
 Dim Cmd As Byte
 Dim Id As Byte
@@ -195,9 +199,11 @@ Sub Refreshkey
                Set Led4
             End If
          End If
-
-         If Sensor = 1 Then
-            Touch = 5
+         If Touch > 0 And Touch < 5 Then Set Istouched
+         If Istouched = 0 Then
+                  If Sensor = 1 Then
+                     Touch = 5
+                  End If
          End If
 
 End Sub
@@ -266,10 +272,12 @@ Sub Keytouched:
                             Id = Touchid1
                             Call Tx
                          End If
+                         Wait 1
                          If Touchid2 > 0 And Touchid2 < 50 Then
                             Id = Touchid2
                             Call Tx
                          End If
+                         Wait 1
                          If Touchid3 > 0 And Touchid3 < 50 Then
                             Id = Touchid3
                             Call Tx
@@ -359,6 +367,20 @@ Issend:
 
 
 
+Return
+
+T1rutin:
+        Stop Timer1
+        If Istouched = 1 Then
+           Incr Touchdelay
+           If Touchdelay > 30 Then
+              Reset Istouched
+              Touchdelay = 0
+           End If
+        End If
+
+        Timer1 = 54735
+        Start Timer1
 Return
 
 Rx:

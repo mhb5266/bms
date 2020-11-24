@@ -395,7 +395,8 @@ Sub Getid
           Toggle Rxtx
           Waitms 500
        Next
-
+       Status = Stopall
+       call keyorder
        Reset Wantid
        Return
 End Sub
@@ -646,6 +647,9 @@ Sub Findorder
                            If Eoutid1(i) = Id Then
                               Set Tempon
                               If Outs.i = 0 Then Temponid(i) = 1
+                              Outs.i = 1
+                              J = I
+                              Call Setouts
                            End If
                        Next
                     End If
