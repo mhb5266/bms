@@ -396,7 +396,7 @@ Sub Getid
           Waitms 500
        Next
        Status = Stopall
-       call keyorder
+       Call Keyorder
        Reset Wantid
        Return
 End Sub

@@ -164,10 +164,20 @@ Dim Findorder As Byte
 Dim Remoteid As Byte
 Dim Remotekeyid As Byte
 
-Dim Fstatus As Eram Byte
-Dim Lstatus As Eram Byte
-Dim Pstatus As Eram Byte
-Dim Wstatus As Eram Byte
+Dim Fstatus As Byte
+Dim Lstatus As Byte
+Dim Pstatus As Byte
+Dim Wstatus As Byte
+
+Dim Efstatus As Eram Byte
+Dim Elstatus As Eram Byte
+Dim Epstatus As Eram Byte
+Dim Ewstatus As Eram Byte
+
+ Fstatus = Efstatus
+ Lstatus = Elstatus
+ Pstatus = Epstatus
+ Wstatus = Ewstatus
 
 Dim Fdays As Eram Byte
 Dim Ldays As Eram Byte
@@ -180,10 +190,10 @@ Dim Fonmin As Eram Byte
 Dim Foffhour As Eram Byte
 Dim Foffmin As Eram Byte
 
-Dim Lonhour As Eram Byte
-Dim Lonmin As Eram Byte
-Dim Loffhour As Eram Byte
-Dim Loffmin As Eram Byte
+Dim Lonhour As Byte
+Dim Lonmin As Byte
+Dim Loffhour As Byte
+Dim Loffmin As Byte
 
 Dim Ponhour As Eram Byte
 Dim Ponmin As Eram Byte
@@ -492,6 +502,7 @@ Main:
        End If
        Call Readtouch
 
+
        'If Touch > 0 Then Call Main_menu
 
 
@@ -718,6 +729,7 @@ Read_date_time:
 
       End Select
   End If
+
 
 Return
 
@@ -1100,6 +1112,86 @@ End Sub
 
 Sub Ifcheck
 
+
+       Select Case Sh_day
+              Case 1 To 10
+                   U = 0
+              Case 11 To 20
+                   U = 1
+              Case Is > 20
+                   U = 2
+       End Select
+       D = U + 3
+
+       Select Case Sh_month
+              Case 1
+                   Sunriseh = Lookup(u , 1h)
+                   Sunrisem = Lookup(u , 1m)
+                   Sunseth = Lookup(d , 1h)
+                   Sunsetm = Lookup(d , 1m)
+              Case 2
+                   Sunriseh = Lookup(u , 2h)
+                   Sunrisem = Lookup(u , 2m)
+                   Sunseth = Lookup(d , 2h)
+                   Sunsetm = Lookup(d , 2m)
+              Case 3
+                   Sunriseh = Lookup(u , 3h)
+                   Sunrisem = Lookup(u , 3m)
+                   Sunseth = Lookup(d , 3h)
+                   Sunsetm = Lookup(d , 3m)
+              Case 4
+                   Sunriseh = Lookup(u , 4h)
+                   Sunrisem = Lookup(u , 4m)
+                   Sunseth = Lookup(d , 4h)
+                   Sunsetm = Lookup(d , 4m)
+              Case 5
+                   Sunriseh = Lookup(u , 5h)
+                   Sunrisem = Lookup(u , 5m)
+                   Sunseth = Lookup(d , 5h)
+                   Sunsetm = Lookup(d , 5m)
+              Case 6
+                   Sunriseh = Lookup(u , 6h)
+                   Sunrisem = Lookup(u , 6m)
+                   Sunseth = Lookup(d , 6h)
+                   Sunsetm = Lookup(d , 6m)
+              Case 7
+                   Sunriseh = Lookup(u , 7h)
+                   Sunrisem = Lookup(u , 7m)
+                   Sunseth = Lookup(d , 7h)
+                   Sunsetm = Lookup(d , 7m)
+              Case 8
+                   Sunriseh = Lookup(u , 8h)
+                   Sunrisem = Lookup(u , 8m)
+                   Sunseth = Lookup(d , 8h)
+                   Sunsetm = Lookup(d , 8m)
+              Case 9
+                   Sunriseh = Lookup(u , 9h)
+                   Sunrisem = Lookup(u , 9m)
+                   Sunseth = Lookup(d , 9h)
+                   Sunsetm = Lookup(d , 9m)
+              Case 10
+                   Sunriseh = Lookup(u , 10h)
+                   Sunrisem = Lookup(u , 10m)
+                   Sunseth = Lookup(d , 10h)
+                   Sunsetm = Lookup(d , 10m)
+              Case 11
+                   Sunriseh = Lookup(u , 11h)
+                   Sunrisem = Lookup(u , 11m)
+                   Sunseth = Lookup(d , 11h)
+                   Sunsetm = Lookup(d , 11m)
+              Case 12
+                   Sunriseh = Lookup(u , 12h)
+                   Sunrisem = Lookup(u , 12m)
+                   Sunseth = Lookup(d , 12h)
+                   Sunsetm = Lookup(d , 12m)
+       End Select
+       Lonhour = Sunseth
+       Lonmin = Sunsetm
+       Loffhour = Sunriseh
+       Loffmin = Sunrisem
+
+
+
     If Sh_month = 6 And Sh_day = 31 Then
        If _hour = 0 And _min = 0 And Backtime = 0 Then
               Set Backtime
@@ -1146,163 +1238,112 @@ Sub Ifcheck
        Eday = Day
     End If
 
+    If Pstatus = 1 Then
+        If Ponhour = _hour And Ponmin = _min And Pstatus = 0 Then
+           Days = Pdays
+           If Days.day = 1 Then
+              Set Pstatus
+              Cmd = 182
+              Id = Idplant
+              Typ = Relaymodule
+              Direct = Tooutput
+              Call Tx
+           End If
+        End If
 
-    If Ponhour = _hour And Ponmin = _min Then
-       Days = Pdays
-       If Days.day = 1 Then
-          Cmd = 182
-          Id = Idplant
-          Typ = Relaymodule
-          Direct = Tooutput
-          Call Tx
-       End If
-    End If
-
-    If Lonhour = _hour And Lonmin = _min Then
-       Days = Ldays
-       If Days.day = 1 Then
-          Cmd = 182
-          Id = Idlight
-          Typ = Relaymodule
-          Direct = Tooutput
-          Call Tx
-       End If
-    End If
-
-    If Wonhour = _hour And Wonmin = _min Then
-       Days = Wdays
-       If Days.day = 1 Then
-          Cmd = 182
-          Id = Idwater
-          Typ = Relaymodule
-          Direct = Tooutput
-          Call Tx
-       End If
-    End If
-
-    If Poffhour = _hour And Poffmin = _min Then
-       Days = Pdays
-       If Days.day = 1 Then
-          Cmd = 181
-          Id = Idplant
-          Typ = Relaymodule
-          Direct = Tooutput
-          Call Tx
-       End If
-    End If
-    If Loffhour = _hour And Loffmin = _min Then
-       Days = Ldays
-       If Days.day = 1 Then
-          Cmd = 181
-          Id = Idlight
-          Typ = Relaymodule
-          Direct = Tooutput
-          Call Tx
-       End If
-    End If
-
-    If Woffhour = _hour And Woffmin = _min Then
-       Days = Wdays
-       If Days.day = 1 Then
-          Cmd = 181
-          Id = Idwater
-          Typ = Relaymodule
-          Direct = Tooutput
-          Call Tx
-       End If
-    End If
-
-    If _hour = 1 And _min = 1 Then
-
-       Select Case Sh_day
-              Case 1 To 10
-                   U = 0
-              Case 11 To 20
-                   U = 1
-              Case Is > 20
-                   U = 2
-       End Select
-       D = U + 3
-
-       Select Case Sh_month
-              Case 1
-                   Sunriseh = Lookup(u , 1h)
-                   Sunrisem = Lookup(d , 1m)
-                   Sunseth = Lookup(u , 1h)
-                   Sunsetm = Lookup(d , 1m)
-              Case 2
-                   Sunriseh = Lookup(u , 2h)
-                   Sunrisem = Lookup(d , 2m)
-                   Sunseth = Lookup(u , 2h)
-                   Sunsetm = Lookup(d , 2m)
-              Case 3
-                   Sunriseh = Lookup(u , 3h)
-                   Sunrisem = Lookup(d , 3m)
-                   Sunseth = Lookup(u , 3h)
-                   Sunsetm = Lookup(d , 3m)
-              Case 4
-                   Sunriseh = Lookup(u , 4h)
-                   Sunrisem = Lookup(d , 4m)
-                   Sunseth = Lookup(u , 4h)
-                   Sunsetm = Lookup(d , 4m)
-              Case 5
-                   Sunriseh = Lookup(u , 5h)
-                   Sunrisem = Lookup(d , 5m)
-                   Sunseth = Lookup(u , 5h)
-                   Sunsetm = Lookup(d , 5m)
-              Case 6
-                   Sunriseh = Lookup(u , 6h)
-                   Sunrisem = Lookup(d , 6m)
-                   Sunseth = Lookup(u , 6h)
-                   Sunsetm = Lookup(d , 6m)
-              Case 7
-                   Sunriseh = Lookup(u , 7h)
-                   Sunrisem = Lookup(d , 7m)
-                   Sunseth = Lookup(u , 7h)
-                   Sunsetm = Lookup(d , 7m)
-              Case 8
-                   Sunriseh = Lookup(u , 8h)
-                   Sunrisem = Lookup(d , 8m)
-                   Sunseth = Lookup(u , 8h)
-                   Sunsetm = Lookup(d , 8m)
-              Case 9
-                   Sunriseh = Lookup(u , 9h)
-                   Sunrisem = Lookup(d , 9m)
-                   Sunseth = Lookup(u , 9h)
-                   Sunsetm = Lookup(d , 9m)
-              Case 10
-                   Sunriseh = Lookup(u , 10h)
-                   Sunrisem = Lookup(d , 10m)
-                   Sunseth = Lookup(u , 10h)
-                   Sunsetm = Lookup(d , 10m)
-              Case 11
-                   Sunriseh = Lookup(u , 11h)
-                   Sunrisem = Lookup(d , 11m)
-                   Sunseth = Lookup(u , 11h)
-                   Sunsetm = Lookup(d , 11m)
-              Case 12
-                   Sunriseh = Lookup(u , 12h)
-                   Sunrisem = Lookup(d , 12m)
-                   Sunseth = Lookup(u , 12h)
-                   Sunsetm = Lookup(d , 12m)
-       End Select
-    End If
-
-
-    If Sunriseh = _hour And Sunrisem = _min And _sec = 0 Then
-       Id = Idlight
-       Cmd = 181
-       Typ = Relaymodule
-       Call Tx
+        If Poffhour = _hour And Poffmin = _min And Pstatus = 1 Then
+           Days = Pdays
+           If Days.day = 1 Then
+              Reset Pstatus
+              Cmd = 181
+              Id = Idplant
+              Typ = Relaymodule
+              Direct = Tooutput
+              Call Tx
+           End If
+        End If
 
     End If
 
-    If Sunseth = _hour And Sunsetm = _min And _sec = 0 Then
-       Id = Idlight
-       Cmd = 182
-       Typ = Relaymodule
-       Call Tx
+
+    If Wstatus = 1 Then
+        If Woffhour = _hour And Woffmin = _min And Wstatus = 1 Then
+           Days = Wdays
+           If Days.day = 1 Then
+              Reset Wstatus
+              Cmd = 181
+              Id = Idwater
+              Typ = Relaymodule
+              Direct = Tooutput
+              Call Tx
+           End If
+        End If
+
+        If Wonhour = _hour And Wonmin = _min And Wstatus = 0 Then
+           Days = Wdays
+           If Days.day = 1 Then
+              Set Wstatus
+              Cmd = 182
+              Id = Idwater
+              Typ = Relaymodule
+              Direct = Tooutput
+              Call Tx
+           End If
+        End If
     End If
+
+    If Lstatus = 3 Then
+        If Lonhour = _hour And Lonmin = _min And Lstatus = 0 Then
+           Days = Ldays
+           If Days.day = 1 Then
+              Set Lstatus
+              Cmd = 182
+              Id = Idlight
+              Typ = Relaymodule
+              Direct = Tooutput
+              Call Tx
+           End If
+        End If
+        If Loffhour = _hour And Loffmin = _min And Lstatus = 0 Then
+           Days = Ldays
+           If Days.day = 1 Then
+              Reset Lstatus
+              Cmd = 181
+              Id = Idlight
+              Typ = Relaymodule
+              Direct = Tooutput
+              Call Tx
+           End If
+        End If
+    End If
+
+    If Fstatus = 3 Then
+        If Fonhour = _hour And Fonmin = _min And Fstatus = 0 Then
+           Days = Fdays
+           If Days.day = 1 Then
+              Set Fstatus
+              Cmd = 182
+              Id = Idfountain
+              Typ = Relaymodule
+              Direct = Tooutput
+              Call Tx
+           End If
+        End If
+        If Foffhour = _hour And Foffmin = _min And Fstatus = 1 Then
+           Days = Fdays
+           If Days.day = 1 Then
+              Reset Fstatus
+              Cmd = 181
+              Id = Idfountain
+              Typ = Relaymodule
+              Direct = Tooutput
+              Call Tx
+           End If
+        End If
+    End If
+
+
+
 
 End Sub
 
@@ -1755,12 +1796,15 @@ Sub Pwlsetting
 
         If Status < 1 Then Status = 3 : If Status > 3 Then Status = 1
 
-        If Onhour > 59 Then Onhour = 0
-        If Onmin > 59 Then Onmin = 0
+        If Onhour > 23 And Onhour < 25 Then Onhour = 0
+        If Onmin > 59 And Onmin < 61 Then Onmin = 0
+        If Offhour > 23 And Offhour < 25 Then Offhour = 0
+        If Offmin > 59 And Offmin < 61 Then Offmin = 0
 
-
-        If Offhour > 59 Then Offhour = 0
-        If Offmin > 59 Then Offmin = 0
+        If Onhour > 25 Then Onhour = 23
+        If Onmin > 61 Then Onmin = 59
+        If Offhour > 25 Then Offhour = 23
+        If Offmin > 61 Then Offmin = 59
 
         '-----------------------------
         If Selection = 1 And Blink_ = 0 Then
@@ -1775,7 +1819,12 @@ Sub Pwlsetting
         Lcdat 3 , 1 , S1
         Setfont Font8x8
         S1 = "     "
-        If Status = 3 Then
+
+        If Status = 3 And Id <> Idlight Then
+
+
+
+
 
                   S1 = "ON :"
 
@@ -1939,8 +1988,15 @@ Sub Pwlsetting
 
         If Touch = 1 Then
            Incr Selection
+           If Id = Idlight Then
+            Cls
+            Set Backmenu
+            Return
+           End If
            If Status < 3 Then
               If Selection > 1 Then Selection = 1
+              Cls
+              Set Backmenu
               Return
            End If
            Touch = 0
@@ -1999,6 +2055,7 @@ Sub Pwlsetting
 
         If Selection > 12 Then
            Cls
+           Set Backmenu
            Exit Do
         End If
     Loop
@@ -2113,7 +2170,8 @@ Sub Plant_menu
     Call Pwlsetting
 
     Pdays = Days
-    Pstatus = Status
+    Epstatus = Status
+    Pstatus = Epstatus
     Ponhour = Onhour
     Ponmin = Onmin
     Poffhour = Offhour
@@ -2151,7 +2209,8 @@ Sub Watersystem_menu
     Call Pwlsetting
 
     Wdays = Days
-    Wstatus = Status
+    Ewstatus = Status
+    Wstatus = Ewstatus
     Wonhour = Onhour
     Wonmin = Onmin
     Woffhour = Offhour
@@ -2188,7 +2247,8 @@ Sub Fountain_menu
     Call Pwlsetting
 
     Fdays = Days
-    Fstatus = Status
+    Efstatus = Status
+    Fstatus = Efstatus
     Fonhour = Onhour
     Fonmin = Onmin
     Foffhour = Offhour
@@ -2215,19 +2275,20 @@ Sub Light_menu
 
     Days = Ldays
     Status = Lstatus
-    Onhour = Lonhour
-    Onmin = Lonmin
-    Offhour = Loffhour
-    Offmin = Loffmin
+    'Onhour = Lonhour
+    'Onmin = Lonmin
+    'Offhour = Loffhour
+    'Offmin = Loffmin
 
     Call Pwlsetting
 
-    Ldays = Days
-    Lstatus = Status
-    Lonhour = Onhour
-    Lonmin = Onmin
-    Loffhour = Offhour
-    Loffmin = Offmin
+    'Ldays = Days
+    Elstatus = Status
+    Lstatus = Elstatus
+    'Lonhour = Onhour
+    'Lonmin = Onmin
+    'Loffhour = Offhour
+    'Loffmin = Offmin
     If Status = 1 Then
        Cmd = 180
        Id = Idlight
