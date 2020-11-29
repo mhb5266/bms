@@ -1,6 +1,6 @@
 Report       : relay slave
-Date         : 11-24-2020
-Time         : 14:15:27
+Date         : 11-29-2020
+Time         : 16:57:04
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M16
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : 1822 hex  -> Will fit into ROM
-ROMIMAGE     :  6178 dec
-FLASH USED   :  37  %
+ROMIMAGE     : 1900 hex  -> Will fit into ROM
+ROMIMAGE     :  6400 dec
+FLASH USED   :  39  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  729  dec
+Space left   :  716  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -91,61 +91,68 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-F                                Byte              0060          96 
-M                                Byte              0061          97 
-TBLANK                           Byte              0062          98 
-TEST                             Byte              0063          99 
-WANTID                           Bit [7]           0064          100 
-GOTID                            Bit [6]           0064          100 
-OUTS                             Dword             0065          101 
-EOUTNUM                          EEPROM Byte(28)   0000          0 
-EOUTID1                          EEPROM Byte(28)   001C          28 
-EOUTID2                          EEPROM Byte(28)   0038          56 
-EOUTID3                          EEPROM Byte(28)   0054          84 
-OUTID1                           Byte(28)          0069          105 
-OUTID2                           Byte(28)          0085          133 
-OUTID3                           Byte(28)          00A1          161 
-EOUTS                            EEPROM Byte(28)   0070          112 
-IDGOT                            EEPROM Byte       008C          140 
-D                                Byte              00BD          189 
-TEMPID                           Byte              00BE          190 
-STATUS                           Byte              00BF          191 
-EFIRST                           EEPROM Byte       008D          141 
-TOGGLEKEY                        Bit [5]           0064          100 
-IDWASGOT                         Bit [4]           0064          100 
-TYP                              Byte              00C0          192 
-CMD                              Byte              00C1          193 
-ID                               Byte              00C2          194 
-I                                Byte              00C3          195 
-J                                Byte              00C4          196 
-K                                Byte              00C5          197 
-MAXIN                            Byte              00C6          198 
-A                                Byte              00C7          199 
-REPLY                            Byte              00C8          200 
-KEYIDS                           Byte              00C9          201 
-EKEYIDS                          EEPROM Byte       008E          142 
-COUNTERID                        Byte              00CA          202 
-BASEID                           Byte              00CB          203 
-MINID                            Byte              00CC          204 
-MAXID                            Byte              00CD          205 
-TEMPONID                         Byte(28)          00CE          206 
-TEMPONTIME                       Word(28)          00EA          234 
-TEMPON                           Bit [3]           0064          100 
-WANTNUM                          Bit [2]           0064          100 
-SYCID                            Bit [1]           0064          100 
-SETID                            Byte              0122          290 
-DIN                              Byte(5)           0123          291 
-Z                                Byte              0128          296 
-ONOFF                            Bit [0]           0064          100 
-TIMEOUT                          Bit [7]           0129          297 
-SENDOK                           Bit [6]           0129          297 
-INOK                             Bit [5]           0129          297 
-LIGHT                            Byte              012A          298 
-LEARNOK                          Bit [4]           0129          297 
-BLANK                            Bit [3]           0129          297 
-IDBLANK                          Byte              012B          299 
-DIRECT                           Byte              012C          300 
-ENDBIT                           Byte              012D          301 
+ESENARIO1                        EEPROM Dword      0000          0 
+ESENARIO2                        EEPROM Dword      0004          4 
+ESENARIO3                        EEPROM Dword      0008          8 
+SENARIO1                         Dword             0060          96 
+SENARIO2                         Dword             0064          100 
+SENARIO3                         Dword             0068          104 
+SETSENARIO                       Byte              006C          108 
+F                                Byte              006D          109 
+M                                Byte              006E          110 
+TBLANK                           Byte              006F          111 
+TEST                             Byte              0070          112 
+WANTID                           Bit [7]           0071          113 
+GOTID                            Bit [6]           0071          113 
+OUTS                             Dword             0072          114 
+EOUTNUM                          EEPROM Byte(28)   000C          12 
+EOUTID1                          EEPROM Byte(28)   0028          40 
+EOUTID2                          EEPROM Byte(28)   0044          68 
+EOUTID3                          EEPROM Byte(28)   0060          96 
+OUTID1                           Byte(28)          0076          118 
+OUTID2                           Byte(28)          0092          146 
+OUTID3                           Byte(28)          00AE          174 
+EOUTS                            EEPROM Byte(28)   007C          124 
+IDGOT                            EEPROM Byte       0098          152 
+D                                Byte              00CA          202 
+TEMPID                           Byte              00CB          203 
+STATUS                           Byte              00CC          204 
+EFIRST                           EEPROM Byte       0099          153 
+TOGGLEKEY                        Bit [5]           0071          113 
+IDWASGOT                         Bit [4]           0071          113 
+TYP                              Byte              00CD          205 
+CMD                              Byte              00CE          206 
+ID                               Byte              00CF          207 
+I                                Byte              00D0          208 
+J                                Byte              00D1          209 
+K                                Byte              00D2          210 
+MAXIN                            Byte              00D3          211 
+A                                Byte              00D4          212 
+REPLY                            Byte              00D5          213 
+KEYIDS                           Byte              00D6          214 
+EKEYIDS                          EEPROM Byte       009A          154 
+COUNTERID                        Byte              00D7          215 
+BASEID                           Byte              00D8          216 
+MINID                            Byte              00D9          217 
+MAXID                            Byte              00DA          218 
+TEMPONID                         Byte(28)          00DB          219 
+TEMPONTIME                       Word(28)          00F7          247 
+TEMPON                           Bit [3]           0071          113 
+WANTNUM                          Bit [2]           0071          113 
+SYCID                            Bit [1]           0071          113 
+SETID                            Byte              012F          303 
+DIN                              Byte(5)           0130          304 
+Z                                Byte              0135          309 
+ONOFF                            Bit [0]           0071          113 
+TIMEOUT                          Bit [7]           0136          310 
+SENDOK                           Bit [6]           0136          310 
+INOK                             Bit [5]           0136          310 
+LIGHT                            Byte              0137          311 
+LEARNOK                          Bit [4]           0136          310 
+BLANK                            Bit [3]           0136          310 
+IDBLANK                          Byte              0138          312 
+DIRECT                           Byte              0139          313 
+ENDBIT                           Byte              013A          314 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -641,6 +648,7 @@ ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
 PWM0                             not used
+SETSENARIO                       not used
 TEST                             not used
 D                                not used
 TEMPID                           not used

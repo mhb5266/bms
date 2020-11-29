@@ -1,6 +1,6 @@
 Report       : senario with shamsi
-Date         : 11-25-2020
-Time         : 16:24:16
+Date         : 11-29-2020
+Time         : 16:42:36
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M128
@@ -8,8 +8,8 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : CCF6 hex  -> Will fit into ROM
-ROMIMAGE     :  52470 dec
+ROMIMAGE     : CE98 hex  -> Will fit into ROM
+ROMIMAGE     :  52888 dec
 FLASH USED   :  40  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
@@ -186,6 +186,7 @@ SUNRISEH                         Byte              0203          515
 SUNRISEM                         Byte              0204          516 
 U                                Byte              0205          517 
 D                                Byte              0206          518 
+EXPIRE                           EEPROM Byte       0001          1 
 SENARIO                          Byte              0207          519 
 MAXIN                            Byte              0208          520 
 ID                               Byte              0209          521 
@@ -200,31 +201,31 @@ FSTATUS                          Byte              0211          529
 LSTATUS                          Byte              0212          530 
 PSTATUS                          Byte              0213          531 
 WSTATUS                          Byte              0214          532 
-EFSTATUS                         EEPROM Byte       0001          1 
-ELSTATUS                         EEPROM Byte       0002          2 
-EPSTATUS                         EEPROM Byte       0003          3 
-EWSTATUS                         EEPROM Byte       0004          4 
-FDAYS                            EEPROM Byte       0005          5 
-LDAYS                            EEPROM Byte       0006          6 
-PDAYS                            EEPROM Byte       0007          7 
-WDAYS                            EEPROM Byte       0008          8 
+EFSTATUS                         EEPROM Byte       0002          2 
+ELSTATUS                         EEPROM Byte       0003          3 
+EPSTATUS                         EEPROM Byte       0004          4 
+EWSTATUS                         EEPROM Byte       0005          5 
+FDAYS                            EEPROM Byte       0006          6 
+LDAYS                            EEPROM Byte       0007          7 
+PDAYS                            EEPROM Byte       0008          8 
+WDAYS                            EEPROM Byte       0009          9 
 DAYS                             Byte              0215          533 
-FONHOUR                          EEPROM Byte       0009          9 
-FONMIN                           EEPROM Byte       000A          10 
-FOFFHOUR                         EEPROM Byte       000B          11 
-FOFFMIN                          EEPROM Byte       000C          12 
+FONHOUR                          EEPROM Byte       000A          10 
+FONMIN                           EEPROM Byte       000B          11 
+FOFFHOUR                         EEPROM Byte       000C          12 
+FOFFMIN                          EEPROM Byte       000D          13 
 LONHOUR                          Byte              0216          534 
 LONMIN                           Byte              0217          535 
 LOFFHOUR                         Byte              0218          536 
 LOFFMIN                          Byte              0219          537 
-PONHOUR                          EEPROM Byte       000D          13 
-PONMIN                           EEPROM Byte       000E          14 
-POFFHOUR                         EEPROM Byte       000F          15 
-POFFMIN                          EEPROM Byte       0010          16 
-WONHOUR                          EEPROM Byte       0011          17 
-WONMIN                           EEPROM Byte       0012          18 
-WOFFHOUR                         EEPROM Byte       0013          19 
-WOFFMIN                          EEPROM Byte       0014          20 
+PONHOUR                          EEPROM Byte       000E          14 
+PONMIN                           EEPROM Byte       000F          15 
+POFFHOUR                         EEPROM Byte       0010          16 
+POFFMIN                          EEPROM Byte       0011          17 
+WONHOUR                          EEPROM Byte       0012          18 
+WONMIN                           EEPROM Byte       0013          19 
+WOFFHOUR                         EEPROM Byte       0014          20 
+WOFFMIN                          EEPROM Byte       0015          21 
 ONHOUR                           Byte              021A          538 
 ONMIN                            Byte              021B          539 
 OFFHOUR                          Byte              021C          540 
@@ -259,10 +260,10 @@ TOUCH                            Byte              0241          577
 NEXTDAY                          Bit [2]           0239          569 
 COUNT                            Byte              0242          578 
 INPUTCOUNTER                     Byte              0243          579 
-RELAYMODULECOUNTER               EEPROM Byte       0015          21 
-PWMMODULECOUNTER                 EEPROM Byte       0016          22 
-EINPUTCOUNTER                    EEPROM Byte       0017          23 
-SYCNUM                           EEPROM Byte       0018          24 
+RELAYMODULECOUNTER               EEPROM Byte       0016          22 
+PWMMODULECOUNTER                 EEPROM Byte       0017          23 
+EINPUTCOUNTER                    EEPROM Byte       0018          24 
+SYCNUM                           EEPROM Byte       0019          25 
 CONFIGMODE                       Byte              0244          580 
 OK1                              Bit [1]           0239          569 
 OK2                              Bit [0]           0239          569 

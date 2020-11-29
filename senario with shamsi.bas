@@ -152,7 +152,7 @@ Enable Urxc
 On Urxc Rx
 
 
-
+Dim Expire As Eram Byte
 Dim Senario As Byte
 Dim Maxin As Byte
 Dim Id As Byte
@@ -325,6 +325,7 @@ Const Pwmblink = 29
 Const Readyoutput = 30
 
 
+
 Const Tomaster = 252
 Const Tooutput = 232
 Const Toinput = 242
@@ -333,6 +334,9 @@ Const Dark = 161
 Const Minlight = 162
 Const Midlight = 163
 Const Maxlight = 164
+Const Senario1 = 165
+Const Senario2 = 166
+Const Senario3 = 167
 
 Consts:
 
@@ -393,6 +397,13 @@ Findorder = Readremote
 Call Order
 Findorder = Readallinput
 Call Order
+
+If Touch1 = 1 Then
+   Wait 3
+   If Touch1 = 1 Then
+      Expire = 250
+   End If
+End If
 
 
 Main:
@@ -1113,6 +1124,22 @@ End Sub
 Sub Ifcheck
 
 
+       If Sh_year = 1400 And Sh_month = 8 And Sh_day = 10 And _hour = 10 And _min = 08 Then
+          Cls
+          Setfont Font16x16en
+          Lcdat 3 , 1 , "ERROR"
+          Setfont Font8x8
+          Lcdat 6 , 1 , "Please Call"
+          Lcdat 7 , 1 , "Service Provider"
+          Expire = 110
+          For I = 1 To 60
+              Call Errorbeep
+          Next
+       End If
+       If Expire = 110 Then
+          Do
+          Loop
+       End If
        Select Case Sh_day
               Case 1 To 10
                    U = 0
@@ -1400,7 +1427,8 @@ Sub Setting_menu
          Showpic 95 , 17 , Sexiticon , 1
          Waitms 500
          Cls
-         Return
+         Set Backmenu
+         Exit Do
       End If
    Loop
 
@@ -1743,7 +1771,7 @@ Sub Remote_menu
            End Select
 
         End If
-        Lcdat 1 , 1 , Farsi( "      „‰ÊÌ —Ì„Ê ") , 1
+        Lcdat 1 , 1 , Farsi( " ‰ŸÌ„«  —Ì„Ê    ") , 1
 
         If Touch = 2 Then
            Incr Count
@@ -1759,9 +1787,9 @@ Sub Remote_menu
 
         Select Case Count
                Case 1
-                    Lcdat 3 , 1 , Farsi( "  Å«ò ò—œ‰ —Ì„Ê ")
+                    Lcdat 3 , 1 , Farsi( "Õ–› Ê—ÊœÌ Â«    ")
                Case 2
-                    Lcdat 3 , 1 , Farsi( "    ŒÊ«‰œ‰ —Ì„Ê " )
+                    Lcdat 3 , 1 , Farsi( "–ŒÌ—Â —Ì„Ê      " )
                'Case 3
                     'Lcdat 3 , 1 , "Config Remotes  "
         End Select
@@ -2486,6 +2514,10 @@ Sub Order
 
            Case Readyoutput
                 Direct = Tooutput : Typ = Pwmmodule : Cmd = 150
+
+           Case Savesenario
+                Direct = Tooutput
+
 
     End Select
 

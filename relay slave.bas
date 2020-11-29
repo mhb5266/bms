@@ -65,6 +65,26 @@ On Urxc Rx
 
 Defines:
 
+Dim Esenario1 As Eram Dword
+Dim Esenario2 As Eram Dword
+Dim Esenario3 As Eram Dword
+
+Dim Senario1 As Dword
+Dim Senario2 As Dword
+Dim Senario3 As Dword
+
+If Esenario1 = 4294967295 Then Esenario1 = 0
+If Esenario2 = 4294967295 Then Esenario2 = 0
+If Esenario3 = 4294967295 Then Esenario3 = 0
+
+Senario1 = Esenario1
+Senario2 = Esenario2
+Senario3 = Esenario3
+
+Dim Setsenario As Byte
+
+
+
 Dim F As Byte
 Dim M As Byte
 Dim Tblank As Byte
