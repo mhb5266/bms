@@ -234,11 +234,12 @@ Const Relaymodule = 110
 Const Pwmmodule = 111
 Const Outstep = 112
 
-Const Idjacuzi = 51
-Const Idwater = 52
-Const Idlight = 53
-Const Idplant = 54
-Const Idfountain = 55
+Const Idjacuzi = 50
+Const Idwater = 51
+Const Idlight = 52
+Const Idplant = 53
+Const Idfountain = 54
+Const Idcurtains = 55
 
 Dim X As Word
 Dim W As Word
@@ -325,7 +326,7 @@ Const Pwmblink = 29
 Const Readyoutput = 30
 
 
-Const Tomaster = 252
+'Const Tomaster = 252
 Const Tooutput = 232
 Const Toinput = 242
 
@@ -386,13 +387,16 @@ Set Backlight
 
 Cls
 Call Beep
-Showpic 32 , 1 , Logo
-Waitms 500
+Showpic 0 , 0 , Logo
+Wait 1
+
 Cls
 Findorder = Readremote
 Call Order
 Findorder = Readallinput
 Call Order
+
+
 
 
 Main:
@@ -401,6 +405,7 @@ Main:
        Gosub Read_date_time
        Gosub M_to_sh
 
+       If Senario = 0 Then Senario = 1
 
        If Refreshtemp <> _sec Then
           Call Temp
@@ -577,7 +582,7 @@ End If
                  Do
                     Cls
                     Showpic 0 , 0 , Night , 1
-                    Setlight = Maxlight
+                    Setlight = Midlight
                     Findorder = Pwmlight
                     Senario = 2
                     Call Order
@@ -606,7 +611,7 @@ End If
                  Do
                     Cls
                     Showpic 0 , 0 , Party , 1
-                    Setlight = Midlight
+                    Setlight = Maxlight
                     Findorder = Pwmlight
                     Senario = 3
                     Call Order
@@ -635,7 +640,7 @@ End If
                  If Poosh < 20 And Ok4 = 1 Then
                     Cls
                     Showpic 0 , 0 , Exiticon , 1
-                    Setlight = Minlight
+                    Setlight = Dark
                     Findorder = Pwmlight
                     Senario = 4
                     Call Order
@@ -1367,6 +1372,7 @@ Sub Setting_menu
       Showpic 63 , 17 , Sdissensor , 0
    End If
 
+   'lcdat 5,96,"Exit"
    Showpic 95 , 17 , Sexiticon , 0
 
    Do
@@ -1398,7 +1404,9 @@ Sub Setting_menu
 
       If Touch = 4 Then
          Showpic 95 , 17 , Sexiticon , 1
+         'lcdat 5,96,"Exit",1
          Waitms 500
+         Set Backmenu
          Cls
          Return
       End If
@@ -1411,6 +1419,7 @@ Sub Configmenu
     Count = 1
     Cls
     Setfont Font8x8
+  '(
     Do
       For I = 1 To 4
        Do
@@ -1477,6 +1486,7 @@ Sub Configmenu
           Cls
       End If
     Loop
+')
     Do
 
 
@@ -2353,6 +2363,22 @@ Sub Checkanswer
                        Case 186
                             Set Setremotedone
 
+                       Case 188
+                            Waitms 50
+                            If Id = 99 Then
+                                                Setlight = Minlight
+                                                Findorder = Pwmlight
+                                                Senario = 1
+                                                Call Order
+                            End If
+                       Case 189
+                            Waitms 50
+                            If Id = 99 Then
+                                                Setlight = Dark
+                                                Findorder = Pwmlight
+                                                Senario = 4
+                                                Call Order
+                            End If
                 End Select
 
 

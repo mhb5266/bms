@@ -205,7 +205,7 @@ Main:
                  Incr Tempontime(i)
                  Wait 1
                  If Tempontime(i) = 120 Then
-                    Tempontime = 0
+                    Tempontime(i) = 0
                     Tempon(i) = 0
                     Outs.i = 0
                     J = I

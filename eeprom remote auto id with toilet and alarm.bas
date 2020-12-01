@@ -38,7 +38,7 @@ Dim Num As Byte
 Num = Enum
 If Num > 100 Then Num = 2
 
-
+Dim Ms20 As Byte
 
 '(
 Eidcounter = Idcounter
@@ -87,6 +87,26 @@ Led Alias Portb.0 : Config Portb.0 = Output
 buzz Alias Portb.1 : Config Portb.1 = Output
 Rxtx Alias Portb.2 : Config Portb.2 = Output
 
+Alarm Alias Pinc.3 : Config Portc.3 = Input
+Sens1 Alias Pinc.2 : Config Portc.2 = Input
+Sens2 Alias Pinc.2 : Config Portc.1 = Input
+Sens3 Alias Pinc.2 : Config Portc.0 = Input
+
+Dim Alarmt As Word
+Dim Alarmnum As Byte
+Dim T1 As Word
+Dim T2 As Word
+Dim T3 As Word
+
+Dim St1 As Bit
+Dim St2 As Bit
+Dim St3 As Bit
+
+
+Const Idalarm = 56
+Const Idsens1 = 57
+Const Idsens2 = 58
+Const Idsens3 = 59
 
 '-------------------------------------------------------------------------------
 '(
@@ -110,6 +130,9 @@ Config Sda = Portc.4                                        'at24cxx pin5
 Const Eewrite = 160                                         'eeprom write address
 Const Eeread = 161                                          'eeprom read address
 '--------------------------------- Timer ---------------------------------------
+Config Timer0 = Timer , Prescale = 1024
+Enable Timer0
+On Timer0 T0rutin
 Config Timer1 = Timer , Prescale = 8 : Stop Timer1 : Timer1 = 0
 'Config Watchdog = 2048
 '--------------------------------- Variable ------------------------------------
@@ -169,6 +192,85 @@ Do
 
   End If
 
+  If Alarm = 1 Then
+     Id = Idalarm
+     Alarmnum = 0
+     Do
+       If Alarm = 1 Then
+          Do
+          Loop Until Alarm = 0
+               Incr Alarmnum
+       End If
+       Waitms 1
+       Incr Alarmt
+     Loop Until Alarmt = 1500
+
+     Direct = Tomaster
+     Typ = Mytyp
+     Id = 99
+     If Alarmnum = 1 Then
+        Cmd = 188
+     Elseif Alarmnum = 3 Then
+        Cmd = 189
+     End If
+
+     Call Tx
+
+  End If
+
+  If Sens1 = 1 Then
+     If St1 = 0 Then
+        Id = Idsens1
+        Set St1
+        Cmd = 182
+        Direct = Tooutput
+        Call Tx
+     Else
+        If T1 < 300 Then
+          Set St1
+          Cmd = 182
+          Direct = Tooutput
+          Call Tx
+        End If
+     End If
+     T1 = 600
+  End If
+
+  If Sens2 = 1 Then
+     If St2 = 0 Then
+        Id = Idsens2
+        Set St2
+        Cmd = 182
+        Direct = Tooutput
+        Call Tx
+     Else
+        If T2 < 300 Then
+          Set St2
+          Cmd = 182
+          Direct = Tooutput
+          Call Tx
+        End If
+     End If
+     T1 = 600
+  End If
+
+  If Sens3 = 1 Then
+     If St3 = 0 Then
+        Id = Idsens3
+        Set St3
+        Cmd = 182
+        Direct = Tooutput
+        Call Tx
+     Else
+        If T3 < 300 Then
+          Set St3
+          Cmd = 182
+          Direct = Tooutput
+          Call Tx
+        End If
+     End If
+     T1 = 600
+  End If
 Loop
 '*****************************************
 '-------------------------------------read
@@ -622,7 +724,47 @@ Decode:
 Return
 '-------------------------------------------------------------------------------
 
+T0rutin:
+        Stop Timer0
+        Incr Ms20
+        If Ms20 = 5 Then
+           If St1 = 1 Then
+              If T1 > 0 Then Decr T1
+              If T1 = 0 Then
+                 Id = Idsens1
+                 Reset St1
+                 Cmd = 181
+                 Direct = Tooutput
+                 Call Tx
+              End If
+           End If
 
+           If St2 = 1 Then
+              If T2 > 0 Then Decr T2
+              If T2 = 0 Then
+                 Id = Idsens2
+                 Reset St2
+                 Cmd = 181
+                 Direct = Tooutput
+                 Call Tx
+              End If
+           End If
+
+           If St3 = 1 Then
+              If T3 > 0 Then Decr T3
+              If T3 = 0 Then
+                 Id = Idsens3
+                 Reset St3
+                 Cmd = 181
+                 Direct = Tooutput
+                 Call Tx
+              End If
+           End If
+
+        End If
+        Timer0 = 39
+        Start Timer0
+Return
 
 Rx:
 

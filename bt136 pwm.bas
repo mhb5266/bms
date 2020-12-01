@@ -196,7 +196,7 @@ Main:
                   Tblank = M Mod 10
                   If Tblank = 0 Then Toggle Rxtx
                Else
-                  Tblank = M Mod 5
+                  Tblank = M Mod 4
                   If Tblank = 0 Then Toggle Rxtx
                End If
              Loop Until Key = 1
@@ -342,7 +342,7 @@ Sub Clearids
                         Eoutid3(i) = 0
                         Waitms 2
                         Light(i) = Dark
-                        Waitms 200
+                        Waitms 750
                         Toggle Buz
                         Outid1(i) = 0
                         Outid2(i) = 0
@@ -431,6 +431,8 @@ Sub Getid
           Toggle Rxtx
           Waitms 200
        Next
+       RESET BUZ
+       RESET RXTX
 
        Reset Wantid
 

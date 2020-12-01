@@ -52,7 +52,7 @@ Config Portd = Output
            Config Portc = Output
 
            En Alias Portd.2 : Config Portd.2 = Output
-           Rxtx Alias Portb.0 : Config Portb.0 = Output
+           Rxtx Alias Portb.6 : Config Portb.6 = Output
 
            Config Portc = Output
 
@@ -215,7 +215,7 @@ Main:
                  Incr Tempontime(i)
                  Wait 1
                  If Tempontime(i) = 120 Then
-                    Tempontime = 0
+                    Tempontime(I) = 0
                     Tempon(i) = 0
                     Outs.i = 0
                     J = I
