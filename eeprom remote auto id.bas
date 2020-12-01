@@ -84,7 +84,7 @@ Key1 Alias Pind.6 : Config Portd.6 = Input
 
 Rel1 Alias Portd.7 : Config Portd.7 = Output
 Led Alias Portb.0 : Config Portb.0 = Output
-buzz Alias Portb.1 : Config Portb.1 = Output
+Buzz Alias Portb.1 : Config Portb.1 = Output
 Rxtx Alias Portb.2 : Config Portb.2 = Output
 
 
@@ -146,10 +146,10 @@ Gosub Rnumber_ew
 End If
 '------------------- startup
 Waitms 500
-Set buzz
+Set Buzz
 Call Beep
 Call Beep
-Reset buzz
+Reset Buzz
 Waitms 500
 
 
@@ -236,7 +236,7 @@ Return
 Keys:
      Reset Rel1
 
-     Set buzz
+     Set Buzz
      Keycheck = 1                                           'hengame learn kardan be releha farman nade
      Waitms 150
      Do
@@ -254,14 +254,14 @@ Keys:
                    Wait 1
                    Wait 1
                    Reset Buzz
-                   Reset buzz
+                   Reset Buzz
                    Return
                    Exit While
                 End If
           Wend
           If T < 5000 Then
                     T = 0
-                    Reset buzz
+                    Reset Buzz
                     Return
           End If
        End If
@@ -807,7 +807,7 @@ Sub Do_learn
         End If
     Loop
     Okread = 0
-    Reset buzz
+    Reset Buzz
 Return
 End Sub
 
