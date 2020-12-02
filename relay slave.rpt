@@ -1,16 +1,27 @@
 Report       : relay slave
+<<<<<<< HEAD
 Date         : 11-29-2020
 Time         : 16:57:04
+=======
+Date         : 12-01-2020
+Time         : 12:12:54
+>>>>>>> 9a1ff577b0f38a2fbc0a39f7f2c5e53cd78b8019
 
-Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
+Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M16
 SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
+<<<<<<< HEAD
 ROMIMAGE     : 1900 hex  -> Will fit into ROM
 ROMIMAGE     :  6400 dec
 FLASH USED   :  39  %
+=======
+ROMIMAGE     : 1832 hex  -> Will fit into ROM
+ROMIMAGE     :  6194 dec
+FLASH USED   :  37  %
+>>>>>>> 9a1ff577b0f38a2fbc0a39f7f2c5e53cd78b8019
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -44,6 +55,8 @@ ADC                              Word              0024          36
 TIMER1                           Word              004C          76 
 COMPARE1A                        Word              004A          74 
 COMPARE1B                        Word              0048          72 
+PWM1A                            Word              004A          74 
+PWM1B                            Word              0048          72 
 CAPTURE1                         Word              0046          70 
 HWSTACK                          Word              005D          93 
 SWSTACK                          Word              001C          28 
@@ -223,6 +236,7 @@ SPSR                             &H0E
 SPCR                             &H0D
 UDR                              &H0C
 UCSRA                            &H0B
+UCSR0A                           &H0B
 USR                              &H0B
 UCSRB                            &H0A
 UCR                              &H0A
@@ -243,6 +257,8 @@ I2DR                             &H03
 I2AR                             &H02
 I2SR                             &H01
 I2BR                             &H00
+_ROMSIZE                         16384
+_CHIP                            18
 INT1                             7
 INT0                             6
 INT2                             5
@@ -295,7 +311,7 @@ BORF                             2
 EXTRF                            1
 PORF                             0
 FOC0                             7
-PWM0                             6
+PWM0BIT                          6
 WGM00                            6
 COM01                            5
 COM00                            4
@@ -333,7 +349,7 @@ CS12                             2
 CS11                             1
 CS10                             0
 FOC2                             7
-PWM2                             6
+PWM2BIT                          6
 WGM20                            6
 COM21                            5
 COM20                            4
@@ -514,6 +530,7 @@ ADPS2                            2
 ADPS1                            1
 ADPS0                            0
 TWGCE                            0
+_RESET                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
 _GSTRBUF                         1032
@@ -526,17 +543,15 @@ _RTSCTS5                         0
 _RTSCTS6                         0
 _RTSCTS7                         0
 _RTSCTS8                         0
-_CHIP                            18
 _RAMSIZE                         1024
 _ERAMSIZE                        512
 _SIM                             0
 _HUGE                            0
 _BASE                            1
 _XTAL                            11059200
-_BUILD                           20781
+_BUILD                           20830
 _COMPILER                        90
 _HWMUL                           1
-_ROMSIZE                         16384
 _DOSFILEWRITE                    0
 _DOSDIRWRITE                     0
 _1WEXT                           0
@@ -544,8 +559,9 @@ _ADC_REFMODEL                    0
 _UARTS                           1
 _HWSTACKSTART                    1119
 _TIMEOUT                         0
-_PRDWORD                         0
 _PBIN_EXTENDED                   0
+_SPI_EXTENDED                    0
+_INPBIN_EXTENDED                 0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
@@ -553,6 +569,7 @@ _HWSTACK_LOW                     &H0437
 _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
+_XTINY                           0
 STOPALL                          1
 NORMAL                           2
 REFRESHALL                       3
@@ -605,50 +622,14 @@ CEXPDIVOFFSET                    36
 --------------------------------------------------------------------------------
 Warnings:
 --------------------------------------------------------------------------------
-SP                               not used
-TCNT1                            not used
-OCR1A                            not used
-OCR1B                            not used
-ICR1                             not used
-EEAR                             not used
-ADC                              not used
-R0                               not used
-R1                               not used
-R2                               not used
-R3                               not used
-R4                               not used
-R5                               not used
-R6                               not used
-R7                               not used
-R8                               not used
-R9                               not used
-R10                              not used
-R11                              not used
-R12                              not used
-R13                              not used
-R14                              not used
-R15                              not used
-R16                              not used
-R17                              not used
-R18                              not used
-R19                              not used
-R20                              not used
-R21                              not used
-R22                              not used
-R23                              not used
-R24                              not used
-R25                              not used
-R26                              not used
-R27                              not used
-R28                              not used
-R29                              not used
-R30                              not used
-R31                              not used
 ADCD                             not used
 COMPARE1                         not used
+<<<<<<< HEAD
 PWM1B                            not used
 PWM0                             not used
 SETSENARIO                       not used
+=======
+>>>>>>> 9a1ff577b0f38a2fbc0a39f7f2c5e53cd78b8019
 TEST                             not used
 D                                not used
 TEMPID                           not used

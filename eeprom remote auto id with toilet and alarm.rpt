@@ -1,6 +1,6 @@
-Report       : relay m8
+Report       : eeprom remote auto id with toilet and alarm
 Date         : 12-01-2020
-Time         : 14:57:27
+Time         : 22:21:08
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,20 +8,20 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 11DA hex  -> Will fit into ROM
-ROMIMAGE     :  4570 dec
-FLASH USED   :  55  %
+ROMIMAGE     : 1802 hex  -> Will fit into ROM
+ROMIMAGE     :  6146 dec
+FLASH USED   :  75  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
 
 Stack start  : 45F hex
-Stack size   : 28 hex
-S-Stacksize  : 10 hex
-S-Stackstart : 438 hex
-Framesize    : 20 hex
-Framestart   : 408 hex
-Space left   :  847  dec
+Stack size   : 20 hex
+S-Stacksize  : 8 hex
+S-Stackstart : 440 hex
+Framesize    : 18 hex
+Framestart   : 420 hex
+Space left   :  818  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -92,62 +92,58 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-F                                Byte              0060          96 
-M                                Byte              0061          97 
-TBLANK                           Byte              0062          98 
-P                                Word              0063          99 
-TEST                             Byte              0065          101 
-WANTID                           Bit [7]           0066          102 
-GOTID                            Bit [6]           0066          102 
-OUTS                             Dword             0067          103 
-EOUTNUM                          EEPROM Byte(8)    0000          0 
-EOUTID1                          EEPROM Byte(8)    0008          8 
-EOUTID2                          EEPROM Byte(8)    0010          16 
-EOUTID3                          EEPROM Byte(8)    0018          24 
-OUTID1                           Byte(8)           006B          107 
-OUTID2                           Byte(8)           0073          115 
-OUTID3                           Byte(8)           007B          123 
-EOUTS                            EEPROM Byte(8)    0020          32 
-IDGOT                            EEPROM Byte       0028          40 
-D                                Byte              0083          131 
-TEMPID                           Byte              0084          132 
-STATUS                           Byte              0085          133 
-EFIRST                           EEPROM Byte       0029          41 
-TOGGLEKEY                        Bit [5]           0066          102 
-IDWASGOT                         Bit [4]           0066          102 
-TYP                              Byte              0086          134 
-CMD                              Byte              0087          135 
-ID                               Byte              0088          136 
-I                                Byte              0089          137 
-J                                Byte              008A          138 
-K                                Byte              008B          139 
-MAXIN                            Byte              008C          140 
-A                                Byte              008D          141 
-REPLY                            Byte              008E          142 
-KEYIDS                           Byte              008F          143 
-EKEYIDS                          EEPROM Byte       002A          42 
-COUNTERID                        Byte              0090          144 
-BASEID                           Byte              0091          145 
-MINID                            Byte              0092          146 
-MAXID                            Byte              0093          147 
-TEMPONID                         Byte(8)           0094          148 
-TEMPONTIME                       Word(8)           009C          156 
-TEMPON                           Bit [3]           0066          102 
-WANTNUM                          Bit [2]           0066          102 
-SYCID                            Bit [1]           0066          102 
-SETID                            Byte              00AC          172 
-DIN                              Byte(5)           00AD          173 
-Z                                Byte              00B2          178 
-ONOFF                            Bit [0]           0066          102 
-TIMEOUT                          Bit [7]           00B3          179 
-SENDOK                           Bit [6]           00B3          179 
-INOK                             Bit [5]           00B3          179 
-LIGHT                            Byte              00B4          180 
-LEARNOK                          Bit [4]           00B3          179 
-BLANK                            Bit [3]           00B3          179 
-IDBLANK                          Byte              00B5          181 
-DIRECT                           Byte              00B6          182 
-ENDBIT                           Byte              00B7          183 
+MAXIN                            Byte              0060          96 
+INOK                             Bit [7]           0061          97 
+F                                Byte              0062          98 
+NEWLEARN                         Bit [6]           0061          97 
+REMOTEID                         EEPROM Byte(10)   0000          0 
+ID                               Byte              0063          99 
+TYP                              Byte              0064          100 
+CMD                              Byte              0065          101 
+DIN                              Byte(5)           0066          102 
+WIC                              Byte              006B          107 
+DIRECT                           Byte              006C          108 
+ENDBIT                           Byte              006D          109 
+CMDCODE                          Byte              006E          110 
+ENUM                             EEPROM Byte       000A          10 
+NUM                              Byte              006F          111 
+MS20                             Byte              0070          112 
+RAW                              Byte              0071          113 
+H                                Byte              0072          114 
+X                                Byte              0073          115 
+W                                Byte              0074          116 
+TEST                             Byte              0075          117 
+ISREQUEST                        Bit [5]           0061          97 
+CLEARALL                         Bit [4]           0061          97 
+LEARNNEW                         Bit [3]           0061          97 
+ENABLE_REMOTE                    Bit [2]           0061          97 
+ALARMT                           Word              0076          118 
+ALARMNUM                         Byte              0078          120 
+T1                               Word              0079          121 
+T2                               Word              007B          123 
+T3                               Word              007D          125 
+ST1                              Bit [1]           0061          97 
+ST2                              Bit [0]           0061          97 
+ST3                              Bit [7]           007F          127 
+S                                Word(24)          0080          128 
+I                                Byte              00B0          176 
+SADDRESS                         String * 20       00B1          177 
+SCODE                            String * 4        00C6          198 
+ADDRESS                          Long              00CB          203 
+CODE                             Byte              00CF          207 
+RA                               Long              00D0          208 
+RNUMBER                          Byte              00D4          212 
+OKREAD                           Bit [6]           007F          127 
+ERROR                            Bit [5]           007F          127 
+KEYCHECK                         Bit [4]           007F          127 
+T                                Word              00D5          213 
+EADDRESS                         Word              00D7          215 
+E_READ                           Byte              00D9          217 
+E_WRITE                          Byte              00DA          218 
+M                                String * 8        00DB          219 
+M1                               String * 2        00E4          228 
+M2                               String * 2        00E7          231 
+M3                               String * 2        00EA          234 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -483,7 +479,7 @@ TCR2UB                           0
 _RESET                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
-_GSTRBUF                         1032
+_GSTRBUF                         1056
 _DECIMALPOINT                    46
 _RTSCTS                          0
 _RTSCTS1                         0
@@ -515,42 +511,24 @@ _INPBIN_EXTENDED                 0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
-_HWSTACK_LOW                     &H0437
-_SWSTACK_LOW                     &H0428
-_FRAME_HIGH                      &H0429
+_HWSTACK_LOW                     &H043F
+_SWSTACK_LOW                     &H0438
+_FRAME_HIGH                      &H0439
 _XMEGA                           0
 _XTINY                           0
-STOPALL                          1
-NORMAL                           2
-REFRESHALL                       3
-RESETALL                         4
-ALLID                            99
-RELAYMODULE                      110
-PWMMODULE                        111
 TOMASTER                         252
-TOOUTPUT                         232
 TOINPUT                          242
-READALLINPUT                     1
-READ1INPUT                       2
-LEARNKEY                         3
-ENABLEBUZ                        4
-DISABLEBUZ                       5
-ENABLESENSOR                     6
-DISABLESENSOR                    7
-ENABLEINPUT                      8
-DISABLEINPUT                     9
-READSTEPS                        10
-LEARNSTEPS                       11
-ENABLESTEP                       12
-DISABLESTEP                      13
-READSENARIO                      14
-READREMOTE                       15
-KEYIN                            101
-STEPS                            102
-SENARIO                          103
-REMOTE                           104
-RELAYMODULES                     110
-MYTYP                            110
+TOOUTPUT                         232
+MYTYP                            104
+IDALARM                          56
+IDSENS1                          57
+IDSENS2                          58
+IDSENS3                          59
+EEWRITE                          160
+EEREAD                           161
+_SDA                             4
+_SCL                             5
+___I2CDELAY                      5
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -574,22 +552,10 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
+H                                not used
+X                                not used
+W                                not used
 TEST                             not used
-D                                not used
-TEMPID                           not used
-TOGGLEKEY                        not used
-IDWASGOT                         not used
-A                                not used
-REPLY                            not used
-KEYIDS                           not used
-EKEYIDS                          not used
-WANTNUM                          not used
-SYCID                            not used
-SETID                            not used
-Z                                not used
-ONOFF                            not used
-TIMEOUT                          not used
-SENDOK                           not used
-LIGHT                            not used
-LEARNOK                          not used
+ALARMT                           not used
+ALARMNUM                         not used
 
