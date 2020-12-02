@@ -62,7 +62,8 @@ Dim Enable_remote As Boolean
 
 'Dim Eevar(10) As Eram Byte
 
-
+Const Timeleft = 30
+Const Halgtimeleft = 15
 Const Tomaster = 252
 Const Toinput = 242
 Const Tooutput = 232
@@ -79,6 +80,8 @@ Declare Sub Clearids
 
 Config_remote:
 
+
+
 _in Alias Pind.3 : Config Portd.3 = Input
 Key1 Alias Pind.6 : Config Portd.6 = Input
 
@@ -89,9 +92,11 @@ Rxtx Alias Portb.2 : Config Portb.2 = Output
 
 Alarm Alias Pinc.3 : Config Portc.3 = Input
 Sens1 Alias Pinc.2 : Config Portc.2 = Input
-Sens2 Alias Pinc.2 : Config Portc.1 = Input
-Sens3 Alias Pinc.2 : Config Portc.0 = Input
+Sens2 Alias Pinc.1 : Config Portc.1 = Input
+Sens3 Alias Pinc.0 : Config Portc.0 = Input
 
+
+Dim Waslearned As Bit
 Dim Alarmt As Word
 Dim Alarmnum As Byte
 Dim T1 As Word
@@ -107,6 +112,8 @@ Const Idalarm = 56
 Const Idsens1 = 57
 Const Idsens2 = 58
 Const Idsens3 = 59
+
+Dim Term As Word
 
 '-------------------------------------------------------------------------------
 '(
@@ -132,7 +139,7 @@ Const Eeread = 161                                          'eeprom read address
 '--------------------------------- Timer ---------------------------------------
 Config Timer0 = Timer , Prescale = 1024
 Enable Timer0
-On Timer0 T0rutin
+On Ovf0 T0rutin
 Config Timer1 = Timer , Prescale = 8 : Stop Timer1 : Timer1 = 0
 'Config Watchdog = 2048
 '--------------------------------- Variable ------------------------------------
@@ -176,15 +183,23 @@ Reset Buzz
 Waitms 500
 
 
-
+Start Timer0
 
 Main:
 'Start Watchdog
 '************************************************************************ main
 Do
 
-  Stop Timer0
-  Gosub _read
+  Waitus 100
+  Incr Term
+  If Term > 10000 Then Term = 0
+
+  If Term < 2500 Then
+     Stop Timer0
+      Gosub _read
+
+  End If
+  Start Timer0
   If Key1 = 0 Then
 
     Call Beep
@@ -192,10 +207,11 @@ Do
     Gosub Keys
 
   End If
-  Start Timer0
 
- '(
+
+
   If Alarm = 1 Then
+     Toggle Led
      Id = Idalarm
      Alarmnum = 0
      Do
@@ -218,67 +234,92 @@ Do
      End If
 
      Call Tx
-
+     Do
+     Loop Until Alarm = 0
+     'Waitms 100
+     'Reset Led
   End If
 
   If Sens1 = 1 Then
+     Toggle Led
      If St1 = 0 Then
         Id = Idsens1
         Set St1
+        Cmd = 180
+        Direct = Tooutput
+        Call Tx
         Cmd = 182
         Direct = Tooutput
         Call Tx
      Else
-        If T1 < 300 Then
+        If T1 < Halgtimeleft Then
           Set St1
           Cmd = 182
+          Id = Idsens1
           Direct = Tooutput
           Call Tx
         End If
      End If
-     T1 = 600
+     T1 = Timeleft
+     ''Waitms 100
+     'Reset Led
   End If
-
+'(
   If Sens2 = 1 Then
+     Toggle Led
      If St2 = 0 Then
         Id = Idsens2
         Set St2
+        Cmd = 180
+        Direct = Tooutput
+        Call Tx
         Cmd = 182
         Direct = Tooutput
         Call Tx
      Else
-        If T2 < 300 Then
+        If T2 < Halgtimeleft Then
           Set St2
+          Id = Idsens2
           Cmd = 182
           Direct = Tooutput
           Call Tx
         End If
      End If
-     T1 = 600
+     T2 = Timeleft
+     'Waitms 100
+     'Reset Led
   End If
-
+')
   If Sens3 = 1 Then
+     Toggle Led
      If St3 = 0 Then
         Id = Idsens3
         Set St3
+        Cmd = 180
+        Direct = Tooutput
+        Call Tx
         Cmd = 182
         Direct = Tooutput
         Call Tx
      Else
-        If T3 < 300 Then
+        If T3 < Halgtimeleft Then
           Set St3
           Cmd = 182
+          Id = Idsens3
           Direct = Tooutput
           Call Tx
         End If
      End If
-     T1 = 600
+     T3 = Timeleft
+     'Waitms 100
+     'Reset Led
   End If
-')
+
 Loop
 '*****************************************
 '-------------------------------------read
 _read:
+      toggle rel1
       Okread = 0
       If _in = 1 Then
          Do
@@ -402,13 +443,13 @@ Command:
         'If Code = 4 Then Toggle Rel4
 
         Toggle Rel1
-
+        Term = 0
         If Newlearn = 1 Then
 
-           If Code = 15 Then
+           If Code > 8 Then
               Remoteid(1) = Raw
               Waitms 10
-           Elseif Code = 8 Then
+           Elseif Code < 9 Then
               Remoteid(num) = Raw
               Waitms 10
               Incr Num
@@ -423,8 +464,11 @@ Command:
 
         End If
 
+        Reset Waslearned
+
         For I = 1 To 10
             If Remoteid(i) = Raw Then
+               Set Waslearned
                Select Case I
                       Case 1
                            Id = Lookup(code , Remote16)
@@ -447,6 +491,17 @@ Command:
                Exit For
             End If
         Next
+        If Waslearned = 0 Then
+           If Code > 8 Then
+              Remoteid(1) = Raw
+              Waitms 10
+           Elseif Code < 9 Then
+              Remoteid(num) = Raw
+              Waitms 10
+              Incr Num
+              Enum = Num
+           End If
+        End If
 '(
         If Num = 0 Or Num > 40 Then Num = 1
         Reset Hasid
@@ -731,7 +786,9 @@ Return
 T0rutin:
         Stop Timer0
         Incr Ms20
-        If Ms20 = 5 Then
+        If Ms20 = 50 Then
+           Ms20 = 0
+           Toggle Buzz
            If St1 = 1 Then
               If T1 > 0 Then Decr T1
               If T1 = 0 Then
