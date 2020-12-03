@@ -1,6 +1,6 @@
 Report       : eeprom remote auto id with toilet and alarm
-Date         : 12-02-2020
-Time         : 16:46:59
+Date         : 12-03-2020
+Time         : 14:57:43
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1A74 hex  -> Will fit into ROM
-ROMIMAGE     :  6772 dec
-FLASH USED   :  82  %
+ROMIMAGE     : 1CFE hex  -> Will fit into ROM
+ROMIMAGE     :  7422 dec
+FLASH USED   :  90  %
 BAUD         : 115200 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 8 hex
 S-Stackstart : 440 hex
 Framesize    : 18 hex
 Framestart   : 420 hex
-Space left   :  816  dec
+Space left   :  814  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -95,55 +95,56 @@ INOK                             Bit [7]           0061          97
 F                                Byte              0062          98 
 NEWLEARN                         Bit [6]           0061          97 
 REMOTEID                         EEPROM Byte(10)   0000          0 
-ID                               Byte              0063          99 
-TYP                              Byte              0064          100 
-CMD                              Byte              0065          101 
-DIN                              Byte(5)           0066          102 
-WIC                              Byte              006B          107 
-DIRECT                           Byte              006C          108 
-ENDBIT                           Byte              006D          109 
-CMDCODE                          Byte              006E          110 
+CHECKTIME                        Word              0063          99 
+ID                               Byte              0065          101 
+TYP                              Byte              0066          102 
+CMD                              Byte              0067          103 
+DIN                              Byte(5)           0068          104 
+WIC                              Byte              006D          109 
+DIRECT                           Byte              006E          110 
+ENDBIT                           Byte              006F          111 
+CMDCODE                          Byte              0070          112 
 ENUM                             EEPROM Byte       000A          10 
-NUM                              Byte              006F          111 
-MS20                             Byte              0070          112 
-RAW                              Byte              0071          113 
-H                                Byte              0072          114 
-X                                Byte              0073          115 
-W                                Byte              0074          116 
-TEST                             Byte              0075          117 
+NUM                              Byte              0071          113 
+MS20                             Byte              0072          114 
+RAW                              Byte              0073          115 
+H                                Byte              0074          116 
+X                                Byte              0075          117 
+W                                Byte              0076          118 
+TEST                             Byte              0077          119 
 ISREQUEST                        Bit [5]           0061          97 
 CLEARALL                         Bit [4]           0061          97 
 LEARNNEW                         Bit [3]           0061          97 
 ENABLE_REMOTE                    Bit [2]           0061          97 
 WASLEARNED                       Bit [1]           0061          97 
-ALARMT                           Word              0076          118 
-ALARMNUM                         Byte              0078          120 
-T1                               Word              0079          121 
-T2                               Word              007B          123 
-T3                               Word              007D          125 
+ALARMT                           Word              0078          120 
+ALARMNUM                         Byte              007A          122 
+T1                               Word              007B          123 
+T2                               Word              007D          125 
+T3                               Word              007F          127 
 ST1                              Bit [0]           0061          97 
-ST2                              Bit [7]           007F          127 
-ST3                              Bit [6]           007F          127 
-TERM                             Word              0080          128 
-S                                Word(24)          0082          130 
-I                                Byte              00B2          178 
-SADDRESS                         String * 20       00B3          179 
-SCODE                            String * 4        00C8          200 
-ADDRESS                          Long              00CD          205 
-CODE                             Byte              00D1          209 
-RA                               Long              00D2          210 
-RNUMBER                          Byte              00D6          214 
-OKREAD                           Bit [5]           007F          127 
-ERROR                            Bit [4]           007F          127 
-KEYCHECK                         Bit [3]           007F          127 
-T                                Word              00D7          215 
-EADDRESS                         Word              00D9          217 
-E_READ                           Byte              00DB          219 
-E_WRITE                          Byte              00DC          220 
-M                                String * 8        00DD          221 
-M1                               String * 2        00E6          230 
-M2                               String * 2        00E9          233 
-M3                               String * 2        00EC          236 
+ST2                              Bit [7]           0081          129 
+ST3                              Bit [6]           0081          129 
+TERM                             Word              0082          130 
+S                                Word(24)          0084          132 
+I                                Byte              00B4          180 
+SADDRESS                         String * 20       00B5          181 
+SCODE                            String * 4        00CA          202 
+ADDRESS                          Long              00CF          207 
+CODE                             Byte              00D3          211 
+RA                               Long              00D4          212 
+RNUMBER                          Byte              00D8          216 
+OKREAD                           Bit [5]           0081          129 
+ERROR                            Bit [4]           0081          129 
+KEYCHECK                         Bit [3]           0081          129 
+T                                Word              00D9          217 
+EADDRESS                         Word              00DB          219 
+E_READ                           Byte              00DD          221 
+E_WRITE                          Byte              00DE          222 
+M                                String * 8        00DF          223 
+M1                               String * 2        00E8          232 
+M2                               String * 2        00EB          235 
+M3                               String * 2        00EE          238 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -512,8 +513,8 @@ _HWSTACK_LOW                     &H043F
 _SWSTACK_LOW                     &H0438
 _FRAME_HIGH                      &H0439
 _XMEGA                           0
-TIMELEFT                         30
-HALGTIMELEFT                     15
+TIMELEFT                         600
+HALFTIMEOUT                      300
 TOMASTER                         252
 TOINPUT                          242
 TOOUTPUT                         232

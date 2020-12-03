@@ -22,7 +22,7 @@ Dim F As Byte
 Dim Newlearn As Bit
 Dim Remoteid(10) As Eram Byte
 
-
+Dim Checktime As Word
 
 Dim Id As Byte
 Dim Typ As Byte
@@ -62,8 +62,8 @@ Dim Enable_remote As Boolean
 
 'Dim Eevar(10) As Eram Byte
 
-Const Timeleft = 30
-Const Halgtimeleft = 15
+Const Timeleft = 600
+Const Halftimeout = 300
 Const Tomaster = 252
 Const Toinput = 242
 Const Tooutput = 232
@@ -85,14 +85,14 @@ Config_remote:
 _in Alias Pind.3 : Config Portd.3 = Input
 Key1 Alias Pind.6 : Config Portd.6 = Input
 
-Rel1 Alias Portd.7 : Config Portd.7 = Output
-Led Alias Portb.0 : Config Portb.0 = Output
-Buzz Alias Portb.1 : Config Portb.1 = Output
+led1 Alias Portd.7 : Config Portd.7 = Output
+led2 Alias Portb.0 : Config Portb.0 = Output
+led3 Alias Portb.1 : Config Portb.1 = Output
 Rxtx Alias Portb.2 : Config Portb.2 = Output
 
 Alarm Alias Pinc.3 : Config Portc.3 = Input
 Sens1 Alias Pinc.2 : Config Portc.2 = Input
-Sens2 Alias Pinc.1 : Config Portc.1 = Input
+Sens2 Alias Pind.5 : Config Portd.5 = Input
 Sens3 Alias Pinc.0 : Config Portc.0 = Input
 
 
@@ -118,20 +118,20 @@ Dim Term As Word
 '-------------------------------------------------------------------------------
 '(
 Config Pinb.0 = Input                                       'RF INPUT
-Config Pinc.1 = Output                                      'Buzzer B.1
+Config Pinc.1 = Output                                      'led3er B.1
 Config Pind.2 = Output                                      'relay 1
 Config Pind.3 = Output                                      'relay 2
 Config Pind.4 = Output                                      'relay3
 Config Pind.5 = Output                                      'relay4
-Config Pinc.0 = Output                                      'buzz learning led
+Config Pinc.0 = Output                                      'led3 learning led2
 ')                                     'key1
 Config Scl = Portc.5                                        'at24cxx pin6
 Config Sda = Portc.4                                        'at24cxx pin5
 '--------------------------------- Alias  --------------------------------------
 '_in Alias Pinb.0                                            'RF input
-'Buzz Alias Portc.0                                          'B.1
-'Rel1 Alias Portd.2                                          'relay1
-'buzz Alias Portc.1                                          'learning led
+'led3 Alias Portc.0                                          'B.1
+'led1 Alias Portd.2                                          'relay1
+'led3 Alias Portc.1                                          'learning led2
 'Key1 Alias Pinb.1                                           'learn key
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Const Eewrite = 160                                         'eeprom write address
@@ -175,15 +175,57 @@ Rnumber = 0
 Gosub Rnumber_ew
 End If
 '------------------- startup
-Waitms 500
-Set Buzz
-Call Beep
-Call Beep
-Reset Buzz
-Waitms 500
+'Waitms 500
+'Set led3
+'Call Beep
+'Call Beep
+'Reset led3
+'Waitms 500
 
+
+
+Stop Timer0
+
+
+For I = 1 To 4
+  Set Led1
+  Reset Led2
+  Reset Led3
+  Reset Rxtx
+  Waitms 300
+
+  Reset Led1
+  Set Led2
+  Reset Led3
+  Reset Rxtx
+  Waitms 300
+
+  Reset Led1
+  Reset Led2
+  Set Led3
+  Reset Rxtx
+  Waitms 300
+
+  Reset Led1
+  Reset Led2
+  Reset Led3
+  Set Rxtx
+  Waitms 300
+Next
+
+  Reset Led1
+  Reset Led2
+  Reset Led3
+  Reset Rxtx
+  Waitms 300
+
+Reset St1
+Reset St2
+Reset St3
 
 Start Timer0
+
+
 
 Main:
 'Start Watchdog
@@ -196,7 +238,7 @@ Do
 
   If Term < 2500 Then
      Stop Timer0
-      Gosub _read
+     Gosub _read
 
   End If
   Start Timer0
@@ -211,7 +253,6 @@ Do
 
 
   If Alarm = 1 Then
-     Toggle Led
      Id = Idalarm
      Alarmnum = 0
      Do
@@ -236,37 +277,65 @@ Do
      Call Tx
      Do
      Loop Until Alarm = 0
-     'Waitms 100
-     'Reset Led
+        For I = 1 To 4
+            Toggle Led2
+            Waitms 200
+        Next
+        Reset Led2
   End If
 
+  If Alarm = 0 Then Reset Rxtx
+'(
+If Sens1 = 1 Then
+   Set Led2
+   Id = Idsens1 : Cmd = 180
+   Direct = Tooutput
+   Call Tx
+   Id = Idsens1
+   Cmd = 182
+   Direct = Tooutput
+   Call Tx
+   T1 = Timeleft
+   Do
+   Loop Until Sens1 = 0
+   Reset Led2
+End If
+')
+
   If Sens1 = 1 Then
-     Toggle Led
+     Stop Timer0
+
      If St1 = 0 Then
         Id = Idsens1
         Set St1
         Cmd = 180
         Direct = Tooutput
         Call Tx
+        Id = Idsens1
         Cmd = 182
         Direct = Tooutput
         Call Tx
+
      Else
-        If T1 < Halgtimeleft Then
-          Set St1
+        If T1 < Halftimeout Then
           Cmd = 182
           Id = Idsens1
           Direct = Tooutput
           Call Tx
         End If
      End If
+        For I = 1 To 4
+            Toggle Led2
+            Waitms 200
+        Next
+        Reset Led2
      T1 = Timeleft
-     ''Waitms 100
-     'Reset Led
+     Start Timer0
   End If
-'(
+
   If Sens2 = 1 Then
-     Toggle Led
+     Stop Timer0
+
      If St2 = 0 Then
         Id = Idsens2
         Set St2
@@ -277,7 +346,7 @@ Do
         Direct = Tooutput
         Call Tx
      Else
-        If T2 < Halgtimeleft Then
+        If T2 < halftimeout Then
           Set St2
           Id = Idsens2
           Cmd = 182
@@ -285,13 +354,18 @@ Do
           Call Tx
         End If
      End If
+        For I = 1 To 4
+            Toggle Led2
+            Waitms 200
+        Next
+        Reset Led2
      T2 = Timeleft
-     'Waitms 100
-     'Reset Led
+     Start Timer0
   End If
-')
+
   If Sens3 = 1 Then
-     Toggle Led
+     Stop Timer0
+
      If St3 = 0 Then
         Id = Idsens3
         Set St3
@@ -302,7 +376,7 @@ Do
         Direct = Tooutput
         Call Tx
      Else
-        If T3 < Halgtimeleft Then
+        If T3 < Halftimeout Then
           Set St3
           Cmd = 182
           Id = Idsens3
@@ -310,16 +384,20 @@ Do
           Call Tx
         End If
      End If
+        For I = 1 To 4
+            Toggle Led2
+            Waitms 200
+        Next
+        Reset Led2
      T3 = Timeleft
-     'Waitms 100
-     'Reset Led
+     Start Timer0
   End If
 
 Loop
 '*****************************************
 '-------------------------------------read
 _read:
-      toggle rel1
+      Toggle Led1
       Okread = 0
       If _in = 1 Then
          Do
@@ -381,9 +459,9 @@ Return
 
 '========================================================================= keys  learning
 Keys:
-     Reset Rel1
+     Reset Led1
 
-     Set Buzz
+     Set led3
      Keycheck = 1                                           'hengame learn kardan be releha farman nade
      Waitms 150
      Do
@@ -397,18 +475,18 @@ Keys:
                    Call Beep
                    Rnumber = 0
                    Gosub Rnumber_ew
-                   Set Buzz
+                   Set led3
                    Wait 1
                    Wait 1
-                   Reset Buzz
-                   Reset Buzz
+                   Reset led3
+                   Reset led3
                    Return
                    Exit While
                 End If
           Wend
           If T < 5000 Then
                     T = 0
-                    Reset Buzz
+                    Reset led3
                     Return
           End If
        End If
@@ -437,12 +515,12 @@ Return
 '-------------------------------- Relay command
 Command:
 
-        'If Code = 1 Then Toggle Rel1
+        'If Code = 1 Then Toggle led1
         'If Code = 2 Then Toggle Rel2
         'If Code = 3 Then Toggle Rel3
         'If Code = 4 Then Toggle Rel4
 
-        Toggle Rel1
+        Toggle led1
         Term = 0
         If Newlearn = 1 Then
 
@@ -458,7 +536,7 @@ Command:
            Reset Newlearn
 
            For I = 1 To 8
-               Toggle Led
+               Toggle led2
                Waitms 250
            Next I
 
@@ -537,7 +615,7 @@ Command:
            Codeid(num) = Code
            Setid(num) = Idcounter
            For X = 1 To 4
-               Toggle Buzz
+               Toggle led3
                Waitms 250
            Next
         End If
@@ -786,9 +864,11 @@ Return
 T0rutin:
         Stop Timer0
         Incr Ms20
-        If Ms20 = 50 Then
+        If Ms20 = 40 Then
            Ms20 = 0
-           Toggle Buzz
+           Toggle Led3
+           Incr Checktime
+
            If St1 = 1 Then
               If T1 > 0 Then Decr T1
               If T1 = 0 Then
@@ -822,6 +902,27 @@ T0rutin:
               End If
            End If
 
+           If Checktime = 1200 Then
+              Checktime = 0
+              If Sens1 = 0 And St1 = 0 Then
+                 Id = Idsens1
+                 Cmd = 181
+                 Direct = Tooutput
+                 Call Tx
+              End If
+              If Sens2 = 0 And St2 = 0 Then
+                 Id = Idsens2
+                 Cmd = 181
+                 Direct = Tooutput
+                 Call Tx
+              End If
+              If Sens3 = 0 And St3 = 0 Then
+                 Id = Idsens3
+                 Cmd = 181
+                 Direct = Tooutput
+                 Call Tx
+              End If
+           End If
         End If
         Timer0 = 39
         Start Timer0
@@ -859,15 +960,15 @@ End
 
 
 Sub Errorbeep
-    Set Buzz
+    Set led3
     Waitms 700
-    Reset Buzz
+    Reset led3
 End Sub
 
 Sub Beep
-    Set Buzz
+    Set led3
     Waitms 80
-    Reset Buzz
+    Reset led3
     Waitms 30
 End Sub
 
@@ -875,7 +976,7 @@ End Sub
 Sub Clear_remotes
  '(
 If Clearall = 1 Then
-     Reset Rel1
+     Reset led1
      Reset Rel2
      Reset Rel3
      Reset Rel4
@@ -887,12 +988,12 @@ If Clearall = 1 Then
      Next I
      Rnumber = 0
      Rnumber_e = Rnumber
-     Set buzz
+     Set led3
      Call Beep
      Call Beep
      Call Errorbeep
      Wait 1
-     Reset buzz
+     Reset led3
      Reset Clearall
 End If
 ')
@@ -906,7 +1007,7 @@ Sub Checkanswer
 
 
                 Case 150
-                     Set Led
+                     Set led2
                      Set Isrequest
 
                 Case 151
@@ -917,8 +1018,8 @@ Sub Checkanswer
                   Cmdcode = 180
 
                   Reset Isrequest
-                  Reset Led
-                  'Set Wantid_led
+                  Reset led2
+                  'Set Wantid_led2
 
 
                 Case 156
@@ -950,14 +1051,14 @@ Sub Checkanswer
                   Wic = Din(4)
                   Cmdcode = 163
 
-                  Reset Led
-                  'Set Wantid_led
+                  Reset led2
+                  'Set Wantid_led2
                 Case 164
                   Reset Learnnew
                   Reset Clearall
                   Wic = Din(4)
-                  Reset Led
-                  'Set Wantid_led
+                  Reset led2
+                  'Set Wantid_led2
                   Cmdcode = 164
             End Select
 
@@ -981,9 +1082,9 @@ Sub Do_learn
                For I = 1 To Rnumber
                    Gosub Ra_r
                    If Ra = Address Then                     'agar address remote tekrari bod yani ghablan learn shode
-                      Set Buzz
+                      Set led3
                       Wait 1
-                      Reset Buzz
+                      Reset led3
                       Error = 1
                       Exit For
                    Else
@@ -995,9 +1096,9 @@ Sub Do_learn
                   Incr Rnumber                              'be meghdare rnumber ke index tedade remote haye learn shode ast yek vahed ezafe kon
                   If Rnumber > 100 Then                     'agar bishtar az 100 remote learn shavad
                      Rnumber = 100
-                     Set Buzz
+                     Set led3
                      Wait 5
-                     Reset Buzz
+                     Reset led3
                   Else                                      'agar kamtar az 100 remote bod
                      Gosub Rnumber_ew                       'meghdare rnumber ra dar eeprom zakhore mikonad
                      Ra = Address
@@ -1010,7 +1111,7 @@ Sub Do_learn
         End If
     Loop
     Okread = 0
-    Reset Buzz
+    Reset led3
 Return
 End Sub
 
@@ -1031,7 +1132,7 @@ Sub Clearids:
                             Call Beep
                             Call Errorbeep
                             Wait 1
-                            Reset Buzz
+                            Reset Led3
                             Reset Clearall
                             Din(1) = 0
                             Din(2) = 0
@@ -1043,7 +1144,8 @@ End Sub
 
 
 Sub Tx:
-    Toggle Rxtx
+    Typ = Mytyp
+     Set Rxtx
     If Direct = Tomaster Then
        Endbit = 230
     Elseif Direct = Tooutput Then
@@ -1052,9 +1154,9 @@ Sub Tx:
     Set En
     Waitms 10
     Printbin Direct ; Typ ; Cmd ; Id ; Endbit
-    Waitms 50
+    Waitms 30
     Reset En
-
+    Reset Rxtx
 
 
 End Sub

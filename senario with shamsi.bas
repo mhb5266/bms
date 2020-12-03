@@ -326,12 +326,10 @@ Const Pwmblink = 29
 Const Readyoutput = 30
 
 
-<<<<<<< HEAD
+
 
 Const Tomaster = 252
-=======
-'Const Tomaster = 252
->>>>>>> 9a1ff577b0f38a2fbc0a39f7f2c5e53cd78b8019
+
 Const Tooutput = 232
 Const Toinput = 242
 
@@ -2398,18 +2396,28 @@ Sub Checkanswer
                        Case 188
                             Waitms 50
                             If Id = 99 Then
-                                                Setlight = Minlight
-                                                Findorder = Pwmlight
-                                                Senario = 1
-                                                Call Order
+                                    Setlight = Minlight
+                                    Findorder = Pwmlight
+                                    Senario = 1
+                                    Call Order
+                                    Cls
+                                    Showpic 0 , 0 , Rutin , 1
+                                    Wait 2
+                                    Cls
+                                    Set Backmenu
                             End If
                        Case 189
                             Waitms 50
                             If Id = 99 Then
-                                                Setlight = Dark
-                                                Findorder = Pwmlight
-                                                Senario = 4
-                                                Call Order
+                                    Setlight = Dark
+                                    Findorder = Pwmlight
+                                    Senario = 4
+                                    Call Order
+                                    Cls
+                                    Showpic 0 , 0 , Exiticon , 1
+                                    Wait 2
+                                    Cls
+                                    Set Backmenu
                             End If
                 End Select
 
@@ -2545,8 +2553,8 @@ Sub Order
            Case Readyoutput
                 Direct = Tooutput : Typ = Pwmmodule : Cmd = 150
 
-           Case Savesenario
-                Direct = Tooutput
+           'Case Savesenario
+                'Direct = Tooutput
 
 
     End Select
