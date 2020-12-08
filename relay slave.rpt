@@ -1,11 +1,6 @@
 Report       : relay slave
-<<<<<<< HEAD
-Date         : 11-29-2020
-Time         : 16:57:04
-=======
-Date         : 12-01-2020
-Time         : 12:12:54
->>>>>>> 9a1ff577b0f38a2fbc0a39f7f2c5e53cd78b8019
+Date         : 12-04-2020
+Time         : 09:15:06
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M16
@@ -13,16 +8,10 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-<<<<<<< HEAD
-ROMIMAGE     : 1900 hex  -> Will fit into ROM
-ROMIMAGE     :  6400 dec
-FLASH USED   :  39  %
-=======
-ROMIMAGE     : 1832 hex  -> Will fit into ROM
-ROMIMAGE     :  6194 dec
-FLASH USED   :  37  %
->>>>>>> 9a1ff577b0f38a2fbc0a39f7f2c5e53cd78b8019
-BAUD         : 115200 Baud
+ROMIMAGE     : 199C hex  -> Will fit into ROM
+ROMIMAGE     :  6556 dec
+FLASH USED   :  40  %
+BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
 
@@ -624,12 +613,7 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-<<<<<<< HEAD
-PWM1B                            not used
-PWM0                             not used
 SETSENARIO                       not used
-=======
->>>>>>> 9a1ff577b0f38a2fbc0a39f7f2c5e53cd78b8019
 TEST                             not used
 D                                not used
 TEMPID                           not used

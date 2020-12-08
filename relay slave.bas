@@ -1,6 +1,6 @@
 $regfile = "m16def.dat"
 $crystal = 11059200
-$baud = 115200
+$baud = 9600
 
 Portconfig:
 
@@ -159,6 +159,7 @@ Subs:
 Declare Sub Clearids
 Declare Sub Findorder
 Declare Sub Getid
+Declare Sub Turnout
 Declare Sub Tx
 
 
@@ -235,7 +236,7 @@ Main:
                  Incr Tempontime(i)
                  Wait 1
                  If Tempontime(i) = 120 Then
-                    Tempontime(I) = 0
+                    Tempontime(i) = 0
                     Tempon(i) = 0
                     Outs.i = 0
                     J = I
@@ -402,13 +403,30 @@ Sub Getid
                           Cmd = 0
                           Id = 0
          End If
-         If Key = 1 Then
-            Waitms 50
-            If Key = 1 Then
-               Reset Wantid
-               Exit Do
-            End If
-         End If
+       If Key = 1 Then
+          Waitms 30
+          If Key = 1 Then
+             M = 0
+             Do
+               Waitms 50
+               Incr M
+               If M < 80 Then
+                  Tblank = M Mod 10
+                  If Tblank = 0 Then Toggle Rxtx
+               Else
+                  Tblank = M Mod 4
+                  If Tblank = 0 Then Toggle Rxtx
+               End If
+             Loop Until Key = 0
+             Reset Rxtx
+             If M < 80 Then
+                Call Turnout
+             Else
+                  Exit Do
+             End If
+             Start Timer0
+          End If
+       End If
        Loop
 
        For I = 1 To 4
@@ -562,13 +580,9 @@ Sub Setouts
 
 End Sub
 
-Sub Findorder
+Sub Turnout
 
-
-        Select Case Cmd
-               Case 151
-                If Wantid = 1 Then
-                                Incr K
+           Incr K
                                 Reset Out1
                                 Reset Out2
                                 Reset Out3
@@ -658,6 +672,15 @@ Sub Findorder
                                               Set Out28
 
                                 End Select
+End Sub
+
+Sub Findorder
+
+
+        Select Case Cmd
+               Case 151
+                If Wantid = 1 Then
+                                Call Turnout
                 End If
                Case 158
                     Call Clearids

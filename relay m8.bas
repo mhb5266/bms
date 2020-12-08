@@ -1,6 +1,6 @@
 $regfile = "m8def.dat"
 $crystal = 11059200
-$baud = 115200
+$baud = 9600
 
 Portconfig:
 
@@ -28,7 +28,7 @@ Portconfig:
            Key Alias Pind.5 : Config Portd.5 = Input
 
 
-
+           Declare Sub Turnout
            Declare Sub Setouts
            Declare Sub Keyorder
 
@@ -260,7 +260,7 @@ Main:
           Loop Until Key = 0
        End If
 
-         ')
+')
 '(
        If Key = 1 Then
           Test = 0
@@ -362,13 +362,31 @@ Sub Getid
                           Cmd = 0
                           Id = 0
          End If
-         If Key = 0 Then
-            Waitms 50
-            If Key = 0 Then
-               Reset Wantid
-               Exit Do
-            End If
-         End If
+       If Key = 0 Then
+          Waitms 30
+          If Key = 0 Then
+             Stop Timer0
+             M = 0
+             Do
+               Waitms 50
+               Incr M
+               If M < 80 Then
+                  Tblank = M Mod 10
+                  If Tblank = 0 Then Toggle Rxtx
+               Else
+                  Tblank = M Mod 5
+                  If Tblank = 0 Then Toggle Rxtx
+               End If
+             Loop Until Key = 1
+             Reset Rxtx
+             If M < 80 Then
+                Call Turnout
+             Else
+                 Exit Do
+             End If
+             Start Timer0
+          End If
+       End If
        Loop
 
        For I = 1 To 4
@@ -378,6 +396,42 @@ Sub Getid
 
        Reset Wantid
        Return
+End Sub
+
+
+Sub Turnout
+Incr K
+                                Reset Out1
+                                Reset Out2
+                                Reset Out3
+                                Reset Out4
+                                Reset Out5
+                                Reset Out6
+                                Reset Out7
+                                Reset Out8
+
+
+                                If K > 8 Then K = 1
+                                Select Case K
+                                         Case 1
+                                              Set Out1
+                                         Case 2
+                                              Set Out2
+                                         Case 3
+                                              Set Out3
+                                         Case 4
+                                              Set Out4
+                                         Case 5
+                                              Set Out5
+                                         Case 6
+                                              Set Out6
+                                         Case 7
+                                              Set Out7
+                                         Case 8
+                                              Set Out8
+
+
+                                End Select
 End Sub
 
 Sub Clearids

@@ -1,10 +1,11 @@
 
 $regfile = "M8def.dat"
 $crystal = 11059200
-$baud = 115200
+$baud = 9600
 
 
 Config_rxtx:
+
 
 Enable Interrupts
 Enable Urxc
@@ -62,8 +63,8 @@ Dim Enable_remote As Boolean
 
 'Dim Eevar(10) As Eram Byte
 
-Const Timeleft = 600
-Const Halftimeout = 300
+Const Timeleft = 150
+Const Halftimeout = 75
 Const Tomaster = 252
 Const Toinput = 242
 Const Tooutput = 232
@@ -85,9 +86,9 @@ Config_remote:
 _in Alias Pind.3 : Config Portd.3 = Input
 Key1 Alias Pind.6 : Config Portd.6 = Input
 
-led1 Alias Portd.7 : Config Portd.7 = Output
-led2 Alias Portb.0 : Config Portb.0 = Output
-led3 Alias Portb.1 : Config Portb.1 = Output
+Led1 Alias Portd.7 : Config Portd.7 = Output
+Led2 Alias Portb.0 : Config Portb.0 = Output
+Led3 Alias Portb.1 : Config Portb.1 = Output
 Rxtx Alias Portb.2 : Config Portb.2 = Output
 
 Alarm Alias Pinc.3 : Config Portc.3 = Input
@@ -346,7 +347,7 @@ End If
         Direct = Tooutput
         Call Tx
      Else
-        If T2 < halftimeout Then
+        If T2 < Halftimeout Then
           Set St2
           Id = Idsens2
           Cmd = 182
@@ -461,7 +462,7 @@ Return
 Keys:
      Reset Led1
 
-     Set led3
+     Set Led3
      Keycheck = 1                                           'hengame learn kardan be releha farman nade
      Waitms 150
      Do
@@ -475,18 +476,18 @@ Keys:
                    Call Beep
                    Rnumber = 0
                    Gosub Rnumber_ew
-                   Set led3
+                   Set Led3
                    Wait 1
                    Wait 1
-                   Reset led3
-                   Reset led3
+                   Reset Led3
+                   Reset Led3
                    Return
                    Exit While
                 End If
           Wend
           If T < 5000 Then
                     T = 0
-                    Reset led3
+                    Reset Led3
                     Return
           End If
        End If
@@ -520,11 +521,11 @@ Command:
         'If Code = 3 Then Toggle Rel3
         'If Code = 4 Then Toggle Rel4
 
-        Toggle led1
+        Toggle Led1
         Term = 0
         If Newlearn = 1 Then
 
-           If Code > 8 Then
+           If Code > 9 Then
               Remoteid(1) = Raw
               Waitms 10
            Elseif Code < 9 Then
@@ -536,7 +537,7 @@ Command:
            Reset Newlearn
 
            For I = 1 To 8
-               Toggle led2
+               Toggle Led2
                Waitms 250
            Next I
 
@@ -580,6 +581,8 @@ Command:
               Enum = Num
            End If
         End If
+
+        Waitms 700
 '(
         If Num = 0 Or Num > 40 Then Num = 1
         Reset Hasid
@@ -960,15 +963,15 @@ End
 
 
 Sub Errorbeep
-    Set led3
+    Set Led3
     Waitms 700
-    Reset led3
+    Reset Led3
 End Sub
 
 Sub Beep
-    Set led3
+    Set Led3
     Waitms 80
-    Reset led3
+    Reset Led3
     Waitms 30
 End Sub
 
@@ -1007,7 +1010,7 @@ Sub Checkanswer
 
 
                 Case 150
-                     Set led2
+                     Set Led2
                      Set Isrequest
 
                 Case 151
@@ -1018,7 +1021,7 @@ Sub Checkanswer
                   Cmdcode = 180
 
                   Reset Isrequest
-                  Reset led2
+                  Reset Led2
                   'Set Wantid_led2
 
 
@@ -1051,13 +1054,13 @@ Sub Checkanswer
                   Wic = Din(4)
                   Cmdcode = 163
 
-                  Reset led2
+                  Reset Led2
                   'Set Wantid_led2
                 Case 164
                   Reset Learnnew
                   Reset Clearall
                   Wic = Din(4)
-                  Reset led2
+                  Reset Led2
                   'Set Wantid_led2
                   Cmdcode = 164
             End Select
@@ -1082,9 +1085,9 @@ Sub Do_learn
                For I = 1 To Rnumber
                    Gosub Ra_r
                    If Ra = Address Then                     'agar address remote tekrari bod yani ghablan learn shode
-                      Set led3
+                      Set Led3
                       Wait 1
-                      Reset led3
+                      Reset Led3
                       Error = 1
                       Exit For
                    Else
@@ -1096,9 +1099,9 @@ Sub Do_learn
                   Incr Rnumber                              'be meghdare rnumber ke index tedade remote haye learn shode ast yek vahed ezafe kon
                   If Rnumber > 100 Then                     'agar bishtar az 100 remote learn shavad
                      Rnumber = 100
-                     Set led3
+                     Set Led3
                      Wait 5
-                     Reset led3
+                     Reset Led3
                   Else                                      'agar kamtar az 100 remote bod
                      Gosub Rnumber_ew                       'meghdare rnumber ra dar eeprom zakhore mikonad
                      Ra = Address
@@ -1111,7 +1114,7 @@ Sub Do_learn
         End If
     Loop
     Okread = 0
-    Reset led3
+    Reset Led3
 Return
 End Sub
 
