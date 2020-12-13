@@ -169,6 +169,8 @@ Dim M As String * 8
 Dim M1 As String * 2
 Dim M2 As String * 2
 Dim M3 As String * 2
+
+dim remsec as byte
 '-------------------------- read rnumber index from eeprom
 Gosub Rnumber_er
 If Rnumber > 100 Then
@@ -235,14 +237,18 @@ Do
 
   Waitus 100
   Incr Term
-  If Term > 10000 Then Term = 0
 
+  If Term > 10000 Then
+   'gosub t0rutin
+   Term = 0
+  end if
   If Term < 2500 Then
-     Stop Timer0
+     'Stop Timer0
      Gosub _read
-
   End If
-  Start Timer0
+
+  'Start Timer0
+
   If Key1 = 0 Then
 
     Call Beep
@@ -250,8 +256,6 @@ Do
     Gosub Keys
 
   End If
-
-
 
   If Alarm = 1 Then
      Id = Idalarm
@@ -318,7 +322,8 @@ End If
         Call Tx
 
      Else
-        If T1 < Halftimeout Then
+        remsec=t1 mod 5
+        If remsec=0 Then
           Cmd = 182
           Id = Idsens1
           Direct = Tooutput
@@ -347,7 +352,8 @@ End If
         Direct = Tooutput
         Call Tx
      Else
-        If T2 < Halftimeout Then
+        remsec=t2 mod 5
+        If remsec=0 Then
           Set St2
           Id = Idsens2
           Cmd = 182
@@ -377,8 +383,8 @@ End If
         Direct = Tooutput
         Call Tx
      Else
-        If T3 < Halftimeout Then
-          Set St3
+        remsec=t3 mod 5
+        If remsec=0 Then
           Cmd = 182
           Id = Idsens3
           Direct = Tooutput
@@ -865,12 +871,21 @@ Return
 '-------------------------------------------------------------------------------
 
 T0rutin:
+
+
         Stop Timer0
         Incr Ms20
         If Ms20 = 40 Then
            Ms20 = 0
+
            Toggle Led3
+
+
+
+
            Incr Checktime
+
+
 
            If St1 = 1 Then
               If T1 > 0 Then Decr T1
@@ -905,7 +920,7 @@ T0rutin:
               End If
            End If
 
-           If Checktime = 1200 Then
+           If Checktime = 150 Then
               Checktime = 0
               If Sens1 = 0 And St1 = 0 Then
                  Id = Idsens1
@@ -926,8 +941,8 @@ T0rutin:
                  Call Tx
               End If
            End If
-        End If
-        Timer0 = 39
+       End If
+       Timer0 = 39
         Start Timer0
 Return
 

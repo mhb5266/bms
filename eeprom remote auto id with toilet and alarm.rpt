@@ -1,6 +1,6 @@
 Report       : eeprom remote auto id with toilet and alarm
-Date         : 12-07-2020
-Time         : 12:12:06
+Date         : 12-11-2020
+Time         : 19:49:22
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1D0A hex  -> Will fit into ROM
-ROMIMAGE     :  7434 dec
-FLASH USED   :  90  %
+ROMIMAGE     : 1D2A hex  -> Will fit into ROM
+ROMIMAGE     :  7466 dec
+FLASH USED   :  91  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 8 hex
 S-Stackstart : 440 hex
 Framesize    : 18 hex
 Framestart   : 420 hex
-Space left   :  814  dec
+Space left   :  813  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -147,6 +147,7 @@ M                                String * 8        00DF          223
 M1                               String * 2        00E8          232 
 M2                               String * 2        00EB          235 
 M3                               String * 2        00EE          238 
+REMSEC                           Byte              00F1          241 
 
 --------------------------------------------------------------------------------
 Constant                         Value
