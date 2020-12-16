@@ -16,8 +16,10 @@ Dim Maxin As Byte
 
 Dim Inok As Boolean
 
+dim button4s as byte
+dim 4s as bit
 Dim F As Byte
-
+dim allonoff as bit
 
 
 Dim Newlearn As Bit
@@ -50,10 +52,10 @@ Dim Gotid As Boolean
 Dim Hasid As Boolean
 ')
 Dim Raw As Byte
-Dim H As Byte
-Dim X As Byte
-Dim W As Byte
-Dim Test As Byte
+'Dim H As Byte
+'Dim X As Byte
+'Dim W As Byte
+'Dim Test As Byte
 
 Dim Isrequest As Boolean
 
@@ -64,19 +66,19 @@ Dim Enable_remote As Boolean
 'Dim Eevar(10) As Eram Byte
 
 Const Timeleft = 150
-Const Halftimeout = 75
+'Const Halftimeout = 75
 Const Tomaster = 252
-Const Toinput = 242
+'Const Toinput = 242
 Const Tooutput = 232
 Const Mytyp = 104
 
 Declare Sub Tx
 Declare Sub Checkanswer
 Declare Sub Do_learn
-Declare Sub Clear_remotes
+'Declare Sub Clear_remotes
 Declare Sub Beep
 Declare Sub Errorbeep
-Declare Sub Order
+'Declare Sub Order
 Declare Sub Clearids
 
 Config_remote:
@@ -290,22 +292,7 @@ Do
   End If
 
   If Alarm = 0 Then Reset Rxtx
-'(
-If Sens1 = 1 Then
-   Set Led2
-   Id = Idsens1 : Cmd = 180
-   Direct = Tooutput
-   Call Tx
-   Id = Idsens1
-   Cmd = 182
-   Direct = Tooutput
-   Call Tx
-   T1 = Timeleft
-   Do
-   Loop Until Sens1 = 0
-   Reset Led2
-End If
-')
+
 
   If Sens1 = 1 Then
      Stop Timer0
@@ -558,22 +545,88 @@ Command:
                       Case 1
                            Id = Lookup(code , Remote16)
                       Case 2
-                           Id = Lookup(code , 1remote4)
+                           if code=8 then
+                               id=lookup(1,1remote4)
+                               set allonoff
+                               toggle button4s.1
+                               4s=button4s.1
+                           else
+                               Id = Lookup(code , 1remote4)
+                           end if
                       Case 3
-                           Id = Lookup(code , 2remote4)
+                           if code=8 then
+                               id=lookup(1,2remote4)
+                               set allonoff
+                               toggle button4s.2
+                               4s=button4s.2
+                           else
+                               Id = Lookup(code , 2remote4)
+                           end if
                       Case 4
-                           Id = Lookup(code , 3remote4)
+                           if code=8 then
+                               id=lookup(1,3remote4)
+                               set allonoff
+                               toggle button4s.3
+                               4s=button4s.3
+                           else
+                               Id = Lookup(code , 3remote4)
+                           end if
                       Case 5
-                           Id = Lookup(code , 4remote4)
+                           if code=8 then
+                               id=lookup(1,4remote4)
+                               set allonoff
+                               toggle button4s.4
+                               4s=button4s.4
+                           else
+                               Id = Lookup(code , 4remote4)
+                           end if
                       Case 6
-                           Id = Lookup(code , 5remote4)
-                      Case Else
+                           if code=8 then
+                               id=lookup(1,5remote4)
+                               set allonoff
+                               toggle button4s.5
+                               4s=button4s.5
+                           else
+                               Id = Lookup(code , 5remote4)
+                           end if
+'(
+                      case 7
+                           if code=8 then
+                               id=lookup(1,6remote4)
+                               set allonoff
+                               toggle button4s.6
+                               4s=button4s.6
+                           else
+                               Id = Lookup(code , 6remote4)
+                           end if
+                      case 8
+                           if code=8 then
+                               id=lookup(1,7remote4)
+                               set allonoff
+                               toggle button4s.7
+                               4s=button4s.7
+                           else
+                               Id = Lookup(code , 7remote4)
+                           end if
+')
                End Select
+
+
                Cmd = 180
                Typ = Mytyp
                Direct = Tooutput
-               Call Tx
-               Exit For
+               if allonoff=1 then
+                   reset allonoff
+                   if 4s=1 then cmd=182 else cmd=181
+                   for i=0 to 2
+                       id=id+i
+                       call tx
+                       waitms 500
+                   next
+               else
+                   Call Tx
+               end if
+               exit for
             End If
         Next
         If Waslearned = 0 Then
@@ -990,9 +1043,8 @@ Sub Beep
     Waitms 30
 End Sub
 
-
+'(
 Sub Clear_remotes
- '(
 If Clearall = 1 Then
      Reset led1
      Reset Rel2
@@ -1014,12 +1066,11 @@ If Clearall = 1 Then
      Reset led3
      Reset Clearall
 End If
-')
 End Sub
-
+  ')
 
 Sub Checkanswer
-                   Toggle Rxtx
+            Toggle Rxtx
             Reset Inok
             Select Case Din(3)
 
@@ -1182,19 +1233,27 @@ End Sub
 
 
 Remote16:
-Data 60 , 61 , 62 , 63 , 64 , 65 , 66 , 67 , 68 , 69 , 70 , 71 , 72 , 73 , 74 , 75 , 96
+Data 60 , 61 , 62 , 63 , 64 , 65 , 66 , 67 , 68 , 69 , 70 , 71 , 72 , 73 , 74 , 75 , 98
 
 1remote4:
-Data 0 , 76 , 77 , 0 , 78 , 0 , 0 , 0 , 79
+Data 0 , 76 , 77 , 0 , 78 , 0 , 0 , 0 , 97
 
 2remote4:
-Data 0 , 80 , 81 , 0 , 82 , 0 , 0 , 0 , 83
+Data 0 , 79 , 80 , 0 , 81 , 0 , 0 , 0 , 97
 
 3remote4:
-Data 0 , 84 , 85 , 0 , 86 , 0 , 0 , 0 , 87
+Data 0 , 82 , 83 , 0 , 84 , 0 , 0 , 0 , 97
 
 4remote4:
-Data 0 , 88 , 89 , 0 , 90 , 0 , 0 , 0 , 91
+Data 0 , 85 , 86 , 0 , 87 , 0 , 0 , 0 , 97
 
 5remote4:
-Data 0 , 92 , 93 , 0 , 94 , 0 , 0 , 0 , 95
+Data 0 , 88 , 89 , 0 , 90 , 0 , 0 , 0 , 97
+'(
+6remote4:
+Data 0 , 91 , 92 , 0 , 93 , 0 , 0 , 0 , 97
+
+7remote4:
+Data 0 , 94 , 95 , 0 , 96 , 0 , 0 , 0 , 97
+
+')

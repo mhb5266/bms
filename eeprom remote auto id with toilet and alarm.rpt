@@ -1,6 +1,6 @@
 Report       : eeprom remote auto id with toilet and alarm
-Date         : 12-11-2020
-Time         : 19:49:22
+Date         : 12-14-2020
+Time         : 23:26:13
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1D2A hex  -> Will fit into ROM
-ROMIMAGE     :  7466 dec
-FLASH USED   :  91  %
+ROMIMAGE     : 1EDA hex  -> Will fit into ROM
+ROMIMAGE     :  7898 dec
+FLASH USED   :  96  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 8 hex
 S-Stackstart : 440 hex
 Framesize    : 18 hex
 Framestart   : 420 hex
-Space left   :  813  dec
+Space left   :  816  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -94,60 +94,59 @@ COMPARE1B                        Word              0048          72
 ERR                              Bit [2]           0006          6 
 MAXIN                            Byte              0060          96 
 INOK                             Bit [7]           0061          97 
-F                                Byte              0062          98 
-NEWLEARN                         Bit [6]           0061          97 
+BUTTON4S                         Byte              0062          98 
+4S                               Bit [6]           0061          97 
+F                                Byte              0063          99 
+ALLONOFF                         Bit [5]           0061          97 
+NEWLEARN                         Bit [4]           0061          97 
 REMOTEID                         EEPROM Byte(10)   0000          0 
-CHECKTIME                        Word              0063          99 
-ID                               Byte              0065          101 
-TYP                              Byte              0066          102 
-CMD                              Byte              0067          103 
-DIN                              Byte(5)           0068          104 
-WIC                              Byte              006D          109 
-DIRECT                           Byte              006E          110 
-ENDBIT                           Byte              006F          111 
-CMDCODE                          Byte              0070          112 
+CHECKTIME                        Word              0064          100 
+ID                               Byte              0066          102 
+TYP                              Byte              0067          103 
+CMD                              Byte              0068          104 
+DIN                              Byte(5)           0069          105 
+WIC                              Byte              006E          110 
+DIRECT                           Byte              006F          111 
+ENDBIT                           Byte              0070          112 
+CMDCODE                          Byte              0071          113 
 ENUM                             EEPROM Byte       000A          10 
-NUM                              Byte              0071          113 
-MS20                             Byte              0072          114 
-RAW                              Byte              0073          115 
-H                                Byte              0074          116 
-X                                Byte              0075          117 
-W                                Byte              0076          118 
-TEST                             Byte              0077          119 
-ISREQUEST                        Bit [5]           0061          97 
-CLEARALL                         Bit [4]           0061          97 
-LEARNNEW                         Bit [3]           0061          97 
-ENABLE_REMOTE                    Bit [2]           0061          97 
-WASLEARNED                       Bit [1]           0061          97 
-ALARMT                           Word              0078          120 
-ALARMNUM                         Byte              007A          122 
-T1                               Word              007B          123 
-T2                               Word              007D          125 
-T3                               Word              007F          127 
-ST1                              Bit [0]           0061          97 
-ST2                              Bit [7]           0081          129 
-ST3                              Bit [6]           0081          129 
-TERM                             Word              0082          130 
-S                                Word(24)          0084          132 
-I                                Byte              00B4          180 
-SADDRESS                         String * 20       00B5          181 
-SCODE                            String * 4        00CA          202 
-ADDRESS                          Long              00CF          207 
-CODE                             Byte              00D3          211 
-RA                               Long              00D4          212 
-RNUMBER                          Byte              00D8          216 
-OKREAD                           Bit [5]           0081          129 
-ERROR                            Bit [4]           0081          129 
-KEYCHECK                         Bit [3]           0081          129 
-T                                Word              00D9          217 
-EADDRESS                         Word              00DB          219 
-E_READ                           Byte              00DD          221 
-E_WRITE                          Byte              00DE          222 
-M                                String * 8        00DF          223 
-M1                               String * 2        00E8          232 
-M2                               String * 2        00EB          235 
-M3                               String * 2        00EE          238 
-REMSEC                           Byte              00F1          241 
+NUM                              Byte              0072          114 
+MS20                             Byte              0073          115 
+RAW                              Byte              0074          116 
+ISREQUEST                        Bit [3]           0061          97 
+CLEARALL                         Bit [2]           0061          97 
+LEARNNEW                         Bit [1]           0061          97 
+ENABLE_REMOTE                    Bit [0]           0061          97 
+WASLEARNED                       Bit [7]           0075          117 
+ALARMT                           Word              0076          118 
+ALARMNUM                         Byte              0078          120 
+T1                               Word              0079          121 
+T2                               Word              007B          123 
+T3                               Word              007D          125 
+ST1                              Bit [6]           0075          117 
+ST2                              Bit [5]           0075          117 
+ST3                              Bit [4]           0075          117 
+TERM                             Word              007F          127 
+S                                Word(24)          0081          129 
+I                                Byte              00B1          177 
+SADDRESS                         String * 20       00B2          178 
+SCODE                            String * 4        00C7          199 
+ADDRESS                          Long              00CC          204 
+CODE                             Byte              00D0          208 
+RA                               Long              00D1          209 
+RNUMBER                          Byte              00D5          213 
+OKREAD                           Bit [3]           0075          117 
+ERROR                            Bit [2]           0075          117 
+KEYCHECK                         Bit [1]           0075          117 
+T                                Word              00D6          214 
+EADDRESS                         Word              00D8          216 
+E_READ                           Byte              00DA          218 
+E_WRITE                          Byte              00DB          219 
+M                                String * 8        00DC          220 
+M1                               String * 2        00E5          229 
+M2                               String * 2        00E8          232 
+M3                               String * 2        00EB          235 
+REMSEC                           Byte              00EE          238 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -521,9 +520,7 @@ _FRAME_HIGH                      &H0439
 _XMEGA                           0
 _XTINY                           0
 TIMELEFT                         150
-HALFTIMEOUT                      75
 TOMASTER                         252
-TOINPUT                          242
 TOOUTPUT                         232
 MYTYP                            104
 IDALARM                          56
@@ -558,8 +555,4 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-H                                not used
-X                                not used
-W                                not used
-TEST                             not used
 
