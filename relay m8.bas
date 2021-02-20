@@ -33,7 +33,7 @@ Portconfig:
            Declare Sub Keyorder
 
 
-
+        
 
 
            En Alias Portd.2 : Config Portd.2 = Output
@@ -49,7 +49,7 @@ On Urxc Rx
 
 
 Defines:
-
+dim 2sec as word
 Dim F As Byte
 Dim M As Byte
 Dim Tblank As Byte
@@ -184,7 +184,91 @@ End If
 
 
 
+'(
+ do
+   set out1
+   reset out2
+   reset out3
+   reset out4
+   reset out5
+   reset out6
+   reset out7
+   reset out8
+   wait 2
 
+   reset out1
+   set out2
+   reset out3
+   reset out4
+   reset out5
+   reset out6
+   reset out7
+   reset out8
+   wait 2
+
+   reset out1
+   reset out2
+   set out3
+   reset out4
+   reset out5
+   reset out6
+   reset out7
+   reset out8
+   wait 2
+
+   reset out1
+   reset out2
+   reset out3
+   set out4
+   reset out5
+   reset out6
+   reset out7
+   reset out8
+   wait 2
+
+   reset out1
+   reset out2
+   reset out3
+   reset out4
+   set out5
+   reset out6
+   reset out7
+   reset out8
+   wait 2
+
+   reset out1
+   reset out2
+   reset out3
+   reset out4
+   reset out5
+   set out6
+   reset out7
+   reset out8
+   wait 2
+
+   reset out1
+   reset out2
+   reset out3
+   reset out4
+   reset out5
+   reset out6
+   set out7
+   reset out8
+   wait 2
+
+   reset out1
+   reset out2
+   reset out3
+   reset out4
+   reset out5
+   reset out6
+   reset out7
+   set out8
+   wait 2
+
+
+ loop
+  ')
 
 
 
@@ -215,7 +299,12 @@ Main:
           Next
        End If
 
-
+       waitus 100
+       incr 2sec
+       if 2sec=20000 then
+          2sec=0
+          toggle buz
+       end if
 
        If Key = 0 Then
           Waitms 30

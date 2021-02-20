@@ -90,7 +90,7 @@ Gosub Keys
 'Start Watchdog
 End If
 Waitms 500
-Toggle Pg
+'Toggle Pg
 
 Loop
 '*******************************************************************************
@@ -241,7 +241,7 @@ Return
 '================================================================ CHECK   code chek ok
 Check:
       Okread = 1
-      If Keycheck = 0 Then                                        'agar keycheck=1 bashad yani be releha farman nade
+      If Keycheck = 0 Then                                  'agar keycheck=1 bashad yani be releha farman nade
          Eaddress = 10
          For I = 1 To Rnumber
              Gosub Ra_r
