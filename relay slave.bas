@@ -230,6 +230,7 @@ Main:
           Waitms 200
        End If
 ')
+'(
        If Tempon = 1 Then
           For I = 1 To Counterid
               If Temponid(i) = 1 Then
@@ -245,7 +246,7 @@ Main:
               End If
           Next
        End If
-
+  ')
 
 
        If Key = 1 Then
@@ -305,7 +306,7 @@ Sub Getid
     Reset Rxtx
     Set Wantid
        Do
-         If Cmd = 180 And Id > 0 And Id < 100 Then
+         If Cmd = 180 Or Cmd = 181 And Id > 0 And Id < 100 Then
                           Reset Gotid
                           If Outid1(k) > 100 Or Outid1(k) = 0 Then
                              Outid1(k) = Id
