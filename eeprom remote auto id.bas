@@ -1,7 +1,7 @@
 
 $regfile = "M8def.dat"
 $crystal = 11059200
-$baud = 115200
+$baud = 9600
 
 
 Config_rxtx:

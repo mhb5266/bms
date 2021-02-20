@@ -1,6 +1,6 @@
 $regfile = "m8def.dat"
 $crystal = 11059200
-$baud = 115200
+$baud = 9600
 
 Configs:
         'Config Timer1 = Pwm , Pwm = 10 , Compare_A_Pwm = Clear_Up , Compare_B_Pwm = Clear_Down , Prescale = 1
@@ -75,7 +75,7 @@ Maxconfig:
           Const Maxlight = 0
           Const Dark = 65535
           Const Midlight = 6500
-          Const Minlight = 9500
+          Const Minlight = 8800
           Const Relaymodule = 110
           Const Triacmodule = 111
           Const Remote = 104
@@ -92,7 +92,7 @@ Maxconfig:
           Dim Heat As Byte
           Dim P As Word
 
-
+          Declare Sub Turnout
           Declare Sub Clearids
           Declare Sub Checkanswer
           Declare Sub Getid
@@ -167,21 +167,28 @@ Main:
           Next
        End If
 ')
-       If Timer1 > Light(1) Then Set Out1 Else Reset Out1
-       If Timer1 > Light(2) Then Set Out2 Else Reset Out2
-       If Timer1 > Light(3) Then Set Out3 Else Reset Out3
-       If Timer1 > Light(4) Then Set Out4 Else Reset Out4
-       If Timer1 > Light(5) Then Set Out5 Else Reset Out5
-       If Timer1 > Light(6) Then Set Out6 Else Reset Out6
-       If Timer1 > Light(7) Then Set Out7 Else Reset Out7
-       If Timer1 > Light(8) Then Set Out8 Else Reset Out8
-       Heat = 0
-       For I = 1 To 8
-           If Light(i) < Dark Then
-              Incr Heat
-           End If
-       Next
-       If Heat > 2 Then Set Fan Else Reset Fan
+
+       If Wantid = 0 Then
+              If Timer1 > Light(1) Then Set Out1 Else Reset Out1
+              If Timer1 > Light(2) Then Set Out2 Else Reset Out2
+              If Timer1 > Light(3) Then Set Out3 Else Reset Out3
+              If Timer1 > Light(4) Then Set Out4 Else Reset Out4
+              If Timer1 > Light(5) Then Set Out5 Else Reset Out5
+              If Timer1 > Light(6) Then Set Out6 Else Reset Out6
+              If Timer1 > Light(7) Then Set Out7 Else Reset Out7
+              If Timer1 > Light(8) Then Set Out8 Else Reset Out8
+
+
+                     Heat = 0
+                     For I = 1 To 8
+                         If Light(i) < Dark Then
+                            Incr Heat
+                         End If
+                     Next
+                     If Heat > 2 Then Set Fan Else Reset Fan
+       End If
+
+
 
 
        If Key = 0 Then
@@ -292,20 +299,25 @@ Rx:
       Incr F
       Inputbin Maxin
 
+      If F = 5 And Maxin = 210 Then Set Inok
+      If Maxin = 232 Then F = 1
 
+'(
 
       If F = 5 Then
          If Maxin = 230 Or Maxin = 210 Then Set Inok
       End If
       If Maxin = 252 Or Maxin = 232 Then F = 1
-
+')
       Din(f) = Maxin
 
       If Inok = 1 Then
-
+        Cmd = Din(3)
         Id = Din(4)
         Typ = Din(2)
-        If Typ = Remote Or Typ = Keyin Or Typ = Relaymodule Then Call Checkanswer
+        If Typ = Remote Or Typ = Keyin Or Typ = Relaymodule Then
+           Call Checkanswer
+        End If
         F = 0
         Reset Inok
       End If
@@ -417,33 +429,46 @@ Sub Getid
                           Cmd = 0
                           Id = 0
          End If
-         If Key = 0 Then
-            Waitms 50
-            If Key = 0 Then
-               Reset Wantid
-               Enable Int1
-               Exit Do
-            End If
-         End If
+
+                If Key = 0 Then
+                   Waitms 30
+                   If Key = 0 Then
+                      Stop Timer0
+                      M = 0
+                      Do
+                        Waitms 50
+                        Incr M
+                        If M < 80 Then
+                           Tblank = M Mod 10
+                           If Tblank = 0 Then Toggle Rxtx
+                        Else
+                           Tblank = M Mod 4
+                           If Tblank = 0 Then Toggle Rxtx
+                        End If
+                      Loop Until Key = 1
+                      Reset Rxtx
+                      If M < 80 Then
+                         Call Turnout
+                      Else
+                          Exit Do
+                      End If
+                      Start Timer0
+                   End If
+                End If
        Loop
 
        For I = 1 To 8
           Toggle Rxtx
           Waitms 200
        Next
-       RESET BUZ
-       RESET RXTX
+       Reset Buz
+       Reset Rxtx
 
        Reset Wantid
 
 End Sub
 
-Sub Checkanswer
-    Toggle Rxtx
-    Cmd = Din(3)
-    Select Case Cmd
-           Case 151
-                If Wantid = 1 Then
+Sub Turnout
                                 Incr K
                                 Reset Out1
                                 Reset Out2
@@ -472,6 +497,16 @@ Sub Checkanswer
                                        Case 8
                                             Set Out8
                                 End Select
+End Sub
+
+
+Sub Checkanswer
+    Toggle Rxtx
+    Cmd = Din(3)
+    Select Case Cmd
+           Case 151
+                If Wantid = 1 Then
+                   Call Turnout
                 End If
 
            Case 158

@@ -7,7 +7,7 @@ $hwstack = 64
 $swstack = 100
 $framesize = 100
 
-$baud = 115200
+$baud = 9600
 
 $include "FONT/farsi_func.bas"
 $lib "glcdKS108.lib"
@@ -417,7 +417,7 @@ Main:
      Do
        Gosub Read_date_time
        Gosub M_to_sh
-
+       Enable Urxc
        If Senario = 0 Then Senario = 1
 
        If Refreshtemp <> _sec Then
@@ -513,6 +513,7 @@ Main:
        If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
           Waitms 50
           If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
+             Disable Urxc
              Poosh = 0
              Call Beep
              Gosub Choose_senario
@@ -531,12 +532,12 @@ Gosub Main
 Choose_senario:
 
 Do
-Waitms 50
-Incr Poosh
-If Poosh > 600 Then
-   Cls
-   Return
-End If
+  Waitms 50
+  Incr Poosh
+  If Poosh > 600 Then
+     Cls
+     Return
+  End If
 
        If Touch1 = 1 Then
        Call Beep
@@ -603,11 +604,12 @@ End If
                     Cls
                     Exit Do
                  Loop Until Touch2 = 0
+                 Exit Do
        End If
 
        If Touch3 = 1 And Ok3 = 0 Then
-       Call Beep
-       Poosh = 0
+          Call Beep
+          Poosh = 0
                  Set Ok3
                  Reset Ok1
                  Reset Ok2
@@ -619,8 +621,8 @@ End If
 
 
        Elseif Touch3 = 1 And Ok3 = 1 Then
-       Call Beep
-       Poosh = 0
+              Call Beep
+              Poosh = 0
                  Do
                     Cls
                     Showpic 0 , 0 , Party , 1
@@ -632,6 +634,7 @@ End If
                     Cls
                     Exit Do
                  Loop Until Touch3 = 0
+                 Exit Do
        End If
 
        If Touch4 = 1 Then
@@ -1607,6 +1610,7 @@ Sub Setkeyid
 
       If Touch = 4 Then
          Einputcounter = Inputcounter
+         Disable Urxc
          Return
       End If
 
@@ -1633,6 +1637,7 @@ Sub Setkeyid
          Einputcounter = Inputcounter
          Id = Inputcounter
          Do
+           Enable Urxc
            Findorder = Readallinput
            Call Order
            If Inputcounter > 50 Then Inputcounter = 1
@@ -2579,7 +2584,7 @@ Sub Tx
     Waitms 50
     Reset Em
     Reset Txled
-    Enable Urxc
+    'Enable Urxc
 
 
 End Sub
