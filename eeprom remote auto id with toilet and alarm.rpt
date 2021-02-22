@@ -1,16 +1,16 @@
 Report       : eeprom remote auto id with toilet and alarm
-Date         : 02-20-2021
-Time         : 19:00:19
+Date         : 12-07-2020
+Time         : 12:12:06
 
-Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
+Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
 SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1ED4 hex  -> Will fit into ROM
-ROMIMAGE     :  7892 dec
-FLASH USED   :  96  %
+ROMIMAGE     : 1D0A hex  -> Will fit into ROM
+ROMIMAGE     :  7434 dec
+FLASH USED   :  90  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 8 hex
 S-Stackstart : 440 hex
 Framesize    : 18 hex
 Framestart   : 420 hex
-Space left   :  816  dec
+Space left   :  814  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -44,6 +44,8 @@ ADC                              Word              0024          36
 TIMER1                           Word              004C          76 
 COMPARE1A                        Word              004A          74 
 COMPARE1B                        Word              0048          72 
+PWM1A                            Word              004A          74 
+PWM1B                            Word              0048          72 
 CAPTURE1                         Word              0046          70 
 HWSTACK                          Word              005D          93 
 SWSTACK                          Word              001C          28 
@@ -92,59 +94,59 @@ COMPARE1B                        Word              0048          72
 ERR                              Bit [2]           0006          6 
 MAXIN                            Byte              0060          96 
 INOK                             Bit [7]           0061          97 
-BUTTON4S                         Byte              0062          98 
-4S                               Bit [6]           0061          97 
-F                                Byte              0063          99 
-ALLONOFF                         Bit [5]           0061          97 
-NEWLEARN                         Bit [4]           0061          97 
+F                                Byte              0062          98 
+NEWLEARN                         Bit [6]           0061          97 
 REMOTEID                         EEPROM Byte(10)   0000          0 
-CHECKTIME                        Word              0064          100 
-ID                               Byte              0066          102 
-TYP                              Byte              0067          103 
-CMD                              Byte              0068          104 
-DIN                              Byte(5)           0069          105 
-WIC                              Byte              006E          110 
-DIRECT                           Byte              006F          111 
-ENDBIT                           Byte              0070          112 
-CMDCODE                          Byte              0071          113 
+CHECKTIME                        Word              0063          99 
+ID                               Byte              0065          101 
+TYP                              Byte              0066          102 
+CMD                              Byte              0067          103 
+DIN                              Byte(5)           0068          104 
+WIC                              Byte              006D          109 
+DIRECT                           Byte              006E          110 
+ENDBIT                           Byte              006F          111 
+CMDCODE                          Byte              0070          112 
 ENUM                             EEPROM Byte       000A          10 
-NUM                              Byte              0072          114 
-MS20                             Byte              0073          115 
-RAW                              Byte              0074          116 
-ISREQUEST                        Bit [3]           0061          97 
-CLEARALL                         Bit [2]           0061          97 
-LEARNNEW                         Bit [1]           0061          97 
-ENABLE_REMOTE                    Bit [0]           0061          97 
-WASLEARNED                       Bit [7]           0075          117 
-ALARMT                           Word              0076          118 
-ALARMNUM                         Byte              0078          120 
-T1                               Word              0079          121 
-T2                               Word              007B          123 
-T3                               Word              007D          125 
-ST1                              Bit [6]           0075          117 
-ST2                              Bit [5]           0075          117 
-ST3                              Bit [4]           0075          117 
-TERM                             Word              007F          127 
-S                                Word(24)          0081          129 
-I                                Byte              00B1          177 
-SADDRESS                         String * 20       00B2          178 
-SCODE                            String * 4        00C7          199 
-ADDRESS                          Long              00CC          204 
-CODE                             Byte              00D0          208 
-RA                               Long              00D1          209 
-RNUMBER                          Byte              00D5          213 
-OKREAD                           Bit [3]           0075          117 
-ERROR                            Bit [2]           0075          117 
-KEYCHECK                         Bit [1]           0075          117 
-T                                Word              00D6          214 
-EADDRESS                         Word              00D8          216 
-E_READ                           Byte              00DA          218 
-E_WRITE                          Byte              00DB          219 
-M                                String * 8        00DC          220 
-M1                               String * 2        00E5          229 
-M2                               String * 2        00E8          232 
-M3                               String * 2        00EB          235 
-REMSEC                           Byte              00EE          238 
+NUM                              Byte              0071          113 
+MS20                             Byte              0072          114 
+RAW                              Byte              0073          115 
+H                                Byte              0074          116 
+X                                Byte              0075          117 
+W                                Byte              0076          118 
+TEST                             Byte              0077          119 
+ISREQUEST                        Bit [5]           0061          97 
+CLEARALL                         Bit [4]           0061          97 
+LEARNNEW                         Bit [3]           0061          97 
+ENABLE_REMOTE                    Bit [2]           0061          97 
+WASLEARNED                       Bit [1]           0061          97 
+ALARMT                           Word              0078          120 
+ALARMNUM                         Byte              007A          122 
+T1                               Word              007B          123 
+T2                               Word              007D          125 
+T3                               Word              007F          127 
+ST1                              Bit [0]           0061          97 
+ST2                              Bit [7]           0081          129 
+ST3                              Bit [6]           0081          129 
+TERM                             Word              0082          130 
+S                                Word(24)          0084          132 
+I                                Byte              00B4          180 
+SADDRESS                         String * 20       00B5          181 
+SCODE                            String * 4        00CA          202 
+ADDRESS                          Long              00CF          207 
+CODE                             Byte              00D3          211 
+RA                               Long              00D4          212 
+RNUMBER                          Byte              00D8          216 
+OKREAD                           Bit [5]           0081          129 
+ERROR                            Bit [4]           0081          129 
+KEYCHECK                         Bit [3]           0081          129 
+T                                Word              00D9          217 
+EADDRESS                         Word              00DB          219 
+E_READ                           Byte              00DD          221 
+E_WRITE                          Byte              00DE          222 
+M                                String * 8        00DF          223 
+M1                               String * 2        00E8          232 
+M2                               String * 2        00EB          235 
+M3                               String * 2        00EE          238 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -209,6 +211,7 @@ SPSR                             &H0E
 SPCR                             &H0D
 UDR                              &H0C
 UCSRA                            &H0B
+UCSR0A                           &H0B
 USR                              &H0B
 UCSRB                            &H0A
 UCR                              &H0A
@@ -229,6 +232,8 @@ TWDR                             &H03
 TWAR                             &H02
 TWSR                             &H01
 TWBR                             &H00
+_ROMSIZE                         8192
+_CHIP                            17
 INT1                             7
 INT0                             6
 IVSEL                            1
@@ -293,7 +298,7 @@ CS12                             2
 CS11                             1
 CS10                             0
 FOC2                             7
-PWM2                             6
+PWM2BIT                          6
 WGM20                            6
 COM21                            5
 COM20                            4
@@ -474,6 +479,7 @@ AS2                              3
 TCN2UB                           2
 OCR2UB                           1
 TCR2UB                           0
+_RESET                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
 _GSTRBUF                         1056
@@ -486,17 +492,15 @@ _RTSCTS5                         0
 _RTSCTS6                         0
 _RTSCTS7                         0
 _RTSCTS8                         0
-_CHIP                            17
 _RAMSIZE                         1024
 _ERAMSIZE                        512
 _SIM                             0
 _HUGE                            0
 _BASE                            1
 _XTAL                            11059200
-_BUILD                           20781
+_BUILD                           20830
 _COMPILER                        90
 _HWMUL                           1
-_ROMSIZE                         8192
 _DOSFILEWRITE                    0
 _DOSDIRWRITE                     0
 _1WEXT                           0
@@ -504,8 +508,9 @@ _ADC_REFMODEL                    0
 _UARTS                           1
 _HWSTACKSTART                    1119
 _TIMEOUT                         0
-_PRDWORD                         0
 _PBIN_EXTENDED                   0
+_SPI_EXTENDED                    0
+_INPBIN_EXTENDED                 0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
@@ -513,8 +518,11 @@ _HWSTACK_LOW                     &H043F
 _SWSTACK_LOW                     &H0438
 _FRAME_HIGH                      &H0439
 _XMEGA                           0
+_XTINY                           0
 TIMELEFT                         150
+HALFTIMEOUT                      75
 TOMASTER                         252
+TOINPUT                          242
 TOOUTPUT                         232
 MYTYP                            104
 IDALARM                          56
@@ -547,46 +555,10 @@ CEXPDIVOFFSET                    36
 --------------------------------------------------------------------------------
 Warnings:
 --------------------------------------------------------------------------------
-SP                               not used
-TCNT1                            not used
-OCR1A                            not used
-OCR1B                            not used
-ICR1                             not used
-EEAR                             not used
-ADC                              not used
-R0                               not used
-R1                               not used
-R2                               not used
-R3                               not used
-R4                               not used
-R5                               not used
-R6                               not used
-R7                               not used
-R8                               not used
-R9                               not used
-R10                              not used
-R11                              not used
-R12                              not used
-R13                              not used
-R14                              not used
-R15                              not used
-R16                              not used
-R17                              not used
-R18                              not used
-R19                              not used
-R20                              not used
-R21                              not used
-R22                              not used
-R23                              not used
-R24                              not used
-R25                              not used
-R26                              not used
-R27                              not used
-R28                              not used
-R29                              not used
-R30                              not used
-R31                              not used
 ADCD                             not used
 COMPARE1                         not used
-PWM1B                            not used
+H                                not used
+X                                not used
+W                                not used
+TEST                             not used
 
