@@ -1,6 +1,6 @@
 Report       : internal eeprom 4m remote
-Date         : 09-19-2020
-Time         : 15:48:02
+Date         : 02-22-2021
+Time         : 12:06:15
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -11,7 +11,7 @@ ROMSIZE      : 2000 hex
 ROMIMAGE     : DFE hex  -> Will fit into ROM
 ROMIMAGE     :  3582 dec
 FLASH USED   :  43  %
-BAUD         : 115200 Baud
+BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
 
@@ -502,8 +502,6 @@ _HWSTACK_LOW                     &H043F
 _SWSTACK_LOW                     &H0438
 _FRAME_HIGH                      &H0439
 _XMEGA                           0
-EEWRITE                          160
-EEREAD                           161
 ALLID                            99
 NONID                            0
 MYTYP                            104

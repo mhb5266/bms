@@ -16,10 +16,10 @@ Dim Maxin As Byte
 
 Dim Inok As Boolean
 
-dim button4s as byte
-dim 4s as bit
+Dim Button4s As Byte
+Dim 4s As Bit
 Dim F As Byte
-dim allonoff as bit
+Dim Allonoff As Bit
 
 
 Dim Newlearn As Bit
@@ -172,7 +172,7 @@ Dim M1 As String * 2
 Dim M2 As String * 2
 Dim M3 As String * 2
 
-dim remsec as byte
+Dim Remsec As Byte
 '-------------------------- read rnumber index from eeprom
 Gosub Rnumber_er
 If Rnumber > 100 Then
@@ -243,7 +243,7 @@ Do
   If Term > 10000 Then
    'gosub t0rutin
    Term = 0
-  end if
+  End If
   If Term < 2500 Then
      'Stop Timer0
      Gosub _read
@@ -309,8 +309,8 @@ Do
         Call Tx
 
      Else
-        remsec=t1 mod 5
-        If remsec=0 Then
+        Remsec = T1 Mod 5
+        If Remsec = 0 Then
           Cmd = 182
           Id = Idsens1
           Direct = Tooutput
@@ -339,8 +339,8 @@ Do
         Direct = Tooutput
         Call Tx
      Else
-        remsec=t2 mod 5
-        If remsec=0 Then
+        Remsec = T2 Mod 5
+        If Remsec = 0 Then
           Set St2
           Id = Idsens2
           Cmd = 182
@@ -370,8 +370,8 @@ Do
         Direct = Tooutput
         Call Tx
      Else
-        remsec=t3 mod 5
-        If remsec=0 Then
+        Remsec = T3 Mod 5
+        If Remsec = 0 Then
           Cmd = 182
           Id = Idsens3
           Direct = Tooutput
@@ -509,7 +509,7 @@ Return
 '-------------------------------- Relay command
 Command:
 
-        'If Code = 1 Then Toggle led1
+        If Code = 1 Then Toggle Led1
         'If Code = 2 Then Toggle Rel2
         'If Code = 3 Then Toggle Rel3
         'If Code = 4 Then Toggle Rel4
@@ -545,50 +545,50 @@ Command:
                       Case 1
                            Id = Lookup(code , Remote16)
                       Case 2
-                           if code=8 then
-                               id=lookup(1,1remote4)
-                               set allonoff
-                               toggle button4s.1
-                               4s=button4s.1
-                           else
+                           If Code = 8 Then
+                               Id = Lookup(1 , 1remote4)
+                               Set Allonoff
+                               Toggle Button4s.1
+                               4s = Button4s.1
+                           Else
                                Id = Lookup(code , 1remote4)
-                           end if
+                           End If
                       Case 3
-                           if code=8 then
-                               id=lookup(1,2remote4)
-                               set allonoff
-                               toggle button4s.2
-                               4s=button4s.2
-                           else
+                           If Code = 8 Then
+                               Id = Lookup(1 , 2remote4)
+                               Set Allonoff
+                               Toggle Button4s.2
+                               4s = Button4s.2
+                           Else
                                Id = Lookup(code , 2remote4)
-                           end if
+                           End If
                       Case 4
-                           if code=8 then
-                               id=lookup(1,3remote4)
-                               set allonoff
-                               toggle button4s.3
-                               4s=button4s.3
-                           else
+                           If Code = 8 Then
+                               Id = Lookup(1 , 3remote4)
+                               Set Allonoff
+                               Toggle Button4s.3
+                               4s = Button4s.3
+                           Else
                                Id = Lookup(code , 3remote4)
-                           end if
+                           End If
                       Case 5
-                           if code=8 then
-                               id=lookup(1,4remote4)
-                               set allonoff
-                               toggle button4s.4
-                               4s=button4s.4
-                           else
+                           If Code = 8 Then
+                               Id = Lookup(1 , 4remote4)
+                               Set Allonoff
+                               Toggle Button4s.4
+                               4s = Button4s.4
+                           Else
                                Id = Lookup(code , 4remote4)
-                           end if
+                           End If
                       Case 6
-                           if code=8 then
-                               id=lookup(1,5remote4)
-                               set allonoff
-                               toggle button4s.5
-                               4s=button4s.5
-                           else
+                           If Code = 8 Then
+                               Id = Lookup(1 , 5remote4)
+                               Set Allonoff
+                               Toggle Button4s.5
+                               4s = Button4s.5
+                           Else
                                Id = Lookup(code , 5remote4)
-                           end if
+                           End If
 '(
                       case 7
                            if code=8 then
@@ -615,18 +615,18 @@ Command:
                Cmd = 180
                Typ = Mytyp
                Direct = Tooutput
-               if allonoff=1 then
-                   reset allonoff
-                   if 4s=1 then cmd=182 else cmd=181
-                   for i=0 to 2
-                       id=id+i
-                       call tx
-                       waitms 500
-                   next
-               else
+               If Allonoff = 1 Then
+                   Reset Allonoff
+                   If 4s = 1 Then Cmd = 182 Else Cmd = 181
+                   For I = 0 To 2
+                       Id = Id + I
+                       Call Tx
+                       Waitms 500
+                   Next
+               Else
                    Call Tx
-               end if
-               exit for
+               End If
+               Exit For
             End If
         Next
         If Waslearned = 0 Then
@@ -1067,7 +1067,7 @@ If Clearall = 1 Then
      Reset Clearall
 End If
 End Sub
-  ')
+')
 
 Sub Checkanswer
             Toggle Rxtx

@@ -1,7 +1,7 @@
 
 $regfile = "M8def.dat"
 $crystal = 11059200
-$baud = 115200
+$baud = 9600
 
 Configs:
 '-------------------------------------------------------------------------------
@@ -13,8 +13,8 @@ Config Pind.4 = Output                                      'relay3
 Config Pind.5 = Output                                      'relay4
 Config Pinc.0 = Output                                      'led1 learning led
 'Config Pinc.0 = Input                                       'key1
-Config Scl = Portc.5                                        'at24cxx pin6
-Config Sda = Portc.4                                        'at24cxx pin5
+'Config Scl = Portc.5                                        'at24cxx pin6
+'Config Sda = Portc.4                                        'at24cxx pin5
 '--------------------------------- Alias  --------------------------------------
 _in Alias Pinb.0                                            'RF input
 Buzz Alias Portc.1                                          'B.1
@@ -25,8 +25,8 @@ Rel4 Alias Portd.5                                          'relay4
 Led1 Alias Portc.0                                          'learning led
 'Key1 Alias Pinc.0                                           'learn key
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Const Eewrite = 160                                         'eeprom write address
-Const Eeread = 161                                          'eeprom read address
+'Const Eewrite = 160                                         'eeprom write address
+'Const Eeread = 161                                          'eeprom read address
 '--------------------------------- Timer ---------------------------------------
 Config Timer1 = Timer , Prescale = 8 : Stop Timer1 : Timer1 = 0
 'Config Watchdog = 2048
@@ -60,7 +60,7 @@ Rxtx Alias Portd.7 : Config Portd.7 = Output
 Enable Interrupts
 
 Enable Urxc
-On Urxc rx
+On Urxc Rx
 
 En Alias Portd.6 : Config Portd.6 = Output
 Wantid_led Alias Portc.2 : Config Portc.2 = Output
@@ -72,9 +72,9 @@ Dim Typ As Byte
 Dim Cmd As Byte
 Dim Id As Byte
 
-Dim Newaddress As Eram Byte :if newaddress=255 then newaddress=0
+Dim Newaddress As Eram Byte : If Newaddress = 255 Then Newaddress = 0
 
-Dim direct As Byte
+Dim Direct As Byte
 Dim Endbit As Byte : Endbit = 220
 
 Dim Inok As Boolean
@@ -102,7 +102,7 @@ Dim Ercounter As Eram Byte : If Ercounter = 255 Then Ercounter = 0
 Dim Rcounter As Byte : Rcounter = Ercounter
 
 Dim Keylearnd As Byte
-Dim wic As Byte
+Dim Wic As Byte
 Dim Test As Word
 
 
@@ -124,7 +124,7 @@ Const Sendkey = 150
 
 Subs:
 
-Declare Sub checkanswer
+Declare Sub Checkanswer
 Declare Sub Do_learn
 Declare Sub Clear_remotes
 Declare Sub Tx
@@ -147,8 +147,8 @@ End If
 Waitms 500
 Set Led1
 Set Rxtx
-call beep
-call beep
+Call Beep
+Call Beep
 Reset Led1
 Waitms 500
 Reset Rxtx
@@ -252,14 +252,14 @@ Return
 '========================================================================= CHECK
 Check:
       Okread = 1
-      If Keycheck = 0 Then                                        'agar keycheck=1 bashad yani be releha farman nade
+      If Keycheck = 0 Then                                  'agar keycheck=1 bashad yani be releha farman nade
          For I = 1 To Rnumber
 
              Ra = Eevar(i)
              If Ra = Address Then
                 Raw = I                                     'code
                 Gosub Command
-                call beep
+                Call Beep
                 Exit For
              End If
          Next
@@ -398,7 +398,7 @@ Sub Do_learn:
 
            If Okread = 1 Then
               Call Beep                                     'repeat check
-              If Rnumber = 0 Then                               ' agar avalin remote as ke learn mishavad
+              If Rnumber = 0 Then                           ' agar avalin remote as ke learn mishavad
                  Incr Rnumber
                  Rnumber_e = Rnumber
                  Waitms 10
@@ -409,7 +409,7 @@ Sub Do_learn:
               Else                                          'address avalin khane baraye zakhire address remote
                  For I = 1 To Rnumber
                      Ra = Eevar(i)
-                     If Ra = Address Then                       'agar address remote tekrari bod yani ghablan learn shode
+                     If Ra = Address Then                   'agar address remote tekrari bod yani ghablan learn shode
                         Set Buzz
                         Wait 1
                         Reset Buzz
@@ -419,8 +419,8 @@ Sub Do_learn:
                         Error = 0
                      End If
                  Next
-                 If Error = 0 Then                              ' agar tekrari nabod
-                    Incr Rnumber                                'be meghdare rnumber ke index tedade remote haye learn shode ast yek vahed ezafe kon
+                 If Error = 0 Then                          ' agar tekrari nabod
+                    Incr Rnumber                            'be meghdare rnumber ke index tedade remote haye learn shode ast yek vahed ezafe kon
                     If Rnumber > 20 Then                    'agar bishtar az 100 remote learn shavad
                        Rnumber = 20
                        Set Buzz

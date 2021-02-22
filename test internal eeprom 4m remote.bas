@@ -252,16 +252,16 @@ Command:
 Select Case Code:
 Case 1:
 Toggle Rel1
-Waitms 100
+Waitms 200
 Case 2:
 Toggle Rel2
-Waitms 100
+Waitms 200
 Case 4:
 Toggle Rel3
-Waitms 100
+Waitms 200
 Case 8:
 Toggle Rel4
-Waitms 100
+Waitms 200
 Case Else
 End Select
 Return
@@ -272,6 +272,5 @@ Waitms 80
 Reset Buzz
 Waitms 30
 Return
-
 
 
