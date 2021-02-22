@@ -1,6 +1,6 @@
-Report       : Micro-eeprom
+Report       : keypad with remote
 Date         : 02-21-2021
-Time         : 13:48:43
+Time         : 14:25:53
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,20 +8,20 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 994 hex  -> Will fit into ROM
-ROMIMAGE     :  2452 dec
-FLASH USED   :  29  %
-BAUD         : 115200 Baud
-XTAL         : 4000000 Hz
-BAUD error   : 7.84%
+ROMIMAGE     : 762 hex  -> Will fit into ROM
+ROMIMAGE     :  1890 dec
+FLASH USED   :  23  %
+BAUD         : 9600 Baud
+XTAL         : 11059200 Hz
+BAUD error   : 0.%
 
 Stack start  : 45F hex
-Stack size   : 20 hex
-S-Stacksize  : 8 hex
-S-Stackstart : 440 hex
-Framesize    : 18 hex
-Framestart   : 420 hex
-Space left   :  864  dec
+Stack size   : 28 hex
+S-Stacksize  : 10 hex
+S-Stackstart : 438 hex
+Framesize    : 20 hex
+Framestart   : 408 hex
+Space left   :  900  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -92,25 +92,48 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-TEST                             Word              0060          96 
-S                                Word(24)          0062          98 
-I                                Byte              0092          146 
-SADDRESS                         String * 20       0093          147 
-SCODE                            String * 4        00A8          168 
-ADDRESS                          Long              00AD          173 
-CODE                             Byte              00B1          177 
-RA                               Long              00B2          178 
-RNUMBER                          Byte              00B6          182 
-RNUMBER_E                        EEPROM Byte       0000          0 
-OKREAD                           Bit [7]           00B7          183 
-ERROR                            Bit [6]           00B7          183 
-KEYCHECK                         Bit [5]           00B7          183 
-T                                Word              00B8          184 
-EADDRESS                         Word              00BA          186 
-E_READ                           Byte              00BC          188 
-E_WRITE                          Byte              00BD          189 
-EEVAR                            EEPROM Long(100)  0001          1 
-ID                               Byte              00BE          190 
+MAXIN                            Byte              0060          96 
+TOUCHDELAY                       Byte              0061          97 
+ISTOUCHED                        Bit [7]           0062          98 
+TYP                              Byte              0063          99 
+CMD                              Byte              0064          100 
+ID                               Byte              0065          101 
+TOUCHID1                         Byte              0066          102 
+TOUCHID2                         Byte              0067          103 
+TOUCHID3                         Byte              0068          104 
+ALLOFFON                         Bit [6]           0062          98 
+TEMPID                           Byte              0069          105 
+S1                               Bit [5]           0062          98 
+S2                               Bit [4]           0062          98 
+S3                               Bit [3]           0062          98 
+S4                               Bit [2]           0062          98 
+TEMPON                           Word              006A          106 
+TEMPEN                           Bit [1]           0062          98 
+P                                Byte              006C          108 
+COUNT                            Word              006D          109 
+EID                              EEPROM Byte       0000          0 
+DIRECT                           Byte              006F          111 
+ENDBIT                           Byte              0070          112 
+L1                               Bit [0]           0062          98 
+L2                               Bit [7]           0071          113 
+L3                               Bit [6]           0071          113 
+I                                Byte              0072          114 
+J                                Long              0073          115 
+A                                Byte              0077          119 
+REPLY                            Byte              0078          120 
+INOK                             Bit [5]           0071          113 
+TOUCH                            Byte              0079          121 
+SENDOK                           Bit [4]           0071          113 
+ISREQUEST                        Bit [3]           0071          113 
+TIMEOUT                          Bit [2]           0071          113 
+ENBUZ                            Bit [1]           0071          113 
+ENSENSOR                         Bit [0]           0071          113 
+ENKEY                            Bit [7]           007A          122 
+WANTID                           Bit [6]           007A          122 
+BACKTYP                          Byte              007B          123 
+BACKCMD                          Byte              007C          124 
+BACKID                           Byte              007D          125 
+DIN                              Byte(5)           007E          126 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -446,7 +469,7 @@ TCR2UB                           0
 _RESET                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
-_GSTRBUF                         1056
+_GSTRBUF                         1032
 _DECIMALPOINT                    46
 _RTSCTS                          0
 _RTSCTS1                         0
@@ -461,7 +484,7 @@ _ERAMSIZE                        512
 _SIM                             0
 _HUGE                            0
 _BASE                            1
-_XTAL                            4000000
+_XTAL                            11059200
 _BUILD                           20830
 _COMPILER                        90
 _HWMUL                           1
@@ -478,13 +501,19 @@ _INPBIN_EXTENDED                 0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
-_HWSTACK_LOW                     &H043F
-_SWSTACK_LOW                     &H0438
-_FRAME_HIGH                      &H0439
+_HWSTACK_LOW                     &H0437
+_SWSTACK_LOW                     &H0428
+_FRAME_HIGH                      &H0429
 _XMEGA                           0
 _XTINY                           0
-EEWRITE                          160
-EEREAD                           161
+KEYID                            1
+TOMASTER                         252
+TOOUTPUT                         232
+TOINPUT                          242
+ALLID                            99
+ALLTYP                           115
+NONID                            0
+MYTYP                            101
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -508,7 +537,18 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-EADDRESS                         not used
-E_READ                           not used
-E_WRITE                          not used
+S1                               not used
+S2                               not used
+S3                               not used
+S4                               not used
+TEMPEN                           not used
+P                                not used
+EID                              not used
+J                                not used
+A                                not used
+REPLY                            not used
+TIMEOUT                          not used
+BACKTYP                          not used
+BACKCMD                          not used
+BACKID                           not used
 
