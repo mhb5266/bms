@@ -21,9 +21,25 @@ Configs:
 
         Config Timer1 = Timer , Prescale = 8 : Stop Timer1 : Timer1 = 0
 
-
+        En Alias Portd.2 : Config Portd.2 = Output
 Defines:
 
+        Dim Endbit As Byte
+        Dim Direct As Byte
+
+        Const Tomaster = 252
+        Const Tooutput = 232
+
+
+        Dim Typ As Byte
+        Dim Id As Byte
+        Dim Cmd As Byte
+        Const Mytyp = 101
+
+        Dim Touchid1 As Eram Byte
+        Dim Touchid2 As Eram Byte
+        Dim Touchid3 As Eram Byte
+        Dim Touchid4 As Eram Byte
 
         Dim Beepen As Bit
         Dim Touch As Byte
@@ -89,6 +105,7 @@ Loop
 
 Refresh:
 
+        Touch = 0
         If Touch1 = 0 Then
            Touch = 1
            Set Led1
@@ -270,20 +287,24 @@ Return
 '-------------------------------- leday command
 Command:
         Select Case Code
+               Typ = Mytyp
                Case 1
-                    Toggle led1
-                    Waitms 200
+                    Id = Touchid1
+                    Toggle Led1
                Case 2
-                    Toggle led2
-                    Waitms 200
+                    Id = Touchid2
+                    Toggle Led2
                Case 4
-                    Toggle led3
-                    Waitms 200
+                    Id = Touchid3
+                    Toggle Led3
                Case 8
+                    Id = Touchid4
                     Toggle Led4
-                    Waitms 200
                Case Else
         End Select
+
+        Gosub Tx
+        Waitms 200
 Return
 
 Beep:
@@ -366,7 +387,14 @@ Keyorder:
 Return
 
 Tx:
+    If Direct = Tooutput Then Endbit = 210
+    If Direct = Tomaster Then Endbit = 230
 
+    Set En
+    Waitms 10
+    Printbin Direct ; Typ ; Cmd ; Id ; Endbit
+    Waitms 50
+    Reset En
 
 Return
 

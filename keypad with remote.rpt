@@ -1,6 +1,6 @@
 Report       : keypad with remote
-Date         : 02-22-2021
-Time         : 17:43:56
+Date         : 02-26-2021
+Time         : 19:59:41
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : ACA hex  -> Will fit into ROM
-ROMIMAGE     :  2762 dec
-FLASH USED   :  33  %
+ROMIMAGE     : B5A hex  -> Will fit into ROM
+ROMIMAGE     :  2906 dec
+FLASH USED   :  35  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 8 hex
 S-Stackstart : 440 hex
 Framesize    : 18 hex
 Framestart   : 420 hex
-Space left   :  869  dec
+Space left   :  864  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -92,23 +92,32 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-BEEPEN                           Bit [7]           0060          96 
-TOUCH                            Byte              0061          97 
-X                                Byte              0062          98 
-S                                Word(24)          0063          99 
-I                                Byte              0093          147 
-SADDRESS                         String * 20       0094          148 
-SCODE                            String * 4        00A9          169 
-ADDRESS                          Long              00AE          174 
-CODE                             Byte              00B2          178 
-RA                               Long              00B3          179 
-RNUMBER                          Byte              00B7          183 
-RNUMBER_E                        EEPROM Byte       0000          0 
-OKREAD                           Bit [6]           0060          96 
-ERROR                            Bit [5]           0060          96 
-KEYCHECK                         Bit [4]           0060          96 
-T                                Word              00B8          184 
-EEVAR                            EEPROM Long(10)   0001          1 
+ENDBIT                           Byte              0060          96 
+DIRECT                           Byte              0061          97 
+TYP                              Byte              0062          98 
+ID                               Byte              0063          99 
+CMD                              Byte              0064          100 
+TOUCHID1                         EEPROM Byte       0000          0 
+TOUCHID2                         EEPROM Byte       0001          1 
+TOUCHID3                         EEPROM Byte       0002          2 
+TOUCHID4                         EEPROM Byte       0003          3 
+BEEPEN                           Bit [7]           0065          101 
+TOUCH                            Byte              0066          102 
+X                                Byte              0067          103 
+S                                Word(24)          0068          104 
+I                                Byte              0098          152 
+SADDRESS                         String * 20       0099          153 
+SCODE                            String * 4        00AE          174 
+ADDRESS                          Long              00B3          179 
+CODE                             Byte              00B7          183 
+RA                               Long              00B8          184 
+RNUMBER                          Byte              00BC          188 
+RNUMBER_E                        EEPROM Byte       0004          4 
+OKREAD                           Bit [6]           0065          101 
+ERROR                            Bit [5]           0065          101 
+KEYCHECK                         Bit [4]           0065          101 
+T                                Word              00BD          189 
+EEVAR                            EEPROM Long(10)   0005          5 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -481,6 +490,9 @@ _SWSTACK_LOW                     &H0438
 _FRAME_HIGH                      &H0439
 _XMEGA                           0
 _XTINY                           0
+TOMASTER                         252
+TOOUTPUT                         232
+MYTYP                            101
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
