@@ -36,7 +36,8 @@ Defines:
         Dim Maxin As Byte
         Dim Inok As Boolean
 
-        Dim Keytouched As Boolean
+        Dim Alloffon As Boolean
+        Dim Keytouched As Word : Const Timeout = 30
         Const T1 = 20
         Const T2 = 30
         Const T3 = 60
@@ -53,7 +54,8 @@ Defines:
         Const Tooutput = 232
 
 
-        Dim Tempon As Boolean
+        Dim Tempon As Word
+        Dim Tempen As Boolean
 
         Dim Typ As Byte
         Dim Id As Byte
@@ -163,109 +165,85 @@ Main:
 
 Refresh:
 
-        Touch = 0
         If Touch1 = 0 Then
+           Waitms 30
+           Set Ledout
            Touch = 1
-           Toggle Led1
            X = 0
            Do
              Waitms 50
              Incr X
-             If X = 75 Then Gosub Beepprogram
-             If X = 100 Then Exit Do
+             If X = 45 Then Gosub Beepprogram
+             If X > 60 Then Exit Do
            Loop Until Touch1 = 1
-           If X > 0 And X < 25 Then
-              Gosub Keyorder
-              Gosub Beep
-           End If
-           If X > 75 And X < 101 Then Gosub Remoteclear
+           keytouched=timeout
+           If X < 45 Then Gosub Keyorder Else Gosub Program
         End If
-        Touch = 0
+
         If Touch2 = 0 Then
+           Waitms 30
+           Set Ledout
            Touch = 2
-           Toggle Led2
            X = 0
            Do
              Waitms 50
              Incr X
-             If X = 75 Then Gosub Beepprogram
-             If X = 100 Then Exit Do
+             If X = 45 Then Gosub Beepprogram
+             If X > 60 Then Exit Do
            Loop Until Touch2 = 1
-           If X > 0 And X < 25 Then
-              Gosub Keyorder
-              Gosub Beep
-           End If
-           If X > 75 And X < 101 Then Gosub Remotelearn
+           keytouched=timeout
+           If X < 45 Then Gosub Keyorder Else Gosub Program
         End If
 
-        Touch = 0
         If Touch3 = 0 Then
+           Waitms 30
+           Set Ledout
            Touch = 3
-           Toggle Led3
            X = 0
            Do
              Waitms 50
              Incr X
-             If X = 75 Then Gosub Beepprogram
-             If X = 100 Then Exit Do
+             If X = 45 Then Gosub Beepprogram
+             If X > 60 Then Exit Do
            Loop Until Touch3 = 1
-           If X > 0 And X < 25 Then
-
-              Gosub Keyorder
-              Gosub Beep
-           End If
-           If X > 75 And X < 101 Then Toggle Beepen
-           If Beepen = 1 Then
-              Gosub Beep
-           Else
-               For I = 1 To 4
-                   Toggle Ledout
-                   Waitms 500
-               Next
-           End If
+           keytouched=timeout
+           If X < 45 Then Gosub Keyorder Else Gosub Program
         End If
 
-        Touch = 0
         If Touch4 = 0 Then
+           Waitms 30
+           Set Ledout
            Touch = 4
            X = 0
            Do
              Waitms 50
              Incr X
-             If X = 75 Then Gosub Beepprogram
-             If X = 100 Then Exit Do
+             If X = 45 Then Gosub Beepprogram
+             If X > 60 Then Exit Do
            Loop Until Touch4 = 1
-           If X > 0 And X < 25 Then
-              Gosub Keyorder
-              Gosub Beep
-           End If
-           If X > 75 And X < 101 Then
-           Toggle Sensoren
+           Keytouched = Timeout
+           If X < 45 Then Gosub Keyorder Else Gosub Program
+        End If
 
-           If Sensoren = 1 Then M = 4 Else M = 8
-              For I = 1 To M
-                  Toggle Ledout
-                  Waitms 250
-              Next
+        If Keytouched = 0 And Sensoren = 0 And Sensor = 0 And Led2 = 1 And Led3 = 1 Then
+           If Led1 = 1 Then
+              Id = Touchid1 : Cmd = 182 : Direct = Tooutput
+              Set Tempen
+              Tempon = T1
+              Reset Led1
+              Gosub Tx
+           Else
+               Set Tempen
+               Tempon = 0
            End If
         End If
 
-
-
-        If Sensoren = 1 Then
-           If Keytouched = 1 Then Return
-           If Sensor = 0 Then
-              Secc = 0
-              If Led1 = 0 And Led2 = 0 And Led3 = 0 And Tempon = 0 Then
-                 'Start Timer0
-                 Set Led1
-                 Id = Touchid1
-                 Cmd = 182
-                 Set Tempon
-                 Gosub Tx
-              End If
-           End If
+        If Keytouched > 0 Then
+           Reset Tempen
+           Tempon = 0
         End If
+        Waitms 200
+        Reset Ledout
 Return
 '--------------------------------------------------------------------------read
 _read:
@@ -547,67 +525,70 @@ Remoteclear:
 Return
 
 Keyorder:
+
          Direct = Tooutput
          Typ = Mytyp
+         Select Case Touch
+                Case 1
+                     Toggle Led1
+                     Id = Touchid1
+                     If Led1 = 0 Then Cmd = 182 Else Cmd = 181
+                Case 2
+                     Toggle Led2
+                     Id = Touchid2
+                     If Led2 = 0 Then Cmd = 182 Else Cmd = 181
 
-        If Touch > 0 And Touch < 5 Then
-           Set Keytouched
-           Secc = 40
-           Start Timer0
-        End If
+                Case 3
+                     Toggle Led3
+                     Id = Touchid3
+                     If Led3 = 0 Then Cmd = 182 Else Cmd = 181
+                Case 4
+                     Toggle Alloffon
+                     If Alloffon = 1 Then Cmd = 182 Else Cmd = 181
+         End Select
 
-         If Touch = 1 Then
-            If Led1 = 1 Then Cmd = 181 Else Cmd = 182
-            Id = Touchid1
+         If Touch < 4 Then
             Gosub Tx
-         End If
-
-         If Touch = 2 Then
-            If Led2 = 1 Then Cmd = 181 Else Cmd = 182
-            Id = Touchid2
-            Gosub Tx
-         End If
-
-         If Touch = 3 Then
-            If Led3 = 1 Then Cmd = 181 Else Cmd = 182
-            Id = Touchid3
-            Gosub Tx
-         End If
-
-         If Touch = 4 Then
-            Toggle L4
-            If L4 = 1 Then Cmd = 181 Else Cmd = 182
+         Else
             For I = 1 To 4
                 If I = 1 Then
                    Id = Touchid1
-                   If L4 = 1 Then Reset Led1 Else Set Led1
+                   If Alloffon = 1 Then Reset Led1 Else Set Led1
+                   Gosub Tx
                 End If
-
                 If I = 2 Then
                    Id = Touchid2
-                   If L4 = 1 Then Reset Led2 Else Set Led2
+                   If Alloffon = 1 Then Reset Led2 Else Set Led2
+                   Gosub Tx
                 End If
-
                 If I = 3 Then
                    Id = Touchid3
-                   If L4 = 1 Then Reset Led3 Else Set Led3
+                   If Alloffon = 1 Then Reset Led3 Else Set Led3
+                   Gosub Tx
                 End If
-
                 If I = 4 Then
-                   If L4 = 1 Then Reset Led4 Else Set Led4
-                   Touch = 0
-                   Return
+                   If Alloffon = 1 Then Reset Led4 Else Set Led4
                 End If
-                Gosub Tx
-                Waitms 200
-
+                Waitms 250
             Next
          End If
-         Touch = 0
 
 
 Return
+Program:
 
+        Select Case Touch
+               Case 1
+                    Gosub Remotelearn
+               Case 2
+                    Toggle Beepen
+               Case 3
+                    Toggle Sensoren
+               Case 4
+                    Gosub Remoteclear
+        End Select
+
+Return
 Tx:
     If Direct = Tooutput Then Endbit = 210
     If Direct = Tomaster Then Endbit = 230
