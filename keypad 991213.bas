@@ -24,7 +24,18 @@ Configs:
         Sensor Alias Pinc.0 : Config Portc.0 = Input
 
         Config Timer1 = Timer , Prescale = 8 : Stop Timer1 : Timer1 = 0
-        Config Timer0 = Timer , Prescale = 1024
+'        Config Timer0 = Timer , Prescale = 1024
+         Config Clock = Soft
+         Config Date = Ymd , Separator = Slash
+         Time$ = "00:00:00"
+         Date$ = "99/12/15"
+
+         Dim Km As Byte
+         Dim Ks As Byte
+
+         Dim Ss As Byte
+         Dim Sm As Byte
+
         Enable Interrupts
         'Enable Timer0
         'On Timer0 T0rutin
@@ -127,6 +138,8 @@ Startup:
 Main:
 
      Do
+
+
        'Stop Timer0
        Gosub _read
        'Start Timer0
@@ -204,25 +217,6 @@ Refresh:
            If X < 45 Then Gosub Keyorder Else Gosub Program
         End If
 
-        If Keytouched = 0 And Sensoren = 0 And Sensor = 0 And Led2 = 1 And Led3 = 1 Then
-           If Led1 = 1 Then
-              Id = Touchid1 : Cmd = 182 : Direct = Tooutput
-              Set Tempen
-              Tempon = T1
-              Reset Led1
-              Gosub Tx
-           Else
-               Set Tempen
-               Tempon = 0
-           End If
-        End If
-
-        If Keytouched > 0 Then
-           Reset Tempen
-           Tempon = 0
-        End If
-        Waitms 200
-        Reset Ledout
 Return
 
 Keyorder:
