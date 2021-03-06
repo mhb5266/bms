@@ -1,19 +1,19 @@
 Report       : time and date cmd test
-Date         : 03-05-2021
-Time         : 16:38:54
+Date         : 03-06-2021
+Time         : 15:23:09
 
-Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
+Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
 SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 518 hex  -> Will fit into ROM
-ROMIMAGE     :  1304 dec
-FLASH USED   :  15  %
+ROMIMAGE     : 37A hex  -> Will fit into ROM
+ROMIMAGE     :  890 dec
+FLASH USED   :  10  %
 BAUD         : 9600 Baud
-XTAL         : 8000000 Hz
-BAUD error   : 0.16%
+XTAL         : 11059200 Hz
+BAUD error   : 0.%
 
 Stack start  : 45F hex
 Stack size   : 28 hex
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  906  dec
+Space left   :  905  dec
 
 LCD DB7      : PORTD.7
 LCD DB6      : PORTD.6
@@ -44,8 +44,6 @@ ADC                              Word              0024          36
 TIMER1                           Word              004C          76 
 COMPARE1A                        Word              004A          74 
 COMPARE1B                        Word              0048          72 
-PWM1A                            Word              004A          74 
-PWM1B                            Word              0048          72 
 CAPTURE1                         Word              0046          70 
 HWSTACK                          Word              005D          93 
 SWSTACK                          Word              001C          28 
@@ -95,10 +93,11 @@ ERR                              Bit [2]           0006          6
 DATE$                            String * 8        0066          102 
 TIME$                            String * 8        006F          111 
 A                                Byte              0078          120 
-S1                               Byte              0079          121 
-S2                               Byte              007A          122 
-M1                               Byte              007B          123 
-M2                               Byte              007C          124 
+SECC                             Byte              0079          121 
+S1                               Byte              007A          122 
+S2                               Byte              007B          123 
+M1                               Byte              007C          124 
+M2                               Byte              007D          125 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -163,7 +162,6 @@ SPSR                             &H0E
 SPCR                             &H0D
 UDR                              &H0C
 UCSRA                            &H0B
-UCSR0A                           &H0B
 USR                              &H0B
 UCSRB                            &H0A
 UCR                              &H0A
@@ -184,8 +182,6 @@ TWDR                             &H03
 TWAR                             &H02
 TWSR                             &H01
 TWBR                             &H00
-_ROMSIZE                         8192
-_CHIP                            17
 INT1                             7
 INT0                             6
 IVSEL                            1
@@ -250,7 +246,7 @@ CS12                             2
 CS11                             1
 CS10                             0
 FOC2                             7
-PWM2BIT                          6
+PWM2                             6
 WGM20                            6
 COM21                            5
 COM20                            4
@@ -431,7 +427,6 @@ AS2                              3
 TCN2UB                           2
 OCR2UB                           1
 TCR2UB                           0
-_RESET                           0
 _DATE_FORMAT                     1
 _DATE_SEPARATOR                  47
 _GSTRBUF                         1032
@@ -444,15 +439,17 @@ _RTSCTS5                         0
 _RTSCTS6                         0
 _RTSCTS7                         0
 _RTSCTS8                         0
+_CHIP                            17
 _RAMSIZE                         1024
 _ERAMSIZE                        512
 _SIM                             0
 _HUGE                            0
 _BASE                            1
-_XTAL                            8000000
-_BUILD                           20830
+_XTAL                            11059200
+_BUILD                           20781
 _COMPILER                        90
 _HWMUL                           1
+_ROMSIZE                         8192
 _DOSFILEWRITE                    0
 _DOSDIRWRITE                     0
 _1WEXT                           0
@@ -460,9 +457,8 @@ _ADC_REFMODEL                    0
 _UARTS                           1
 _HWSTACKSTART                    1119
 _TIMEOUT                         0
+_PRDWORD                         0
 _PBIN_EXTENDED                   0
-_SPI_EXTENDED                    0
-_INPBIN_EXTENDED                 0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
@@ -470,7 +466,6 @@ _HWSTACK_LOW                     &H0437
 _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
-_XTINY                           0
 _LCDDB4                          &H12
 _LCDDB4_PIN                      4
 _LCDDB4DIR                       &H11
@@ -490,7 +485,7 @@ _LCDDBRS                         &H12
 _LCDDBRS_PIN                     2
 _LCDDBRSDIR                      &H11
 _USERCLOCK                       0
-_SECTIC                          0
+_SECTIC                          1
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -512,6 +507,52 @@ CEXPDIVOFFSET                    36
 --------------------------------------------------------------------------------
 Warnings:
 --------------------------------------------------------------------------------
+SP                               not used
+TCNT1                            not used
+OCR1A                            not used
+OCR1B                            not used
+ICR1                             not used
+EEAR                             not used
+ADC                              not used
+R0                               not used
+R1                               not used
+R2                               not used
+R3                               not used
+R4                               not used
+R5                               not used
+R6                               not used
+R7                               not used
+R8                               not used
+R9                               not used
+R10                              not used
+R11                              not used
+R12                              not used
+R13                              not used
+R14                              not used
+R15                              not used
+R16                              not used
+R17                              not used
+R18                              not used
+R19                              not used
+R20                              not used
+R21                              not used
+R22                              not used
+R23                              not used
+R24                              not used
+R25                              not used
+R26                              not used
+R27                              not used
+R28                              not used
+R29                              not used
+R30                              not used
+R31                              not used
 ADCD                             not used
 COMPARE1                         not used
+PWM1B                            not used
+DATE$                            not used
+SECC                             not used
+S1                               not used
+S2                               not used
+M1                               not used
+M2                               not used
 

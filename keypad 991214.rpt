@@ -1,6 +1,6 @@
-Report       : keypad with remote
-Date         : 03-04-2021
-Time         : 13:00:14
+Report       : keypad 991214
+Date         : 03-06-2021
+Time         : 16:19:29
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1160 hex  -> Will fit into ROM
-ROMIMAGE     :  4448 dec
-FLASH USED   :  54  %
+ROMIMAGE     : 108E hex  -> Will fit into ROM
+ROMIMAGE     :  4238 dec
+FLASH USED   :  51  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 8 hex
 S-Stackstart : 440 hex
 Framesize    : 18 hex
 Framestart   : 420 hex
-Space left   :  852  dec
+Space left   :  850  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -90,42 +90,44 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-F                                Byte              0060          96 
-DIN                              Byte(5)           0061          97 
-MAXIN                            Byte              0066          102 
-INOK                             Bit [7]           0067          103 
-KEYTOUCHED                       Bit [6]           0067          103 
-M                                Byte              0068          104 
-L4                               Bit [5]           0067          103 
-20MS                             Byte              0069          105 
-SECC                             Word              006A          106 
-ENDBIT                           Byte              006C          108 
-DIRECT                           Byte              006D          109 
-TEMPON                           Bit [4]           0067          103 
-TYP                              Byte              006E          110 
-ID                               Byte              006F          111 
-CMD                              Byte              0070          112 
+Z                                Word              0060          96 
+F                                Byte              0062          98 
+DIN                              Byte(5)           0063          99 
+MAXIN                            Byte              0068          104 
+INOK                             Bit [7]           0069          105 
+KEYTOUCHED                       Byte              006A          106 
+M                                Byte              006B          107 
+L4                               Bit [6]           0069          105 
+20MS                             Byte              006C          108 
+SECC                             Byte              006D          109 
+ENDBIT                           Byte              006E          110 
+DIRECT                           Byte              006F          111 
+TEMPEN                           Bit [5]           0069          105 
+TEMPON                           Byte              0070          112 
+TYP                              Byte              0071          113 
+ID                               Byte              0072          114 
+CMD                              Byte              0073          115 
 TOUCHID1                         EEPROM Byte       0000          0 
 TOUCHID2                         EEPROM Byte       0001          1 
 TOUCHID3                         EEPROM Byte       0002          2 
 TOUCHID4                         EEPROM Byte       0003          3 
-SENSOREN                         Bit [3]           0067          103 
-BEEPEN                           Bit [2]           0067          103 
-TOUCH                            Byte              0071          113 
-X                                Byte              0072          114 
-S                                Word(24)          0073          115 
-I                                Byte              00A3          163 
-SADDRESS                         String * 20       00A4          164 
-SCODE                            String * 4        00B9          185 
-ADDRESS                          Long              00BE          190 
-CODE                             Byte              00C2          194 
-RA                               Long              00C3          195 
-RNUMBER                          Byte              00C7          199 
+SENSOREN                         Bit [4]           0069          105 
+BEEPEN                           Bit [3]           0069          105 
+TOUCH                            Byte              0074          116 
+X                                Byte              0075          117 
+S                                Word(24)          0076          118 
+I                                Byte              00A6          166 
+SADDRESS                         String * 20       00A7          167 
+SCODE                            String * 4        00BC          188 
+ADDRESS                          Long              00C1          193 
+CODE                             Byte              00C5          197 
+RA                               Long              00C6          198 
+RNUMBER                          Byte              00CA          202 
 RNUMBER_E                        EEPROM Byte       0004          4 
-OKREAD                           Bit [1]           0067          103 
-ERROR                            Bit [0]           0067          103 
-KEYCHECK                         Bit [7]           00C8          200 
-T                                Word              00C9          201 
+OKREAD                           Bit [2]           0069          105 
+ERROR                            Bit [1]           0069          105 
+KEYCHECK                         Bit [0]           0069          105 
+T                                Word              00CB          203 
 EEVAR                            EEPROM Long(10)   0005          5 
 
 --------------------------------------------------------------------------------
@@ -564,4 +566,7 @@ R31                              not used
 ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
+Z                                not used
+M                                not used
+TOUCHID4                         not used
 

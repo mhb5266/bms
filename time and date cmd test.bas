@@ -1,11 +1,13 @@
 $regfile = "m8def.dat"
-$crystal = 8000000
+$crystal = 11059200
 
 Config Lcdpin = 16 * 2 , Db4 = Portd.4 , Db5 = Portd.5 , Db6 = Portd.6 , Db7 = Portd.7 , E = Portd.3 , Rs = Portd.2
 Cursor Off
-Config Clock = Soft
+Config Clock = Soft , Gosub = Sectic
 Config Date = Ymd , Separator = Slash
-Config Timer0 = Timer , Prescale = 1
+'Config Timer0 = Timer , Prescale = 1
+
+config TIMER1=TIMER,prescale=256
 
 Enable Interrupts
 
@@ -14,8 +16,13 @@ _year = 99
 _month = 12
 _day = 15
 
-Key Alias Pinb.0 : Config Portb.0 = Input
+Key Alias Pinb.1 : Config Portb.1 = Input
+Pg Alias Portc.3 : Config Portc.3 = Output
+
+Config Portc.5 = Output
 Dim A As Byte
+
+Dim Secc As Byte
 
 Dim S1 As Byte
 Dim S2 As Byte
@@ -25,6 +32,11 @@ Dim M2 As Byte
 
 Main:
      Do
+
+
+       A = _sec Mod 2
+       If A = 0 Then Toggle Pg
+     '(
        Home
        'Lcd _hour ; ":" ; _min ; ":" ; _sec
        Lcd Time$
@@ -36,7 +48,10 @@ Main:
        Timer1 = 5
        Stop Timer0
        Stop Timer1
-
+       If Secc > _sec Or Secc < _sec Then
+          Toggle Pg
+          Secc = _sec
+       End If
        If Key = 0 Then
 
 
@@ -53,7 +68,13 @@ Main:
              Do
              Loop Until Key = 1
        End If
-
+')
      Loop
+
+
+Sectic:
+Toggle Pg
+Return
+
 
 End

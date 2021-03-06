@@ -4,6 +4,7 @@
 '**************************************
 $regfile = "M8def.dat"
 $crystal = 11059200
+
 $baud = 9600
 '-------------------------------------------------------------------------------
 Configs:
@@ -16,10 +17,10 @@ Configs:
         Ledout Alias Portc.4 : Config Portc.4 = Output
         Touch1 Alias Pinb.1 : Config Portb.1 = Input
         Touch2 Alias Pinb.2 : Config Portb.2 = Input
-        Touch3 Alias Pinb.3 : Config Portb.3 = Input
-        Touch4 Alias Pinb.4 : Config Portb.4 = Input
+        Touch3 Alias Pinc.0 : Config Portc.0 = Input
+        Touch4 Alias Pinc.1 : Config Portc.1 = Input
 
-        Sensor Alias Pinc.0 : Config Portc.0 = Input
+        Sensor Alias Pinc.2 : Config Portc.2 = Input
 
         Config Timer1 = Timer , Prescale = 8 : Stop Timer1 : Timer1 = 0
         Config Timer0 = Timer , Prescale = 1024
@@ -29,14 +30,21 @@ Configs:
 
 
         En Alias Portd.2 : Config Portd.2 = Output
+
+        Pg Alias Portc.3 : Config Portc.3 = Output
+
+
 Defines:
 
+
+
+        Dim Z As Word
         Dim F As Byte
         Dim Din(5) As Byte
         Dim Maxin As Byte
         Dim Inok As Boolean
 
-        Dim Keytouched As Boolean
+        Dim Keytouched As Byte
         Const T1 = 20
         Const T2 = 30
         Const T3 = 60
@@ -44,16 +52,17 @@ Defines:
         Dim M As Byte
         Dim L4 As Boolean
         Dim 20ms As Byte
-        Dim Secc As Word
+        Dim Secc As Byte
 
         Dim Endbit As Byte
         Dim Direct As Byte
 
         Const Tomaster = 252
-        Const Tooutput = 232
+        Const Tooutput = 232 : Direct = Tooutput
 
 
-        Dim Tempon As Boolean
+        Dim Tempen As Boolean
+        Dim Tempon As Byte
 
         Dim Typ As Byte
         Dim Id As Byte
@@ -112,41 +121,28 @@ Startup:
 
 
         For I = 1 To 8
-            Toggle Led1
+            Toggle Ledout
             Waitms 200
         Next
 
+        Set Led1
+        Set Led2
+        Set Led3
+        Set Led4
+
+        Set Sensoren
+        Set Beepen
+
+Start Timer0
 Main:
 
      Do
 
        Gosub _read
 
-       If Secc > 70 Then
-                Reset Keytouched
-                Reset Tempon
-                Stop Timer0
-       End If
-       If Tempon = 1 Then
 
-          If Secc = T2 Then
-             If Led1 = 1 Then
-                Reset Led1
-                Reset Ledout
-                Reset Buzz
-                Reset Tempon
-                Stop Timer0
-                Cmd = 181
-                Gosub Tx
-             End If
-          End If
 
-       Else
 
-           Stop Timer0
-           Timer0 = 0
-
-       End If
 
 
        Gosub Refresh
@@ -160,6 +156,10 @@ Main:
           End If
 ')
      Loop
+
+Sectic:
+       Toggle Pg
+Return
 
 Refresh:
 
@@ -178,7 +178,7 @@ Refresh:
               Gosub Keyorder
               Gosub Beep
            End If
-           If X > 75 And X < 101 Then Gosub Remoteclear
+           If X > 75 And X < 101 Then Gosub Remotelearn
         End If
         Touch = 0
         If Touch2 = 0 Then
@@ -195,7 +195,7 @@ Refresh:
               Gosub Keyorder
               Gosub Beep
            End If
-           If X > 75 And X < 101 Then Gosub Remotelearn
+           If X > 75 And X < 101 Then Toggle Beepen
         End If
 
         Touch = 0
@@ -214,7 +214,7 @@ Refresh:
               Gosub Keyorder
               Gosub Beep
            End If
-           If X > 75 And X < 101 Then Toggle Beepen
+           If X > 75 And X < 101 Then Toggle Sensoren
            If Beepen = 1 Then
               Gosub Beep
            Else
@@ -239,32 +239,23 @@ Refresh:
               Gosub Keyorder
               Gosub Beep
            End If
-           If X > 75 And X < 101 Then
-           Toggle Sensoren
-
-           If Sensoren = 1 Then M = 4 Else M = 8
-              For I = 1 To M
-                  Toggle Ledout
-                  Waitms 250
-              Next
-           End If
+           If X > 75 And X < 101 Then Gosub Remoteclear
         End If
 
 
-
-        If Sensoren = 1 And Keytouched = 0 Then
-           If Sensor = 0 Then
-              Secc = 0
-              If Led1 = 0 And Led2 = 0 And Led3 = 0 And Tempon = 0 Then
-                 'Start Timer0
-                 Set Led1
-                 Id = Touchid1
-                 Cmd = 182
-                 Set Tempon
-                 Gosub Tx
-              End If
+        If Sensoren = 1 And Keytouched = 0 And Sensor = 0 Then
+           If Tempen = 0 And Led1 = 1 And Led2 = 1 And Led3 = 1 Then
+              Cmd = 182 : Id = Touchid1
+              Reset Led1
+              Gosub Tx
+              Tempon = 60
            End If
+           If Tempen = 1 And Led2 = 1 And Led3 = 1then
+              Reset Led1
+              Tempon = 60
+           end if
         End If
+
 Return
 '--------------------------------------------------------------------------read
 _read:
@@ -447,12 +438,11 @@ Command:
                     Touch = 3
                Case 8
                     Touch = 4
-                    Id = Touchid4
 
         End Select
         Gosub Keyorder
 
-        Gosub Tx
+        'Gosub Tx
         Waitms 200
 Return
 
@@ -551,11 +541,8 @@ Keyorder:
          Direct = Tooutput
          Typ = Mytyp
 
-        If Touch > 0 And Touch < 5 Then
-           Set Keytouched
-           Secc = 40
-           Start Timer0
-        End If
+         Keytouched = 30
+
 
          If Touch = 1 Then
             If Led1 = 1 Then Cmd = 181 Else Cmd = 182
@@ -623,16 +610,26 @@ Return
 
 T0rutin:
         Stop Timer0
-        Incr 20ms
-        If 20ms = 50 Then
-           Incr Secc
-           20ms = 0
-           Toggle Ledout
-           If Secc > T1 And Secc < T2 Then Toggle Buzz
-           If Secc > T2 Or Secc < T1 Then Reset Buzz
-           If Secc = 70 Then Reset Keytouched
-        End If
-        Timer0 = 39
+             Incr 20ms
+             If 20ms = 42 Then
+                20ms = 0
+                Incr Secc
+                Toggle Pg
+                If Keytouched > 30 Then
+                   Decr Keytouched
+                   If Keytouched = 0 Then
+                      Reset Tempen
+                   End If
+                End If
+                If Tempon > 0 Then
+                   Decr Tempon
+                   If Tempon = 0 Then
+                      Cmd = 181 : Id = Touchid1
+                      set led1
+                      Gosub Tx
+                   End If
+                End If
+             End If
         Start Timer0
 Return
 
