@@ -1,0 +1,18 @@
+$regfile = "m32def.dat"
+$crystal = 2000000
+$hwstack = 64
+$swstack = 100
+$framesize = 100
+$baud = 9600
+
+
+dim s as string * 100
+
+
+
+do
+
+
+loop
+
+end

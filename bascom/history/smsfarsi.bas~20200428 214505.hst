@@ -1,0 +1,80 @@
+$regfile = "m328pdef.dat"
+$crystal = 16000000
+$hwstack = 64
+$swstack = 100
+$framesize = 100
+$baud = 9600
+
+Config Single = Scientific , Digits = 2
+declare sub send_unicode(phone as string , text as string)
+wait 40
+dim s(71) as byte
+dim sms as string * 70 at s overlay
+dim phone_number as string * 11
+dim temp as Single
+temp = -27.32
+
+ phone_number = ""
+ phone_number = "09120197955"
+
+ sms = ""
+ sms = "Çíä íÇã ÈÇ ÈÓ˜Çã ÇÑÓÇá ÔÏå ÇÓÊ."
+call send_unicode(phone_number , sms )
+
+sms = ""
+sms = "ÏãÇí åæÇ"
+sms = sms + chr(10)
+sms = sms + str(temp) + " °C"
+sms = sms + chr(10)
+sms = sms + "ÇÓÊ."
+call send_unicode(phone_number , sms )
+
+
+
+do
+
+
+loop
+
+end
+
+sub send_unicode(phone as string , text as string)
+local Str_len As Byte , Index As Byte , I As Byte
+Str_len = Len(text)
+print "AT+CMGF=1"
+waitms 200
+print "AT+CSCS=" ; Chr(34) ; "HEX" ; Chr(34)
+WAITMS 200
+ PRINT "AT+CSMP=49,167,0,8"
+ WAITMS 200
+Print "AT+CMGS=" ; Chr(34) ; phone ; Chr(34)
+waitms 200
+For I = 1 To Str_len
+if s(i) > 127 then
+'print s(i) ; " ";
+Index = Lookdown(s(i) , ascii , 36)
+if index <> -1 then
+index = index - 1
+'S2 = s2 + "06" + Lookupstr(Index , unicode)
+print "06" ; HEX(Lookup(Index , unicode))
+end if
+elseif s(i) <= 127 then
+'print s(i) ; " ";
+' S2 = s2 + "00" + hex(s(i))
+print "00" + hex(s(i));
+end if
+next
+print
+'PRINT LEN(S2)
+'print s2
+Print Chr(26)
+wait 5
+end sub
+
+
+ascii:
+'data "Ç" , "È" , "" , "Ê" , "Ë" , "Ì" , "" , "Í" , "Î" , "Ï" , "Ð" , "Ñ" , "Ò" , "Ž" , "Ó" , "Ô" , "Õ" , "Ö" , "Ø" , "Ù" , "Ú" , "Û" , "Ý" , "Þ" , "˜" , "˜" , "" , "á" , "ã" , "ä" , "å" , "æ" , "í" , "Â" , "¡" , "í"
+data 199 , 200 , 129 , 202 , 203 , 204 , 141 , 205 , 206 , 207 , 208 , 209 , 210 , 142 , 211 , 212 , 213 , 214 , 216 , 217 , 218 , 219 , 221 , 222 , 152 , 223 , 144 , 225 , 227 , 228 , 229 , 230 , 237 , 194 , 161 , 236 , 176
+
+unicode:
+data &h27 , &h28 , &h7E , &h2A , &h2B , &h2C , &h86 , &h2D , &h2E , &h2F , &h30 , &h31 , &h32 , &h98 , &h33 , &h34 , &h35 , &h36 , &h37 , &h38 , &h39 , &h3A , &h41 , &h42 , &hA9 , &h43 , &hAF , &h44 , &h45 , &h46 , &h47 , &h48 , &h4A , &h22 , &h0C , &h49 , &hB0

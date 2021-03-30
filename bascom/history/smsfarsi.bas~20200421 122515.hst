@@ -1,0 +1,40 @@
+$regfile = "m32def.dat"
+$crystal = 2000000
+$hwstack = 64
+$swstack = 100
+$framesize = 100
+$baud = 9600
+
+dim s(101) as byte
+dim s1 as string * 100 at s overlay 
+dim s2 as string * 100
+
+DIM Cur_chr As String * 1
+dim Str_len As Byte , Index As Byte , I As Byte , value as byte
+ s1 = ""
+ s1 = "«»Å ”‘"
+ print "”·«„"
+Str_len = Len(s1)
+For I = Str_len To 1 Step -1
+'Cur_chr = ""
+'Cur_chr = Mid(s1 , I , 1)
+value = s(i)
+print value
+Index = Lookdown(value , utf8 , 32)
+print Index
+ next
+
+
+do
+
+
+loop
+
+end
+
+utf8:
+data "«" , "»" , "Å" , " " , "À" , "Ã" , "ç" , "Õ" , "Œ" , "œ" , "–" , "—" , "“" , "é" , "”" , "‘" , "’" , "÷" , "ÿ" , "Ÿ" , "⁄" , "€" , "›" , "ﬁ" , "ò" , "ê" , "·" , "„" , "‰" , "Â" , "Ê" , "Ì"
+
+
+unicode:
+data "27" , "28" , "7E" , "2A" , "2B" , "2C" , "86" , "2D" , "2E" , "2F" , "30" , "32" , "32" , "98" , "33" , "34" , "35" , "36" , "37" , "38" , "39" , "3A" , "41" , "42" , "43" , "AF" , "44" , "45" , "46" , "47" , "48" , "49"

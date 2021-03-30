@@ -1,6 +1,6 @@
 Report       : keypad 991214
-Date         : 03-06-2021
-Time         : 16:19:29
+Date         : 03-08-2021
+Time         : 16:07:21
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 108E hex  -> Will fit into ROM
-ROMIMAGE     :  4238 dec
-FLASH USED   :  51  %
+ROMIMAGE     : 1108 hex  -> Will fit into ROM
+ROMIMAGE     :  4360 dec
+FLASH USED   :  53  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%

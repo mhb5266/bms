@@ -1,6 +1,6 @@
 
 $regfile = "m32def.dat"
-$crystal = 8000000
+$crystal = 11059200
 $baud = 9600
 
 Config Lcdpin = Pin , Db4 = Portb.0 , Db5 = Portb.1 , Db6 = Portb.2 , Db7 = Portb.3 , E = Portb.4 , Rs = Portb.5

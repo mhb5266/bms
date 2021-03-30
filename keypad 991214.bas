@@ -166,7 +166,7 @@ Refresh:
         Touch = 0
         If Touch1 = 0 Then
            Touch = 1
-           Toggle Led1
+           If Tempen = 0 Then Toggle Led1
            X = 0
            Do
              Waitms 50
@@ -248,12 +248,13 @@ Refresh:
               Cmd = 182 : Id = Touchid1
               Reset Led1
               Gosub Tx
+              Set Tempen
               Tempon = 60
            End If
            If Tempen = 1 And Led2 = 1 And Led3 = 1then
               Reset Led1
               Tempon = 60
-           end if
+           End If
         End If
 
 Return
@@ -542,7 +543,11 @@ Keyorder:
          Typ = Mytyp
 
          Keytouched = 30
+            Tempen = 0 : Tempon = 0
+         If Tempen = 1 Or Tempon > 0 Then
+            Reset Ledout : Reset Buzz
 
+         End If
 
          If Touch = 1 Then
             If Led1 = 1 Then Cmd = 181 Else Cmd = 182
@@ -615,18 +620,24 @@ T0rutin:
                 20ms = 0
                 Incr Secc
                 Toggle Pg
-                If Keytouched > 30 Then
+                If Keytouched > 0 Then
                    Decr Keytouched
+                   Toggle Ledout
                    If Keytouched = 0 Then
                       Reset Tempen
+                      Reset Ledout
                    End If
                 End If
                 If Tempon > 0 Then
                    Decr Tempon
+                   Toggle Ledout
+                   If Tempon < 10 Then Toggle Buzz
                    If Tempon = 0 Then
                       Cmd = 181 : Id = Touchid1
-                      set led1
+                      Set Led1
                       Gosub Tx
+                      Reset Buzz
+                      Reset Ledout
                    End If
                 End If
              End If

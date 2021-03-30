@@ -1,0 +1,46 @@
+$regfile = "m32def.dat"
+$crystal = 2000000
+$hwstack = 64
+$swstack = 100
+$framesize = 100
+$baud = 9600
+
+dim s(101) as byte
+dim s1 as string * 100 at s overlay
+dim s2 as string * 100
+
+DIM Cur_chr As String * 1
+dim Str_len As Byte , Index As Byte , I As Byte , value as byte
+ s1 = ""
+ s2 = ""
+ s1 = "ÎÔÊ Âáæ" + "ala"
+
+Str_len = Len(s1)
+For I = 1 To Str_len
+if s(i) > 127 then
+Index = Lookdown(s(i) , utf8 , 32)
+if index <> -1 then
+index = index - 1
+S2 = s2 + " 06" + Lookupstr(Index , unicode)
+end if
+elseif s(i) <= 127 then
+ S2 = s2 + " 00" + hex(s(i))
+end if
+next
+
+
+print s2
+
+do
+
+
+loop
+
+end
+
+utf8:
+'data "Ç" , "È" , "" , "Ê" , "Ë" , "Ì" , "" , "Í" , "Î" , "Ï" , "Ð" , "Ñ" , "Ò" , "Ž" , "Ó" , "Ô" , "Õ" , "Ö" , "Ø" , "Ù" , "Ú" , "Û" , "Ý" , "Þ" , "˜" , "" , "á" , "ã" , "ä" , "å" , "æ" , "í"
+data 199 , 200 , 129 , 202 , 203 , 204 , 141 , 205 , 206 , 207 , 208 , 209 , 210 , 142 , 211 , 212 , 213 , 214 , 216 , 217 , 218 , 219 , 221 , 222 , 223 , 144 , 225 , 227 , 228 , 229 , 230 , 236
+
+unicode:
+data "27" , "28" , "7E" , "2A" , "2B" , "2C" , "86" , "2D" , "2E" , "2F" , "30" , "32" , "32" , "98" , "33" , "34" , "35" , "36" , "37" , "38" , "39" , "3A" , "41" , "42" , "43" , "AF" , "44" , "45" , "46" , "47" , "48" , "49"
