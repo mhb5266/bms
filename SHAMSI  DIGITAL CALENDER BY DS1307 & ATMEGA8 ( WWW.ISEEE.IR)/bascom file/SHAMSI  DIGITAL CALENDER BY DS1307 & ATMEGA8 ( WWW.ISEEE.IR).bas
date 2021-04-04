@@ -241,8 +241,7 @@ Else
 
 End If
 
-Locate 2 , 1
-Lcd S1
+Lcdat 1 , 1 , S1
 
 
 
