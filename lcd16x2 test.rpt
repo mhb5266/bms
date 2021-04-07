@@ -1,6 +1,6 @@
-Report       : smsfarsi
-Date         : 03-30-2021
-Time         : 17:37:59
+Report       : lcd16x2 test
+Date         : 04-06-2021
+Time         : 15:31:05
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M32
@@ -8,20 +8,20 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : C38 hex  -> Will fit into ROM
-ROMIMAGE     :  3128 dec
-FLASH USED   :  9  %
+ROMIMAGE     : 1DC hex  -> Will fit into ROM
+ROMIMAGE     :  476 dec
+FLASH USED   :  1  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
 
 Stack start  : 85F hex
-Stack size   : 40 hex
-S-Stacksize  : 64 hex
-S-Stackstart : 820 hex
-Framesize    : 64 hex
-Framestart   : 758 hex
-Space left   :  1690  dec
+Stack size   : 28 hex
+S-Stacksize  : 10 hex
+S-Stackstart : 838 hex
+Framesize    : 20 hex
+Framestart   : 808 hex
+Space left   :  1959  dec
 
 LCD DB7      : PORTB.3
 LCD DB6      : PORTB.2
@@ -91,11 +91,6 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-MAXIN                            String * 5        0060          96 
-S                                Byte(71)          0066          102 
-SMS                              String * 70       0066          102 
-PHONE_NUMBER                     String * 11       00AD          173 
-TEMP                             Single            00B9          185 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -449,7 +444,7 @@ OCR2UB                           1
 TCR2UB                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
-_GSTRBUF                         1880
+_GSTRBUF                         2056
 _DECIMALPOINT                    46
 _RTSCTS                          0
 _RTSCTS1                         0
@@ -482,9 +477,9 @@ _PBIN_EXTENDED                   0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
-_HWSTACK_LOW                     &H081F
-_SWSTACK_LOW                     &H07BC
-_FRAME_HIGH                      &H07BD
+_HWSTACK_LOW                     &H0837
+_SWSTACK_LOW                     &H0828
+_FRAME_HIGH                      &H0829
 _XMEGA                           0
 _LCDDB4                          &H18
 _LCDDB4_PIN                      0
@@ -569,4 +564,3 @@ COMPARE1                         not used
 PWM1B                            not used
 PWM0                             not used
 
-Length of string might not be enough to hold the result. A length of 16 is desir  in line  0 

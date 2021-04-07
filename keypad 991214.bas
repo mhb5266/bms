@@ -8,17 +8,17 @@ $crystal = 11059200
 $baud = 9600
 '-------------------------------------------------------------------------------
 Configs:
-         _in Alias Pinb.0 : Config Portb.0 = Input
-        Buzz Alias Portc.5 : Config Portc.5 = Output
-        Led1 Alias Portd.3 : Config Portd.3 = Output
-        Led2 Alias Portd.4 : Config Portd.4 = Output
-        Led3 Alias Portd.6 : Config Portd.6 = Output
-        Led4 Alias Portd.7 : Config Portd.7 = Output
-        Ledout Alias Portc.4 : Config Portc.4 = Output
-        Touch1 Alias Pinb.1 : Config Portb.1 = Input
-        Touch2 Alias Pinb.2 : Config Portb.2 = Input
-        Touch3 Alias Pinc.0 : Config Portc.0 = Input
-        Touch4 Alias Pinc.1 : Config Portc.1 = Input
+         _in Alias Pinc.4 : Config Portc.4 = Input
+        Buzz Alias Portb.1 : Config Portb.1 = Output
+        Led1 Alias Portb.2 : Config Portb.2 = Output
+        Led2 Alias Portb.3 : Config Portb.3 = Output
+        Led3 Alias Portb.4 : Config Portb.4 = Output
+        Led4 Alias Portb.5 : Config Portb.5 = Output
+        Ledout Alias Portc.3 : Config Portc.3 = Output
+        Touch1 Alias Pind.5 : Config Portd.5 = Input
+        Touch2 Alias Pind.6 : Config Portd.6 = Input
+        Touch3 Alias Pind.7 : Config Portd.7 = Input
+        Touch4 Alias Pinb.0 : Config Portb.0 = Input
 
         Sensor Alias Pinc.2 : Config Portc.2 = Input
 
@@ -134,6 +134,8 @@ Startup:
         Set Beepen
 
 Start Timer0
+
+
 Main:
 
      Do

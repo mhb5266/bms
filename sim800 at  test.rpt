@@ -1,6 +1,6 @@
-Report       : smsfarsi
-Date         : 03-30-2021
-Time         : 17:37:59
+Report       : sim800 at  test
+Date         : 04-06-2021
+Time         : 17:02:11
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M32
@@ -8,20 +8,20 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : C38 hex  -> Will fit into ROM
-ROMIMAGE     :  3128 dec
-FLASH USED   :  9  %
+ROMIMAGE     : A42 hex  -> Will fit into ROM
+ROMIMAGE     :  2626 dec
+FLASH USED   :  8  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
 
 Stack start  : 85F hex
 Stack size   : 40 hex
-S-Stacksize  : 64 hex
+S-Stacksize  : 40 hex
 S-Stackstart : 820 hex
-Framesize    : 64 hex
-Framestart   : 758 hex
-Space left   :  1690  dec
+Framesize    : 40 hex
+Framestart   : 7A0 hex
+Space left   :  947  dec
 
 LCD DB7      : PORTB.3
 LCD DB6      : PORTB.2
@@ -91,11 +91,39 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-MAXIN                            String * 5        0060          96 
-S                                Byte(71)          0066          102 
-SMS                              String * 70       0066          102 
-PHONE_NUMBER                     String * 11       00AD          173 
-TEMP                             Single            00B9          185 
+LISTEN                           EEPROM Byte       0000          0 
+ALARM                            EEPROM Byte       0001          1 
+STATUS1                          EEPROM Byte       0002          2 
+STATUS2                          EEPROM Byte       0003          3 
+STATUS3                          EEPROM Byte       0004          4 
+NUMBER                           EEPROM String     0005          5 
+SMS                              EEPROM Byte       0013          19 
+PASS                             EEPROM String     0014          20 
+PASS2                            EEPROM String     0019          25 
+MAXIN                            Byte              0060          96 
+NUM                              String * 80       0061          97 
+NUM2                             String * 80       00B2          178 
+MSG                              String * 160      0103          259 
+INMSG                            String * 160      01A4          420 
+GSTMP                            Byte              0245          581 
+AR                               String(10) * 20   0246          582 
+COUNT                            Byte              0318          792 
+GPS                              Byte              0319          793 
+PASS_STORED                      String * 13       031A          794 
+SHARJ                            String * 160      0328          808 
+S                                Byte              03C9          969 
+X                                Byte              03CA          970 
+RLY1                             String * 3        03CB          971 
+RLY2                             String * 3        03CF          975 
+RLY3                             String * 3        03D3          979 
+RLY4                             String * 3        03D7          983 
+ALRM                             String * 3        03DB          987 
+P1                               String * 4        03DF          991 
+P2                               String * 3        03E4          996 
+BODY                             Bit [7]           03E8          1000 
+I                                Byte              03E9          1001 
+BUF                              Byte              03EA          1002 
+D                                Byte              03EB          1003 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -449,7 +477,7 @@ OCR2UB                           1
 TCR2UB                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
-_GSTRBUF                         1880
+_GSTRBUF                         1952
 _DECIMALPOINT                    46
 _RTSCTS                          0
 _RTSCTS1                         0
@@ -483,8 +511,8 @@ _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
 _HWSTACK_LOW                     &H081F
-_SWSTACK_LOW                     &H07BC
-_FRAME_HIGH                      &H07BD
+_SWSTACK_LOW                     &H07E0
+_FRAME_HIGH                      &H07E1
 _XMEGA                           0
 _LCDDB4                          &H18
 _LCDDB4_PIN                      0
@@ -568,5 +596,23 @@ ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
 PWM0                             not used
+LISTEN                           not used
+ALARM                            not used
+STATUS1                          not used
+STATUS2                          not used
+STATUS3                          not used
+NUMBER                           not used
+SMS                              not used
+GSTMP                            not used
+COUNT                            not used
+PASS_STORED                      not used
+X                                not used
+RLY1                             not used
+RLY2                             not used
+RLY3                             not used
+RLY4                             not used
+ALRM                             not used
+P2                               not used
+I                                not used
 
-Length of string might not be enough to hold the result. A length of 16 is desir  in line  0 
+Source string could be too big to fit into target string [INMSG>NUM]  in line  0 

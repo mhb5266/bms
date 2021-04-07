@@ -1,6 +1,6 @@
 Report       : sim 800 test
-Date         : 03-30-2021
-Time         : 17:06:44
+Date         : 04-04-2021
+Time         : 17:01:36
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M32
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : B24 hex  -> Will fit into ROM
-ROMIMAGE     :  2852 dec
-FLASH USED   :  8  %
+ROMIMAGE     : C18 hex  -> Will fit into ROM
+ROMIMAGE     :  3096 dec
+FLASH USED   :  9  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 40 hex
 S-Stackstart : 820 hex
 Framesize    : 40 hex
 Framestart   : 7A0 hex
-Space left   :  940  dec
+Space left   :  948  dec
 
 LCD DB7      : PORTB.3
 LCD DB6      : PORTB.2
@@ -100,27 +100,29 @@ NUMBER                           EEPROM String     0005          5
 SMS                              EEPROM Byte       0013          19 
 PASS                             EEPROM String     0014          20 
 PASS2                            EEPROM String     0019          25 
-MAXIN                            String * 10       0060          96 
-NUM                              String * 80       006B          107 
-NUM2                             String * 80       00BC          188 
-MSG                              String * 160      010D          269 
-INMSG                            String * 160      01AE          430 
-GSTMP                            Byte              024F          591 
-AR                               String(10) * 20   0250          592 
-COUNT                            Byte              0322          802 
-GPS                              Byte              0323          803 
-PASS_STORED                      String * 13       0324          804 
-SHARJ                            String * 160      0332          818 
-S                                Byte              03D3          979 
-X                                Byte              03D4          980 
-RLY1                             String * 3        03D5          981 
-RLY2                             String * 3        03D9          985 
-RLY3                             String * 3        03DD          989 
-RLY4                             String * 3        03E1          993 
-ALRM                             String * 3        03E5          997 
-P1                               String * 4        03E9          1001 
-P2                               String * 3        03EE          1006 
-BODY                             Bit [7]           03F2          1010 
+MAXIN                            Byte              0060          96 
+NUM                              String * 80       0061          97 
+NUM2                             String * 80       00B2          178 
+MSG                              String * 160      0103          259 
+INMSG                            String * 160      01A4          420 
+GSTMP                            Byte              0245          581 
+AR                               String(10) * 20   0246          582 
+COUNT                            Byte              0318          792 
+GPS                              Byte              0319          793 
+PASS_STORED                      String * 13       031A          794 
+SHARJ                            String * 160      0328          808 
+S                                Byte              03C9          969 
+X                                Byte              03CA          970 
+RLY1                             String * 3        03CB          971 
+RLY2                             String * 3        03CF          975 
+RLY3                             String * 3        03D3          979 
+RLY4                             String * 3        03D7          983 
+ALRM                             String * 3        03DB          987 
+P1                               String * 4        03DF          991 
+P2                               String * 3        03E4          996 
+BODY                             Bit [7]           03E8          1000 
+I                                Byte              03E9          1001 
+BUF                              Byte              03EA          1002 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -598,5 +600,6 @@ GSTMP                            not used
 COUNT                            not used
 X                                not used
 RLY4                             not used
+I                                not used
 
 Source string could be too big to fit into target string [INMSG>NUM]  in line  0 

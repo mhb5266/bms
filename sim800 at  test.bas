@@ -2,9 +2,13 @@
 $regfile = "m32def.dat"
 $crystal = 11059200
 $baud = 9600
+'Config Com1 = Dummy , Synchrone = 0 , Parity = None , Stopbits = 1 , Databits = 7 , Clockpol = 0
+'open "com1:"for binary as #1
 
 Config Lcdpin = Pin , Db4 = Portb.0 , Db5 = Portb.1 , Db6 = Portb.2 , Db7 = Portb.3 , E = Portb.4 , Rs = Portb.5
 Config Lcd = 16 * 2
+Cursor Off
+
 
 $hwstack = 64
 $swstack = 64
@@ -83,6 +87,7 @@ Dim Body As Bit
 Dim I As Byte
 Dim Buf As Byte
 
+Dim D As Byte
 
 Relay1 = 0
 Relay2 = 0
@@ -93,57 +98,8 @@ Sens2 = 1
 S = 2
 Body = 0
 
-If Sms = 1 Then
-Sms = 1
-Else
-Sms = 0
-End If
-If Alarm = 1 Then
-Alrm = "on"
-Else
-Alrm = "Off"
-End If
-Cursor Off
-P2 = Pass2
 
-If P2 = "OK" Then
-Cls : Lcd "HAVE OLD PASS"
-Wait 2
-Else
-Pass = "1111"
-Cls : Lcd "Default Pass Is:" : Locate 2 , 7 : Lcd "1111"
-Wait 2
-End If
-
-P1 = Pass
-
-Pass_stored = Number
-Gps = Status1
-If Gps = 1 Then
-  Relay1 = 1
-  Rly1 = "on"
-Else
-  Relay1 = 0
-  Rly1 = "off"
-End If
-Gps = Status2
-If Gps = 1 Then
-  Relay2 = 1
-  Rly2 = "on"
-Else
-  Relay2 = 0
-  Rly2 = "Off"
-End If
-Gps = Status3
-If Gps = 1 Then
-  Relay3 = 1
-  Rly3 = "on"
-Else
-  Relay3 = 0
-  Rly3 = "off"
-End If
-
-
+'(
   Cls
   Locate 1 , 3                                              'Clear display
   Lcd "Initializing"
@@ -153,27 +109,6 @@ End If
   Wait 2
   Reset Pwr
 
-Wait 10
-
-'Wait 5                                                      ' give some time for gsm modem
-
-
-
-
-Print "AT"
-Wait 2
-Print "AT+CMGD=0,4"
-Wait 2
-Print "AT+CREG?"
-Wait 2
-Print "ATE0"
-Wait 2
-Print "AT+CNMI =1,1,0,0,0"                                  'new message indication off
-Wait 2                                                      ' THIRD Command Text Mode
-Print "AT+CMGF=1"
-Wait 1
-Print "AT"
-Wait 1
 
   Cls
 
@@ -181,28 +116,46 @@ Wait 1
     Lcd "."
     Incr Gps
     If Gps > 15 Then Exit Do
-    Waitms 300
+    Waitms 500
   Loop
   Cls
-
-
-'(
-       Msg = "hi mhb"
-       Send_sms
-       Wait 1
-       Lcd "sms was send"
-       Wait 2
-       Cls
-
-
 ')
 
 
 
-Do
+ Wait 5
+Print "AT+IPR=9600"
+Wait 2
+'Print "ate0"
+Dail
+Wait 2
+  Cls
+  Do
+
+    'Printbin 65 ; 84
+     Print "AT"
+     Print "AT"
+     Incr D
+    Inmsg = ""
+    Wait 1
+    Lcd "get command"
+    Waitms 500
+    Lowerline
+    Do
+       Gps = Inkey()
+       Inmsg = Inmsg + Chr(gps)
 
 
-         Print "AT"
+       Lcd Gps
+         Loop Until Ischarwaiting() = 0
+    Lcd "  " ; Inmsg
+    Wait 2
+    Cls
+    Waitms 500
+  Loop
+  Do
+         Print "At"
+
          Wait 1
          Inmsg = ""
          Do
@@ -220,20 +173,8 @@ Do
          Wait 2
          Cls
          End If
-  Wait 1
+  Loop
 
-Loop
-
-Do
-
-
-  Getline
-  Lcd Inmsg
-  Wait 2
-  Cls
-  Wait 1
-
-Loop
 
 Main:
 Maxin = "  "
@@ -272,7 +213,7 @@ Sub Send_sms
      Wait 1
      Print "AT+CMGS=" ; Chr(34) ; 09376921503 ; Chr(34)     'send sms
      Waitms 200
-     Print Msg ; Chr(26)
+     Print "hi" ; Chr(26)
      Wait 5
      Print "AT"
      Wait 1
@@ -299,7 +240,7 @@ Sub Getline
 End Sub
 '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 Sub Dail
-Print "Atd" ; Num ; ";"
+Print "Atd" ; 09376921503 ; ";"
 Wait 10
 Print "Ath"
 End Sub
