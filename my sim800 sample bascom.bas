@@ -15,9 +15,10 @@ $baud = 9600
 
 'HW stack 20, SW stack 8 , frame 10
 
-Config Lcdpin = Pin , Db4 = Portb.0 , Db5 = Portb.1 , Db6 = Portb.2 , Db7 = Portb.3 , E = Portb.4 , Rs = Portb.5
-Config Lcd = 16 * 2
+Config Lcdpin = 16 * 4 , Db4 = Portb.0 , Db5 = Portb.1 , Db6 = Portb.2 , Db7 = Portb.3 , E = Portb.4 , Rs = Portb.5
+Config Lcd = 16 * 4
 Cursor Off
+
 
 'some subroutines
 Declare Sub Getline(s As String)
@@ -27,18 +28,28 @@ Declare Sub Send_sms
 Declare Sub Dial
 Declare Sub Resetsim
 Declare Sub Checksim
+Declare Sub Money
+Declare Sub Temp
+Declare Sub Antenna
+Declare Sub Charge
 'used variables
 Dim I As Byte , B As Byte
-Dim Sret As String * 66 , Stemp As String * 6
+Dim Sret As String * 160 , Stemp As String * 6
 Dim U As Byte
 Dim Lim As Byte
 Dim Msg As String * 160
-Dim Num As String * 16:num="09376921503"
+Dim Num As String * 16 : Num = "09376921503"
+Dim Sharj As String * 160
+Dim Sheader(10) As String * 50
+Dim Sbody(5) As String * 30
+Dim Count As Byte
+Dim Scount As Byte
+Dim Length As Byte
 
 Simrst Alias Portd.7 : Config Simrst = Output
 
 'we use a serial input buffer
-Config Serialin = Buffered , Size = 12                      ' buffer is small a bigger chip would allow a bigger buffer
+Config Serialin = Buffered , Size = 150                     ' buffer is small a bigger chip would allow a bigger buffer
 
 'enable the interrupts because the serial input buffer works interrupts driven
 Enable Interrupts
@@ -49,27 +60,47 @@ Const Senddemo = 1                                          ' 1= send an sms
 Const Pincode = "AT+CPIN=1234"                              ' pincode change it into yours!
 Const Phonenumber = "AT+CMGS=09376921503"                   ' phonenumber to send sms to
 
+Led1 Alias Porta.0 : Config Porta.0 = Output
+
+
+Configtemp:
+
+Config 1wire = Portc.3
+
+
+Dim Ds18b20_id_1(9) As Byte
+Dim Ds18b20_id_2(8) As Byte
+Dim Action As Byte
+Ds18b20_id_1(1) = 1wsearchfirst()
+
+Dim Temperature As String * 6
+Dim Sens1 As String * 6
+Dim Sens2 As String * 6
+
+
+Dim Refreshtemp As Byte
+
+Dim Readsens As Integer
+Dim Tmp1 As Integer
 
 Startup:
 
 Resetsim
-Wait 5
+Cls
+Lcd "    LOADING    "
+Lowerline
+For I = 1 To 15
 
-#if Uselcd = 1
-    Cls
-    Lcd "SMS Demo"
-#endif
-
-'wait until the mode is ready after power up
-Waitms 3000
-
-#if Uselcd = 1
-    Lcd "Init modem"
-#endif
+    Lcd "."
+    Wait 1
+Next
+Cls
 
 
 Print "AT"                                                  ' send AT command twice to activate the modem
 Print "AT"
+Flushbuf
+'Print "AT&F"
 Flushbuf                                                    ' flush the buffer
 Print "ATE0"
 #if Uselcd = 1
@@ -77,8 +108,8 @@ Print "ATE0"
 #endif
 
 
-
 Do
+  Flushbuf
    Print "AT" :                                             ' Waitms 100
    Getline Sret                                             ' get data from modem
    #if Uselcd = 1
@@ -98,60 +129,167 @@ If Sret = "+CPIN: SIM PIN" Then
    Print Pincode                                            ' send pincode
 End If
 Flushbuf
-#if Uselcd = 1
-    Home Upper : Lcd "set text mode"
-#endif
+
 Print "AT+CMGF=1"                                           ' set SMS text mode
 Getline Sret                                                ' get OK status
-#if Uselcd = 1
-    Home Lower : Lcd Sret
-#endif
+
+If Sret = "OK" Then
+ Lcd "TEXTMODE OK"
+Else
+ Lcd "ERROR"
+End If
+Wait 1
+Cls
+
+Flushbuf
 
 'sms settings
 Print "AT+CSMP=17,167,0,0"
 Getline Sret
-Print "AT+CNMI=0,1,2,0,0"
+
+'Print "AT+CNMI=0,1,2,0,0"
+Print "AT+CNMI=2,2,0,0,0"
 Getline Sret
 
-#if Senddemo = 1
-    #if Uselcd = 1
-        Home Upper : Lcd "send sms"
-    #endif
-    Print Phonenumber
-    Waitms 100
-    Print "BASCOM AVR SMS" ; Chr(26)
-    Getline Sret
-    #if Uselcd = 1
-        Home Lower : Lcd Sret                               'feedback
-    #endif
-#endif
+  Flushbuf
+   Print "AT+CSMP?"
+   Getline Sret
+   #if Uselcd = 1
+       Cls : Lcd "CHR SETTING"
+       Wait 1
+       Cls
+       Lcd Sret
+       Wait 1
+   #endif
+   Waitms 500
+Wait 1
+
+  Flushbuf
+   Print "AT+CNMI?"
+   Getline Sret
+   #if Uselcd = 1
+       Cls : Lcd "INDICATE CNG"
+       Wait 1
+       Cls
+       Lcd Sret
+       Wait 1
+   #endif
+   Waitms 500
+Wait 1
+
+Do
+  Flushbuf
+   Print "AT+CMGF=1"
+   Getline Sret
+   #if Uselcd = 1
+       Cls : Lcd "TEXT MODE" : Lowerline : Lcd Sret
+   #endif
+   Waitms 500
+Loop Until Sret = "OK"
+Wait 2
+
+  Flushbuf
+Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
+   Getline Sret
+   #if Uselcd = 1
+       Cls : Lcd "FONT SETTING"
+       Wait 1
+       Cls
+       Lcd Sret
+       Wait 1
+   #endif
+   Waitms 500
+Wait 2
+
+
+Do
+  Flushbuf
+   Print "AT+CMGDA=DEL ALL"
+   Getline Sret
+   #if Uselcd = 1
+       Cls : Lcd "DEL ALL" : Lowerline : Lcd Sret
+   #endif
+   Waitms 500
+Loop Until Sret = "OK"
+Wait 2
+
 
 
 Main:
-Cls
+
+Msg = "SIM800 IS ONLINE NOW"
+'Send_sms
+
+
+
 Do
 
+  Temp
+  Cls : Lcd Sens1 : Wait 4 : Cls
+ ' Print "AT+CNMI?"
+  'Getline Sret
+  'Cls : Lcd Sret : Wait 2 : Cls
+  'If Sret = "OK" Then
+     'Cls : Lcd "NEW SMS" : Wait 2 : Cls
+     Flushbuf
+     Print "AT+CMGR=1"
+     Getline Sret
+     If Sret = "OK" Then
+        Sret = ""
+          Getline Sret
+          Count = Split(sret , Sheader(1) , Chr(34))
+          Getline Sret
+          Scount = Split(sret , Sbody(1) , " ")
+
+          Cls : Lcd Sbody(1)
+          If Sbody(1) = "?" Then
+             If Led1 = 0 Then Msg = "OFF" Else Msg = "ON"
+             Num = Sheader(2)
+             Send_sms
+          End If
+          If Sbody(1) = "OFF" Or Sbody(1) = "Off" Or Sbody(1) = "off" Then
+             Reset Led1
+             Num = Sheader(2)
+             Msg = "LED IS OFF"
+             Send_sms
+          End If
+          If Sbody(1) = "ON" Or Sbody(1) = "On" Or Sbody(1) = "on" Then
+             Set Led1
+             Num = Sheader(2)
+             Msg = "LED IS ON"
+             Send_sms
+          End If
+
+          If Sbody(1) = "TEMP" Or Sbody(1) = "Temp" Or Sbody(1) = "temp" Then
+             Reset Led1
+             Num = Sheader(2)
+             Msg = Sens1
+             Send_sms
+          End If
+
+     End If
 Loop
 
 
 
-Do
-   Getline Sret                                             ' wait for a modem response
-   #if Uselcd = 1
-       Cls
-       Lcd "Msg from modem"
-       Home Lower : Lcd Sret
-   #endif
-   I = Instr(sret , ":")                                    ' look for :
-   If I > 0 Then                                              'found it
-      Stemp = Left(sret , I)
-      Select Case Stemp
-             Case "+CMTI:" : Showsms Sret                   ' we received an SMS
-             ' handle other cases here
-     End Select
-   End If
-    'Send_sms
-Loop                                                        ' for ever
+Sub Temp
+   1wreset
+   1wwrite &HCC
+   1wwrite &H44
+   Waitms 30
+   1wreset
+   1wwrite &H55
+   1wverify Ds18b20_id_1(1)
+   1wwrite &HBE
+   Readsens = 1wread(2)
+
+
+   Tmp1 = Readsens
+
+   Readsens = Readsens * 10 : Readsens = Readsens \ 16
+   Temperature = Str(readsens) : Temperature = Format(temperature , "0.0")
+      Sens1 = Temperature
+End Sub
 
 
 'subroutine that is called when a sms is received
@@ -175,7 +313,12 @@ Sub Showsms(s As String )
          Lcd S
      #endif
      Do
-       Getline S                                            ' get data from buffer
+       Getline S
+       Lcd S
+       Wait 2
+       Cls
+       Wait 1
+       '(                                           ' get data from buffer
        Select Case S
               Case "MHB" :                                  'when you send PORT as sms text, this will be executed
                    #if Uselcd = 1
@@ -184,6 +327,7 @@ Sub Showsms(s As String )
               Case "OK" : Exit Do                           ' end of message
               Case Else
        End Select
+')
      Loop
      #if Uselcd = 1
          Home Lower : Lcd "remove sms"
@@ -254,6 +398,8 @@ Sub Checksim
             Wait 2
             Cls
          End If
+      Else
+         Lim = 0
       End If
 End Sub
 
@@ -261,4 +407,51 @@ Sub Resetsim
     Reset Simrst
     Wait 1
     Set Simrst
+End Sub
+
+Sub Money
+Print "ATD*140#"
+Getline Sret
+Getline Sret
+Sharj = Left(sret , 33)
+Sharj = Right(sharj , 6)
+Sharj = Ltrim(sharj)
+End Sub
+
+
+Sub Antenna
+Do
+  Print "AT+CSQ"
+  Getline Sret
+
+  'Cls : Lcd Sret : Wait 3 : Cls : Wait 1
+Loop
+
+End Sub
+
+
+Sub Charge
+
+
+Print "At+Cusd=1"
+Getline Sret
+'Print "ATD*720*7*1*3#"
+'Print "At+Cusd=1," ; Chr(34) ; "*555*4*3*2#" ; Chr(34)
+'Getline Sret
+
+Cls : Lcd Sret : Wait 3 : Cls : Waitms 500
+
+
+Flushbuf
+'Print "At+Cusd=1," ; Chr(34) ; "*720*1#" ; Chr(34)
+Print "At+Cusd=1," ; Chr(34) ; "*555*1*2#" ; Chr(34)
+'Print "ATD*140#"
+'Print "ATD*720*1#"
+'Getline Sret
+'Cls : Lcd Sret : Wait 10 : Cls : Waitms 500
+'Getline Sret
+'Cls : Lcd Sret : Wait 10 : Cls : Waitms 500
+
+
+
 End Sub

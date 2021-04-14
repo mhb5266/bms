@@ -1,6 +1,6 @@
 Report       : my sim800 sample bascom
-Date         : 04-07-2021
-Time         : 17:25:16
+Date         : 04-14-2021
+Time         : 17:49:52
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M32
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 9B2 hex  -> Will fit into ROM
-ROMIMAGE     :  2482 dec
-FLASH USED   :  7  %
+ROMIMAGE     : 149C hex  -> Will fit into ROM
+ROMIMAGE     :  5276 dec
+FLASH USED   :  16  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 838 hex
 Framesize    : 20 hex
 Framestart   : 808 hex
-Space left   :  1688  dec
+Space left   :  571  dec
 
 LCD DB7      : PORTB.3
 LCD DB6      : PORTB.2
@@ -93,12 +93,27 @@ PWM0                             Byte              005C          92
 ERR                              Bit [2]           0006          6 
 I                                Byte              0060          96 
 B                                Byte              0061          97 
-SRET                             String * 66       0062          98 
-STEMP                            String * 6        00A5          165 
-U                                Byte              00AC          172 
-LIM                              Byte              00AD          173 
-MSG                              String * 160      00AE          174 
-NUM                              String * 16       014F          335 
+SRET                             String * 160      0062          98 
+STEMP                            String * 6        0103          259 
+U                                Byte              010A          266 
+LIM                              Byte              010B          267 
+MSG                              String * 160      010C          268 
+NUM                              String * 16       01AD          429 
+SHARJ                            String * 160      01BE          446 
+SHEADER                          String(10) * 50   025F          607 
+SBODY                            String(5) * 30    045D          1117 
+COUNT                            Byte              04F8          1272 
+SCOUNT                           Byte              04F9          1273 
+LENGTH                           Byte              04FA          1274 
+DS18B20_ID_1                     Byte(9)           0594          1428 
+DS18B20_ID_2                     Byte(8)           059D          1437 
+ACTION                           Byte              05A5          1445 
+TEMPERATURE                      String * 6        05B2          1458 
+SENS1                            String * 6        05B9          1465 
+SENS2                            String * 6        05C0          1472 
+REFRESHTEMP                      Byte              05C7          1479 
+READSENS                         Integer           05C8          1480 
+TMP1                             Integer           05CA          1482 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -507,8 +522,8 @@ _LCDDBEDIR                       &H17
 _LCDDBRS                         &H18
 _LCDDBRS_PIN                     5
 _LCDDBRSDIR                      &H17
-_RS232_BUFSIZE0                  12
-_RS232_BUFSIZE_IN0P1             13
+_RS232_BUFSIZE0                  150
+_RS232_BUFSIZE_IN0P1             151
 _CHECKCHAR0                      0
 USELCD                           1
 SENDDEMO                         1
@@ -579,4 +594,14 @@ COMPARE1                         not used
 PWM1B                            not used
 PWM0                             not used
 U                                not used
+LENGTH                           not used
+DS18B20_ID_2                     not used
+ACTION                           not used
+SENS2                            not used
+REFRESHTEMP                      not used
 
+Source string could be too big to fit into target string [SHEADER(2)>NUM]  in line  0 
+Source string could be too big to fit into target string [SHEADER(2)>NUM]  in line  0 
+Source string could be too big to fit into target string [SHEADER(2)>NUM]  in line  0 
+Source string could be too big to fit into target string [SHEADER(2)>NUM]  in line  0 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  0 

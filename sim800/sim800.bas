@@ -216,7 +216,7 @@ M:
          Incr S
          Print "AT"
          Wait 2
-         Print "AT+CMGR=1"                                  ' get the message
+         Print "AT+CMGR=0"                                  ' get the message
          Getline
          If Inmsg <> "OK" Then
            Num = Inmsg

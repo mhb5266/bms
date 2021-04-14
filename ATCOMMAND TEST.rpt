@@ -1,6 +1,6 @@
-Report       : sim800
-Date         : 04-10-2021
-Time         : 12:30:22
+Report       : ATCOMMAND TEST
+Date         : 04-11-2021
+Time         : 14:08:07
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M32
@@ -8,20 +8,20 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 19A8 hex  -> Will fit into ROM
-ROMIMAGE     :  6568 dec
-FLASH USED   :  20  %
+ROMIMAGE     : 4AA hex  -> Will fit into ROM
+ROMIMAGE     :  1194 dec
+FLASH USED   :  3  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
 
 Stack start  : 85F hex
-Stack size   : 40 hex
-S-Stacksize  : 40 hex
-S-Stackstart : 820 hex
-Framesize    : 40 hex
-Framestart   : 7A0 hex
-Space left   :  951  dec
+Stack size   : 28 hex
+S-Stacksize  : 10 hex
+S-Stackstart : 838 hex
+Framesize    : 20 hex
+Framestart   : 808 hex
+Space left   :  1857  dec
 
 LCD DB7      : PORTB.3
 LCD DB6      : PORTB.2
@@ -91,35 +91,8 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-LISTEN                           EEPROM Byte       0000          0 
-ALARM                            EEPROM Byte       0001          1 
-STATUS1                          EEPROM Byte       0002          2 
-STATUS2                          EEPROM Byte       0003          3 
-STATUS3                          EEPROM Byte       0004          4 
-NUMBER                           EEPROM String     0005          5 
-SMS                              EEPROM Byte       0013          19 
-PASS                             EEPROM String     0014          20 
-PASS2                            EEPROM String     0019          25 
-NUM                              String * 80       0060          96 
-NUM2                             String * 80       00B1          177 
-MSG                              String * 160      0102          258 
-INMSG                            String * 160      01A3          419 
-GSTMP                            Byte              0244          580 
-AR                               String(10) * 20   0245          581 
-COUNT                            Byte              0317          791 
-GPS                              Byte              0318          792 
-PASS_STORED                      String * 13       0319          793 
-SHARJ                            String * 160      0327          807 
-S                                Byte              03C8          968 
-X                                Byte              03C9          969 
-RLY1                             String * 3        03CA          970 
-RLY2                             String * 3        03CE          974 
-RLY3                             String * 3        03D2          978 
-RLY4                             String * 3        03D6          982 
-ALRM                             String * 3        03DA          986 
-P1                               String * 4        03DE          990 
-P2                               String * 3        03E3          995 
-BODY                             Bit [7]           03E7          999 
+SRET                             String * 100      0060          96 
+B                                Byte              00C5          197 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -473,7 +446,7 @@ OCR2UB                           1
 TCR2UB                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
-_GSTRBUF                         1952
+_GSTRBUF                         2056
 _DECIMALPOINT                    46
 _RTSCTS                          0
 _RTSCTS1                         0
@@ -506,9 +479,9 @@ _PBIN_EXTENDED                   0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
-_HWSTACK_LOW                     &H081F
-_SWSTACK_LOW                     &H07E0
-_FRAME_HIGH                      &H07E1
+_HWSTACK_LOW                     &H0837
+_SWSTACK_LOW                     &H0828
+_FRAME_HIGH                      &H0829
 _XMEGA                           0
 _LCDDB4                          &H18
 _LCDDB4_PIN                      0
@@ -592,11 +565,4 @@ ADCD                             not used
 COMPARE1                         not used
 PWM1B                            not used
 PWM0                             not used
-GSTMP                            not used
-COUNT                            not used
-X                                not used
-RLY4                             not used
 
-Source string could be too big to fit into target string [INMSG>NUM]  in line  0 
-Source string could be too big to fit into target string [NUM>PASS_STORED]  in line  0 
-Source string could be too big to fit into target string [INMSG>NUM]  in line  0 
