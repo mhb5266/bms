@@ -6,21 +6,24 @@ $regfile = "M8def.dat"
 $crystal = 11059200
 
 $baud = 9600
+
+Dim Keyid As Byte
+Keyid = 1
 '-------------------------------------------------------------------------------
 Configs:
-         _in Alias Pinc.4 : Config Portc.4 = Input
-        Buzz Alias Portb.1 : Config Portb.1 = Output
-        Led1 Alias Portb.2 : Config Portb.2 = Output
-        Led2 Alias Portb.3 : Config Portb.3 = Output
-        Led3 Alias Portb.4 : Config Portb.4 = Output
-        Led4 Alias Portb.5 : Config Portb.5 = Output
-        Ledout Alias Portc.3 : Config Portc.3 = Output
-        Touch1 Alias Pind.5 : Config Portd.5 = Input
-        Touch2 Alias Pind.6 : Config Portd.6 = Input
-        Touch3 Alias Pind.7 : Config Portd.7 = Input
-        Touch4 Alias Pinb.0 : Config Portb.0 = Input
+         _in Alias Pinc.5 : Config Portc.5 = Input
+        Buzz Alias Portc.3 : Config Portc.3 = Output
+        Led4 Alias Portd.5 : Config Portd.5 = Output
+        Led3 Alias Portd.6 : Config Portd.6 = Output
+        Led1 Alias Portd.7 : Config Portd.7 = Output
+        Led2 Alias Portb.0 : Config Portb.0 = Output
+        'BUZZ Alias Portc.3 : Config Portc.3 = Output
+        Touch2 Alias Pinb.1 : Config Portb.1 = Input
+        Touch4 Alias Pinb.2 : Config Portb.2 = Input
+        Touch3 Alias Pinb.3 : Config Portb.3 = Input
+        Touch1 Alias Pinb.4 : Config Portb.4 = Input
 
-        Sensor Alias Pinc.2 : Config Portc.2 = Input
+        Sensor Alias Pinc.4 : Config Portc.4 = Input
 
         Config Timer1 = Timer , Prescale = 8 : Stop Timer1 : Timer1 = 0
         Config Timer0 = Timer , Prescale = 1024
@@ -31,12 +34,16 @@ Configs:
 
         En Alias Portd.2 : Config Portd.2 = Output
 
-        Pg Alias Portc.3 : Config Portc.3 = Output
+        'Pg Alias Portc.3 : Config Portc.3 = Output
+
+
 
 
 Defines:
 
-
+        Declare Sub Beep
+        Declare Sub Beeppro
+        Declare Sub Beeperror
 
         Dim Z As Word
         Dim F As Byte
@@ -49,7 +56,7 @@ Defines:
         Const T2 = 30
         Const T3 = 60
 
-        Dim M As Byte
+        Dim Mmm As Byte
         Dim L4 As Boolean
         Dim 20ms As Byte
         Dim Secc As Byte
@@ -69,10 +76,13 @@ Defines:
         Dim Cmd As Byte
         Const Mytyp = 101
 
-        Dim Touchid1 As Eram Byte
-        Dim Touchid2 As Eram Byte
-        Dim Touchid3 As Eram Byte
-        Dim Touchid4 As Eram Byte
+        Dim Touchid1 As Byte
+        Dim Touchid2 As Byte
+        Dim Touchid3 As Byte
+
+        Touchid3 = Keyid * 3
+        Touchid1 = Touchid3 - 2
+        Touchid2 = Touchid3 - 1
 
         Dim Sensoren As Bit
         Dim Beepen As Bit
@@ -92,7 +102,8 @@ Defines:
         Dim Okread As Bit
         Dim Error As Bit
         Dim Keycheck As Bit
-        Dim T As Word                                       'check for pushing lean key time
+        Dim T As Word
+        Dim P As Byte                                       'check for pushing lean key time
         Error = 0
         Okread = 0
         T = 0
@@ -104,6 +115,9 @@ Defines:
 
 Startup:
 
+        Set Sensoren
+        Set Beepen
+
         Rnumber = Rnumber_e
         If Rnumber > 10 Then
         Rnumber = 0
@@ -112,55 +126,58 @@ Startup:
         End If
         '------------------- startup
         Waitms 500
-        Set Ledout
-        Gosub Beep
-        Gosub Beep
-        Reset Ledout
+        Set Buzz
+        Beep
+        Beep
+        Reset Buzz
         Waitms 500
         Enable Interrupts
 
 
-        For I = 1 To 8
-            Toggle Ledout
-            Waitms 200
-        Next
+        Reset Led1
+        Reset Led2
+        Reset Led3
+        Reset Led4
 
-        Set Led1
-        Set Led2
-        Set Led3
-        Set Led4
 
-        Set Sensoren
-        Set Beepen
 
 Start Timer0
+
+
 
 
 Main:
 
      Do
 
-       Gosub _read
+       Incr P
+       If P > 0 And P < 50 Then
+        Gosub Refresh
+       End If
+
+       If P > 50 And P < 100 Then
+          'Stop Timer0
+          Gosub _read
+          'Start Timer0
+       End If
+       If P > 100 Then P = 0
 
 
 
-
-
-
-       Gosub Refresh
        '(
        If Touch1 = 0 Then
 
-          Gosub Beep
+          BEEP
           Waitms 100
           Gosub Keys
 
           End If
 ')
+
      Loop
 
 Sectic:
-       Toggle Pg
+       'Toggle Pg
 Return
 
 Refresh:
@@ -168,96 +185,116 @@ Refresh:
         Touch = 0
         If Touch1 = 0 Then
            Touch = 1
-           If Tempen = 0 Then Toggle Led1
+           If Tempen = 0 Then
+              Toggle Led1
+           Else
+               Set Led1
+               Reset Tempen
+               Tempon = 0
+           End If
+
            X = 0
            Do
              Waitms 50
              Incr X
-             If X = 75 Then Gosub Beepprogram
+             If X = 75 Then Beeppro
              If X = 100 Then Exit Do
            Loop Until Touch1 = 1
            If X > 0 And X < 25 Then
+              Beep
               Gosub Keyorder
-              Gosub Beep
            End If
-           If X > 75 And X < 101 Then Gosub Remotelearn
+           If X >= 75 And X < 101 Then
+              Gosub Remotelearn
+           End If
         End If
         Touch = 0
+
+
         If Touch2 = 0 Then
            Touch = 2
            Toggle Led2
+           If Tempen = 1 Then
+               Set Led1
+               Reset Tempen
+               Tempon = 0
+           End If
            X = 0
            Do
              Waitms 50
              Incr X
-             If X = 75 Then Gosub Beepprogram
+             If X = 75 Then
+                Toggle Beepen
+                Beeppro
+             End If
              If X = 100 Then Exit Do
            Loop Until Touch2 = 1
            If X > 0 And X < 25 Then
+              Beep
               Gosub Keyorder
-              Gosub Beep
            End If
-           If X > 75 And X < 101 Then Toggle Beepen
         End If
-
+'
         Touch = 0
         If Touch3 = 0 Then
            Touch = 3
            Toggle Led3
+           If Tempen = 1 Then
+               Set Led1
+               Reset Tempen
+               Tempon = 0
+           End If
            X = 0
            Do
              Waitms 50
              Incr X
-             If X = 75 Then Gosub Beepprogram
+             If X = 75 Then Beeppro
              If X = 100 Then Exit Do
            Loop Until Touch3 = 1
            If X > 0 And X < 25 Then
 
               Gosub Keyorder
-              Gosub Beep
+              Beep
            End If
-           If X > 75 And X < 101 Then Toggle Sensoren
-           If Beepen = 1 Then
-              Gosub Beep
-           Else
-               For I = 1 To 4
-                   Toggle Ledout
-                   Waitms 500
-               Next
-           End If
+           If X => 75 And X < 101 Then Toggle Sensoren
         End If
 
         Touch = 0
         If Touch4 = 0 Then
+           Toggle Touch4
+           If Tempen = 1 Then
+               Reset Tempen
+               Tempon = 0
+           End If
            Touch = 4
            X = 0
            Do
              Waitms 50
              Incr X
-             If X = 75 Then Gosub Beepprogram
+             If X = 75 Then Beeppro
              If X = 100 Then Exit Do
            Loop Until Touch4 = 1
            If X > 0 And X < 25 Then
+              Beep
               Gosub Keyorder
-              Gosub Beep
            End If
-           If X > 75 And X < 101 Then Gosub Remoteclear
+           If X => 75 And X < 101 Then Gosub Remoteclear
         End If
 
 
-        If Sensoren = 1 And Keytouched = 0 And Sensor = 0 Then
-           If Tempen = 0 And Led1 = 1 And Led2 = 1 And Led3 = 1 Then
-              Cmd = 182 : Id = Touchid1
-              Reset Led1
-              Gosub Tx
-              Set Tempen
-              Tempon = 60
-           End If
-           If Tempen = 1 And Led2 = 1 And Led3 = 1then
-              Reset Led1
-              Tempon = 60
-           End If
-        End If
+
+
+If Sensoren = 1 And Keytouched = 0 And Sensor = 1 Then
+   If Tempen = 0 And Led1 = 0 And Led2 = 0 And Led3 = 0 Then
+      Typ = Mytyp : Cmd = 182 : Id = Touchid1 : Direct = Tooutput
+      Gosub Tx
+      Set Tempen
+      Tempon = 60
+   End If
+   If Tempen = 1 And Led2 = 0 And Led3 = 0 Then
+      Tempon = 60
+   End If
+End If
 
 Return
 '--------------------------------------------------------------------------read
@@ -323,90 +360,8 @@ If _in = 1 Then
 End If
 Return
 '================================================================ keys  learning
-Keys:
-'(
-     'Reset Led1
-     'Reset Led2
-     'Reset Led3
-     'Reset Led4
-     Set Ledout
-     Keycheck = 1
-     Waitms 150
-     Do
-       If Touch1 = 0 Then
-              Gosub Beep
-              While Touch1 = 0
-                            Incr T
-                            Waitms 1
-                            If T >= 5000 Then
-                               T = 0
-                               Gosub Beep
-                               Rnumber = 0
-                               Rnumber_e = Rnumber
-                               Waitms 10
-                               Set Buzz
-                               Wait 1
-                               Wait 1
-                               Reset Buzz
-                               Reset Ledout
-                               Return
-                               Exit While
-                            End If
-              Wend
-              If T < 5000 Then
-                            T = 0
-                            Reset Ledout
-                            Return
-              End If
-       End If
-       ''''''''''''''''''''''''''^^^
-       Gosub _read
-       If Okread = 1 Then
-               Gosub Beep
-               ''''''''''''''''''''''repeat check
-               If Rnumber = 0 Then                          ' agar avalin remote as ke learn mishavad
-                              Incr Rnumber
-                              Rnumber_e = Rnumber
-                              Waitms 10
-                              Ra = Address
-                              Eevar(rnumber) = Ra
-                              Waitms 10
-                              Exit Do
-                              Else                          'address avalin khane baraye zakhire address remote
-                              For I = 1 To Rnumber
-                                  Ra = Eevar(i)
-                                  If Ra = Address Then      'agar address remote tekrari bod yani ghablan learn shode
-                                     Set Buzz
-                                     Wait 1
-                                     Reset Buzz
-                                     Error = 1
-                                     Exit For
-                                  Else
-                                     Error = 0
-                                     End If
-                              Next
-                              If Error = 0 Then             ' agar tekrari nabod
-                                 Incr Rnumber               'be meghdare rnumber ke index tedade remote haye learn shode ast yek vahed ezafe kon
-                                 If Rnumber > 10 Then       'agar bishtar az 100 remote learn shavad
-                                    Rnumber = 10
-                                    Set Buzz
-                                    Wait 5
-                                    Reset Buzz
-                                 Else                       'agar kamtar az 100 remote bod
-                                    Rnumber_e = Rnumber     'meghdare rnumber ra dar eeprom zakhore mikonad
-                                    Ra = Address
-                                    Eevar(rnumber) = Ra
-                                    Waitms 10
-                                 End If
-                              End If
-               End If
-               Exit Do
-       End If
-     Loop
-     Okread = 0
-     Reset Ledout
-Return
-')
+
+
 '========================================================================= CHECK
 Check:
       Okread = 1
@@ -415,7 +370,6 @@ Check:
              Ra = Eevar(i)
              If Ra = Address Then                           'code
                 Gosub Command
-                Gosub Beep
                 Exit For
              End If
          Next
@@ -443,47 +397,56 @@ Command:
                     Touch = 4
 
         End Select
+        Beep
         Gosub Keyorder
 
         'Gosub Tx
         Waitms 200
 Return
 
-Beep:
+Sub Beep:
      If Beepen = 0 Then Return
      Set Buzz
      Waitms 80
      Reset Buzz
      Waitms 30
-Return
+End Sub
 
-Beeperror:
+ Sub Beeperror:
      If Beepen = 0 Then Return
      Set Buzz
      Waitms 300
      Reset Buzz
      Waitms 30
-     Return
+  End Sub
 
-Beepprogram:
+Sub Beeppro:
 
-Return
+     Set Buzz
+     Waitms 200
+     Reset Buzz
+     Waitms 100
+     Set Buzz
+     Waitms 200
+     Reset Buzz
+     Waitms 100
+End Sub
 
 
 
 Remotelearn:
      For I = 1 To 8
-         Toggle Led2
+         Toggle Led1
          Waitms 500
      Next
-     Set Led2
+     Set Led1
      Wait 1
-     Reset Led2
+     Reset Led1
 
      Do
        Gosub _read
        If Okread = 1 Then
-               Gosub Beep
+               Beep
                ''''''''''''''''''''''repeat check
                If Rnumber = 0 Then                          ' agar avalin remote as ke learn mishavad
                               Incr Rnumber
@@ -497,9 +460,7 @@ Remotelearn:
                               For I = 1 To Rnumber
                                   Ra = Eevar(i)
                                   If Ra = Address Then      'agar address remote tekrari bod yani ghablan learn shode
-                                     Set Buzz
-                                     Wait 1
-                                     Reset Buzz
+                                     Beeperror
                                      Error = 1
                                      Exit For
                                   Else
@@ -510,9 +471,7 @@ Remotelearn:
                                  Incr Rnumber               'be meghdare rnumber ke index tedade remote haye learn shode ast yek vahed ezafe kon
                                  If Rnumber > 10 Then       'agar bishtar az 100 remote learn shavad
                                     Rnumber = 10
-                                    Set Buzz
-                                    Wait 5
-                                    Reset Buzz
+                                    Beeppro
                                  Else                       'agar kamtar az 100 remote bod
                                     Rnumber_e = Rnumber     'meghdare rnumber ra dar eeprom zakhore mikonad
                                     Ra = Address
@@ -544,33 +503,36 @@ Keyorder:
          Direct = Tooutput
          Typ = Mytyp
 
-         Keytouched = 30
+         Keytouched = 10
             Tempen = 0 : Tempon = 0
-         If Tempen = 1 Or Tempon > 0 Then
-            Reset Ledout : Reset Buzz
 
-         End If
 
          If Touch = 1 Then
-            If Led1 = 1 Then Cmd = 181 Else Cmd = 182
+            If Led1 = 0 Then Cmd = 181 Else Cmd = 182
             Id = Touchid1
             Gosub Tx
          End If
 
          If Touch = 2 Then
-            If Led2 = 1 Then Cmd = 181 Else Cmd = 182
+            If Led2 = 0 Then Cmd = 181 Else Cmd = 182
             Id = Touchid2
             Gosub Tx
          End If
 
          If Touch = 3 Then
-            If Led3 = 1 Then Cmd = 181 Else Cmd = 182
+            Cmd = 180
             Id = Touchid3
             Gosub Tx
          End If
 
          If Touch = 4 Then
-            Toggle L4
+            Mmm = 0
+            If Led1 = 1 Then Incr Mmm
+            If Led2 = 1 Then Incr Mmm
+            If Led3 = 1 Then Incr Mmm
+
+            If Mmm > 1 Then Set L4 Else Reset L4
+            'Toggle L4
             If L4 = 1 Then Cmd = 181 Else Cmd = 182
             For I = 1 To 4
                 If I = 1 Then
@@ -621,25 +583,24 @@ T0rutin:
              If 20ms = 42 Then
                 20ms = 0
                 Incr Secc
-                Toggle Pg
+                'Toggle Pg
                 If Keytouched > 0 Then
                    Decr Keytouched
-                   Toggle Ledout
+                   Toggle Led4
                    If Keytouched = 0 Then
-                      Reset Tempen
-                      Reset Ledout
+                      Reset Led4
                    End If
                 End If
                 If Tempon > 0 Then
                    Decr Tempon
-                   Toggle Ledout
-                   If Tempon < 10 Then Toggle Buzz
+                   Toggle Led1
+                   If Tempon < 10 Then
+                      Beep
+                   End If
                    If Tempon = 0 Then
-                      Cmd = 181 : Id = Touchid1
-                      Set Led1
+                      Cmd = 181 : Id = Touchid1 : Direct = Tooutput : Typ = Mytyp
+                      Reset Led1
                       Gosub Tx
-                      Reset Buzz
-                      Reset Ledout
                    End If
                 End If
              End If

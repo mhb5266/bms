@@ -32,20 +32,23 @@ Declare Sub Money
 Declare Sub Temp
 Declare Sub Antenna
 Declare Sub Charge
+Declare Sub Delall
+Declare Sub Delread
 'used variables
 Dim I As Byte , B As Byte
 Dim Sret As String * 160 , Stemp As String * 6
 Dim U As Byte
 Dim Lim As Byte
 Dim Msg As String * 160
-Dim Num As String * 16 : Num = "09376921503"
+Dim Num As String * 13 : Num = "+989376921503"
 Dim Sharj As String * 160
 Dim Sheader(10) As String * 50
-Dim Sbody(5) As String * 30
+Dim Sbody(10) As String * 30
+Dim Net As String * 10
 Dim Count As Byte
 Dim Scount As Byte
 Dim Length As Byte
-
+Dim Anten As Word
 Simrst Alias Portd.7 : Config Simrst = Output
 
 'we use a serial input buffer
@@ -103,28 +106,27 @@ Flushbuf
 'Print "AT&F"
 Flushbuf                                                    ' flush the buffer
 Print "ATE0"
-#if Uselcd = 1
     Home Lower
-#endif
+
 
 
 Do
   Flushbuf
    Print "AT" :                                             ' Waitms 100
    Getline Sret                                             ' get data from modem
-   #if Uselcd = 1
        Lcd Sret                                             ' feedback on display
-   #endif
 Loop Until Sret = "OK"                                      ' modem must send OK
 Flushbuf                                                    ' flush the input buffer
-#if Uselcd = 1
+
+
+
     Home Upper : Lcd "Get pin mode"
-#endif
+
 Print "AT+cpin?"                                            ' get pin status
 Getline Sret
-#if Uselcd = 1
+
     Home Lower : Lcd Sret
-#endif
+
 If Sret = "+CPIN: SIM PIN" Then
    Print Pincode                                            ' send pincode
 End If
@@ -141,39 +143,40 @@ End If
 Wait 1
 Cls
 
+Print "At+Cusd=1"
+Getline Sret
+Cls : Lcd "USSD CODE" : Lowerline : Lcd Sret : Wait 3 : Cls : Waitms 500
+
+
 Flushbuf
 
 'sms settings
-Print "AT+CSMP=17,167,0,0"
+'Print "AT+CSMP=17,167,0,0"
+Print "AT+CSMP=17,167,2,25"
 Getline Sret
 
 'Print "AT+CNMI=0,1,2,0,0"
 Print "AT+CNMI=2,2,0,0,0"
 Getline Sret
 
+
   Flushbuf
    Print "AT+CSMP?"
    Getline Sret
-   #if Uselcd = 1
        Cls : Lcd "CHR SETTING"
        Wait 1
        Cls
        Lcd Sret
        Wait 1
-   #endif
-   Waitms 500
-Wait 1
 
   Flushbuf
    Print "AT+CNMI?"
    Getline Sret
-   #if Uselcd = 1
        Cls : Lcd "INDICATE CNG"
        Wait 1
        Cls
        Lcd Sret
        Wait 1
-   #endif
    Waitms 500
 Wait 1
 
@@ -181,34 +184,25 @@ Do
   Flushbuf
    Print "AT+CMGF=1"
    Getline Sret
-   #if Uselcd = 1
        Cls : Lcd "TEXT MODE" : Lowerline : Lcd Sret
-   #endif
    Waitms 500
 Loop Until Sret = "OK"
 Wait 2
 
   Flushbuf
-Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
+  Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
    Getline Sret
-   #if Uselcd = 1
-       Cls : Lcd "FONT SETTING"
-       Wait 1
-       Cls
-       Lcd Sret
-       Wait 1
-   #endif
-   Waitms 500
+   Cls : Lcd "FONT SETTING"
+   Wait 1
+   Cls
+   Lcd Sret
+   Wait 1
 Wait 2
 
 
 Do
-  Flushbuf
-   Print "AT+CMGDA=DEL ALL"
-   Getline Sret
-   #if Uselcd = 1
-       Cls : Lcd "DEL ALL" : Lowerline : Lcd Sret
-   #endif
+   Delall
+   Cls : Lcd "DEL ALL" : Lowerline : Lcd Sret : Wait 2 : Cls : Waitms 500
    Waitms 500
 Loop Until Sret = "OK"
 Wait 2
@@ -220,12 +214,17 @@ Main:
 Msg = "SIM800 IS ONLINE NOW"
 'Send_sms
 
-
+Charge
+Wait 5
 
 Do
-
+  Flushbuf
+  Cls : Wait 1
+  Antenna
   Temp
-  Cls : Lcd Sens1 : Wait 4 : Cls
+  Wait 1
+  Cls : Lcd "TEMP=" ; Sens1 ; "ANTEN= " ; Anten : Lowerline : Lcd Sharj : Lcd " $"
+
  ' Print "AT+CNMI?"
   'Getline Sret
   'Cls : Lcd Sret : Wait 2 : Cls
@@ -240,34 +239,47 @@ Do
           Count = Split(sret , Sheader(1) , Chr(34))
           Getline Sret
           Scount = Split(sret , Sbody(1) , " ")
-
+          Num = Sheader(2)
           Cls : Lcd Sbody(1)
+          Msg = ""
           If Sbody(1) = "?" Then
-             If Led1 = 0 Then Msg = "OFF" Else Msg = "ON"
-             Num = Sheader(2)
+             Flushbuf
+             If Led1 = 0 Then Msg = "LED IS OFF" Else Msg = "LED IS ON"
+             Msg = Msg + Chr(13)
+             Msg = Msg + "ANTEN=" + Net
+             Msg = Msg + Chr(13)
+             Msg = Msg + Sharj + " $"
+             Msg = Msg + Chr(13)
+             Msg = Msg + Sens1 + Chr(39) + "C"
              Send_sms
           End If
-          If Sbody(1) = "OFF" Or Sbody(1) = "Off" Or Sbody(1) = "off" Then
+          If Lcase(sbody(1)) = "off" Then
              Reset Led1
-             Num = Sheader(2)
              Msg = "LED IS OFF"
+
+
              Send_sms
           End If
-          If Sbody(1) = "ON" Or Sbody(1) = "On" Or Sbody(1) = "on" Then
+          If Lcase(sbody(1)) = "on" Then
              Set Led1
              Num = Sheader(2)
              Msg = "LED IS ON"
              Send_sms
           End If
 
-          If Sbody(1) = "TEMP" Or Sbody(1) = "Temp" Or Sbody(1) = "temp" Then
-             Reset Led1
-             Num = Sheader(2)
+          If Lcase(sbody(1)) = "temp" Then
+             Temp
+             Wait 5
              Msg = Sens1
              Send_sms
           End If
+          For I = 1 To 10
+              Sheader(i) = ""
+              Sbody(i) = ""
+          Next
 
      End If
+     Delread
 Loop
 
 
@@ -364,15 +376,17 @@ Sub Flushbuf()
 End Sub
 
 Sub Send_sms
-
-     Wait 1
+Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
+   Getline Sret
      Print "AT+CMGS=" ; Chr(34) ; Num ; Chr(34)             'send sms
      Waitms 200
      Print Msg ; Chr(26)
      Wait 5
      Print "AT"
-     Wait 1
-
+     Cls : Lcd Num : Wait 5 : Cls : Lcd Msg : Wait 5 : Cls : Waitms 500
+     Flushbuf
+     Charge
+     Wait 5 : Cls : Lcd Sharj : Wait 5 : Cls : Waitms 500
 
 End Sub
 
@@ -420,12 +434,26 @@ End Sub
 
 
 Sub Antenna
-Do
+  Flushbuf
   Print "AT+CSQ"
   Getline Sret
-
-  'Cls : Lcd Sret : Wait 3 : Cls : Wait 1
-Loop
+  Count = Split(sret , Sbody(1) , " ")
+  Anten = Val(sbody(2))
+'  Cls : Lcd "ANTEN= " : Lcd Anten : Lowerline : Lcd Sret : Wait 5 : Cls : Waitms 500
+  Select Case Anten
+         Case 0
+              Net = "BAD"
+         Case 1
+              Net = "WEAK"
+         Case 2 To 15
+              Net = "MID"
+         Case 16 To 30
+              Net = "GOOD"
+         Case 31
+              Net = "BEST"
+         Case 99
+              Net = "OFFLINE"
+  End Select
 
 End Sub
 
@@ -433,25 +461,27 @@ End Sub
 Sub Charge
 
 
-Print "At+Cusd=1"
-Getline Sret
-'Print "ATD*720*7*1*3#"
-'Print "At+Cusd=1," ; Chr(34) ; "*555*4*3*2#" ; Chr(34)
-'Getline Sret
-
-Cls : Lcd Sret : Wait 3 : Cls : Waitms 500
-
-
-Flushbuf
-'Print "At+Cusd=1," ; Chr(34) ; "*720*1#" ; Chr(34)
-Print "At+Cusd=1," ; Chr(34) ; "*555*1*2#" ; Chr(34)
 'Print "ATD*140#"
-'Print "ATD*720*1#"
-'Getline Sret
-'Cls : Lcd Sret : Wait 10 : Cls : Waitms 500
-'Getline Sret
-'Cls : Lcd Sret : Wait 10 : Cls : Waitms 500
+Flushbuf
+Print "At+Cusd=1," ; Chr(34) ; "*140#" ; Chr(34)
+
+'Print "At+Cusd=1," ; Chr(34) ; "*555*1*2#" ; Chr(34)
+  Getline Sret
+  Getline Sret
+  Sharj = Right(sret , 17)
+  Getline Sret
 
 
+End Sub
 
+Sub Delall
+     Flushbuf
+     Print "AT+CMGDA=DEL ALL"
+     Getline Sret
+End Sub
+
+Sub Delread
+     Flushbuf
+     Print "AT+CMGDA=DEL READ"
+     Getline Sret
 End Sub

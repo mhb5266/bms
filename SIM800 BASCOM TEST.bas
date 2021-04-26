@@ -142,7 +142,8 @@ Loop ' for ever
 
 'subroutine that is called when a sms is received
 's hold the received string
-'+CMTI: "SM",5
+'+CMTI: "SM",5                             AT+CUSD=1
+Ok
 Sub Showsms(s As String )
  #if Uselcd = 1
  Cls
