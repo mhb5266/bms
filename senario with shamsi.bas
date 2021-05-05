@@ -324,6 +324,9 @@ Const Clearall = 27
 Const Pwmlight = 28
 Const Pwmblink = 29
 Const Readyoutput = 30
+Const Clearkeyouts = 31
+Const Savesenario = 32
+Const Dosenario = 33
 
 
 
@@ -344,7 +347,7 @@ Const Senario3 = 167
 Consts:
 
 
-Const Main_menu_counter = 8
+Const Main_menu_counter = 9
 
 Subs:
 
@@ -364,6 +367,7 @@ Declare Sub Plant_menu
 Declare Sub Remote_menu
 Declare Sub Setting_menu
 Declare Sub Pwlsetting
+Declare Sub Planmenu
 
 Declare Sub Setkeyid
 Declare Sub Set_id_modules
@@ -559,7 +563,9 @@ Do
                     Cls
                     Showpic 0 , 0 , Rutin , 1
                     Setlight = Minlight
-                    Findorder = Pwmlight
+                    'Findorder = Pwmlight
+                    Findorder = Dosenario
+                    Id = 1
                     Senario = 1
                     Call Order
                     Wait 2
@@ -597,8 +603,10 @@ Do
                     Cls
                     Showpic 0 , 0 , Night , 1
                     Setlight = Midlight
-                    Findorder = Pwmlight
-                    Senario = 2
+                    'Findorder = Pwmlight
+                    'Senario = 2
+                    Findorder = Dosenario
+                    Id = 2
                     Call Order
                     Wait 2
                     Cls
@@ -627,7 +635,9 @@ Do
                     Cls
                     Showpic 0 , 0 , Party , 1
                     Setlight = Maxlight
-                    Findorder = Pwmlight
+                    'Findorder = Pwmlight
+                    Findorder = Dosenario
+                    Id = 3
                     Senario = 3
                     Call Order
                     Wait 2
@@ -657,7 +667,9 @@ Do
                     Cls
                     Showpic 0 , 0 , Exiticon , 1
                     Setlight = Dark
-                    Findorder = Pwmlight
+                    'Findorder = Pwmlight
+                    Findorder = Dosenario
+                    Id = 4                   
                     Senario = 4
                     Call Order
                     Wait 2
@@ -920,6 +932,9 @@ M_day = Kole_roz_m
 
 Return
 
+Planicon:
+$bgf "plan.bgf"
+
 Spump:
 $bgf "spump.bgf"
 Sdissensor:
@@ -1057,6 +1072,8 @@ Sub Main_menu
                                     Showpic 32 , 0 , Setclockicon
                                Case 8
                                     Showpic 32 , 0 , Configicon
+                               Case 9
+                                    Showpic 32 , 0 , Planicon
 
                         End Select
             End If
@@ -1099,6 +1116,8 @@ Sub Main_menu
                                     Showpic 32 , 0 , Setclockicon
                                Case 8
                                     Showpic 32 , 0 , Configicon
+                               Case 9
+                                    Showpic 32 , 0 , Planicon
                         End Select
                         Touch = 0
             End If
@@ -1107,23 +1126,23 @@ Sub Main_menu
                    Cls
                    Select Case Count
                           Case 1
-                               Call Setting_menu
+                               Setting_menu
                           Case 2
-                               Call Jacuzi_menu
+                               Jacuzi_menu
                           Case 3
-                               Call Plant_menu
+                               Plant_menu
                           Case 4
-                               Call Watersystem_menu
+                               Watersystem_menu
                           Case 5
-                               Call Light_menu
+                               Light_menu
                           Case 6
-                               Call Fountain_menu
+                               Fountain_menu
                           Case 7
-                               Call Clock_menu
+                               Clock_menu
                           Case 8
-                               Call Configmenu
-
-
+                               Configmenu
+                          Case 9
+                               Planmenu
                    End Select
             End If
             Call Readtouch
@@ -2490,11 +2509,22 @@ Sub Order
 
                 Direct = Toinput : Typ = 101 : Cmd = 155 : Id = Allid
 
+           Case Savesenario
+
+                Direct = Toinput : Typ = 101 : Cmd = 200
+           Case Dosenario
+
+                Direct = Toinput : Typ = 101 : Cmd = 201
+
            Case Enableinput
 
                 Direct = Toinput : Typ = 101 : Cmd = 156 : Id = Allid
 
            Case Disableinput
+
+                Direct = Toinput : Typ = 101 : Cmd = 157 : Id = Allid
+
+           Case Clearkeyouts
 
                 Direct = Toinput : Typ = 101 : Cmd = 157 : Id = Allid
 
@@ -2539,9 +2569,11 @@ Sub Order
                 Direct = Tooutput : Typ = 110 : Cmd = 160
 
            Case Sycpwmmoduleid
+
                 Direct = Tooutput : Typ = 111 : Cmd = 160
 
            Case Setidformodules
+
                 Direct = Tooutput : Cmd = 151
 
            Case Clearall
@@ -2815,6 +2847,47 @@ Sub Temp
 
 End Sub
 
+Sub Planmenu
+    Cls
+    Selection = 1
+    Do
+      Select Case Selection
+             Case 1
+                  Showpic 48 , 17 , Srutin , 0
+             Case 2
+                  Showpic 48 , 17 , Snight , 0
+             Case 3
+                  Showpic 48 , 17 , Sparty , 0
+             Case 4
+                  Showpic 48 , 17 , Sexiticon , 0
+      End Select
+      Waitms 200
+      If Touch1 = 1 Then
+         Id = Selection
+         Findorder = Savesenario
+         Beep
+         Order
+      End If
+      If Touch2 = 1 Then
+         Incr Selection
+         If Selection > 4 Then Selection = 1
+         Beep
+         Cls
+      End If
+      If Touch3 = 1 Then
+         Decr Selection
+         If Selection = 0 Then Selection = 4
+         Beep
+         Cls
+      End If
+      If Touch4 = 1 Then
+         Cls
+         Set Backmenu
+         Beep
+         Return
+      End If
+    Loop
+End Sub
 
 Sub Clock_menu
  Call Beep
