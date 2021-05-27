@@ -669,7 +669,7 @@ Do
                     Setlight = Dark
                     'Findorder = Pwmlight
                     Findorder = Dosenario
-                    Id = 4                   
+                    Id = 4
                     Senario = 4
                     Call Order
                     Wait 2

@@ -1,6 +1,6 @@
 Report       : keypad 991214
-Date         : 05-05-2021
-Time         : 16:52:31
+Date         : 05-11-2021
+Time         : 13:32:19
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1B20 hex  -> Will fit into ROM
-ROMIMAGE     :  6944 dec
-FLASH USED   :  84  %
+ROMIMAGE     : 1C9A hex  -> Will fit into ROM
+ROMIMAGE     :  7322 dec
+FLASH USED   :  89  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 8 hex
 S-Stackstart : 440 hex
 Framesize    : 18 hex
 Framestart   : 420 hex
-Space left   :  829  dec
+Space left   :  828  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -123,20 +123,21 @@ SENSOREN                         Bit [3]           0061          97
 BEEPEN                           Bit [2]           0061          97 
 TOUCH                            Byte              0086          134 
 X                                Word              0087          135 
-S                                Word(24)          0089          137 
-I                                Byte              00B9          185 
-SADDRESS                         String * 20       00BA          186 
-SCODE                            String * 4        00CF          207 
-ADDRESS                          Long              00D4          212 
-CODE                             Byte              00D8          216 
-RA                               Long              00D9          217 
-RNUMBER                          Byte              00DD          221 
+W                                Byte              0089          137 
+S                                Word(24)          008A          138 
+I                                Byte              00BA          186 
+SADDRESS                         String * 20       00BB          187 
+SCODE                            String * 4        00D0          208 
+ADDRESS                          Long              00D5          213 
+CODE                             Byte              00D9          217 
+RA                               Long              00DA          218 
+RNUMBER                          Byte              00DE          222 
 RNUMBER_E                        EEPROM Byte       000E          14 
 OKREAD                           Bit [1]           0061          97 
 ERROR                            Bit [0]           0061          97 
-KEYCHECK                         Bit [7]           00DE          222 
-T                                Word              00DF          223 
-P                                Byte              00E1          225 
+KEYCHECK                         Bit [7]           00DF          223 
+T                                Word              00E0          224 
+P                                Byte              00E2          226 
 EEVAR                            EEPROM Long(2)    000F          15 
 
 --------------------------------------------------------------------------------
@@ -512,6 +513,7 @@ T3                               60
 TOMASTER                         252
 TOOUTPUT                         232
 MYTYP                            101
+RELAYMODULE                      110
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -577,5 +579,6 @@ COMPARE1                         not used
 PWM1B                            not used
 PASSWORD                         not used
 Z                                not used
+INOK                             not used
 P                                not used
 

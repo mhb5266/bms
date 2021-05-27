@@ -57,6 +57,8 @@ Defines:
         Declare Sub Remoteclear
         Declare Sub Findorder
         Declare Sub Checkkey
+        Declare Sub Keyorder
+        Declare Sub Tx
 
         Dim 4chcode As Eram Byte
         Dim 4ch As Boolean
@@ -69,7 +71,7 @@ Defines:
         Dim Maxin As Byte
         Dim Inok As Boolean
 
-        Dim Light As Byte
+        Dim Light As Byte : Light = 4
 
         Dim Keytouched As Byte
         Const T1 = 20
@@ -95,6 +97,7 @@ Defines:
         Dim Id As Byte
         Dim Cmd As Byte
         Const Mytyp = 101
+        Const Relaymodule = 110
 
         Dim Touchid1 As Byte
         Dim Touchid2 As Byte
@@ -107,6 +110,7 @@ Defines:
         Dim Beepen As Bit
         Dim Touch As Byte
         Dim X As Word
+        Dim W As Byte
         Dim S(24)as Word
         Dim I As Byte
         I = 0
@@ -301,7 +305,7 @@ Refresh:
            Loop Until Touch1 = 1
            If X >= 0 And X < 250 Then
               Beep
-              Gosub Keyorder
+              Keyorder
            End If
            If X >= 750 And X < 1001 Then
               Order = "learn"
@@ -331,7 +335,7 @@ Refresh:
            Loop Until Touch2 = 1
            If X >= 0 And X < 250 Then
               Beep
-              Gosub Keyorder
+              Keyorder
            End If
         End If
 
@@ -353,7 +357,7 @@ Refresh:
            Loop Until Touch3 = 1
            If X >= 0 And X < 250 Then
               Incr Light
-              Gosub Keyorder
+              Keyorder
               Beep
            End If
            If X => 750 And X < 1001 Then Toggle Sensoren
@@ -376,7 +380,7 @@ Refresh:
            Loop Until Touch4 = 1
            If X >= 0 And X < 250 Then
               Beep
-              Gosub Keyorder
+              Keyorder
            End If
            If X => 750 And X < 1001 Then
               Order = "clear"
@@ -389,8 +393,8 @@ Refresh:
 
 If Sensoren = 1 And Keytouched = 0 And Sensor = 1 Then
    If Tempen = 0 And Led1 = 0 And Led2 = 0 And Led3 = 0 Then
-      Typ = Mytyp : Cmd = 182 : Id = Touchid1 : Direct = Tooutput
-      Gosub Tx
+      Typ = Relaymodule : Cmd = 182 : Id = Touchid1 : Direct = Tooutput
+      Tx
       Set Tempen
       Tempon = 60
    End If
@@ -493,7 +497,7 @@ Command:
 
         If 4ch = 0 Then
                 Select Case Code
-                       Typ = Mytyp
+                       Typ = Relaymodule
                        Case 1
                             Id = Touchid1
                             Touch = 1
@@ -534,11 +538,120 @@ Command:
             If Code = 4chcode Then Touch = 4 Else Return
         End If
         Beep
-        Gosub Keyorder
+        Keyorder
 
-        'Gosub Tx
+        'tx
         Waitms 200
 Return
+
+
+
+
+
+
+T0rutin:
+        Stop Timer0
+             Incr 20ms
+             If 20ms = 42 Then
+                20ms = 0
+                Incr Secc
+                'Toggle Pg
+                If Keytouched > 0 Then
+                   Decr Keytouched
+                   'Toggle Led
+                   If Keytouched = 0 Then
+                      'Reset Led
+                   End If
+                End If
+                If Tempon > 0 And Tempen = 1 Then
+                   Decr Tempon
+                   Toggle Led1
+                   If Tempon < 13 And Tempon > 9 Then
+                      Beep
+                   End If
+                   If Tempon = 0 Then
+                      Cmd = 181 : Id = Touchid1 : Direct = Tooutput : Typ = Relaymodule
+                      Reset Led1
+                      Reset Tempen
+                      Tx
+                   End If
+                End If
+             End If
+        Start Timer0
+Return
+
+Rx:
+Stop Timer0
+Disable Urxc
+   Do
+   Incr F
+     Inputbin Maxin
+     If Maxin = 242 Then F = 1
+     If Maxin = 220 Then F = 5
+     Din(f) = Maxin
+     If Maxin = 252 Or Maxin = 232 Or Maxin = 210 Or Maxin = 230 Then
+        F = 0
+        For I = 1 To 5
+            Din(i) = 0
+        Next
+     End If
+   Loop Until Ischarwaiting() = 0
+   If F = 5 And Din(2) = Mytyp And Din(1) = 242 And Din(5) = 220 Then
+      F = 0
+      Typ = Din(2) : Cmd = Din(3) : Id = Din(4)
+      Findorder
+   End If
+   Enable Urxc
+   Start Timer0
+'(
+Stop Timer0
+20ms = 0
+      Incr F
+      Inputbin Maxin
+
+
+      If F = 5 And Maxin = 220 Then Set Inok
+      If Maxin = 242 Then F = 1
+
+      Din(f) = Maxin
+
+      If Inok = 1 And Din(2) = Mytyp Then
+        F = 0
+        Typ = Din(2)
+        If Typ = Mytyp Then
+           Cmd = Din(3)
+           Id = Din(4)
+           Din(3) = 0
+           Din(4) = 0
+           Din(2) = 0
+           For I = 1 To 8
+               Toggle Led
+               Waitms 100
+           Next
+           Findorder
+        End If
+        I = 0
+        Reset Inok
+      End If
+
+Start Timer0
+')
+Return
+
+
+End
+
+Sub Tx:
+    If Direct = Tooutput Then Endbit = 210
+    If Direct = Tomaster Then Endbit = 230
+
+    Set En
+    Waitms 10
+    Printbin Direct ; Typ ; Cmd ; Id ; Endbit
+    Waitms 50
+    Reset En
+
+End Sub
 
 Sub Beep:
 
@@ -640,150 +753,6 @@ Sub Remoteclear
            Waitms 500
        Next
 End Sub
-
-Keyorder:
-         Direct = Tooutput
-         Typ = Mytyp
-
-         Keytouched = 10
-            Tempen = 0 : Tempon = 0
-
-
-         If Touch = 1 Then
-            If Led1 = 0 Then Cmd = 181 Else Cmd = 182
-            Id = Touchid1
-            Gosub Tx
-         End If
-
-         If Touch = 2 Then
-            If Led2 = 0 Then Cmd = 181 Else Cmd = 182
-            Id = Touchid2
-            Gosub Tx
-         End If
-
-         If Touch = 3 Then
-            If Light > 4 Then Light = 1
-            If Light = 1 Then Cmd = 161
-            If Light = 2 Then Cmd = 162
-            If Light = 3 Then Cmd = 163
-            If Light = 4 Then Cmd = 164
-            Id = Touchid3
-            Gosub Tx
-         End If
-
-         If Touch = 4 Then
-            Mmm = 0
-            If Led1 = 1 Then Incr Mmm
-            If Led2 = 1 Then Incr Mmm
-            If Led3 = 1 Then Incr Mmm
-
-            If Mmm > 1 Then Set L4 Else Reset L4
-            'Toggle L4
-            If L4 = 1 Then Cmd = 181 Else Cmd = 182
-            For I = 1 To 4
-                If I = 1 Then
-                   Id = Touchid1
-                   If L4 = 1 Then Reset Led1 Else Set Led1
-                End If
-
-                If I = 2 Then
-                   Id = Touchid2
-                   If L4 = 1 Then Reset Led2 Else Set Led2
-                End If
-
-                If I = 3 Then
-                   Id = Touchid3
-                   If L4 = 1 Then Reset Led3 Else Set Led3
-                End If
-
-                If I = 4 Then
-                   If L4 = 1 Then Reset Led4 Else Set Led4
-                   Touch = 0
-                   Return
-                End If
-                Gosub Tx
-                Waitms 200
-
-            Next
-         End If
-         Touch = 0
-
-
-Return
-
-Tx:
-    If Direct = Tooutput Then Endbit = 210
-    If Direct = Tomaster Then Endbit = 230
-
-    Set En
-    Waitms 10
-    Printbin Direct ; Typ ; Cmd ; Id ; Endbit
-    Waitms 50
-    Reset En
-
-Return
-
-T0rutin:
-        Stop Timer0
-             Incr 20ms
-             If 20ms = 42 Then
-                20ms = 0
-                Incr Secc
-                'Toggle Pg
-                If Keytouched > 0 Then
-                   Decr Keytouched
-                   'Toggle Led
-                   If Keytouched = 0 Then
-                      'Reset Led
-                   End If
-                End If
-                If Tempon > 0 Then
-                   Decr Tempon
-                   Toggle Led1
-                   If Tempon < 13 And Tempon > 9 Then
-                      Beep
-                   End If
-                   If Tempon = 0 Then
-                      Cmd = 181 : Id = Touchid1 : Direct = Tooutput : Typ = Mytyp
-                      Reset Led1
-                      Reset Tempen
-                      Gosub Tx
-                   End If
-                End If
-             End If
-        Start Timer0
-Return
-
-Rx:
-
-
-      Incr F
-      Inputbin Maxin
-
-
-      If F = 5 And Maxin = 220 Then Set Inok
-      If Maxin = 242 Then F = 1
-
-      Din(f) = Maxin
-
-      If Inok = 1 Then
-
-        Typ = Din(2)
-        If Typ = Mytyp Then
-           Cmd = Din(3)
-           Id = Din(4)
-           For I = 1 To 8
-               Toggle Led
-               Waitms 100
-           Next
-           Findorder
-        End If
-        I = 0
-        Reset Inok
-      End If
-
-
-Return
 
 Sub Pasword
     Waitms 200
@@ -887,6 +856,7 @@ End Sub
 
 Sub Findorder
 Stop Timer0
+If Din(2) = Mytyp Then
      Select Case Cmd
             Case 152
                  Set Beepen
@@ -909,7 +879,7 @@ Stop Timer0
                         If I = 1 Then Id = Touchid1
                         If I = 2 Then Id = Touchid2
                         If I = 3 Then Id = Touchid3
-                        Gosub Tx
+                        Tx
                         Waitms 750
                     Next
                  End If
@@ -918,25 +888,60 @@ Stop Timer0
                   Ekeyid = Keyid
                   Waitms 10
              Case 200
-                  I = Id * 3
-                  El(i) = Light
-                  If Led2 = 1 Then El(i -1) = 1 Else El(i -1) = 0
-                  If Led1 = 1 Then El(i -2) = 1 Else El(i -2) = 0
+                  Do
+                    If Touch4 = 0 Then
+                       Beep : Exit Do
+                    End If
+                    If Touch1 = 0 Then
+                       Beeperror : Return
+                    End If
+                    Toggle Led
+                    Waitms 500
+                  Loop
+                  Reset Led
+                  Ledflash
+                  W = Id * 3
+                  Do
+                    Touch = 0
+                    If Touch1 = 0 Then
+                       Toggle Led1
+                       Touch = 1
+                    End If
+                    If Touch2 = 0 Then
+                       Toggle Led2
+                       Touch = 2
+                    End If
+                    If Touch3 = 0 Then
+                       Toggle Led3
+                       Touch = 3
+                    End If
+                    If Touch > 0 Then
+                       Keyorder
+                    End If
+                    If Touch4 = 0 Then Exit Do
+                    Waitms 100
+                  Loop
+                  El(w) = Light
+                  If Led2 = 1 Then El(w -1) = 1 Else El(w -1) = 0
+                  If Led1 = 1 Then El(w -2) = 1 Else El(w -2) = 0
                   Beeppro
              Case 201
                   I = Id * 3
                   Light = El(i)
-                  If Light < 4 Then Set Led3 Else Reset Led3
+                  If Light < 4 And Light > 0 Then Set Led3 Else Reset Led3
                   If El(i -1) = 1 Then Set Led2 Else Reset Led2
                   If El(i -2) = 1 Then Set Led1 Else Reset Led1
                   I = Keyid * 5
                   Wait I
                   For I = 1 To 3
                       Touch = I
-                      Gosub Keyorder
+                      Keyorder
                       Waitms 500
                   Next
      End Select
+     Cmd = 0
+     Id = 0
+End If
 Start Timer0
 End Sub
 
@@ -944,4 +949,77 @@ Sub Checkkey
     If Touch1 = 0 Or Touch2 = 0 Or Touch3 = 0 Or Touch4 = 0 Or Sensor = 1 Then Gosub Refresh
 End Sub
 
-End
+Sub Keyorder
+         Direct = Tooutput
+         Typ = Relaymodule
+
+         Keytouched = 10
+            Tempen = 0 : Tempon = 0
+
+
+         If Touch = 1 Then
+            If Led1 = 0 Then Cmd = 181 Else Cmd = 182
+            Id = Touchid1
+            Tx
+         End If
+
+         If Touch = 2 Then
+            If Led2 = 0 Then Cmd = 181 Else Cmd = 182
+            Id = Touchid2
+            Tx
+         End If
+
+         If Touch = 3 Then
+            Id = Touchid3
+
+            Cmd = 180
+            Tx
+
+            If Light > 4 Then Light = 1
+            If Light = 1 Then Cmd = 161
+            If Light = 2 Then Cmd = 162
+            If Light = 3 Then Cmd = 163
+            If Light = 4 Then Cmd = 164
+
+            If Light > 1 And Light < 5 Then Tx
+         End If
+
+         If Touch = 4 Then
+            Mmm = 0
+            If Led1 = 1 Then Incr Mmm
+            If Led2 = 1 Then Incr Mmm
+            If Led3 = 1 Then Incr Mmm
+
+            If Mmm > 1 Then Set L4 Else Reset L4
+            'Toggle L4
+            If L4 = 1 Then Cmd = 181 Else Cmd = 182
+            For I = 1 To 4
+                If I = 1 Then
+                   Id = Touchid1
+                   If L4 = 1 Then Reset Led1 Else Set Led1
+                End If
+
+                If I = 2 Then
+                   Id = Touchid2
+                   If L4 = 1 Then Reset Led2 Else Set Led2
+                End If
+
+                If I = 3 Then
+                   Id = Touchid3
+                   If L4 = 1 Then Reset Led3 Else Set Led3
+                End If
+
+                If I = 4 Then
+                   If L4 = 1 Then Reset Led4 Else Set Led4
+                   Touch = 0
+                   Return
+                End If
+                Tx
+                Waitms 200
+
+            Next
+         End If
+         Touch = 0
+
+
+End Sub
