@@ -35,8 +35,8 @@ Configs:
         Enable Interrupts
         Enable Timer0
         On Timer0 T0rutin
-        Enable Urxc
-        On Urxc Rx
+        'Enable Urxc
+        'On Urxc Rx
 
         En Alias Portd.2 : Config Portd.2 = Output
 
@@ -95,7 +95,7 @@ Defines:
         Dim Id As Byte
         Dim Cmd As Byte
         Const Mytyp = 101
-
+        const relaymodule=110
         Dim Touchid1 As Byte
         Dim Touchid2 As Byte
         Dim Touchid3 As Byte
@@ -245,7 +245,7 @@ Start Timer0
 Main:
 
      Do
-       Keyid = Ekeyid
+
        If Keyid = 255 Or Keyid = 0 Then Gosub Noid
        '(
        Incr P
@@ -274,11 +274,11 @@ Main:
 ')
 
      Loop
-
+'(
 Sectic:
        'Toggle Pg
 Return
-
+  ')
 Refresh:
 
         Touch = 0
@@ -299,7 +299,7 @@ Refresh:
              If X = 750 Then Beeppro
              If X = 1000 Then Exit Do
            Loop Until Touch1 = 1
-           If X >= 0 And X < 250 Then
+           If X >= 0 And X < 700 Then
               Beep
               Gosub Keyorder
            End If
@@ -326,10 +326,11 @@ Refresh:
              If X = 750 Then
                 Toggle Beepen
                 Beeppro
+                if beepen=1 then beeppro
              End If
              If X = 1000 Then Exit Do
            Loop Until Touch2 = 1
-           If X >= 0 And X < 250 Then
+           If X >= 0 And X < 700 Then
               Beep
               Gosub Keyorder
            End If
@@ -348,15 +349,19 @@ Refresh:
            Do
              Waitms 5
              Incr X
-             If X = 750 Then Beeppro
+             If X = 750 Then
+             Beeppro
+             if sensoren=1 then beeppro
+             endif
              If X = 1000 Then Exit Do
            Loop Until Touch3 = 1
-           If X >= 0 And X < 250 Then
+           If X >= 0 And X < 700 Then
               Incr Light
               Gosub Keyorder
               Beep
            End If
            If X => 750 And X < 1001 Then Toggle Sensoren
+
         End If
 
         Touch = 0
@@ -374,7 +379,7 @@ Refresh:
              If X = 750 Then Beeppro
              If X = 1000 Then Exit Do
            Loop Until Touch4 = 1
-           If X >= 0 And X < 250 Then
+           If X >= 0 And X < 700 Then
               Beep
               Gosub Keyorder
            End If
@@ -631,13 +636,17 @@ Sub Remotelearn
      Loop
 End Sub
 
-Sub Remoteclear
+ dSub Remoteclear
 
-       Rnumber = 0
-       Rnumber_e = Rnumber
+
        For I = 1 To 8
            Toggle Led1
-           Waitms 500
+           Rnumber = 0
+           Rnumber_e = Rnumber
+           waitms 50
+           eevar(i)=0
+           Waitms 50
+           waitms 400
        Next
 End Sub
 
@@ -662,12 +671,15 @@ Keyorder:
          End If
 
          If Touch = 3 Then
+            Id = Touchid3
+            cmd=180
+            gosub tx
             If Light > 4 Then Light = 1
             If Light = 1 Then Cmd = 161
             If Light = 2 Then Cmd = 162
             If Light = 3 Then Cmd = 163
             If Light = 4 Then Cmd = 164
-            Id = Touchid3
+
             Gosub Tx
          End If
 
@@ -714,7 +726,7 @@ Return
 Tx:
     If Direct = Tooutput Then Endbit = 210
     If Direct = Tomaster Then Endbit = 230
-
+    typ=relaymodule
     Set En
     Waitms 10
     Printbin Direct ; Typ ; Cmd ; Id ; Endbit
@@ -812,7 +824,7 @@ Sub Pasword
     Elseif Pass(1) = 2 And Pass(2) = 2 And Pass(3) = 3 And Pass(4) = 3 Then
            Keyid = 255
            Ekeyid = Keyid
-           Waitms 10
+           Waitms 30
            Beeppro
            Gosub Noid
     Else
@@ -916,7 +928,7 @@ Stop Timer0
              Case 159
                   Keyid = 255
                   Ekeyid = Keyid
-                  Waitms 10
+                  Waitms 30
              Case 200
                   I = Id * 3
                   El(i) = Light

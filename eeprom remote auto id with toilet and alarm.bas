@@ -467,11 +467,9 @@ Keys:
                 If T >= 5000 Then
                    T = 0
                    Call Beep
-                   Rnumber = 0
-                   Gosub Rnumber_ew
+                   clearids
                    Set Led3
-                   Wait 1
-                   Wait 1
+                   Wait 2
                    Reset Led3
                    Reset Led3
                    Return
@@ -481,7 +479,8 @@ Keys:
           If T < 5000 Then
                     T = 0
                     Reset Led3
-                    Return
+                    do_learn
+                    exit do
           End If
        End If
      Loop
@@ -1194,6 +1193,11 @@ Sub Clearids:
              Num = 2
              Enum = 2
              Waitms 5
+
+             for i=0 to 20
+                     Ra = 0
+                     Gosub Ra_w
+             next
                                   Rnumber = 0
                                   Gosub Rnumber_ew
 

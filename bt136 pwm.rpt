@@ -1,6 +1,6 @@
 Report       : bt136 pwm
-Date         : 12-07-2020
-Time         : 18:03:03
+Date         : 05-23-2021
+Time         : 13:21:26
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 10EA hex  -> Will fit into ROM
-ROMIMAGE     :  4330 dec
-FLASH USED   :  52  %
+ROMIMAGE     : 110E hex  -> Will fit into ROM
+ROMIMAGE     :  4366 dec
+FLASH USED   :  53  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%

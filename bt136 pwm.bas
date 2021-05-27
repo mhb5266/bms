@@ -377,7 +377,8 @@ Sub Getid
              P = 0
              Toggle Buz
           End If
-         If Cmd = 180 And Id > 0 And Id < 100 Then
+         If  Id > 0 And Id < 100 Then
+            if cmd=180 or cmd=181 or cmd=182 then
                           Reset Gotid
                           If Outid1(k) > 100 Or Outid1(k) = 0 Then
                              Outid1(k) = Id
@@ -428,6 +429,7 @@ Sub Getid
                           End If
                           Cmd = 0
                           Id = 0
+            endif
          End If
 
                 If Key = 0 Then

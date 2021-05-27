@@ -33,7 +33,7 @@ Portconfig:
            Declare Sub Keyorder
 
 
-        
+
 
 
            En Alias Portd.2 : Config Portd.2 = Output
@@ -392,7 +392,7 @@ Sub Getid
              P = 0
              Toggle Buz
           End If
-         If Cmd = 180 And Id > 0 And Id < 100 Then
+         If  Id > 0 And Id < 100  and cmd >179 and cmd<183 Then
                           Reset Gotid
                           If Outid1(k) > 100 Or Outid1(k) = 0 Then
                              Outid1(k) = Id
@@ -450,6 +450,7 @@ Sub Getid
                           End If
                           Cmd = 0
                           Id = 0
+
          End If
        If Key = 0 Then
           Waitms 30
