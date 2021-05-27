@@ -1,5 +1,0 @@
-Error : 60    Line :   844   Duplicate label [TX                              ]  , in File : C:\Users\moham\OneDrive\Desktop\bms\keypad 991215.bas
-Error : 60    Line :   856   Duplicate label [T0RUTIN                         ]  , in File : C:\Users\moham\OneDrive\Desktop\bms\keypad 991215.bas
-Error : 60    Line :   887   Duplicate label [RX                              ]  , in File : C:\Users\moham\OneDrive\Desktop\bms\keypad 991215.bas
-Error : 60    Line :   1114  Duplicate label [KEYORDER                        ]  , in File : C:\Users\moham\OneDrive\Desktop\bms\keypad 991215.bas
-Error : 344   Line :   7     Program will overwrite flash memory (or bootloader) [ 248 too long]  , in File : C:\MCS\BASCAVR2083\LIB\FP_TRIG.LBX
