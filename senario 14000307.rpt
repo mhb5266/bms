@@ -1,6 +1,6 @@
-Report       : senario with shamsi improved in home
-Date         : 05-28-2021
-Time         : 23:42:49
+Report       : senario 14000307
+Date         : 06-02-2021
+Time         : 13:03:22
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M128
@@ -8,10 +8,10 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : C334 hex  -> Will fit into ROM
-ROMIMAGE     :  49972 dec
-FLASH USED   :  38  %
-BAUD         : 115200 Baud
+ROMIMAGE     : B660 hex  -> Will fit into ROM
+ROMIMAGE     :  46688 dec
+FLASH USED   :  35  %
+BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
 
@@ -21,7 +21,7 @@ S-Stacksize  : 64 hex
 S-Stackstart : 10C0 hex
 Framesize    : 64 hex
 Framestart   : FF8 hex
-Space left   :  3511  dec
+Space left   :  3465  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -194,79 +194,71 @@ TYP                              Byte              020A          522
 CMD                              Byte              020B          523 
 STARTBIT                         Byte              020C          524 
 ENDBIT                           Byte              020D          525 
-FINDORDER                        Byte              020E          526 
-REMOTEID                         Byte              020F          527 
-REMOTEKEYID                      Byte              0210          528 
-FSTATUS                          EEPROM Byte       0001          1 
-LSTATUS                          EEPROM Byte       0002          2 
-PSTATUS                          EEPROM Byte       0003          3 
-WSTATUS                          EEPROM Byte       0004          4 
-FDAYS                            EEPROM Byte       0005          5 
-LDAYS                            EEPROM Byte       0006          6 
-PDAYS                            EEPROM Byte       0007          7 
-WDAYS                            EEPROM Byte       0008          8 
-DAYS                             Byte              0211          529 
-FONHOUR                          EEPROM Byte       0009          9 
-FONMIN                           EEPROM Byte       000A          10 
-FOFFHOUR                         EEPROM Byte       000B          11 
-FOFFMIN                          EEPROM Byte       000C          12 
-LONHOUR                          EEPROM Byte       000D          13 
-LONMIN                           EEPROM Byte       000E          14 
-LOFFHOUR                         EEPROM Byte       000F          15 
-LOFFMIN                          EEPROM Byte       0010          16 
-PONHOUR                          EEPROM Byte       0011          17 
-PONMIN                           EEPROM Byte       0012          18 
-POFFHOUR                         EEPROM Byte       0013          19 
-POFFMIN                          EEPROM Byte       0014          20 
-WONHOUR                          EEPROM Byte       0015          21 
-WONMIN                           EEPROM Byte       0016          22 
-WOFFHOUR                         EEPROM Byte       0017          23 
-WOFFMIN                          EEPROM Byte       0018          24 
-ONHOUR                           Byte              0212          530 
-ONMIN                            Byte              0213          531 
-OFFHOUR                          Byte              0214          532 
-OFFMIN                           Byte              0215          533 
-STATUS                           Byte              0216          534 
-SETLIGHT                         Byte              0217          535 
-DIN                              Byte(5)           0218          536 
+FINDORDER                        String * 20       020E          526 
+REMOTEID                         Byte              0223          547 
+REMOTEKEYID                      Byte              0224          548 
+FSTATUS                          Byte              0225          549 
+LSTATUS                          Byte              0226          550 
+PSTATUS                          Byte              0227          551 
+WSTATUS                          Byte              0228          552 
+PUSTATUS                         Byte              0229          553 
+EFDAYS                           EEPROM Byte       0001          1 
+ELDAYS                           EEPROM Byte       0002          2 
+EPDAYS                           EEPROM Byte       0003          3 
+EWDAYS                           EEPROM Byte       0004          4 
+EPUDAYS                          EEPROM Byte       0005          5 
+FDAYS                            Byte              022A          554 
+LDAYS                            Byte              022B          555 
+PDAYS                            Byte              022C          556 
+WDAYS                            Byte              022D          557 
+PUDAYS                           Byte              022E          558 
+DAYS                             Byte              022F          559 
+EFTIME                           EEPROM Byte(4)    0006          6 
+ELTIME                           EEPROM Byte(4)    000A          10 
+EPTIME                           EEPROM Byte(4)    000E          14 
+EWTIME                           EEPROM Byte(4)    0012          18 
+EPUTIME                          EEPROM Byte(4)    0016          22 
+FTIME                            Byte(4)           0230          560 
+LTIME                            Byte(4)           0234          564 
+PTIME                            Byte(4)           0238          568 
+WTIME                            Byte(4)           023C          572 
+PUTIME                           Byte(4)           0240          576 
+ONHOUR                           Byte              0244          580 
+ONMIN                            Byte              0245          581 
+OFFHOUR                          Byte              0246          582 
+OFFMIN                           Byte              0247          583 
+STATUS                           Byte              0248          584 
+SETLIGHT                         Byte              0249          585 
+DIN                              Byte(5)           024A          586 
 INOK                             Bit [3]           013A          314 
 LEARNOK                          Bit [2]           013A          314 
 LEARNDONE                        Bit [1]           013A          314 
-CLEARDONE                        Byte              021D          541 
+CLEARDONE                        Byte              024F          591 
 SETREMOTEDONE                    Bit [0]           013A          314 
-DIRECT                           Byte              021E          542 
-X                                Word              021F          543 
-W                                Word              0221          545 
-Z                                Word              0223          547 
-PLANT_STATUS                     Byte              0225          549 
-PLANT_START_HOUR                 Byte              0226          550 
-PLANT_START_MIN                  Byte              0227          551 
-PLANT_STOP_HOUR                  Byte              0228          552 
-PLANT_STOP_MIN                   Byte              0229          553 
-PLANT_DAYS                       Byte(7)           022A          554 
-JSTATUS                          Bit [7]           0231          561 
-PUMPS                            Bit [6]           0231          561 
-MUTES                            Bit [5]           0231          561 
-SENSORS                          Bit [4]           0231          561 
-BACKMENU                         Bit [3]           0231          561 
-PASS                             Byte(4)           0232          562 
-REERROR                          Byte              0236          566 
-POOSH                            Word              0237          567 
-TOUCH                            Byte              0239          569 
-NEXTDAY                          Bit [2]           0231          561 
-COUNT                            Byte              023A          570 
-INPUTCOUNTER                     Byte              023B          571 
-RELAYMODULECOUNTER               EEPROM Byte       0019          25 
-PWMMODULECOUNTER                 EEPROM Byte       001A          26 
-EINPUTCOUNTER                    EEPROM Byte       001B          27 
-SYCNUM                           EEPROM Byte       001C          28 
-CONFIGMODE                       Byte              023C          572 
-OK1                              Bit [1]           0231          561 
-OK2                              Bit [0]           0231          561 
-OK3                              Bit [7]           023D          573 
-OK4                              Bit [6]           023D          573 
-I                                Byte              023E          574 
-J                                Byte              023F          575 
+DIRECT                           Byte              0250          592 
+X                                Word              0251          593 
+W                                Word              0253          595 
+Z                                Word              0255          597 
+PLANT_STATUS                     Byte              0257          599 
+PLANT_START_HOUR                 Byte              0258          600 
+PLANT_START_MIN                  Byte              0259          601 
+PLANT_STOP_HOUR                  Byte              025A          602 
+PLANT_STOP_MIN                   Byte              025B          603 
+PLANT_DAYS                       Byte(7)           025C          604 
+JSTATUS                          Bit [7]           0263          611 
+CHANGETIME                       Bit [6]           0263          611 
+LSEC                             Byte              0264          612 
+PUMPS                            Bit [5]           0263          611 
+MUTES                            Bit [4]           0263          611 
+SENSORS                          Bit [3]           0263          611 
+BACKMENU                         Bit [2]           0263          611 
+PASS                             Byte(4)           0265          613 
+REERROR                          Byte              0269          617 
+TOUCH                            Byte              026A          618 
+NEXTDAY                          Bit [1]           0263          611 
+COUNT                            Byte              026B          619 
+I                                Byte              026C          620 
+J                                Byte              026D          621 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -985,38 +977,8 @@ IDWATER                          52
 IDLIGHT                          53
 IDPLANT                          54
 IDFOUNTAIN                       55
+IDPUMP                           56
 ALLID                            99
-ALLTYP                           115
-READALLINPUT                     1
-READ1INPUT                       2
-SETIDKEY                         3
-ENABLEBUZ                        4
-DISABLEBUZ                       5
-ENABLESENSOR                     6
-DISABLESENSOR                    7
-ENABLEINPUT                      8
-DISABLEINPUT                     9
-READSTEPS                        10
-LEARNSTEPS                       11
-ENABLESTEP                       12
-DISABLESTEP                      13
-READSENARIO                      14
-READREMOTE                       15
-OUTPUTBLANK                      16
-RESETOUTPUT                      17
-RESETALLOUTPUT                   18
-SETOUTPUT                        19
-CLEARID                          20
-LEARNREMOTE                      21
-CLEARREMOTE                      22
-SETIDREMOTE                      23
-SYCRELAYMODULEID                 24
-SYCPWMMODULEID                   25
-SETIDFORMODULES                  26
-CLEARALL                         27
-PWMLIGHT                         28
-PWMBLINK                         29
-READYOUTPUT                      30
 TOMASTER                         252
 TOOUTPUT                         232
 TOINPUT                          242
@@ -1054,11 +1016,16 @@ COMPARE1                         not used
 COUNTER3                         not used
 COMPARE3                         not used
 ACTION                           not used
+REFRESHTEMP                      not used
 DIFT                             not used
 TEMPOK                           not used
 TMPREAD                          not used
 ST1                              not used
 ST2                              not used
+SAHIH1                           not used
+SAHIH2                           not used
+ASHAR1                           not used
+ASHAR2                           not used
 KABISE                           not used
 CONTER3                          not used
 CONTER4                          not used
@@ -1070,8 +1037,22 @@ MENU                             not used
 TEST                             not used
 S3                               not used
 S4                               not used
+BACKTIME                         not used
+SUNSETH                          not used
+SUNSETM                          not used
+SUNRISEH                         not used
+SUNRISEM                         not used
+U                                not used
+D                                not used
+SENARIO                          not used
 REMOTEID                         not used
+REMOTEKEYID                      not used
+LDAYS                            not used
+SETLIGHT                         not used
 LEARNOK                          not used
+LEARNDONE                        not used
+CLEARDONE                        not used
+SETREMOTEDONE                    not used
 X                                not used
 W                                not used
 Z                                not used
@@ -1081,15 +1062,21 @@ PLANT_START_MIN                  not used
 PLANT_STOP_HOUR                  not used
 PLANT_STOP_MIN                   not used
 PLANT_DAYS                       not used
+PUMPS                            not used
+MUTES                            not used
+SENSORS                          not used
+PASS                             not used
+REERROR                          not used
+NEXTDAY                          not used
 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  673 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  1790 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  1802 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  1817 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  1829 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  2703 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  2715 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  2727 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  2744 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  2756 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  2768 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  428 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  1207 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  1219 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  1234 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  1246 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  2106 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  2118 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  2130 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  2147 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  2159 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  2171 

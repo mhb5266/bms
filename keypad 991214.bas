@@ -636,7 +636,7 @@ Sub Remotelearn
      Loop
 End Sub
 
- dSub Remoteclear
+ Sub Remoteclear
 
 
        For I = 1 To 8

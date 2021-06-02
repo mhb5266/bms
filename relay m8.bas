@@ -69,6 +69,14 @@ Dim Outid1(8) As Byte
 Dim Outid2(8) As Byte
 Dim Outid3(8) As Byte
 
+dim senario1 as eram byte
+dim senario2 as eram byte
+dim senario3 as eram byte
+dim senario4 as eram byte
+
+dim senario as byte
+
+
 Dim Eouts(8) As Eram Byte
 Dim Idgot As Eram Byte
 Dim D As Byte
@@ -165,7 +173,7 @@ Const Readremote = 15
 
 Const Keyin = 101
 Const Steps = 102
-Const Senario = 103
+
 Const Remote = 104
 Const Relaymodules = 110
 
@@ -736,6 +744,137 @@ Sub Findorder
                        Set Blank
                        Idblank = Id
 
+               case 200
+                  if id=1 then
+                     if out1=0 then senario.0=0 else senario.0=1
+                     if out2=0 then senario.1=0 else senario.1=1
+                     if out3=0 then senario.2=0 else senario.2=1
+                     if out4=0 then senario.3=0 else senario.3=1
+                     if out5=0 then senario.4=0 else senario.4=1
+                     if out6=0 then senario.5=0 else senario.5=1
+                     if out7=0 then senario.6=0 else senario.6=1
+                     if out8=0 then senario.7=0 else senario.7=1
+                     senario1=senario
+                     waitms 20
+                  end if
+                  if id=2 then
+                     if out1=0 then senario.0=0 else senario.0=1
+                     if out2=0 then senario.1=0 else senario.1=1
+                     if out3=0 then senario.2=0 else senario.2=1
+                     if out4=0 then senario.3=0 else senario.3=1
+                     if out5=0 then senario.4=0 else senario.4=1
+                     if out6=0 then senario.5=0 else senario.5=1
+                     if out7=0 then senario.6=0 else senario.6=1
+                     if out8=0 then senario.7=0 else senario.7=1
+                     senario2=senario
+                     waitms 20
+                  end if
+                  if id=3 then
+                     if out1=0 then senario.0=0 else senario.0=1
+                     if out2=0 then senario.1=0 else senario.1=1
+                     if out3=0 then senario.2=0 else senario.2=1
+                     if out4=0 then senario.3=0 else senario.3=1
+                     if out5=0 then senario.4=0 else senario.4=1
+                     if out6=0 then senario.5=0 else senario.5=1
+                     if out7=0 then senario.6=0 else senario.6=1
+                     if out8=0 then senario.7=0 else senario.7=1
+                     senario3=senario
+                     waitms 20
+                  end if
+                  if id=4 then
+                     if out1=0 then senario.0=0 else senario.0=1
+                     if out2=0 then senario.1=0 else senario.1=1
+                     if out3=0 then senario.2=0 else senario.2=1
+                     if out4=0 then senario.3=0 else senario.3=1
+                     if out5=0 then senario.4=0 else senario.4=1
+                     if out6=0 then senario.5=0 else senario.5=1
+                     if out7=0 then senario.6=0 else senario.6=1
+                     if out8=0 then senario.7=0 else senario.7=1
+                     senario4=senario
+                     waitms 20
+                  end if
+
+               case 201
+                  if id=1 then
+                     senario=senario1
+                     waitms 20
+                     if senario.0=0 then out1=0 else out1=1
+                     waitms 500
+                     if senario.1=0 then out2=0 else out2=1
+                     waitms 500
+                     if senario.2=0 then out3=0 else out3=1
+                     waitms 500
+                     if senario.3=0 then out4=0 else out4=1
+                     waitms 500
+                     if senario.4=0 then out5=0 else out5=1
+                     waitms 500
+                     if senario.5=0 then out6=0 else out6=1
+                     waitms 500
+                     if senario.6=0 then out7=0 else out7=1
+                     waitms 500
+                     if senario.7=0 then out8=0 else out8=1
+                     waitms 500
+                  end if
+                  if id=2 then
+                     senario=senario2
+                     waitms 20
+                     if senario.0=0 then out1=0 else out1=1
+                     waitms 500
+                     if senario.1=0 then out2=0 else out2=1
+                     waitms 500
+                     if senario.2=0 then out3=0 else out3=1
+                     waitms 500
+                     if senario.3=0 then out4=0 else out4=1
+                     waitms 500
+                     if senario.4=0 then out5=0 else out5=1
+                     waitms 500
+                     if senario.5=0 then out6=0 else out6=1
+                     waitms 500
+                     if senario.6=0 then out7=0 else out7=1
+                     waitms 500
+                     if senario.7=0 then out8=0 else out8=1
+                     waitms 500
+                  end if
+                  if id=3 then
+                     senario=senario3
+                     waitms 20
+                     if senario.0=0 then out1=0 else out1=1
+                     waitms 500
+                     if senario.1=0 then out2=0 else out2=1
+                     waitms 500
+                     if senario.2=0 then out3=0 else out3=1
+                     waitms 500
+                     if senario.3=0 then out4=0 else out4=1
+                     waitms 500
+                     if senario.4=0 then out5=0 else out5=1
+                     waitms 500
+                     if senario.5=0 then out6=0 else out6=1
+                     waitms 500
+                     if senario.6=0 then out7=0 else out7=1
+                     waitms 500
+                     if senario.7=0 then out8=0 else out8=1
+                     waitms 500
+                  end if
+                  if id=4 then
+                     senario=senario4
+                     waitms 20
+                     if senario.0=0 then out1=0 else out1=1
+                     waitms 500
+                     if senario.1=0 then out2=0 else out2=1
+                     waitms 500
+                     if senario.2=0 then out3=0 else out3=1
+                     waitms 500
+                     if senario.3=0 then out4=0 else out4=1
+                     waitms 500
+                     if senario.4=0 then out5=0 else out5=1
+                     waitms 500
+                     if senario.5=0 then out6=0 else out6=1
+                     waitms 500
+                     if senario.6=0 then out7=0 else out7=1
+                     waitms 500 
+                     if senario.7=0 then out8=0 else out8=1
+
+                  end if
 
         End Select
 

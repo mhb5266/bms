@@ -148,8 +148,8 @@ Dim D As Byte
 Maxconfig:
 
 Enable Interrupts
-Enable Urxc
-On Urxc Rx
+'Enable Urxc
+'On Urxc Rx
 
 
 
@@ -376,7 +376,7 @@ Set Backlight
 
 Cls
 Call Beep
-Showpic 32 , 1 , Logo
+Showpic 32 , 0 , Logo
 Waitms 500
 Cls
 Findorder = Readremote
@@ -394,7 +394,7 @@ Main:
 
        If Refreshtemp <> _sec Then
           Call Temp
-
+'(
           If _sec = 5 Or _sec = 20 Or _sec = 35 Or _sec = 50 Then
             Cls
             Select Case Senario
@@ -479,6 +479,7 @@ Main:
                Showpic 95 , 17 , Sfountain , 0
             End If
           End If
+          ')
          Refreshtemp = _sec
        End If
        Call Show
