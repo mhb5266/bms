@@ -1144,8 +1144,8 @@ Sub Pwlsetting
     Status = 1
 
         Select Case Id
-               Case Idlight
-                    Showpic 0 , 0 , Slight
+               Case IdPUMP
+                    Showpic 0 , 0 , SPUMP
                Case Idplant
                     Showpic 0 , 0 , Splant
                Case Idwater
@@ -1718,7 +1718,303 @@ Sub Light_menu
     Offhour = Eltime(3)
     Offmin = Eltime(4)
 
-    Call Pwlsetting
+
+    Do
+
+        If Status < 1 Then Status = 4 : If Status > 4 Then Status = 1
+
+        If Onhour > 59 Then Onhour = 0
+        If Onmin > 59 Then Onmin = 0
+
+
+        If Offhour > 59 Then Offhour = 0
+        If Offmin > 59 Then Offmin = 0
+
+        '-----------------------------
+        If Selection = 1 And Blink_ = 0 Then
+           S1 = "     "
+        Else
+           If Status = 1 Then S1 = "ON  "
+           If Status = 2 Then S1 = "OFF "
+           If Status = 3 Then S1 = "AUTO"
+           If Status = 4 Then S1 = "TIME"
+        End If
+
+        Setfont Font16x16en
+        Lcdat 5 , 1 , S1
+        Setfont Font8x8
+        S1 = "     "
+        If Status =4  Then
+
+                  S1 = "ON :"
+
+
+                 '-----------------------------
+                 If Selection = 2 And Blink_ = 0 Then
+
+                  S1 = S1 + "  "
+                 Else
+
+                  S = Str(onhour)
+                  S = Format(s , "00")
+                  S1 = S1 + S
+
+                 End If
+                 S1 = S1 + ":"
+                 '------------------------------
+                 If Selection = 3 And Blink_ = 0 Then
+
+                  S1 = S1 + "  "
+                 Else
+
+                  S = Str(onmin)
+                  S = Format(s , "00")
+                  S1 = S1 + S
+
+                 End If
+
+                 Lcdat 7 , 1 , S1
+
+                 S1 = "OFF:"
+                 '------------------------------
+                 If Selection = 4 And Blink_ = 0 Then
+
+                  S1 = S1 + "  "
+                 Else
+
+                  S = Str(offhour)
+                  S = Format(s , "00")
+                  S1 = S1 + S
+
+                 End If
+                 S1 = S1 + ":"
+                 '------------------------------
+                 If Selection = 5 And Blink_ = 0 Then
+
+                  S1 = S1 + "  "
+                 Else
+
+                  S = Str(offmin)
+                  S = Format(s , "00")
+                  S1 = S1 + S
+
+                 End If
+
+
+                 Lcdat 8 , 1 , S1
+
+
+
+
+                S1 = ""
+                '--------------------------------
+                If Selection = 6 And Blink_ = 0 Then
+
+                 S1 = S1 + "     "
+                Else
+
+                 If Days.0 = 1 Then S1 = S1 + "*Sat" Else S1 = S1 + " Sat"
+
+
+                End If
+
+                Lcdat 2 , 88 , S1
+
+                '---------------------------------
+                S1 = ""
+                If Selection = 7 And Blink_ = 0 Then
+
+                 S1 = S1 + "     "
+                Else
+
+                 If Days.1 = 1 Then S1 = S1 + "*Sun" Else S1 = S1 + " Sun"
+
+
+                End If
+
+                Lcdat 3 , 88 , S1
+                '----------------------------------
+
+                S1 = ""
+                If Selection = 8 And Blink_ = 0 Then
+
+                 S1 = S1 + "     "
+                Else
+
+                 If Days.2 = 1 Then S1 = S1 + "*Mon" Else S1 = S1 + " Mon"
+
+
+                End If
+
+                Lcdat 4 , 88 , S1
+                '----------------------------------
+                S1 = ""
+                If Selection = 9 And Blink_ = 0 Then
+
+                 S1 = S1 + "     "
+                Else
+
+                 If Days.3 = 1 Then S1 = S1 + "*Tue" Else S1 = S1 + " Tue"
+
+
+                End If
+
+                Lcdat 5 , 88 , S1
+                '----------------------------------
+
+                S1 = ""
+                If Selection = 10 And Blink_ = 0 Then
+
+                 S1 = S1 + "     "
+                Else
+
+                 If Days.4 = 1 Then S1 = S1 + "*Wed" Else S1 = S1 + " Wed"
+
+
+                End If
+
+                Lcdat 6 , 88 , S1
+                '----------------------------------
+                S1 = ""
+                If Selection = 11 And Blink_ = 0 Then
+
+                 S1 = S1 + "     "
+                Else
+
+                 If Days.5 = 1 Then S1 = S1 + "*Thu" Else S1 = S1 + " Thu"
+
+
+                End If
+
+                Lcdat 7 , 88 , S1
+                '----------------------------------
+
+                S1 = ""
+                If Selection = 12 And Blink_ = 0 Then
+
+                 S1 = S1 + "    "
+                Else
+
+                 If Days.6 = 1 Then S1 = S1 + "*Fri" Else S1 = S1 + " Fri"
+
+
+                End If
+
+                Lcdat 8 , 88 , S1
+                '----------------------------------
+        End If
+
+        Call Readtouch
+
+        If Touch = 11 Or Touch = 21 Then
+           Incr Selection
+           If Status < 4 Then
+              If Selection > 1 Then Selection = 1
+              Set Backmenu
+              Cls
+              Exit Do
+           End If
+           If Status <4 Then
+              Set Backmenu
+              Cls
+              Exit Do
+           End If
+           Touch = 0
+        End If
+
+        If Touch = 14 Or Touch = 24 Then
+           Cls
+           Setfont Font8x8
+           Set Backmenu
+           Touch = 0
+           Return
+        End If
+
+        Incr Timer_1
+        If Timer_1 > 5 Then
+         Timer_1 = 0
+         Toggle Blink_
+        End If
+
+        '-----------------------------------
+        If Touch = 12 Or Touch = 22 Then
+
+              If Selection = 1 Then Incr Status
+              If Selection = 2 Then Incr Onhour
+              If Selection = 3 Then Incr Onmin
+              If Selection = 4 Then Incr Offhour
+              If Selection = 5 Then Incr Offmin
+              If Selection = 6 Then Toggle Days.0
+              If Selection = 7 Then Toggle Days.1
+              If Selection = 8 Then Toggle Days.2
+              If Selection = 9 Then Toggle Days.3
+              If Selection = 10 Then Toggle Days.4
+              If Selection = 11 Then Toggle Days.5
+              If Selection = 12 Then Toggle Days.6
+
+        End If
+        '------------------------------------
+        If Touch = 13 Or Touch = 23 Then
+              If Selection = 1 Then Decr Status
+              If Selection = 2 Then Decr Onhour
+              If Selection = 3 Then Decr Onmin
+              If Selection = 4 Then Decr Offhour
+              If Selection = 5 Then Decr Offmin
+              If Selection = 6 Then Toggle Days.0
+              If Selection = 7 Then Toggle Days.1
+              If Selection = 8 Then Toggle Days.2
+              If Selection = 9 Then Toggle Days.3
+              If Selection = 10 Then Toggle Days.4
+              If Selection = 11 Then Toggle Days.5
+              If Selection = 12 Then Toggle Days.6
+        End If
+
+        '--------------------------------------
+
+        If Status < 1 Then Status = 3 : If Status > 3 Then Status = 1
+
+
+        If Touch = 12 Or Touch = 13 Or Touch = 22 Or Touch = 23 Then
+            Cls
+            Set Blink_
+            Select Case Id
+               Case Idlight
+                    Showpic 0 , 0 , Slight
+               Case Idplant
+                    Showpic 0 , 0 , Splant
+               Case Idwater
+                    Showpic 0 , 0 , Swatersystem
+               Case Idfountain
+                    Showpic 0 , 0 , Sfountain
+            End Select
+            If Selection = 1 And Status < 3 Then
+               If Status = 1 Then
+                  Cmd = 180 : Direct = Tooutput : Typ = Relaymodule : Tx
+                  Waitms 20
+                  Cmd = 182 : Direct = Tooutput : Typ = Relaymodule : Tx
+                  Waitms 20
+               End If
+               If Status = 2 Then
+                  Cmd = 180 : Direct = Tooutput : Typ = Relaymodule : Tx
+                  Waitms 20
+                  Cmd = 181 : Direct = Tooutput : Typ = Relaymodule : Tx
+                  Waitms 20
+               End If
+            End If
+            Touch = 0
+        End If
+
+
+
+        Waitms 50
+
+
+        If Selection > 12 Then
+           Cls
+           Exit Do
+        End If
+    Loop
+
 
     Eldays = Days
     Lstatus = Status
