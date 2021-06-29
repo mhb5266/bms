@@ -1,0 +1,52 @@
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+__ds1820_scratch_pad                                                              0x0263       9
+ds1820_rom_codes                                                                  0x026C      72
+glcd_state                                                                        0x02B4      29
+rx_buffer                                                                         0x02D1      24
+st7920_graphics_on                                                                0x02E9       1
+st7920_bits8_15                                                                   0x02EA       1
+xt                                                                                0x02EB       1
+yt                                                                                0x02EC       1
+_seed                                                                             0x02ED       4
+
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+ds1820_devices                                                                    R5           1
+rx_wr_index                                                                       R4           1
+rx_rd_index                                                                       R7           1
+rx_counter                                                                        R6           1
+rx_buffer_overflow                                                                R2.0      1bit
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+usart_rx_isr                                                                      0x00081     35
+main                                                                              0x000A4    102
+rtc_init                                                                          0x0010A     31
+st7920_delay_G102                                                                 0x00129      4
+st7920_wrbus_G102                                                                 0x0012D     27
+st7920_rdbus_G102                                                                 0x00148     20
+st7920_busy_G102                                                                  0x0015C     26
+st7920_wrdata                                                                     0x00176      6
+st7920_rddata                                                                     0x0017C      4
+st7920_wrcmd                                                                      0x00180      5
+st7920_setxy_G102                                                                 0x00185     19
+glcd_display                                                                      0x00198     24
+glcd_cleartext                                                                    0x001B0     13
+glcd_cleargraphics                                                                0x001BD     38
+glcd_init                                                                         0x001E3    154
+lcd_gotoxy                                                                        0x0027D     30
+glcd_putcharcg                                                                    0x0029B     45
+lcd_putchar                                                                       0x002C8     44
+lcd_puts                                                                          0x002F4     17
+glcd_clipx                                                                        0x00305     18
+glcd_clipy                                                                        0x00317     18
+glcd_moveto                                                                       0x00329     13
+memset                                                                            0x00336     16

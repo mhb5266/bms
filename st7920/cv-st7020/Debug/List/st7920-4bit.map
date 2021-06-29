@@ -1,0 +1,95 @@
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+glcd_state                                                                        0x02A4      29
+rot                                                                               0x02C1       1
+Reverse                                                                           0x02C2       1
+Horizontal                                                                        0x02C3       1
+FgColor                                                                           0x02C4       2
+BkColor                                                                           0x02C6       2
+FontFixed                                                                         0x02C8       1
+NonTransparence                                                                   0x02C9       1
+FontWidth                                                                         0x02CA       1
+FontHeight                                                                        0x02CB       1
+FontXScale                                                                        0x02CC       1
+FontYScale                                                                        0x02CD       1
+FontSpaceX                                                                        0x02CE       1
+FontSpaceY                                                                        0x02CF       1
+cursorX                                                                           0x02D0       2
+cursorY                                                                           0x02D2       2
+peLETTER                                                                          0x02D4       1
+str                                                                               0x02D5      20
+st7920_graphics_on                                                                0x02E9       1
+st7920_bits8_15                                                                   0x02EA       1
+xt                                                                                0x02EB       1
+yt                                                                                0x02EC       1
+_seed                                                                             0x02ED       4
+
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+i                                                                                 R5           1
+FontPointer                                                                       R6,R7        2
+fontSize                                                                          R8,R9        2
+firstchar                                                                         R4           1
+lastchar                                                                          R11          1
+charwidth                                                                         R10          1
+prevLet                                                                           R13          1
+nextLet                                                                           R12          1
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+main                                                                              0x00AA4    255
+PutCharEN                                                                         0x00BA3    228
+PutCharPE                                                                         0x00C87    196
+PutsPE                                                                            0x00D4B    257
+LcdFont                                                                           0x00E4C     26
+SetLetter                                                                         0x00E66     15
+SetLine                                                                           0x00E75     39
+PutChar                                                                           0x00E9C     11
+Puts                                                                              0x00EA7     35
+st7920_delay_G100                                                                 0x00ECA      4
+st7920_wrbus_G100                                                                 0x00ECE     27
+st7920_rdbus_G100                                                                 0x00EE9     20
+st7920_busy_G100                                                                  0x00EFD     26
+st7920_wrdata                                                                     0x00F17      6
+st7920_rddata                                                                     0x00F1D      4
+st7920_wrcmd                                                                      0x00F21      5
+st7920_setxy_G100                                                                 0x00F26     19
+glcd_display                                                                      0x00F39     25
+glcd_cleartext                                                                    0x00F52     13
+glcd_cleargraphics                                                                0x00F5F     38
+glcd_clear                                                                        0x00F85      3
+glcd_init                                                                         0x00F88    155
+st7920_rdbyte_G100                                                                0x01023     16
+st7920_wrbyte_G100                                                                0x01033     16
+glcd_putpixel                                                                     0x01043     48
+st7920_wrmasked_G100                                                              0x01073     73
+glcd_block                                                                        0x010BC    445
+glcd_putcharcg                                                                    0x01279     45
+glcd_clipx                                                                        0x012A6     21
+glcd_clipy                                                                        0x012BB     21
+glcd_imagesize                                                                    0x012D0     44
+glcd_getcharw_G101                                                                0x012FC    120
+glcd_new_line_G101                                                                0x01374     19
+glcd_putchar                                                                      0x01387    149
+glcd_outtextxy                                                                    0x0141C     16
+glcd_outtextxyf                                                                   0x0142C     18
+glcd_putimagef                                                                    0x0143E     46
+glcd_moveto                                                                       0x0146C     12
+put_buff_G104                                                                     0x01478     63
+_print_G104                                                                       0x014B7    308
+sprintf                                                                           0x015EB     52
+memset                                                                            0x0161F     16
+strlen                                                                            0x0162F     12
+strlenf                                                                           0x0163B     13
+glcd_getmask                                                                      0x01648     11
+glcd_mappixcolor1bit                                                              0x01653     40
+glcd_readmem                                                                      0x0167B     31
+glcd_writemem                                                                     0x0169A     31
+glcd_revbits                                                                      0x016B9     19

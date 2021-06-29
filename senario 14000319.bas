@@ -947,55 +947,41 @@ Sub Temp
    1wreset
    1wwrite &H55
    1wverify Ds18b20_id_1(1)
-   1wwrite &HBE
-   Readsens = 1wread(2)
+   if err=0 then
+      1wwrite &HBE
+      Readsens = 1wread(2)
 
 
-   Tmp1 = Readsens
+      Tmp1 = Readsens
 
-   Gosub Conversion
-   Sens1 = Temperature
+      Gosub Conversion
+      Sens1 = Temperature
 
 
-  If Jstatus = 0 Then
-      Setfont Font16x16en
-      Lcdat 3 , 1 , Sens1 ; "  "
-  End If
-
-  '(
-
-   If Readsens < 0 Then Readsens = Readsens * -1
-   Sahih1 = 0
-   If Readsens > 9 Then
-   Sahih1 = Readsens / 10
-   Ashar1 = Readsens Mod 10
-   End If
-')
+      If Jstatus = 0 Then
+         Setfont Font16x16en
+         Lcdat 3 , 1 , Sens1 ; "  "
+      End If
+   end if
 
    1wreset
    1wwrite &H55
    1wverify Ds18b20_id_2(1)
-   1wwrite &HBE
-   Readsens = 1wread(2)
-   Tmp2 = Readsens
+   if err=0 then
+      1wwrite &HBE
+      Readsens = 1wread(2)
 
-   Gosub Conversion
-   Sens2 = Temperature
+      Tmp2 = Readsens
 
-  If Jstatus = 1 Then
-      Showpic 96 , 32 , Smalljacuzi
-      Setfont Font16x16en
-      Lcdat 3 , 1 , Sens2 ; "  "
-  End If
-      '(
-   If Readsens < 0 Then Readsens = Readsens * -1
-   Sahih2 = 0
-   If Readsens > 9 Then
-   Sahih2 = Readsens / 10
-   Ashar2 = Readsens Mod 10
-   End If
-')
+      Gosub Conversion
+      Sens2 = Temperature
 
+      If Jstatus = 1 Then
+         Showpic 96 , 32 , Smalljacuzi
+         Setfont Font16x16en
+         Lcdat 3 , 1 , Sens2 ; "  "
+      End If
+   end if
 
 End Sub
 
@@ -1141,11 +1127,9 @@ End Sub
 Sub Pwlsetting
     Selection = 1
     Cls
-    Status = 1
+    if status>4 or status<1 then Status = 1
 
         Select Case Id
-               Case Idlight
-                    Showpic 0 , 0 , Slight
                Case Idplant
                     Showpic 0 , 0 , Splant
                Case Idwater
@@ -1155,20 +1139,6 @@ Sub Pwlsetting
         End Select
 
     Do
-      '(
-        Select Case Id
-               Case Idlight
-                    Lcdat 1 , 1 , Farsi( " ÑæÔäÇíí äãÇ    ") , 1
-               Case Idplant
-                    Lcdat 1 , 1 , Farsi( " ÑÔÏ íÇå       ") , 1
-               Case Idwater
-                    Lcdat 1 , 1 , Farsi( " ÂÈíÇÑí         " ) , 1
-               Case Idfountain
-                    Lcdat 1 , 1 , Farsi( " ÂÈäãÇ          " ) , 1
-        End Select
-')
-
-
 
 
         If Status < 1 Then Status = 3 : If Status > 3 Then Status = 1

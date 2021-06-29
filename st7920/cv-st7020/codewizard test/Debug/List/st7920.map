@@ -1,0 +1,42 @@
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+glcd_state                                                                        0x0269      29
+st7920_graphics_on                                                                0x0286       1
+st7920_bits8_15                                                                   0x0287       1
+xt                                                                                0x0288       1
+yt                                                                                0x0289       1
+_seed                                                                             0x028A       4
+
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+main                                                                              0x001C4     73
+st7920_delay_G100                                                                 0x0020D      4
+st7920_wrbus_G100                                                                 0x00211     27
+st7920_rdbus_G100                                                                 0x0022C     20
+st7920_busy_G100                                                                  0x00240     26
+st7920_wrdata                                                                     0x0025A      6
+st7920_rddata                                                                     0x00260      4
+st7920_wrcmd                                                                      0x00264      5
+st7920_setxy_G100                                                                 0x00269     19
+glcd_display                                                                      0x0027C     24
+glcd_cleartext                                                                    0x00294     13
+glcd_cleargraphics                                                                0x002A1     38
+glcd_init                                                                         0x002C7    154
+lcd_gotoxy                                                                        0x00361     30
+glcd_putcharcg                                                                    0x0037F     44
+lcd_putchar                                                                       0x003AB     44
+lcd_puts                                                                          0x003D7     17
+glcd_clipx                                                                        0x003E8     18
+glcd_clipy                                                                        0x003FA     18
+glcd_moveto                                                                       0x0040C     13
+memset                                                                            0x00419     16
