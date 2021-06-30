@@ -1,12 +1,16 @@
 RAM Allocation [bytes]
 Variable                                                                          Address   Size
 ------------------------------------------------------------------------------------------------
-glcd_state                                                                        0x0269      29
-st7920_graphics_on                                                                0x0286       1
-st7920_bits8_15                                                                   0x0287       1
-xt                                                                                0x0288       1
-yt                                                                                0x0289       1
-_seed                                                                             0x028A       4
+__ds18b20_scratch_pad                                                             0x0269       9
+ds1820_rom_codes                                                                  0x0272      72
+glcd_state                                                                        0x02BA      29
+temp                                                                              0x02D7       4
+buffer                                                                            0x02DB      16
+st7920_graphics_on                                                                0x02EB       1
+st7920_bits8_15                                                                   0x02EC       1
+xt                                                                                0x02ED       1
+yt                                                                                0x02EE       1
+_seed                                                                             0x02EF       4
 
 EEPROM Allocation [bytes]
 Variable                                                                          Address   Size
@@ -15,28 +19,43 @@ Variable                                                                        
 Register Allocation
 Variable                                                                          Register  Size
 ------------------------------------------------------------------------------------------------
+ds1820_devices                                                                    R5           1
+a                                                                                 R4           1
 
 FLASH Allocation [words]
 Function                                                                          Address   Size
 ------------------------------------------------------------------------------------------------
-main                                                                              0x001C4     73
-st7920_delay_G100                                                                 0x0020D      4
-st7920_wrbus_G100                                                                 0x00211     27
-st7920_rdbus_G100                                                                 0x0022C     20
-st7920_busy_G100                                                                  0x00240     26
-st7920_wrdata                                                                     0x0025A      6
-st7920_rddata                                                                     0x00260      4
-st7920_wrcmd                                                                      0x00264      5
-st7920_setxy_G100                                                                 0x00269     19
-glcd_display                                                                      0x0027C     24
-glcd_cleartext                                                                    0x00294     13
-glcd_cleargraphics                                                                0x002A1     38
-glcd_init                                                                         0x002C7    154
-lcd_gotoxy                                                                        0x00361     30
-glcd_putcharcg                                                                    0x0037F     44
-lcd_putchar                                                                       0x003AB     44
-lcd_puts                                                                          0x003D7     17
-glcd_clipx                                                                        0x003E8     18
-glcd_clipy                                                                        0x003FA     18
-glcd_moveto                                                                       0x0040C     13
-memset                                                                            0x00419     16
+timer1_ovf_isr                                                                    0x001DA      7
+main                                                                              0x001E1    129
+put_buff_G100                                                                     0x00262     58
+_ftoe_G100                                                                        0x0029C    210
+_print_G100                                                                       0x0036E    538
+sprintf                                                                           0x00588     52
+ds18b20_select                                                                    0x005BC     36
+ds18b20_read_spd                                                                  0x005E0     42
+ds18b20_temperature                                                               0x0060A     80
+st7920_delay_G102                                                                 0x0065A      4
+st7920_wrbus_G102                                                                 0x0065E     27
+st7920_rdbus_G102                                                                 0x00679     20
+st7920_busy_G102                                                                  0x0068D     26
+st7920_wrdata                                                                     0x006A7      6
+st7920_rddata                                                                     0x006AD      4
+st7920_wrcmd                                                                      0x006B1      5
+st7920_setxy_G102                                                                 0x006B6     19
+glcd_display                                                                      0x006C9     24
+glcd_cleargraphics                                                                0x006E1     38
+glcd_init                                                                         0x00707    154
+lcd_gotoxy                                                                        0x007A1     30
+glcd_putcharcg                                                                    0x007BF     44
+lcd_putchar                                                                       0x007EB     44
+lcd_puts                                                                          0x00817     17
+glcd_clipx                                                                        0x00828     18
+glcd_clipy                                                                        0x0083A     18
+glcd_moveto                                                                       0x0084C     13
+memset                                                                            0x00859     16
+strcpyf                                                                           0x00869     13
+strlen                                                                            0x00876     12
+strlenf                                                                           0x00882     13
+ftrunc                                                                            0x0088F     49
+floor                                                                             0x008C0     23
+ftoa                                                                              0x008D7    194

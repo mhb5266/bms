@@ -292,7 +292,8 @@ Consts:
 
 Const Main_menu_counter = 8
 
-Configsub:
+definesub:
+
    Declare Sub Pump_menu
    Declare Sub Selectmenu
    Declare Sub Selectsenario
@@ -342,25 +343,7 @@ Configsub:
    Declare Sub Tx
 
    Declare Sub Checkanswer
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Declare Sub Order
+   Declare Sub Order
 
 
 Startup:
