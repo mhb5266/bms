@@ -249,6 +249,8 @@ Plant_def:
 
 Defines:
 
+dim mm as bit
+
 Dim Jstatus As Boolean
 Dim Changetime As Boolean
 Dim Lsec As Byte
@@ -363,20 +365,21 @@ Waitms 500
 Main:
 
    Do
-      Waitms 100
+      Waitms 10
       Read_dt
       Mtosh
       If _sec <> Lsec Then
          Shoewtime
          Temp
-         Ifcheck
+         if _sec=0 then Ifcheck
       End If
       Lsec = _sec
+      set mm
       Readtouch
-      If Touch = 11 Then
+      If Touch = 21 Then
         Selectmenu
       End If
-      If Touch > 20 And Touch < 25 Then
+      If Touch > 10 And Touch < 15 Then
          Selectsenario
       End If
    Loop
@@ -1119,6 +1122,8 @@ Sub Pwlsetting
                     Showpic 0 , 0 , Swatersystem
                Case Idfountain
                     Showpic 0 , 0 , Sfountain
+               case idpump
+                    Showpic 0 , 0 , Spump
         End Select
 
     Do
@@ -1126,12 +1131,21 @@ Sub Pwlsetting
 
         If Status < 1 Then Status = 3 : If Status > 3 Then Status = 1
 
-        If Onhour > 59 Then Onhour = 0
-        If Onmin > 59 Then Onmin = 0
+        If Onhour > 23 and onhour<25 Then Onhour = 0
+        If Onmin > 59 and onmin<61 Then Onmin = 0
 
 
-        If Offhour > 59 Then Offhour = 0
-        If Offmin > 59 Then Offmin = 0
+        If Offhour > 23 and offhour<25 Then Offhour = 0
+        If Offmin > 59 and offmin<61 Then Offmin = 0
+
+
+
+        If Onhour > 25 Then Onhour = 23
+        If Onmin > 61  Then Onmin = 59
+
+
+        If Offhour > 25  Then Offhour = 23
+        If Offmin > 61  Then Offmin = 59
 
         '-----------------------------
         If Selection = 1 And Blink_ = 0 Then
@@ -1146,7 +1160,7 @@ Sub Pwlsetting
         Lcdat 5 , 1 , S1
         Setfont Font8x8
         S1 = "     "
-        If Status = 3 And Id <> Idlight Then
+        If Status = 3  Then
 
                   S1 = "ON :"
 
@@ -1307,8 +1321,11 @@ Sub Pwlsetting
         End If
 
         Call Readtouch
-
-        If Touch = 11 Or Touch = 21 Then
+        if touch>0 then
+           blink_=1
+           timer_1=0
+        end if
+        If Touch = 11  Then
            Incr Selection
            If Status < 3 Then
               If Selection > 1 Then Selection = 1
@@ -1316,15 +1333,9 @@ Sub Pwlsetting
               Cls
               Exit Do
            End If
-           If Status = 3 And Id = Idlight Then
-              Set Backmenu
-              Cls
-              Exit Do
-           End If
            Touch = 0
         End If
-
-        If Touch = 14 Or Touch = 24 Then
+        If Touch = 14  Then
            Cls
            Setfont Font8x8
            Set Backmenu
@@ -1339,7 +1350,7 @@ Sub Pwlsetting
         End If
 
         '-----------------------------------
-        If Touch = 12 Or Touch = 22 Then
+        If Touch = 12  Then
 
               If Selection = 1 Then Incr Status
               If Selection = 2 Then Incr Onhour
@@ -1356,7 +1367,7 @@ Sub Pwlsetting
 
         End If
         '------------------------------------
-        If Touch = 13 Or Touch = 23 Then
+        If Touch = 13  Then
               If Selection = 1 Then Decr Status
               If Selection = 2 Then Decr Onhour
               If Selection = 3 Then Decr Onmin
@@ -1376,12 +1387,12 @@ Sub Pwlsetting
         If Status < 1 Then Status = 3 : If Status > 3 Then Status = 1
 
 
-        If Touch = 12 Or Touch = 13 Or Touch = 22 Or Touch = 23 Then
-            Cls
+        If Touch = 12 Or Touch = 13  Then
+           if status<3 and  selection=1 then cls
             Set Blink_
             Select Case Id
-               Case Idlight
-                    Showpic 0 , 0 , Slight
+               case idpump
+                    Showpic 0 , 0 , Spump
                Case Idplant
                     Showpic 0 , 0 , Splant
                Case Idwater
@@ -1403,6 +1414,7 @@ Sub Pwlsetting
                   Waitms 20
                End If
             End If
+            If Selection = 1 And Status = 3 Then waitms 100
             Touch = 0
         End If
 
@@ -1457,7 +1469,7 @@ Sub Jacuzi_menu
 
         Call Readtouch
 
-        If Touch = 11 Or Touch = 21 Then
+        If Touch = 11  Then
            Incr Selection
            If Selection > 2 Then
                Selection = 1
@@ -1468,7 +1480,7 @@ Sub Jacuzi_menu
            Touch = 0
         End If
 
-        If Touch = 14 Or Touch = 24 Then
+        If Touch = 14 Then
            Cls
            Set Backmenu
            Setfont Font8x8
@@ -1481,15 +1493,17 @@ Sub Jacuzi_menu
          Timer_1 = 0
          Toggle Blink_
         End If
-
+        if touch=12 or touch=13 then
+           Set Blink_
+           timer_1=0
+        end if
         '-----------------------------------
-        If Touch = 12 Or Touch = 22 Then
-
+        If Touch = 12  Then
               If Selection = 1 Then Incr Status
               If Selection = 2 Then Incr Alarmtemp
         End If
         '------------------------------------
-        If Touch = 13 Or Touch = 23 Then
+        If Touch = 13  Then
            If Selection = 1 Then Decr Status
            If Selection = 2 Then Decr Alarmtemp
         End If
@@ -1498,22 +1512,23 @@ Sub Jacuzi_menu
         If Status > 2 Then Status = 1
         If Status < 1 Then Status = 2
 
-        If Touch = 12 Or Touch = 13 Or Touch = 22 Or Touch = 23 Then
-            Set Blink_
-            If Status = 1 Then
-                  Cmd = 180 : Direct = Tooutput : Typ = Relaymodule : Tx
-                  Waitms 20
-                  Cmd = 182 : Direct = Tooutput : Typ = Relaymodule : Tx
-                  Waitms 20
-            End If
-            If Status = 2 Then
-                  Cmd = 180 : Direct = Tooutput : Typ = Relaymodule : Tx
-                  Waitms 20
-                  Cmd = 181 : Direct = Tooutput : Typ = Relaymodule : Tx
-                  Waitms 20
-            End If
-            Touch = 0
-        End If
+        if selection=1 then
+                If Touch = 12 Or Touch = 13  Then
+                    If Status = 1 Then
+                          Cmd = 180 : Direct = Tooutput : Typ = Relaymodule : Tx
+                          Waitms 20
+                          Cmd = 182 : Direct = Tooutput : Typ = Relaymodule : Tx
+                          Waitms 20
+                    End If
+                    If Status = 2 Then
+                          Cmd = 180 : Direct = Tooutput : Typ = Relaymodule : Tx
+                          Waitms 20
+                          Cmd = 181 : Direct = Tooutput : Typ = Relaymodule : Tx
+                          Waitms 20
+                    End If
+                    Touch = 0
+                End If
+        end if
 
 
 
@@ -1679,12 +1694,21 @@ Sub Light_menu
 
         If Status < 1 Then Status = 4 : If Status > 4 Then Status = 1
 
-        If Onhour > 59 Then Onhour = 0
-        If Onmin > 59 Then Onmin = 0
+        If Onhour > 23 and onhour<25 Then Onhour = 0
+        If Onmin > 59 and onmin<61 Then Onmin = 0
 
 
-        If Offhour > 59 Then Offhour = 0
-        If Offmin > 59 Then Offmin = 0
+        If Offhour > 23 and offhour<25 Then Offhour = 0
+        If Offmin > 59 and offmin<61 Then Offmin = 0
+
+
+
+        If Onhour > 25 Then Onhour = 23
+        If Onmin > 61  Then Onmin = 59
+
+
+        If Offhour > 25  Then Offhour = 23
+        If Offmin > 61  Then Offmin = 59
 
         '-----------------------------
         If Selection = 1 And Blink_ = 0 Then
@@ -1862,7 +1886,7 @@ Sub Light_menu
 
         Call Readtouch
 
-        If Touch = 11 Or Touch = 21 Then
+        If Touch = 11 Then
            Incr Selection
            If Status < 3 Then
               If Selection > 1 Then Selection = 1
@@ -1878,7 +1902,7 @@ Sub Light_menu
            Touch = 0
         End If
 
-        If Touch = 14 Or Touch = 24 Then
+        If Touch = 14 Then
            Cls
            Setfont Font8x8
            Set Backmenu
@@ -1893,7 +1917,7 @@ Sub Light_menu
         End If
 
         '-----------------------------------
-        If Touch = 12 Or Touch = 22 Then
+        If Touch = 12  Then
 
               If Selection = 1 Then Incr Status
               If Selection = 2 Then Incr Onhour
@@ -1910,7 +1934,7 @@ Sub Light_menu
 
         End If
         '------------------------------------
-        If Touch = 13 Or Touch = 23 Then
+        If Touch = 13  Then
               If Selection = 1 Then Decr Status
               If Selection = 2 Then Decr Onhour
               If Selection = 3 Then Decr Onmin
@@ -1930,8 +1954,8 @@ Sub Light_menu
         If Status < 1 Then Status = 4 : If Status > 4 Then Status = 1
 
 
-        If Touch = 12 Or Touch = 13 Or Touch = 22 Or Touch = 23 Then
-            Cls
+        If Touch = 12 Or Touch = 13  Then
+            if status<4 and  selection=1 then cls
             Set Blink_
             Showpic 0 , 0 , Slight
             If Selection = 1 And Status < 3 Then
@@ -1948,6 +1972,7 @@ Sub Light_menu
                   Waitms 20
                End If
             End If
+            If Selection = 1 And Status >2 Then waitms 100
             Touch = 0
         End If
 
@@ -2037,84 +2062,73 @@ End Sub
 
 Sub Readtouch
    Touch = 0
-   If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
+     set buz
+    if touch1=1 and mm=1 then
+       j=0
+       do
+         incr j
+         if j=2 then reset buz
+         waitms 25
+         if j=10 then exit do
+       loop until touch1=0
+       if j>9 then touch=21 else touch=11
+    end if
+    if touch1=1 and mm=0 then
+       waitms 10
+       if touch1=1 then touch=11
+    end if
+    if touch2=1 then
+       waitms 10
+       if touch2=1 then touch=12
+    end if
+    if touch3=1 then
+       waitms 10
+       if touch3=1 then touch=13
+    end if
+    if touch4=1 then
+       waitms 10
+       if touch4=1 then touch=14
+    end if
+    reset buz
+    reset mm
+
+  '( If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
       Checkkey
    End If
+   ')
 End Sub
 
 Sub Checkkey
-   Set Buz
-   If Touch1 = 1 Then
-      J = 0
-      Do
-         Incr J
-         If J = 11 Then
-            Beeppro
-            Exit Do
-         End If
-         Waitms 50
-      Loop Until Touch1 = 0
-      If J < 10 Then
-         Touch = 11
-      Elseif J > 10 Then
-         Touch = 21
-      End If
-   End If
+    set buz
+    if touch1=1 and mm=1 then
+       j=0
+       do
+         incr j
+         if j=2 then reset buz
+         waitms 25
+         if j=10 then exit do
+       loop until touch1=0
+       if j>9 then touch=21 else touch=11
+    end if
+    if touch1=1 and mm=0 then
+       waitms 25
+       if touch1=1 then touch=11
+    end if
+    if touch2=1 then
+       waitms 25
+       if touch2=1 then touch=12
+    end if
+    if touch3=1 then
+       waitms 25
+       if touch3=1 then touch=13
+    end if
+    if touch4=1 then
+       waitms 25
+       if touch4=1 then touch=14
+    end if
+    reset buz
+    reset mm
 
-   If Touch2 = 1 Then
-      J = 0
-      Do
-         Incr J
-         If J = 2 Then Reset Buz
-         If J = 11 Then
-            Beeppro
-            Exit Do
-         End If
-         Waitms 50
-      Loop Until Touch2 = 0
-      If J < 10 Then
-         Touch = 12
-      Elseif J > 10 Then
-         Touch = 22
-      End If
-   End If
-   If Touch3 = 1 Then
-      J = 0
-      Do
-         Incr J
-         If J = 2 Then Reset Buz
-        If J = 2 Then Reset Buz
-         If J = 11 Then
-            Beeppro
-            Exit Do
-         End If
-         Waitms 50
-      Loop Until Touch3 = 0
-      If J < 10 Then
-         Touch = 13
-      Elseif J > 10 Then
-         Touch = 23
-      End If
-   End If
-
-   If Touch4 = 1 Then
-      J = 0
-      Do
-         Incr J
-         If J = 2 Then Reset Buz
-         If J = 11 Then
-            Beeppro
-            Exit Do
-         End If
-         Waitms 50
-      Loop Until Touch4 = 0
-      If J < 10 Then
-         Touch = 14
-      Elseif J > 10 Then
-         Touch = 24
-      End If
-   End If
-   Reset Buz
 End Sub
 
 Sub Beep
@@ -2166,82 +2180,98 @@ End Sub
 Sub Selectsenario
    Cls
    Waitms 200
-   If Touch = 21 Then
+   If Touch = 11 Then
       Showpic 0 , 0 , Exiticon
       Do
          Readtouch
-         If Touch = 11 Or Touch = 21 Then
+         If Touch = 11  Then
             Showpic 0 , 0 , Exiticon , 1
             Findorder = "setsenario#1"
+            order
             Beeppro
-            Order
-            Waitms 500
+            Waitms 300
             Cls
-            Return
+            exit do
          End If
-         If Touch = 12 Or Touch = 13 Or Touch = 14 Or Touch = 22 Or Touch = 23 Or Touch = 24 Then
-            Beeppro
+         If Touch = 12 Or Touch = 13 Or Touch = 14  Then
             Cls
+            Beeppro
+            'waitms 100
+            do
+              readtouch
+            loop until touch=0
             Exit Do
          End If
       Loop
    End If
-   If Touch = 22 Then
+   If Touch = 12 Then
       Showpic 0 , 0 , Night
       Do
          Readtouch
-         If Touch = 12 Or Touch = 22 Then
+         If Touch = 12  Then
             Showpic 0 , 0 , Night , 1
             Findorder = "setsenario#2"
+            order
             Beeppro
-            Order
-            Waitms 500
+            Waitms 300
             Cls
-            Return
+            exit do
          End If
-         If Touch = 11 Or Touch = 21 Or Touch = 14 Or Touch = 22 Or Touch = 23 Or Touch = 24 Then
-            Beeperror
+         If Touch = 11 Or Touch = 13 Or Touch = 14 Then
             Cls
+            Beeperror
+            'waitms 100
+            do
+              readtouch
+            loop until touch=0
             Exit Do
          End If
       Loop
    End If
-   If Touch = 23 Then
+   If Touch = 13 Then
       Showpic 0 , 0 , Party
       Do
          Readtouch
-         If Touch = 13 Or Touch = 23 Then
+         If Touch = 13 Then
             Showpic 0 , 0 , Party , 1
             Findorder = "setsenario#3"
+            order
             Beeppro
-            Order
-            Waitms 500
+            Waitms 300
             Cls
-            Return
+            exit do
          End If
-         If Touch = 12 Or Touch = 11 Or Touch = 14 Or Touch = 22 Or Touch = 21 Or Touch = 24 Then
-             Beeppro
+         If Touch = 12 Or Touch = 11 Or Touch = 14  Then
             Cls
+            Beeperror
+            'waitms 100
+            do
+              readtouch
+            loop until touch=0
             Exit Do
          End If
       Loop
    End If
-   If Touch = 24 Then
+   If Touch = 14 Then
       Showpic 0 , 0 , Rutin
       Do
          Readtouch
-         If Touch = 14 Or Touch = 24 Then
+         If Touch = 14 Then
             Showpic 0 , 0 , Rutin , 1
             Findorder = "setsenario#4"
+            order
             Beeppro
-            Order
-            Waitms 500
+            Waitms 300
             Cls
-            Return
+            exit do
          End If
-         If Touch = 12 Or Touch = 13 Or Touch = 11 Or Touch = 22 Or Touch = 23 Or Touch = 21 Then
-            Beeppro
+         If Touch = 12 Or Touch = 13 Or Touch = 11  Then
             Cls
+            Beeperror
+            'waitms 100
+            do
+              readtouch
+            loop until touch=0
             Exit Do
          End If
       Loop
@@ -2254,6 +2284,9 @@ Sub Selectmenu
    Cls
    Set Backmenu
    Count = 1
+    do
+      readtouch
+    loop until touch=0
    Do
       If Backmenu = 1 Then
          Reset Backmenu
@@ -2280,6 +2313,7 @@ Sub Selectmenu
          End Select
       End If
       Readtouch
+      waitms 100
       If Touch = 11 Then
          Select Case Count
 
@@ -2328,6 +2362,8 @@ Sub Selectmenu
       End If
       If Touch = 14 Then
          Cls
+         do
+         loop until touch4=0
          Exit Do
       End If
    Loop
@@ -2454,12 +2490,12 @@ Sub Clock_menu
 
     Call Readtouch
 
-    If Touch = 11 Or Touch = 21 Then
+    If Touch = 11 Then
        Incr Selection
        Touch = 0
     End If
 
-    If Touch = 14 Or Touch = 24 Then
+    If Touch = 14 Then
        Cls
        Touch = 0
        Set Backmenu
@@ -2472,10 +2508,10 @@ Sub Clock_menu
      Toggle Blink_
     End If
 
-    If Touch = 12 Or Touch = 13 Or Touch = 22 Or Touch = 23 Then Set Blink_
+    If Touch = 12 Or Touch = 13 then  Set Blink_
 
     '-----------------------------------
-    If Touch = 12 Or Touch = 22 Then
+    If Touch = 12  Then
           If Selection = 1 Then Incr _hour
           If Selection = 2 Then Incr _min
           If Selection = 3 Then Incr _sec
@@ -2486,7 +2522,7 @@ Sub Clock_menu
           Touch = 0
     End If
     '------------------------------------
-    If Touch = 13 Or Touch = 23 Then
+    If Touch = 13  Then
          If Selection = 1 Then Decr _hour
          If Selection = 2 Then Decr _min
          If Selection = 3 Then Decr _sec
@@ -2498,13 +2534,13 @@ Sub Clock_menu
     End If
 
     '--------------------------------------
-    If _hour > 100 Then _hour = 23
-    If _min > 100 Then _min = 59
-    If _sec > 100 Then _sec = 59
+    If _hour > 25 Then _hour = 23
+    If _min > 61 Then _min = 59
+    If _sec > 61 Then _sec = 59
 
-    If _hour > 23 Then _hour = 0
-    If _min > 59 Then _min = 0
-    If _sec > 59 Then _sec = 0
+    If _hour > 23 and _hour<25 Then _hour = 0
+    If _min > 59 and _min<61 Then _min = 0
+    If _sec > 59 and _sec<61  Then _sec = 0
     If Sh_year > 1470 Then Sh_year = 1390
     If Sh_month > 12 Then Sh_month = 1
     If Sh_day > 31 Then Sh_day = 1
@@ -2521,7 +2557,7 @@ Sub Clock_menu
     '---------------------------------------
 
 
-    Waitms 40
+    Waitms 25
 
     If Selection > 7 Then Exit Do
 
