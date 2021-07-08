@@ -364,6 +364,7 @@ Sub Clearids
 End Sub
 
 Sub Getid
+    disable int1
     K = 0
     Reset En
     Set Rxtx
@@ -377,8 +378,8 @@ Sub Getid
              P = 0
              Toggle Buz
           End If
-         If  Id > 0 And Id < 100 Then
-            if cmd=180 or cmd=181 or cmd=182 then
+          If  Id > 0 And Id < 100 Then
+             if cmd=180 or cmd=181 or cmd=182 then
                           Reset Gotid
                           If Outid1(k) > 100 Or Outid1(k) = 0 Then
                              Outid1(k) = Id
@@ -429,10 +430,10 @@ Sub Getid
                           End If
                           Cmd = 0
                           Id = 0
-            endif
-         End If
+             endif
+          End If
 
-                If Key = 0 Then
+          If Key = 0 Then
                    Waitms 30
                    If Key = 0 Then
                       Stop Timer0
@@ -456,7 +457,7 @@ Sub Getid
                       End If
                       Start Timer0
                    End If
-                End If
+          End If
        Loop
 
        For I = 1 To 8
@@ -465,7 +466,7 @@ Sub Getid
        Next
        Reset Buz
        Reset Rxtx
-
+       enable int1
        Reset Wantid
 
 End Sub
@@ -559,6 +560,14 @@ Sub Checkanswer
                         End If
                     Next
 
+           case 183
+
+                    For I = 1 To 8
+                        If Id = 0 Or Id > 100 Then Return
+                        If Outid1(i) = Id Or Outid2(i) = Id Or Outid3(i) = Id Then
+                           Light(i) = minlight
+                        End If
+                    Next
 
            Case 161
                 Alllight = Minlight

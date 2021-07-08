@@ -1,16 +1,16 @@
-Report       : bt136 pwm
-Date         : 07-07-2021
-Time         : 17:42:49
+Report       : relay28new
+Date         : 07-08-2021
+Time         : 14:54:47
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
-Processor    : M8
+Processor    : M16
 SRAM         : 400 hex
 EEPROM       : 200 hex
-ROMSIZE      : 2000 hex
+ROMSIZE      : 4000 hex
 
-ROMIMAGE     : 11F2 hex  -> Will fit into ROM
-ROMIMAGE     :  4594 dec
-FLASH USED   :  56  %
+ROMIMAGE     : 1C6E hex  -> Will fit into ROM
+ROMIMAGE     :  7278 dec
+FLASH USED   :  44  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  851  dec
+Space left   :  712  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -91,48 +91,72 @@ PWM1A                            Word              004A          74
 COMPARE1                         Word              004A          74 
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
+PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-DIN                              Byte(5)           0060          96 
-MAXIN                            Byte              0065          101 
-TYP                              Byte              0066          102 
-CMD                              Byte              0067          103 
-ID                               Byte              0068          104 
-WANTID                           Bit [7]           0069          105 
-M                                Byte              006A          106 
-TBLANK                           Byte              006B          107 
-Q                                Byte              006C          108 
-T0BACK                           Bit [6]           0069          105 
-INOK                             Bit [5]           0069          105 
-WIC                              Byte              006D          109 
-F                                Byte              006E          110 
-HEAT                             Byte              006F          111 
-P                                Word              0070          112 
-TEST                             Word              0072          114 
-ELIGHT                           EEPROM Word(8)    0000          0 
-LIGHT                            Word(8)           0074          116 
-ALLLIGHT                         EEPROM Word       0010          16 
-PLUS                             Byte              0084          132 
-UPDOWN                           Bit [4]           0069          105 
-SECC                             Word              0085          133 
-TERM                             Byte              0087          135 
-PW                               Word              0088          136 
-STEPS                            Byte              008A          138 
-DELAY_                           Word              008B          139 
-I                                Byte              008D          141 
-EOUTID1                          EEPROM Byte(8)    0012          18 
-EOUTID2                          EEPROM Byte(8)    001A          26 
-EOUTID3                          EEPROM Byte(8)    0022          34 
-POWEROFF                         Byte              008E          142 
-OUTID1                           Byte(8)           008F          143 
-OUTID2                           Byte(8)           0097          151 
-OUTID3                           Byte(8)           009F          159 
-RXTXOFF                          Byte              00A7          167 
-GOTID                            Bit [3]           0069          105 
-K                                Byte              00A8          168 
-J                                Byte              00A9          169 
-X                                Byte              00AA          170 
-OUTS                             Byte(8)           00AB          171 
-STATUS                           Byte              00B3          179 
+ESENARIO1                        EEPROM Dword      0000          0 
+ESENARIO2                        EEPROM Dword      0004          4 
+ESENARIO3                        EEPROM Dword      0008          8 
+ESENARIO4                        EEPROM Dword      000C          12 
+SENARIO1                         Dword             0060          96 
+SENARIO2                         Dword             0064          100 
+SENARIO3                         Dword             0068          104 
+SENARIO4                         Dword             006C          108 
+SETSENARIO                       Byte              0070          112 
+F                                Byte              0071          113 
+M                                Byte              0072          114 
+TBLANK                           Byte              0073          115 
+TEST                             Byte              0074          116 
+WANTID                           Bit [7]           0075          117 
+GOTID                            Bit [6]           0075          117 
+OUTS                             Dword             0076          118 
+EOUTNUM                          EEPROM Byte(28)   0010          16 
+EOUTID1                          EEPROM Byte(28)   002C          44 
+EOUTID2                          EEPROM Byte(28)   0048          72 
+EOUTID3                          EEPROM Byte(28)   0064          100 
+OUTID1                           Byte(28)          007A          122 
+OUTID2                           Byte(28)          0096          150 
+OUTID3                           Byte(28)          00B2          178 
+EOUTS                            EEPROM Byte(28)   0080          128 
+IDGOT                            EEPROM Byte       009C          156 
+D                                Byte              00CE          206 
+TEMPID                           Byte              00CF          207 
+STATUS                           Byte              00D0          208 
+EFIRST                           EEPROM Byte       009D          157 
+TOGGLEKEY                        Bit [5]           0075          117 
+IDWASGOT                         Bit [4]           0075          117 
+TYP                              Byte              00D1          209 
+CMD                              Byte              00D2          210 
+ID                               Byte              00D3          211 
+I                                Byte              00D4          212 
+J                                Byte              00D5          213 
+K                                Byte              00D6          214 
+MAXIN                            Byte              00D7          215 
+A                                Byte              00D8          216 
+REPLY                            Byte              00D9          217 
+KEYIDS                           Byte              00DA          218 
+EKEYIDS                          EEPROM Byte       009E          158 
+COUNTERID                        Byte              00DB          219 
+BASEID                           Byte              00DC          220 
+MINID                            Byte              00DD          221 
+MAXID                            Byte              00DE          222 
+TEMPONID                         Byte(28)          00DF          223 
+TEMPONTIME                       Word(28)          00FB          251 
+TEMPON                           Bit [3]           0075          117 
+WANTNUM                          Bit [2]           0075          117 
+SYCID                            Bit [1]           0075          117 
+SETID                            Byte              0133          307 
+DIN                              Byte(5)           0134          308 
+Z                                Byte              0139          313 
+ONOFF                            Bit [0]           0075          117 
+TIMEOUT                          Bit [7]           013A          314 
+SENDOK                           Bit [6]           013A          314 
+INOK                             Bit [5]           013A          314 
+LIGHT                            Byte              013B          315 
+LEARNOK                          Bit [4]           013A          314 
+BLANK                            Bit [3]           013A          314 
+IDBLANK                          Byte              013C          316 
+DIRECT                           Byte              013D          317 
+ENDBIT                           Byte              013E          318 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -140,8 +164,11 @@ Constant                         Value
 SREG                             &H3F
 SPH                              &H3E
 SPL                              &H3D
-GIMSK                            &H3B
+OCR0                             &H3C
+PWM0                             &H3C
+COMPARE0                         &H3C
 GICR                             &H3B
+GIMSK                            &H3B
 GIFR                             &H3A
 TIMSK                            &H39
 TIFR                             &H38
@@ -177,12 +204,15 @@ PWM2                             &H23
 COMPARE2                         &H23
 ASSR                             &H22
 WDTCR                            &H21
-UBRRH                            &H20
 UBRRHI                           &H20
+UBRRH                            &H20
 EEARH                            &H1F
 EEARL                            &H1E
 EEDR                             &H1D
 EECR                             &H1C
+PORTA                            &H1B
+DDRA                             &H1A
+PINA                             &H19
 PORTB                            &H18
 DDRB                             &H17
 PINB                             &H16
@@ -202,31 +232,34 @@ USR                              &H0B
 UCSRB                            &H0A
 UCR                              &H0A
 UCSRC                            &H20
-UBRRL                            &H09
 UBRR                             &H09
+UBRRL                            &H09
 ACSR                             &H08
 ADMUX                            &H07
-ADCSR                            &H06
 ADCSRA                           &H06
+ADCSR                            &H06
 ADCH                             &H05
 ADCL                             &H04
-I2DR                             &H03
-I2AR                             &H02
-I2SR                             &H01
-I2BR                             &H00
 TWDR                             &H03
 TWAR                             &H02
 TWSR                             &H01
 TWBR                             &H00
-_ROMSIZE                         8192
-_CHIP                            17
+I2DR                             &H03
+I2AR                             &H02
+I2SR                             &H01
+I2BR                             &H00
+_ROMSIZE                         16384
+_CHIP                            18
 INT1                             7
 INT0                             6
+INT2                             5
 IVSEL                            1
 IVCE                             0
 INTF1                            7
 INTF0                            6
+INTF2                            5
 TOIE0                            0
+OCIE0                            1
 TOIE1                            2
 OCIE1B                           3
 OCIE1A                           4
@@ -234,6 +267,7 @@ TICIE1                           5
 TOIE2                            6
 OCIE2                            7
 TOV0                             0
+OCF0                             1
 TOV1                             2
 OCF1B                            3
 OCF1A                            4
@@ -241,28 +275,50 @@ ICF1                             5
 TOV2                             6
 OCF2                             7
 SPMIE                            7
-RWWSB                            6
-RWWSRE                           4
+ASB                              6
+ASRE                             4
 BLBSET                           3
 PGWRT                            2
 PGERS                            1
 SPMEN                            0
-SELFPRGEN                        0
-SE                               7
-SM2                              6
+TWINT                            7
+TWEA                             6
+TWSTA                            5
+TWSTO                            4
+TWWC                             3
+TWEN                             2
+TWIE                             0
+SM2                              7
+SE                               6
 SM1                              5
 SM0                              4
 ISC11                            3
 ISC10                            2
 ISC01                            1
 ISC00                            0
+ISC2                             6
 WDRF                             3
 BORF                             2
 EXTRF                            1
 PORF                             0
+FOC0                             7
+PWM0BIT                          6
+WGM00                            6
+COM01                            5
+COM00                            4
+CTC0                             3
+WGM01                            3
 CS02                             2
 CS01                             1
 CS00                             0
+ADTS2                            7
+ADTS1                            6
+ADTS0                            5
+ADHSM                            4
+ACME                             3
+PUD                              2
+PSR2                             1
+PSR10                            0
 COM1A1                           7
 COM1A0                           6
 COM1B1                           5
@@ -277,9 +333,9 @@ ICNC1                            7
 ICES1                            6
 CTC11                            4
 CTC10                            3
+CTC1                             3
 WGM13                            4
 WGM12                            3
-CTC1                             3
 CS12                             2
 CS11                             1
 CS10                             0
@@ -293,12 +349,10 @@ WGM21                            3
 CS22                             2
 CS21                             1
 CS20                             0
-ADHSM                            4
-ACME                             3
-PUD                              2
-PSR2                             1
-PSR10                            0
-WDCE                             4
+AS2                              3
+TCN2UB                           2
+OCR2UB                           1
+TCR2UB                           0
 WDTOE                            4
 WDE                              3
 WDP2                             2
@@ -307,8 +361,31 @@ WDP0                             0
 EERIE                            3
 EEMWE                            2
 EEWE                             1
-EEPE                             1
 EERE                             0
+PA7                              7
+PA6                              6
+PA5                              5
+PA4                              4
+PA3                              3
+PA2                              2
+PA1                              1
+PA0                              0
+DDA7                             7
+DDA6                             6
+DDA5                             5
+DDA4                             4
+DDA3                             3
+DDA2                             2
+DDA1                             1
+DDA0                             0
+PINA7                            7
+PINA6                            6
+PINA5                            5
+PINA4                            4
+PINA3                            3
+PINA2                            2
+PINA1                            1
+PINA0                            0
 PB7                              7
 PB6                              6
 PB5                              5
@@ -333,6 +410,7 @@ PINB3                            3
 PINB2                            2
 PINB1                            1
 PINB0                            0
+PC7                              7
 PC6                              6
 PC5                              5
 PC4                              4
@@ -340,6 +418,7 @@ PC3                              3
 PC2                              2
 PC1                              1
 PC0                              0
+DDC7                             7
 DDC6                             6
 DDC5                             5
 DDC4                             4
@@ -347,6 +426,7 @@ DDC3                             3
 DDC2                             2
 DDC1                             1
 DDC0                             0
+PINC7                            7
 PINC6                            6
 PINC5                            5
 PINC4                            4
@@ -378,13 +458,23 @@ PIND3                            3
 PIND2                            2
 PIND1                            1
 PIND0                            0
+SPIF                             7
+WCOL                             6
+SPI2X                            0
+SPIE                             7
+SPE                              6
+DORD                             5
+MSTR                             4
+CPOL                             3
+CPHA                             2
+SPR1                             1
+SPR0                             0
 RXC                              7
 TXC                              6
 UDRE                             5
 FE                               4
 OR                               3
 DOR                              3
-UPE                              2
 PE                               2
 U2X                              1
 MPCM                             0
@@ -405,17 +495,6 @@ USBS                             3
 UCSZ1                            2
 UCSZ0                            1
 UCPOL                            0
-SPIE                             7
-SPE                              6
-DORD                             5
-MSTR                             4
-CPOL                             3
-CPHA                             2
-SPR1                             1
-SPR0                             0
-SPIF                             7
-WCOL                             6
-SPI2X                            0
 ACD                              7
 ACBG                             6
 ACO                              5
@@ -427,44 +506,21 @@ ACIS0                            0
 REFS1                            7
 REFS0                            6
 ADLAR                            5
+MUX4                             4
 MUX3                             3
 MUX2                             2
 MUX1                             1
 MUX0                             0
 ADEN                             7
 ADSC                             6
+ADATE                            5
 ADFR                             5
 ADIF                             4
 ADIE                             3
 ADPS2                            2
 ADPS1                            1
 ADPS0                            0
-TWINT                            7
-TWEA                             6
-TWSTA                            5
-TWSTO                            4
-TWWC                             3
-TWEN                             2
-TWIE                             0
-TWA6                             7
-TWA5                             6
-TWA4                             5
-TWA3                             4
-TWA2                             3
-TWA1                             2
-TWA0                             1
 TWGCE                            0
-TWS7                             7
-TWS6                             6
-TWS5                             5
-TWS4                             4
-TWS3                             3
-TWPS1                            1
-TWPS0                            0
-AS2                              3
-TCN2UB                           2
-OCR2UB                           1
-TCR2UB                           0
 _RESET                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
@@ -505,17 +561,37 @@ _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
 _XTINY                           0
-MAXLIGHT                         0
-DARK                             65535
-MIDLIGHT                         6500
-MINLIGHT                         8800
+STOPALL                          1
+NORMAL                           2
+REFRESHALL                       3
+RESETALL                         4
+ALLID                            99
 RELAYMODULE                      110
-TRIACMODULE                      111
-REMOTE                           104
+PWMMODULE                        111
+TOMASTER                         252
+TOOUTPUT                         232
+TOINPUT                          242
+READALLINPUT                     1
+READ1INPUT                       2
+LEARNKEY                         3
+ENABLEBUZ                        4
+DISABLEBUZ                       5
+ENABLESENSOR                     6
+DISABLESENSOR                    7
+ENABLEINPUT                      8
+DISABLEINPUT                     9
+READSTEPS                        10
+LEARNSTEPS                       11
+ENABLESTEP                       12
+DISABLESTEP                      13
+READSENARIO                      14
+READREMOTE                       15
 KEYIN                            101
-D                                0
-REFRESHALL                       1
-STOPALL                          2
+STEPS                            102
+SENARIO                          103
+REMOTE                           104
+RELAYMODULES                     110
+MYTYP                            110
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -539,18 +615,24 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-T0BACK                           not used
-WIC                              not used
+SETSENARIO                       not used
 TEST                             not used
-PLUS                             not used
-UPDOWN                           not used
-SECC                             not used
-TERM                             not used
-PW                               not used
-STEPS                            not used
-DELAY_                           not used
-J                                not used
-X                                not used
-OUTS                             not used
-STATUS                           not used
+D                                not used
+TEMPID                           not used
+TOGGLEKEY                        not used
+IDWASGOT                         not used
+A                                not used
+REPLY                            not used
+KEYIDS                           not used
+EKEYIDS                          not used
+TEMPONTIME                       not used
+WANTNUM                          not used
+SYCID                            not used
+SETID                            not used
+Z                                not used
+ONOFF                            not used
+TIMEOUT                          not used
+SENDOK                           not used
+LIGHT                            not used
+LEARNOK                          not used
 

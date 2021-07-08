@@ -46,7 +46,7 @@ Config Portd = Output
 
            Declare Sub Setouts
            Declare Sub Keyorder
-           declare sub readouts
+
 
 
            Config Portc = Output
@@ -68,18 +68,17 @@ Defines:
 Dim Esenario1 As Eram Dword
 Dim Esenario2 As Eram Dword
 Dim Esenario3 As Eram Dword
+Dim Esenario4 As Eram Dword
 
 Dim Senario1 As Dword
 Dim Senario2 As Dword
 Dim Senario3 As Dword
-
-If Esenario1 = 4294967295 Then Esenario1 = 0
-If Esenario2 = 4294967295 Then Esenario2 = 0
-If Esenario3 = 4294967295 Then Esenario3 = 0
+Dim Senario4 As Dword
 
 Senario1 = Esenario1
 Senario2 = Esenario2
 Senario3 = Esenario3
+Senario4 = Esenario4
 
 Dim Setsenario As Byte
 
@@ -94,16 +93,15 @@ Dim Gotid As Boolean
 
 Dim Outs As Dword
 Dim Eoutnum(28) As Eram Byte
+Dim Eoutid1(28) As Eram Byte
+Dim Eoutid2(28) As Eram Byte
+Dim Eoutid3(28) As Eram Byte
 
-Dim Eoutid1 As Eram Byte
-Dim Eoutid2 As Eram Byte
-Dim Eoutid3 As Eram Byte
-Dim Eoutid4 As Eram Byte
+Dim Outid1(28) As Byte
+Dim Outid2(28) As Byte
+Dim Outid3(28) As Byte
 
-Dim Outid1 As Byte
-Dim Outid2 As Byte
-Dim Outid3 As Byte
-Dim Outid4 As Byte
+
 
 Dim Eouts(28) As Eram Byte
 Dim Idgot As Eram Byte
@@ -519,9 +517,9 @@ End Sub
 
 Sub Setouts
 
-        If Status = Normal Then
-           If Outs.j = 1 Then Eouts(j) = 1 Else Eouts(j) = 0
-        End If
+        'If Status = Normal Then
+           'If Outs.j = 1 Then Eouts(j) = 1 Else Eouts(j) = 0
+        'End If
         Select Case J
                Case 1
                     Out1 = Outs.1
@@ -678,37 +676,6 @@ Sub Turnout
                                 End Select
 End Sub
 
-sub readouts
-    outs.1=out1
-    outs.2=out2
-    outs.3=out3
-    outs.4=out4
-    outs.5=out5
-    outs.6=out6
-    outs.7=out7
-    outs.8=out8
-    outs.9=out9
-    outs.10=out10
-    outs.11=out11
-    outs.12=out12
-    outs.13=out13
-    outs.14=out14
-    outs.15=out15
-    outs.16=out16
-    outs.17=out17
-    outs.18=out18
-    outs.19=out19
-    outs.20=out20
-    outs.21=out21
-    outs.22=out22
-    outs.23=out23
-    outs.24=out24
-    outs.25=out25
-    outs.26=out26
-    outs.27=out27
-    outs.28=out28
-end sub
-
 Sub Findorder
 
 
@@ -781,25 +748,88 @@ Sub Findorder
                        Idblank = Id
 
                case 200
-
                     if id=1 then
-                       readouts
-                       for i= 0 to 28
-
+                       for i=0 to 28
+                           senario1.i=outs.i
+                           waitms 5
                        next
+                       esenario1=senario1
+                       waitms 20
                     end if
                     if id=2 then
-
+                       for i=0 to 28
+                           senario2.i=outs.i
+                           waitms 5
+                       next
+                       esenario2=senario2
+                       waitms 20
                     end if
                     if id=3 then
-
+                       for i=0 to 28
+                           senario3.i=outs.i
+                           waitms 5
+                       next
+                       esenario3=senario3
+                       waitms 20
                     end if
                     if id=4 then
-
+                       for i=0 to 28
+                           senario4.i=outs.i
+                           waitms 5
+                       next
+                       esenario4=senario4
+                       waitms 20
                     end if
 
                case 201
-
+                    if id=1 then
+                       senario1=esenario1
+                       waitms 20
+                       for i=0 to 28
+                           outs.i=senario1.i
+                           waitms 5
+                       next
+                       For J = 1 To 28
+                           Call Setouts
+                           Waitms 100
+                       Next
+                    end if
+                    if id=2 then
+                       senario2=esenario2
+                       waitms 20
+                       for i=0 to 28
+                           outs.i=senario2.i
+                           waitms 5
+                       next
+                       For J = 1 To 28
+                           Call Setouts
+                           Waitms 100
+                       Next
+                    end if
+                    if id=3 then
+                       senario3=esenario3
+                       waitms 20
+                       for i=0 to 28
+                           outs.i=senario3.i
+                           waitms 5
+                       next
+                       For J = 1 To 28
+                           Call Setouts
+                           Waitms 100
+                       Next
+                    end if
+                    if id=4 then
+                       senario4=esenario4
+                       waitms 20
+                       for i=0 to 28
+                           outs.i=senario4.i
+                           waitms 5
+                       next
+                       For J = 1 To 28
+                           Call Setouts
+                           Waitms 100
+                       Next
+                    end if
 
         End Select
 
@@ -818,6 +848,8 @@ Rx:
         waitms 1
       Loop Until Ischarwaiting() = 0
       If f = 5 Then
+         Toggle Rxtx
+         f=0
          typ=din(2):cmd=din(3):id=din(4)
          if typ=relaymodule then
             findorder
@@ -827,7 +859,6 @@ Rx:
 Return
 
 '(
-
 Rx:
       Incr F
       Inputbin Maxin
@@ -848,7 +879,7 @@ Rx:
         Reset Inok
       End If
 Return
+ ')
 
-')
 
 End

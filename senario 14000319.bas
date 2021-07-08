@@ -182,6 +182,12 @@ Dim Pdays As Byte
 Dim Wdays As Byte
 Dim Pudays As Byte
 
+dim fonoff as bit
+dim lonoff as bit
+dim wonoff as bit
+dim puonoff as bit
+dim ponoff as  bit
+
 Dim Days As Byte
 
 Dim Eftime(4) As Eram Byte
@@ -195,6 +201,8 @@ Dim Ltime(4) As Byte
 Dim Ptime(4) As Byte
 Dim Wtime(4) As Byte
 Dim Putime(4) As Byte
+
+
 
 
 Dim Onhour As Byte
@@ -300,7 +308,7 @@ definesub:
    Declare Sub Selectmenu
    Declare Sub Selectsenario
    Declare Sub Beeppro
-   Declare Sub Readtouch
+   Declare Sub readtouch
    Declare Sub Checkkey
    Declare Sub Shoewtime
    Declare Sub Conversion
@@ -356,7 +364,41 @@ Set Backlight
 Cls
 Call Beep
 Showpic 0 , 0 , Logo
-Waitms 700
+'(
+for i=1 to 4
+    ftime(i)=eftime(i)
+    waitms 5
+    ltime(i)=eltime(i)
+    waitms 5
+    ptime(i)=eptime(i)
+    waitms 5
+    wtime(i)=ewtime(i)
+    waitms 5
+    putime(i)=eputime(i)
+    waitms 5
+next
+')
+
+
+eftime(1)=13:eftime(2)=13:eftime(3)=13:eftime(4)=14
+eltime(1)=13:eltime(2)=14:eltime(3)=13:eltime(4)=15
+ewtime(1)=13:ewtime(2)=15:ewtime(3)=13:ewtime(4)=16
+eptime(1)=13:eptime(2)=16:eptime(3)=13:eptime(4)=17
+eputime(1)=13:eputime(2)=17:eputime(3)=13:eputime(4)=18
+
+ftime(1)=13:ftime(2)=13:ftime(3)=13:ftime(4)=14
+ltime(1)=13:ltime(2)=14:ltime(3)=13:ltime(4)=15
+wtime(1)=13:wtime(2)=15:wtime(3)=13:wtime(4)=16
+ptime(1)=13:ptime(2)=16:ptime(3)=13:ptime(4)=17
+putime(1)=13:putime(2)=17:putime(3)=13:putime(4)=18
+
+Fdays=255:Fstatus=3
+pdays=255:pstatus=3
+pudays=255:pustatus=3
+ldays=255:lstatus=4
+wdays=255:wstatus=3
+
+Waitms 500
 Cls
 Waitms 500
 
@@ -371,11 +413,16 @@ Main:
       If _sec <> Lsec Then
          Shoewtime
          Temp
-         if _sec=0 then Ifcheck
+         if _sec=0 or _sec=2 or _sec=4 then Ifcheck
       End If
       Lsec = _sec
       set mm
-      Readtouch
+      if backmenu=1 then
+         cls
+         reset backmenu
+         waitms 200
+      end if
+      readtouch
       If Touch = 21 Then
         Selectmenu
       End If
@@ -677,7 +724,7 @@ Sub Read_dt:
    I2crbyte M_month , Ack                                   ' Month of Year
    I2crbyte _year , Nack                                    ' Year
    I2cstop
-   _sec = Makedec(_sec) : _min = Makedec(_min) : _hour = Makedec(_hour)
+   _sec = Makedec(_sec) : _min = Makedec(_min) : _hour = Makedec(_hour):weekday=makedec(weekday)
    M_day = Makedec(m_day) : M_month = Makedec(m_month) : _year = Makedec(_year)
    M_year = 2000 + _year
 
@@ -733,7 +780,7 @@ Sub Shoewtime
    End If
 
 
-
+   day=weekday
    Select Case Day
       Case 1
          S2 = "Sat"
@@ -769,13 +816,14 @@ End Sub
 
 Sub Settime:
    _sec = 0
-   _sec = Makebcd(_sec) : _min = Makebcd(_min) : _hour = Makebcd(_hour)
+   _sec = Makebcd(_sec) : _min = Makebcd(_min) : _hour = Makebcd(_hour) :weekday=makebcd(day)
    I2cstart                                                 ' Generate start code
    I2cwbyte Ds1307w                                         ' send address
    I2cwbyte 0                                               ' starting address in 1307
    I2cwbyte _sec                                            ' Send Data to SECONDS
    I2cwbyte _min                                            ' MINUTES
    I2cwbyte _hour                                           ' Hours
+   i2cwbyte weekday
    I2cstop
 End Sub
 
@@ -980,53 +1028,74 @@ Sub Ifcheck
 
    If Ftime(1) = _hour And Ftime(2) = _min And Fstatus = 3 Then
       Findorder = "setfountain"
+      set fonoff
       Order
    End If
    If Ftime(3) = _hour And Ftime(4) = _min And Fstatus = 3 Then
       Findorder = "resetfountain"
+      reset fonoff
+      cls
       Order
    End If
 
 
-   If Ltime(1) = _hour And Ltime(2) = _min And Lstatus = 3 Then
+   If Ltime(1) = _hour And Ltime(2) = _min And Lstatus = 4 Then
       Findorder = "setlight"
+      set lonoff
       Order
    End If
-   If Ltime(3) = _hour And Ltime(4) = _min And Lstatus = 3 Then
+   If Ltime(3) = _hour And Ltime(4) = _min And Lstatus = 4 Then
       Findorder = "resetlight"
+      reset lonoff
+      cls
       Order
    End If
 
 
    If Putime(1) = _hour And Putime(2) = _min And Pustatus = 3 Then
       Findorder = "setpump"
+      set puonoff
+
       Order
    End If
    If Putime(3) = _hour And Putime(4) = _min And Pustatus = 3 Then
       Findorder = "resetpump"
+      reset puonoff
+      cls
       Order
    End If
 
 
    If Ptime(1) = _hour And Ptime(2) = _min And Pstatus = 3 Then
       Findorder = "setplant"
+      set ponoff
       Order
    End If
    If Ptime(3) = _hour And Ptime(4) = _min And Pstatus = 3 Then
       Findorder = "resetplant"
+      reset ponoff
+      cls
       Order
    End If
 
 
    If Wtime(1) = _hour And Wtime(2) = _min And Wstatus = 3 Then
       Findorder = "setwater"
+      set wonoff
       Order
    End If
    If Wtime(3) = _hour And Wtime(4) = _min And Wstatus = 3 Then
       Findorder = "resetwater"
+      reset wonoff
+      cls
       Order
    End If
 
+   if fonoff=1 then Showpic 0 , 10 , Sfountain
+   if puonoff=1 then Showpic 63 , 10 , Spump
+   if ponoff=1 then  Showpic 95 , 10 , Splant
+   if wonoff=1 then  Showpic 0 , 32 , Swatersystem
+   if lonoff=1 then  Showpic 32 , 10 , Slight
 End Sub
 
 Sub Setting_menu
@@ -1052,7 +1121,8 @@ Sub Setting_menu
 
          End Select
       End If
-      Readtouch
+      reset mm
+      readtouch
       If Touch = 11 Then
          Select Case Count
 
@@ -1319,8 +1389,8 @@ Sub Pwlsetting
                 Lcdat 8 , 88 , S1
                 '----------------------------------
         End If
-
-        Call Readtouch
+        reset mm
+        readtouch
         if touch>0 then
            blink_=1
            timer_1=0
@@ -1340,7 +1410,7 @@ Sub Pwlsetting
            Setfont Font8x8
            Set Backmenu
            Touch = 0
-           Return
+           exit do
         End If
 
         Incr Timer_1
@@ -1424,6 +1494,7 @@ Sub Pwlsetting
 
 
         If Selection > 12 Then
+           set backmenu
            Cls
            Exit Do
         End If
@@ -1466,8 +1537,8 @@ Sub Jacuzi_menu
 
         Lcdat 7 , 1 , S2
 
-
-        Call Readtouch
+        reset mm
+        readtouch
 
         If Touch = 11  Then
            Incr Selection
@@ -1883,8 +1954,8 @@ Sub Light_menu
                 Lcdat 8 , 88 , S1
                 '----------------------------------
         End If
-
-        Call Readtouch
+        reset mm
+        readtouch
 
         If Touch = 11 Then
            Incr Selection
@@ -1907,7 +1978,7 @@ Sub Light_menu
            Setfont Font8x8
            Set Backmenu
            Touch = 0
-           Return
+           exit do
         End If
 
         Incr Timer_1
@@ -1983,6 +2054,7 @@ Sub Light_menu
 
         If Selection > 12 Then
            Cls
+           set backmenu
            Exit Do
         End If
     Loop
@@ -2032,7 +2104,7 @@ Sub Order
          Direct = Tooutput : Typ = Relaymodule : Cmd = 181 : Id = Idfountain
 
       Case "setlight"
-         Direct = Tooutput : Typ = Relaymodule : Cmd = 182 : Id = Idlight
+         Direct = Tooutput : Typ = Relaymodule : Cmd = 183 : Id = Idlight
       Case "resetlight"
          Direct = Tooutput : Typ = Relaymodule : Cmd = 181 : Id = Idlight
 
@@ -2060,7 +2132,7 @@ Sub Order
 
 End Sub
 
-Sub Readtouch
+Sub readtouch
    Touch = 0
      set buz
     if touch1=1 and mm=1 then
@@ -2074,24 +2146,24 @@ Sub Readtouch
        if j>9 then touch=21 else touch=11
     end if
     if touch1=1 and mm=0 then
-       waitms 10
+       waitms 25
        if touch1=1 then touch=11
     end if
     if touch2=1 then
-       waitms 10
+       waitms 25
        if touch2=1 then touch=12
     end if
     if touch3=1 then
-       waitms 10
+       waitms 25
        if touch3=1 then touch=13
     end if
     if touch4=1 then
-       waitms 10
+       waitms 25
        if touch4=1 then touch=14
     end if
     reset buz
     reset mm
-
+    waitms 150
   '( If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
       Checkkey
    End If
@@ -2164,7 +2236,7 @@ Sub Tx
     Waitms 50
     Reset Em
     Reset Txled
-    Enable Urxc
+    'Enable Urxc
 
 
 End Sub
@@ -2180,10 +2252,12 @@ End Sub
 Sub Selectsenario
    Cls
    Waitms 200
+   j=0
    If Touch = 11 Then
       Showpic 0 , 0 , Exiticon
       Do
-         Readtouch
+         reset mm
+         readtouch
          If Touch = 11  Then
             Showpic 0 , 0 , Exiticon , 1
             Findorder = "setsenario#1"
@@ -2198,16 +2272,23 @@ Sub Selectsenario
             Beeppro
             'waitms 100
             do
+              reset mm
               readtouch
             loop until touch=0
             Exit Do
          End If
+         incr j
+         if j=40 then
+            cls
+            exit do
+         end if
       Loop
    End If
    If Touch = 12 Then
       Showpic 0 , 0 , Night
       Do
-         Readtouch
+         reset mm
+         readtouch
          If Touch = 12  Then
             Showpic 0 , 0 , Night , 1
             Findorder = "setsenario#2"
@@ -2222,16 +2303,23 @@ Sub Selectsenario
             Beeperror
             'waitms 100
             do
+              reset mm
               readtouch
             loop until touch=0
             Exit Do
          End If
+         incr j
+         if j=40 then
+            cls
+            exit do
+         end if
       Loop
    End If
    If Touch = 13 Then
       Showpic 0 , 0 , Party
       Do
-         Readtouch
+         reset mm
+         readtouch
          If Touch = 13 Then
             Showpic 0 , 0 , Party , 1
             Findorder = "setsenario#3"
@@ -2246,16 +2334,23 @@ Sub Selectsenario
             Beeperror
             'waitms 100
             do
+              reset mm
               readtouch
             loop until touch=0
             Exit Do
          End If
+         incr j
+          if j=40 then
+            cls
+            exit do
+         end if
       Loop
    End If
    If Touch = 14 Then
       Showpic 0 , 0 , Rutin
       Do
-         Readtouch
+         reset mm
+         readtouch
          If Touch = 14 Then
             Showpic 0 , 0 , Rutin , 1
             Findorder = "setsenario#4"
@@ -2270,10 +2365,16 @@ Sub Selectsenario
             Beeperror
             'waitms 100
             do
+              reset mm
               readtouch
             loop until touch=0
             Exit Do
          End If
+         incr j
+         if j=40 then
+            cls
+            exit do
+         end if
       Loop
    End If
 
@@ -2285,6 +2386,7 @@ Sub Selectmenu
    Set Backmenu
    Count = 1
     do
+      reset mm
       readtouch
     loop until touch=0
    Do
@@ -2312,8 +2414,8 @@ Sub Selectmenu
 
          End Select
       End If
-      Readtouch
-      waitms 100
+      reset mm
+      readtouch
       If Touch = 11 Then
          Select Case Count
 
@@ -2362,8 +2464,11 @@ Sub Selectmenu
       End If
       If Touch = 14 Then
          Cls
+         set backmenu
          do
-         loop until touch4=0
+           readtouch
+         loop until touch=0
+         waitms 30
          Exit Do
       End If
    Loop
@@ -2371,6 +2476,7 @@ End Sub
 
 
 Sub Clock_menu
+read_dt
  Call Beep
  Selection = 1
  Cls
@@ -2459,7 +2565,7 @@ Sub Clock_menu
 
     If Selection = 7 And Blink_ = 0 Then
        S2 = "    "
-       Eday = Day
+       'Eday = Day
     Else
         Select Case Day
            Case 1
@@ -2483,12 +2589,12 @@ Sub Clock_menu
 
     Lcdat 2 , 1 , S1
     Lcdat 3 , 1 , S2
+    weekday=day
 
 
 
-
-
-    Call Readtouch
+    reset mm
+    readtouch
 
     If Touch = 11 Then
        Incr Selection
@@ -2499,7 +2605,7 @@ Sub Clock_menu
        Cls
        Touch = 0
        Set Backmenu
-       Return
+       exit do
     End If
 
     Incr Timer_1
@@ -2564,13 +2670,15 @@ Sub Clock_menu
  Loop
 
  Cls
+ Gosub Sh_to_m
+ Setdate
+ Settime
  Lcdat 1 , 1 , " SAVEING"
  Set Backmenu
  Wait 1
  Cls
- Gosub Sh_to_m
- Gosub Setdate
- Gosub Settime
+
+
 
 End Sub
 
