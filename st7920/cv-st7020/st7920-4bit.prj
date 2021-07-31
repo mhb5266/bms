@@ -7,7 +7,7 @@ A=
 C=
 D=10/24/2020
 Files=4
-OpenedFiles=7
+OpenedFiles=3
 OF1=st7920-4bit.c
 Active1=1
 DebugOutputListFilesDirectory=Debug\List
@@ -32,15 +32,15 @@ PageIndex0=0
 EditorPanel1=0
 TimeStamp1=1390254777
 PageIndex1=1
-OF2=arial.c
+OF2=C:\cvavr\inc\glcd_st7920.h
 Active2=0
 EditorPanel2=0
-TimeStamp2=1364356604
+TimeStamp2=1081897506
 PageIndex2=2
-OF3=FONT\Font.c
+OF3=C:\cvavr\inc\graphics.h
 Active3=0
 EditorPanel3=0
-TimeStamp3=1364227267
+TimeStamp3=1131829043
 PageIndex3=3
 OF4=Image\pic.c
 Active4=0
@@ -160,8 +160,8 @@ WatchAVR8LAutoVariables=0
 UseEEPROMLocation0=1
 RebuildAll=0
 LinkageInformationPresent=1
-COFFileTimeStamp=1392479494
-Build=8
+COFFileTimeStamp=1392480883
+Build=9
 [DefinedSymbolsDebug]
 Count=0
 [Compiler]
@@ -263,7 +263,7 @@ UseEEPROMLocation0=1
 RebuildAll=1
 LinkageInformationPresent=0
 COFFileTimeStamp=-1
-Build=8
+Build=9
 IncludePath0=
 IncludePath1=
 IncludePath2=
@@ -517,7 +517,7 @@ L13=Enhanced function parameters passing: Yes
 L14=Automatic register allocation: Yes
 L15=Smart register allocation: Yes
 L16=
-L17=Build: 7
+L17=Build: 8
 L18=26954 line(s) compiled
 L19=No errors
 L20=4 warning(s)
@@ -566,7 +566,7 @@ Row=0
 Column=0
 ScrollPosX=0
 ScrollPosY=0
-TimeStamp=1392479820
+TimeStamp=1392481003
 [BookmarksFoldedCode]
 Files=17
 F1=st7920-4bit.c
@@ -588,10 +588,10 @@ F16=Image\pic.c
 F17=C:\cvavr\inc\delay.h
 [Bookmarks1]
 TimeStamp=1390254777
-Row=237
-Column=46
+Row=224
+Column=0
 ScrollPosX=0
-ScrollPosY=35
+ScrollPosY=102
 BK0=-1
 BK1=-1
 BK2=-1
@@ -668,10 +668,10 @@ BK8=-1
 BK9=-1
 [Bookmarks6]
 TimeStamp=1131829043
-Row=123
-Column=14
+Row=197
+Column=28
 ScrollPosX=0
-ScrollPosY=237
+ScrollPosY=194
 BK0=-1
 BK1=-1
 BK2=-1
@@ -862,6 +862,30 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
+[Bookmarks17]
+TimeStamp=711006688
+Row=0
+Column=0
+ScrollPosX=0
+ScrollPosY=0
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode2]
+Blocks=0
+[FoldedCode3]
+Blocks=0
+[FoldedCode16]
+Blocks=0
+[FoldedCode17]
+Blocks=0
 [HeadersList]
 Files=2
 F1=C:\Users\Barouei\Desktop\Bms\st7920\cv-st7020\st7920-4bit.c
@@ -909,31 +933,7 @@ F16=C:\cvavr\inc\delay.h
 F17=FONT\PE_Map.h
 [FoldedCode1]
 Blocks=0
-[FoldedCode2]
-Blocks=0
-[FoldedCode3]
-Blocks=0
-[FoldedCode16]
-Blocks=0
 [FoldedCode6]
 Blocks=0
 [FoldedCode4]
-Blocks=0
-[Bookmarks17]
-TimeStamp=711006688
-Row=0
-Column=0
-ScrollPosX=0
-ScrollPosY=0
-BK0=-1
-BK1=-1
-BK2=-1
-BK3=-1
-BK4=-1
-BK5=-1
-BK6=-1
-BK7=-1
-BK8=-1
-BK9=-1
-[FoldedCode17]
 Blocks=0

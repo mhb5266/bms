@@ -1,0 +1,1 @@
+echo off avrdude -c usbasp -P USB -p m328 -U flash:w:lfArduAvr.hex pause

@@ -22,7 +22,7 @@ Data Stack size         : 512
 *******************************************************/
 
 #include <mega32a.h>
-#include <clock.c>
+#include <mhb.c>
 
 
 // 1 Wire Bus interface functions
@@ -224,11 +224,12 @@ while (1)
         sprintf(buffer,"Temp=%2.1f%`C",temp,223);
         lcd_puts(buffer);
       }   
-      glcd_cleargraphics();
       delay_ms(500);
+      lcd_clear();
       lcd_gotoxy(0,0);
-      lcd_putsf(clock);
-      delay_ms(750); 
-        
+      glcd_putimagef(0,0, mhb, 0); 
+      delay_ms(750);
+      lcd_clear();   
+      delay_ms(750);     
       }
 }

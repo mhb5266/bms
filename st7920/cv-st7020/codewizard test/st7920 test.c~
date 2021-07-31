@@ -221,14 +221,15 @@ while (1)
       lcd_puts("HI Ehsan"); 
       lcd_gotoxy(0,1);       
         temp=ds18b20_temperature(0);
-        sprintf(buffer,"Temp=%2.1f%`C",temp);
+        sprintf(buffer,"Temp=%2.1f%`C",temp,223);
         lcd_puts(buffer);
       }   
-      glcd_cleargraphics();
       delay_ms(500);
+      lcd_clear();
       lcd_gotoxy(0,0);
-      lcd_putsf(clock);
-      delay_ms(750); 
-        
+      glcd_putimagef(0,0, clock, 0); 
+      delay_ms(750);
+      lcd_clear();   
+      delay_ms(750);     
       }
 }
