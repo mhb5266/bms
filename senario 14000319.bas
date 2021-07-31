@@ -246,14 +246,6 @@ Dim W As Word
 Dim Z As Word
 
 
-Plant_def:
-
-          Dim Plant_status As Byte
-          Dim Plant_start_hour As Byte
-          Dim Plant_start_min As Byte
-          Dim Plant_stop_hour As Byte
-          Dim Plant_stop_min As Byte
-          Dim Plant_days(7) As Byte
 
 Defines:
 
@@ -303,6 +295,8 @@ Consts:
 Const Main_menu_counter = 8
 
 definesub:
+
+   declare sub faston
 
    Declare Sub Pump_menu
    Declare Sub Selectmenu
@@ -413,7 +407,7 @@ Main:
       If _sec <> Lsec Then
          Shoewtime
          Temp
-         if _sec=0 or _sec=2 or _sec=4 then Ifcheck
+         if _sec=0 or _sec=2 then Ifcheck
       End If
       Lsec = _sec
       set mm
@@ -426,6 +420,9 @@ Main:
       If Touch = 21 Then
         Selectmenu
       End If
+      if touch=22 then
+         faston
+      end if
       If Touch > 10 And Touch < 15 Then
          Selectsenario
       End If
@@ -601,6 +598,33 @@ M_day = Kole_roz_m
 
 Return
 
+Night:
+      $bgf "night.bgf"
+Tv:
+      $bgf "tv.bgf"
+Party:
+      $bgf "party.bgf"
+Rutin:
+      $bgf "rutin.bgf"
+Logo:
+     $bgf "logo.bgf"
+Settingicon:
+            $bgf "settingicon.bgf"
+            '$bgf "emtech1.bgf"
+Setclockicon:
+             $bgf "clock.bgf"
+Remoteicon:
+           $bgf "remote.bgf"
+Planticon:
+          $bgf "plant.bgf"
+Lighticon:
+          $bgf "light.bgf"
+Jaccuziicon:
+            $bgf "jaccuzi.bgf"
+Watersystemicon:
+                $bgf "watersystem.bgf"
+Kelidha:
+        $bgf "kelidha.bgf"
 
 Pumpicon:
 $bgf "pump.bgf"
@@ -651,6 +675,8 @@ $bgf "exiticon.bgf"
 Fountainicon:
 $bgf "fountain.bgf"
 
+
+
 Tempicon:
 $bgf "tempicon.bgf"
 
@@ -664,33 +690,9 @@ Nexticon:
 
 Menuicon:
       $bgf "menu.bgf"
-Tv:
-      $bgf "tv.bgf"
-Party:
-      $bgf "party.bgf"
-Rutin:
-      $bgf "rutin.bgf"
-Night:
-      $bgf "night.bgf"
-Logo:
-     $bgf "logo.bgf"
-Settingicon:
-            $bgf "settingicon.bgf"
-            '$bgf "emtech1.bgf"
-Setclockicon:
-             $bgf "clock.bgf"
-Remoteicon:
-           $bgf "remote.bgf"
-Planticon:
-          $bgf "plant.bgf"
-Lighticon:
-          $bgf "light.bgf"
-Jaccuziicon:
-            $bgf "jaccuzi.bgf"
-Watersystemicon:
-                $bgf "watersystem.bgf"
-Kelidha:
-        $bgf "kelidha.bgf"
+
+
+
 
 
 
@@ -1179,6 +1181,78 @@ Sub Setting_menu
    Loop
 
 End Sub
+
+sub faston
+    cls
+    waitms 500
+    Showpic 0 , 0 , Jaccuziicon
+    count=1
+    do
+      readtouch
+      if touch=11 then
+         cls
+         select case count
+                case 1
+                     toggle jstatus
+                     if jstatus=1 then findorder="setjacuzi" else  findorder="resetjacuzi"
+                     if jstatus=1 then Showpic 0 , 0 , Jaccuziicon , 1 else Showpic 0 , 0 , Jaccuziicon , 0
+                case 2
+                     if pstatus=1 then pstatus=0 else pstatus=1
+                     if pstatus=1 then findorder="setplant" else  findorder="resetplant"
+                     Showpic 0 , 0 , planticon,pstatus
+                case 3
+                     if wstatus=1 then wstatus=0 else wstatus=1
+                     if wstatus=1 then findorder="setwater" else  findorder="resetwater"
+                     Showpic 0 , 0 , watersystemicon,wstatus
+                case 4
+                     if lstatus=1 then lstatus=0 else lstatus=1
+                     if lstatus=1 then findorder="setlight" else  findorder="resetlight"
+                     Showpic 0 , 0 , lighticon,lstatus
+                case 5
+                     if fstatus=1 then fstatus=0 else fstatus=1
+                     if fstatus=1 then findorder="setfountain" else  findorder="resetfountain"
+                     Showpic 0 , 0 ,fountainicon,fstatus
+                case 6
+                     if pustatus=1 then pustatus=0 else pustatus=1
+                     if pustatus=1 then findorder="setpump" else  findorder="resetpump"
+                     Showpic 0 , 0 , pumpicon,pustatus
+         end select
+         order
+         waitms 500
+         cls
+      end if
+      if touch=12 then incr count
+      if touch=13 then decr count
+      if count=0 then count=6
+      if count=7 then count=1
+      if touch=12 or touch=13 or touch=11 then
+         select case count
+            Case 1
+               if jstatus=1 then Showpic 0 , 0 , Jaccuziicon , 1 else Showpic 0 , 0 , Jaccuziicon , 0
+            Case 2
+               Showpic 0 , 0 , Planticon , pstatus
+            Case 3
+               Showpic 0 , 0 , Watersystemicon ,wstatus
+            Case 4
+               Showpic 0 , 0 , Lighticon, lstatus
+            Case 5
+               Showpic 0 , 0 , Fountainicon,fstatus
+            Case 6
+               Showpic 0 , 0 , Pumpicon,pustatus
+         end select
+      end if
+      if touch=14 then
+         Cls
+         set backmenu
+         do
+           readtouch
+         loop until touch=0
+         waitms 30
+         Exit Do
+      end if
+
+    loop
+end sub
 
 Sub Pwlsetting
     Selection = 1
@@ -2104,7 +2178,7 @@ Sub Order
          Direct = Tooutput : Typ = Relaymodule : Cmd = 181 : Id = Idfountain
 
       Case "setlight"
-         Direct = Tooutput : Typ = Relaymodule : Cmd = 183 : Id = Idlight
+         Direct = Tooutput : Typ = Relaymodule : Cmd = 182 : Id = Idlight 'cmd=183 for minlight'
       Case "resetlight"
          Direct = Tooutput : Typ = Relaymodule : Cmd = 181 : Id = Idlight
 
@@ -2123,11 +2197,14 @@ Sub Order
       Case "resetplant"
          Direct = Tooutput : Typ = Relaymodule : Cmd = 181 : Id = Idplant
 
-
+      Case "setjacuzi"
+         Direct = Tooutput : Typ = Relaymodule : Cmd = 182 : Id = Idjacuzi
+      Case "resetjacuzi"
+         Direct = Tooutput : Typ = Relaymodule : Cmd = 181 : Id = Idjacuzi
 
    End Select
 
-    Call Tx
+   Tx
 
 
 End Sub
@@ -2141,15 +2218,25 @@ Sub readtouch
          incr j
          if j=2 then reset buz
          waitms 25
-         if j=10 then exit do
+         if j=20 then exit do
        loop until touch1=0
-       if j>9 then touch=21 else touch=11
+       if j>19 then touch=21 else touch=11
+    end if
+    if touch2=1 and mm=1 then
+       j=0
+       do
+         incr j
+         if j=2 then reset buz
+         waitms 25
+         if j=20 then exit do
+       loop until touch2=0
+       if j>19 then touch=22 else touch=12
     end if
     if touch1=1 and mm=0 then
        waitms 25
        if touch1=1 then touch=11
     end if
-    if touch2=1 then
+    if touch2=1 and mm=0 then
        waitms 25
        if touch2=1 then touch=12
     end if
@@ -2164,6 +2251,7 @@ Sub readtouch
     reset buz
     reset mm
     waitms 150
+    if touch>0 then j=0
   '( If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
       Checkkey
    End If
@@ -2385,80 +2473,84 @@ Sub Selectmenu
    Cls
    Set Backmenu
    Count = 1
-    do
+   do
       reset mm
       readtouch
-    loop until touch=0
+   loop until touch=0
+   j=0
    Do
       If Backmenu = 1 Then
          Reset Backmenu
          If Count < 1 Or Count > 8 Then Count = 1
          Select Case Count
-
             Case 1
-               Showpic 32 , 0 , Jaccuziicon
+               Showpic 0 , 0 , Settingicon
             Case 2
-               Showpic 32 , 0 , Planticon
+               Showpic 0 , 0 , Setclockicon
             Case 3
-               Showpic 32 , 0 , Watersystemicon
+               Showpic 0 , 0 , Jaccuziicon
             Case 4
-               Showpic 32 , 0 , Lighticon
+               Showpic 0 , 0 , Planticon
             Case 5
-               Showpic 32 , 0 , Fountainicon
+               Showpic 0 , 0 , Watersystemicon
             Case 6
-               Showpic 32 , 0 , Pumpicon
+               Showpic 0 , 0 , Lighticon
             Case 7
-               Showpic 32 , 0 , Setclockicon
+               Showpic 0 , 0 , Fountainicon
             Case 8
-               Showpic 32 , 0 , Settingicon
+               Showpic 0 , 0 , Pumpicon
+
 
          End Select
       End If
       reset mm
       readtouch
       If Touch = 11 Then
+         j=0
          Select Case Count
-
             Case 1
-               Jacuzi_menu
-            Case 2
-               Plant_menu
-            Case 3
-               Watersystem_menu
-            Case 4
-               Light_menu
-            Case 5
-               Fountain_menu
-            Case 6
-               Pump_menu
-            Case 7
-               Clock_menu
-            Case 8
                Setting_menu
+            Case 2
+               Clock_menu
+            Case 3
+               Jacuzi_menu
+            Case 4
+               Plant_menu
+            Case 5
+               Watersystem_menu
+            Case 6
+               Light_menu
+            Case 7
+               Fountain_menu
+            Case 8
+               Pump_menu
+
          End Select
       End If
       If Touch = 12 Or Touch = 13 Then
+         j=0
          If Touch = 12 Then Incr Count Else Decr Count
          If Count < 1 Then Count = 8
          If Count > 8 Then Count = 1
          Cls
          Select Case Count
             Case 1
-               Showpic 32 , 0 , Jaccuziicon
+               Showpic 0 , 0 , Settingicon
             Case 2
-               Showpic 32 , 0 , Planticon
+               Showpic 0 , 0 , Setclockicon
             Case 3
-               Showpic 32 , 0 , Watersystemicon
+               Showpic 0 , 0 , Jaccuziicon
             Case 4
-               Showpic 32 , 0 , Lighticon
+               Showpic 0 , 0 , Planticon
             Case 5
-               Showpic 32 , 0 , Fountainicon
+               Showpic 0 , 0 , Watersystemicon
             Case 6
-               Showpic 32 , 0 , Pumpicon
+               Showpic 0 , 0 , Lighticon
             Case 7
-               Showpic 32 , 0 , Setclockicon
+               Showpic 0 , 0 , Fountainicon
             Case 8
-               Showpic 32 , 0 , Settingicon
+               Showpic 0 , 0 , Pumpicon
+
 
          End Select
       End If
@@ -2471,6 +2563,12 @@ Sub Selectmenu
          waitms 30
          Exit Do
       End If
+      incr j
+      if j=50 then
+         cls
+         set backmenu
+         exit do
+      end if
    Loop
 End Sub
 

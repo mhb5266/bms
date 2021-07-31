@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.30  C:\Users\Barouei\Desktop\Bms\st7920\cv-st7020\Debug\List\st7920-4bit.asm Tue Jun 29 19:59:54 2021
+AVRASM ver. 2.1.30  C:\Users\Barouei\Desktop\Bms\st7920\cv-st7020\Debug\List\st7920-4bit.asm Sat Jul 31 17:40:10 2021
 
 C:\Users\Barouei\Desktop\Bms\st7920\cv-st7020\Debug\List\st7920-4bit.asm(1087): warning: Register r5 already defined by the .DEF directive
 C:\Users\Barouei\Desktop\Bms\st7920\cv-st7020\Debug\List\st7920-4bit.asm(1088): warning: Register r6 already defined by the .DEF directive

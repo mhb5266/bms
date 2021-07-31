@@ -19,26 +19,7 @@ Config Portd = Output
            Out6 Alias Portc.1
            Out7 Alias Portc.0
            Out8 Alias Portd.7
-           Out9 Alias Portc.3
-           Out10 Alias Portc.4
-           Out11 Alias Portc.5
-           Out12 Alias Portc.6
-           Out13 Alias Porta.5
-           Out14 Alias Porta.6
-           Out15 Alias Porta.7
-           Out16 Alias Portc.7
-           Out17 Alias Porta.4
-           Out18 Alias Porta.3
-           Out19 Alias Porta.2
-           Out20 Alias Porta.1
-           Out21 Alias Portb.2
-           Out22 Alias Portb.1
-           Out23 Alias Portb.0
-           Out24 Alias Porta.0
-           Out25 Alias Portb.3
-           Out26 Alias Portb.4
-           Out27 Alias Portb.5
-           Out28 Alias Portb.6
+
 
            Key Alias Pinb.7 : Config Portb.7 = Input
 
@@ -65,15 +46,15 @@ On Urxc Rx
 
 Defines:
 
-Dim Esenario1 As Eram Dword
-Dim Esenario2 As Eram Dword
-Dim Esenario3 As Eram Dword
-Dim Esenario4 As Eram Dword
+Dim Esenario1 As Eram byte
+Dim Esenario2 As Eram byte
+Dim Esenario3 As Eram byte
+Dim Esenario4 As Eram byte
 
-Dim Senario1 As Dword
-Dim Senario2 As Dword
-Dim Senario3 As Dword
-Dim Senario4 As Dword
+Dim Senario1 As byte
+Dim Senario2 As byte
+Dim Senario3 As byte
+Dim Senario4 As byte
 
 Senario1 = Esenario1
 Senario2 = Esenario2
@@ -92,18 +73,18 @@ Dim Wantid As Boolean
 Dim Gotid As Boolean
 
 Dim Outs As Dword
-Dim Eoutnum(28) As Eram Byte
-Dim Eoutid1(28) As Eram Byte
-Dim Eoutid2(28) As Eram Byte
-Dim Eoutid3(28) As Eram Byte
+Dim Eoutnum(8) As Eram Byte
+Dim Eoutid1(8) As Eram Byte
+Dim Eoutid2(8) As Eram Byte
+Dim Eoutid3(8) As Eram Byte
 
-Dim Outid1(28) As Byte
-Dim Outid2(28) As Byte
-Dim Outid3(28) As Byte
+Dim Outid1(8) As Byte
+Dim Outid2(8) As Byte
+Dim Outid3(8) As Byte
 
 
 
-Dim Eouts(28) As Eram Byte
+Dim Eouts(8) As Eram Byte
 Dim Idgot As Eram Byte
 Dim D As Byte
 'Dim Moduleid As Eram Byte
@@ -154,6 +135,9 @@ Dim Idblank As Byte
 Dim Direct As Byte
 Dim Endbit As Byte
 
+Const Tomaster = 252
+Const Tooutput = 232
+Const Toinput = 242
 
 
 Subs:
@@ -175,44 +159,14 @@ Const Resetall = 4
 Const Allid = 99
 
 Const Relaymodule = 110
-Const Pwmmodule = 111
 
-Const Tomaster = 252
-Const Tooutput = 232
-Const Toinput = 242
-
-Const Readallinput = 1
-Const Read1input = 2
-Const Learnkey = 3
-Const Enablebuz = 4
-Const Disablebuz = 5
-Const Enablesensor = 6
-Const Disablesensor = 7
-Const Enableinput = 8
-Const Disableinput = 9
-Const Readsteps = 10
-Const Learnsteps = 11
-Const Enablestep = 12
-Const Disablestep = 13
-Const Readsenario = 14
-Const Readremote = 15
-
-
-Const Keyin = 101
-Const Steps = 102
-Const Senario = 103
-Const Remote = 104
-Const Relaymodules = 110
-
-
-Const Mytyp = 110
 
 Startup:
 Reset Inok
 Reset En
 If Efirst > 0 Then
    Efirst = 0
-   For I = 1 To 28
+   For I = 1 To 8
        Eouts(i) = 0
    Next
 End If
@@ -346,46 +300,7 @@ Sub Getid
                                               Toggle Out7
                                          Case 8
                                               Toggle Out8
-                                         Case 9
-                                              Toggle Out9
-                                         Case 10
-                                              Toggle Out10
-                                         Case 11
-                                              Toggle Out11
-                                         Case 12
-                                              Toggle Out12
-                                         Case 13
-                                              Toggle Out13
-                                         Case 14
-                                              Toggle Out14
-                                         Case 15
-                                              Toggle Out15
-                                         Case 16
-                                              Toggle Out16
-                                         Case 17
-                                              Toggle Out17
-                                         Case 18
-                                              Toggle Out18
-                                         Case 19
-                                              Toggle Out19
-                                         Case 20
-                                              Toggle Out20
-                                         Case 21
-                                              Toggle Out21
-                                         Case 22
-                                              Toggle Out22
-                                         Case 23
-                                              Toggle Out23
-                                         Case 24
-                                              Toggle Out24
-                                         Case 25
-                                              Toggle Out25
-                                         Case 26
-                                              Toggle Out26
-                                         Case 27
-                                              Toggle Out27
-                                         Case 28
-                                              Toggle Out28
+
 
 
                                  End Select
@@ -521,62 +436,22 @@ Sub Setouts
            'If Outs.j = 1 Then Eouts(j) = 1 Else Eouts(j) = 0
         'End If
         Select Case J
+               Case 0
+                    Out1 = Outs.0
                Case 1
-                    Out1 = Outs.1
+                    Out2 = Outs.1
                Case 2
-                    Out2 = Outs.2
+                    Out3 = Outs.2
                Case 3
-                    Out3 = Outs.3
+                    Out4 = Outs.3
                Case 4
-                    Out4 = Outs.4
+                    Out5 = Outs.4
                Case 5
-                    Out5 = Outs.5
+                    Out6 = Outs.5
                Case 6
-                    Out6 = Outs.6
+                    Out7 = Outs.6
                Case 7
-                    Out7 = Outs.7
-               Case 8
-                    Out8 = Outs.8
-               Case 9
-                    Out9 = Outs.9
-               Case 10
-                    Out10 = Outs.10
-               Case 11
-                    Out11 = Outs.11
-               Case 12
-                    Out12 = Outs.12
-               Case 13
-                    Out13 = Outs.13
-               Case 14
-                    Out14 = Outs.14
-               Case 15
-                    Out15 = Outs.15
-               Case 16
-                    Out16 = Outs.16
-               Case 17
-                    Out17 = Outs.17
-               Case 18
-                    Out18 = Outs.18
-               Case 19
-                    Out19 = Outs.19
-               Case 20
-                    Out20 = Outs.20
-               Case 21
-                    Out21 = Outs.21
-               Case 22
-                    Out22 = Outs.22
-               Case 23
-                    Out23 = Outs.23
-               Case 24
-                    Out24 = Outs.24
-               Case 25
-                    Out25 = Outs.25
-               Case 26
-                    Out26 = Outs.26
-               Case 27
-                    Out27 = Outs.27
-               Case 28
-                    Out28 = Outs.28
+                    Out8 = Outs.7
         End Select
 
 
@@ -593,26 +468,7 @@ Sub Turnout
                                 Reset Out6
                                 Reset Out7
                                 Reset Out8
-                                Reset Out9
-                                Reset Out10
-                                Reset Out11
-                                Reset Out12
-                                Reset Out13
-                                Reset Out14
-                                Reset Out15
-                                Reset Out16
-                                Reset Out17
-                                Reset Out18
-                                Reset Out19
-                                Reset Out20
-                                Reset Out21
-                                Reset Out22
-                                Reset Out23
-                                Reset Out24
-                                Reset Out25
-                                Reset Out26
-                                Reset Out27
-                                Reset Out28
+
 
                                 If K > 28 Then K = 1
                                 Select Case K
@@ -632,46 +488,7 @@ Sub Turnout
                                               Set Out7
                                          Case 8
                                               Set Out8
-                                         Case 9
-                                              Set Out9
-                                         Case 10
-                                              Set Out10
-                                         Case 11
-                                              Set Out11
-                                         Case 12
-                                              Set Out12
-                                         Case 13
-                                              Set Out13
-                                         Case 14
-                                              Set Out14
-                                         Case 15
-                                              Set Out15
-                                         Case 16
-                                              Set Out16
-                                         Case 17
-                                              Set Out17
-                                         Case 18
-                                              Set Out18
-                                         Case 19
-                                              Set Out19
-                                         Case 20
-                                              Set Out20
-                                         Case 21
-                                              Set Out21
-                                         Case 22
-                                              Set Out22
-                                         Case 23
-                                              Set Out23
-                                         Case 24
-                                              Set Out24
-                                         Case 25
-                                              Set Out25
-                                         Case 26
-                                              Set Out26
-                                         Case 27
-                                              Set Out27
-                                         Case 28
-                                              Set Out28
+
 
                                 End Select
 End Sub
@@ -748,8 +565,9 @@ Sub Findorder
                        Idblank = Id
 
                case 200
+
                     if id=1 then
-                       for i=0 to 28
+                       for i=0 to 7
                            senario1.i=outs.i
                            waitms 5
                        next
@@ -757,7 +575,7 @@ Sub Findorder
                        waitms 20
                     end if
                     if id=2 then
-                       for i=0 to 28
+                       for i=0 to 7
                            senario2.i=outs.i
                            waitms 5
                        next
@@ -765,7 +583,7 @@ Sub Findorder
                        waitms 20
                     end if
                     if id=3 then
-                       for i=0 to 28
+                       for i=0 to 7
                            senario3.i=outs.i
                            waitms 5
                        next
@@ -773,7 +591,7 @@ Sub Findorder
                        waitms 20
                     end if
                     if id=4 then
-                       for i=0 to 28
+                       for i=0 to 7
                            senario4.i=outs.i
                            waitms 5
                        next
@@ -782,55 +600,75 @@ Sub Findorder
                     end if
 
                case 201
+
+
                     if id=1 then
                        senario1=esenario1
+                       'senario1=65535
                        waitms 20
-                       for i=0 to 28
-                           outs.i=senario1.i
+                       for j=0 to 7
+                           outs.j=senario1.j
                            waitms 5
                        next
-                       For J = 1 To 28
+                       For J = 0 To 7
                            Call Setouts
                            Waitms 100
                        Next
                     end if
                     if id=2 then
                        senario2=esenario2
+                       'senario2=255
                        waitms 20
-                       for i=0 to 28
-                           outs.i=senario2.i
+                       for j=0 to 7
+                           outs.j=senario2.j
                            waitms 5
                        next
-                       For J = 1 To 28
+                       For J = 0 To 7
                            Call Setouts
                            Waitms 100
                        Next
                     end if
                     if id=3 then
                        senario3=esenario3
+                       'senario3=64
                        waitms 20
-                       for i=0 to 28
-                           outs.i=senario3.i
+                       for j=0 to 7
+                           outs.j=senario3.j
                            waitms 5
                        next
-                       For J = 1 To 28
+                       For J = 0 To 7
                            Call Setouts
                            Waitms 100
                        Next
                     end if
                     if id=4 then
                        senario4=esenario4
+                       'senario4=4
                        waitms 20
-                       for i=0 to 28
-                           outs.i=senario4.i
+                       for j=0 to 7
+                           outs.j=senario4.j
                            waitms 5
                        next
-                       For J = 1 To 28
+                       For J = 0 To 7
                            Call Setouts
                            Waitms 100
                        Next
                     end if
 
+         '(
+                 if id=1 then
+                    set out1:reset out2:reset out3:reset out4
+                 end if
+                 if id=2 then
+                    reset out1:set out2:reset out3:reset out4
+                 end if
+                 if id=3 then
+                    reset out1:reset out2:set out3:reset out4
+                 end if
+                 if id=4 then
+                    reset out1:reset out2:reset out3:set out4
+                 end if
+                 ')
         End Select
 
 

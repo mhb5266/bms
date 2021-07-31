@@ -22,6 +22,8 @@ Data Stack size         : 512
 *******************************************************/
 
 #include <mega32a.h>
+#include <clock.c>
+
 
 // 1 Wire Bus interface functions
 #include <1wire.h>
@@ -207,11 +209,11 @@ glcd_init(&glcd_init_data);
 
 // Global enable interrupts
 #asm("sei")
-
+glcd_cleargraphics();
 while (1)
       {
       // Place your code here
-      lcd_clear(); 
+      //lcd_clear(); 
       //delay_ms(500);          
       a=w1_init();
       if (a>0) {
@@ -221,7 +223,12 @@ while (1)
         temp=ds18b20_temperature(0);
         sprintf(buffer,"Temp=%2.1f%`C",temp);
         lcd_puts(buffer);
-      }
+      }   
+      glcd_cleargraphics();
       delay_ms(500);
+      lcd_gotoxy(0,0);
+      lcd_putsf(clock);
+      delay_ms(750); 
+        
       }
 }

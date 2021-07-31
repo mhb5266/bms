@@ -1,6 +1,6 @@
 Report       : senario 14000319
-Date         : 07-08-2021
-Time         : 13:48:02
+Date         : 07-28-2021
+Time         : 15:27:26
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M128
@@ -8,9 +8,9 @@ SRAM         : 1000 hex
 EEPROM       : 1000 hex
 ROMSIZE      : 20000 hex
 
-ROMIMAGE     : C8C2 hex  -> Will fit into ROM
-ROMIMAGE     :  51394 dec
-FLASH USED   :  39  %
+ROMIMAGE     : CE38 hex  -> Will fit into ROM
+ROMIMAGE     :  52792 dec
+FLASH USED   :  40  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 64 hex
 S-Stackstart : 10C0 hex
 Framesize    : 64 hex
 Framestart   : FF8 hex
-Space left   :  3464  dec
+Space left   :  3476  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -244,27 +244,21 @@ DIRECT                           Byte              0251          593
 X                                Word              0252          594 
 W                                Word              0254          596 
 Z                                Word              0256          598 
-PLANT_STATUS                     Byte              0258          600 
-PLANT_START_HOUR                 Byte              0259          601 
-PLANT_START_MIN                  Byte              025A          602 
-PLANT_STOP_HOUR                  Byte              025B          603 
-PLANT_STOP_MIN                   Byte              025C          604 
-PLANT_DAYS                       Byte(7)           025D          605 
 MM                               Bit [2]           022F          559 
 JSTATUS                          Bit [1]           022F          559 
 CHANGETIME                       Bit [0]           022F          559 
-LSEC                             Byte              0264          612 
-PUMPS                            Bit [7]           0265          613 
-MUTES                            Bit [6]           0265          613 
-SENSORS                          Bit [5]           0265          613 
-BACKMENU                         Bit [4]           0265          613 
-PASS                             Byte(4)           0266          614 
-REERROR                          Byte              026A          618 
-TOUCH                            Byte              026B          619 
-NEXTDAY                          Bit [3]           0265          613 
-COUNT                            Byte              026C          620 
-I                                Byte              026D          621 
-J                                Byte              026E          622 
+LSEC                             Byte              0258          600 
+PUMPS                            Bit [7]           0259          601 
+MUTES                            Bit [6]           0259          601 
+SENSORS                          Bit [5]           0259          601 
+BACKMENU                         Bit [4]           0259          601 
+PASS                             Byte(4)           025A          602 
+REERROR                          Byte              025E          606 
+TOUCH                            Byte              025F          607 
+NEXTDAY                          Bit [3]           0259          601 
+COUNT                            Byte              0260          608 
+I                                Byte              0261          609 
+J                                Byte              0262          610 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -1061,12 +1055,6 @@ SETREMOTEDONE                    not used
 X                                not used
 W                                not used
 Z                                not used
-PLANT_STATUS                     not used
-PLANT_START_HOUR                 not used
-PLANT_START_MIN                  not used
-PLANT_STOP_HOUR                  not used
-PLANT_STOP_MIN                   not used
-PLANT_DAYS                       not used
 PUMPS                            not used
 MUTES                            not used
 SENSORS                          not used
@@ -1074,18 +1062,18 @@ PASS                             not used
 REERROR                          not used
 NEXTDAY                          not used
 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  461 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  1244 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  1256 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  1271 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  1283 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  1809 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  1821 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  1836 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  1848 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  2495 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  2507 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  2519 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  2536 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  2548 
-Source string could be too big to fit into target string [S>___STRBUF]  in line  2560 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  458 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  1318 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  1330 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  1345 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  1357 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  1883 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  1895 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  1910 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  1922 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  2593 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  2605 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  2617 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  2634 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  2646 
+Source string could be too big to fit into target string [S>___STRBUF]  in line  2658 
