@@ -215,7 +215,7 @@ SetLetter(P_LETTER);
 SetLine(0,0);
 Puts("Èå äÇã ÎÏÇ");
 DrawStringAt(1,0,"ÓáÇã",BLACK,WHITE);
-DrawStringAt(2,0,"ÝÇÑÓí äæíÓí",BLACK,WHITE);
+DrawStringAt(2,0,"ãÍãÏ ÍÓä ÈÇÑæí",BLACK,WHITE);
 DrawStringAt(3,0,"˜ÏæíŽä",BLACK,WHITE);
 DrawStringAt(4,0,"ãí˜Ñæäí˜",BLACK,WHITE);
  
@@ -232,8 +232,12 @@ glcd_outtextxyf(0,0,"micronik.ir");
 while (1)
       {   
        i++;
-       sprintf(str,"value=%d ",i);  
+       sprintf(str,"value=%d ",i); 
+       glcd_setcolor(0); 
+       glcd_setbkcolor(1);       
        glcd_outtextxy(0,14,str); 
+       glcd_setcolor(1); 
+       glcd_setbkcolor(0);        
        delay_ms(500); 
        if(i>20) i=0;
       }

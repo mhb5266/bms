@@ -1,0 +1,10 @@
+VERSION:3 SOURCE_TIMESTAMP:5308886D
+NODE:I LEVEL:0 LINE:2 "C:\cvavr\inc\mega8.h"
+NODE:I LEVEL:0 LINE:3 "C:\cvavr\inc\string.h"
+NODE:I LEVEL:0 LINE:4 "defines.c"
+NODE:I LEVEL:0 LINE:5 "uartdef.c"
+NODE:I LEVEL:0 LINE:8 "C:\cvavr\inc\alcd.h"
+NODE:I LEVEL:0 LINE:9 "C:\cvavr\inc\delay.h"
+NODE:I LEVEL:0 LINE:14 "C:\cvavr\inc\stdio.h"
+NODE:F LEVEL:0 LINE:17 "timer1_ovf_isr(void)"
+NODE:F LEVEL:0 LINE:26 "main(void)"

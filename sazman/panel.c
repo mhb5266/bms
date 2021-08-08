@@ -27,9 +27,12 @@ Data Stack size         : 512
 // 1 Wire Bus interface functions
 #include <1wire.h>
 #include <stdio.h>
+#include <ds1307.h>
+#include <testfont.c>
+#include <string.h>
 // DS1820 Temperature Sensor functions
 #include <ds18b20.h>
-#include <bfreeze.c>
+//#include <bfreeze.c>
 // maximum number of DS1820 devices
 // connected to the 1 Wire bus
 #define MAX_DS1820 8
@@ -49,10 +52,8 @@ unsigned char ds1820_rom_codes[MAX_DS1820][9];
 #include <font5x7.h>
 
 // Declare your global variables here
-float temp=0;
-char a=0;
-char buffer[16];
-// Timer1 overflow interrupt service routine
+#include <defines.c>
+// Timer1 overflow interrupt service routine                                                                
 interrupt [TIM1_OVF] void timer1_ovf_isr(void)
 {
 // Reinitialize Timer1 value
@@ -209,11 +210,85 @@ glcd_init(&glcd_init_data);
 // Global enable interrupts
 #asm("sei")
 glcd_cleargraphics();
+//rtc_init(0,0,0);
+//rtc_set_time(15,20,0);
+//rtc_set_date(6,14,05,00);
 while (1)
-      {
-      // Place your code here
+      {     
+      
+      rtc_get_time(&_hour,&_min,&_sec);
+      sprintf(strsec,"%02d:%02d:%02d",_hour,_min,_sec);
+
+
+      lcd_gotoxy(0,1);
+      lcd_puts(strsec); 
+      rtc_get_date(&_wday,&_day,&_month,&_year);
+      _wday--;
+      sh_year=_year+1400;
+      sprintf(strsec,"%4d/%02d/%02d",sh_year,_month,_day);
+      //switch(_wday){
+       //case(1):_weekday="SAT";
+       //case(2):_weekday="SUN";
+       //case(3):_weekday="MON";
+       //case(4):_weekday="TUE";
+       //case(5):_weekday="WED";
+       //case(6):_weekday="THU";
+       //case(7):_weekday="FRI"; 
+       //default:_weekday="___"; 
+      //}     
+     
+      lcd_gotoxy(0,0);
+      lcd_puts(strsec); 
+      //_weekday[]="s";     
+      //if (_sec==2) a^;
+      //glcd_display(a);
+      
+      strcpy(strsec,_weekday[_wday]);
+      lcd_gotoxy(11,0);
+      lcd_puts(strsec);       
+      /*lcd_gotoxy(0,0); 
+      lcd_puts("11");                     
+      glcd_rectangle(0, 0, 18, 18);
+      delay_ms(2000);                   
+      glcd_clear();
+      delay_ms(750);
+      //glcd_setcolor(0);
+      //glcd_setbkcolor(1);
+      delay_ms(2000);   
+      glcd_setfont(she);
+      delay_ms(2000);      
+      glcd_outtext("!");
+      //lcd_puts("!");
+      //glcd_setcolor(1);
+      //glcd_setbkcolor(0);
+      //lcd_puts("!");
+      delay_ms(500);
+      glcd_clear();
+      
+    
+      glcd_rectangle(30, 30, 45, 45); 
+      glcd_setfont(she);
+      glcd_setcolor(0);
+      glcd_setbkcolor(1);
+      glcd_outtextxy(33, 33, "!"); 
+      delay_ms(2000);   
+      glcd_setcolor(1);
+      glcd_setbkcolor(0);
+      glcd_cleartext();   
+      delay_ms(2000);   
+      rtc_get_time(_hour,_min,_sec);
+      sprintf(strsec,"%d",_sec);
+      lcd_gotoxy(0,0); 
+      lcd_puts(strsec);
+      delay_ms(2000);
+      glcd_clear();
+    
+*/
+  // Place your code here
       //lcd_clear(); 
       //delay_ms(500);          
+      
+      /*
       a=w1_init();
       if (a>0) {
       lcd_gotoxy(0,0);
@@ -226,9 +301,11 @@ while (1)
       delay_ms(500);
       lcd_clear();
       lcd_gotoxy(0,0);
-      glcd_putimagef(0,0,bfreeze,1);
-      delay_ms(750);   
-      delay_ms(750);
-       lcd_clear();     
+      glcd_putimagef(0,0,bfreeze,0);
+      delay_ms(2000);
+      glcd_putimagef(0,0,bfreeze,3);
+      delay_ms(2000);      
+      lcd_clear();*/
+           
       }
 }

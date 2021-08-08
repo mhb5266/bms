@@ -1,6 +1,6 @@
 
 
-$regfile = "m128def.dat"
+$regfile = "m128def.dat"                                                            f
 $crystal = 11059200
 
 $hwstack = 64
@@ -42,7 +42,8 @@ Dim Tmp2 As Integer
 Dim St1(10) As Integer
 Dim St2(10) As Integer
 
-Dim Alarmtemp As Byte
+Dim eAlarmtemp As  eram Byte
+Dim Alarmtemp As  Byte
 
 Dim Sahih1 As Integer
 Dim Sahih2 As Integer
@@ -161,8 +162,7 @@ Dim Cmd As Byte
 Dim Startbit As Byte : Startbit = 252
 Dim Endbit As Byte : Endbit = 220
 Dim Findorder As String * 20
-Dim Remoteid As Byte
-Dim Remotekeyid As Byte
+
 
 Dim Fstatus As Byte
 Dim Lstatus As Byte
@@ -218,21 +218,17 @@ Dim Setlight As Byte
 Dim Din(5) As Byte
 
 Dim Inok As Boolean
-Dim Learnok As Boolean
 
-Dim Learndone As Boolean
-Dim Cleardone As Byte
-Dim Setremotedone As Boolean
+
+
 
 Dim Direct As Byte
 
-Const Keyin = 101
-Const Steps = 102
-'Const Senario = 103
+
+
 Const Remote = 104
 Const Relaymodule = 110
-Const Pwmmodule = 111
-Const Outstep = 112
+
 
 Const Idjacuzi = 51
 Const Idwater = 52
@@ -248,9 +244,9 @@ Dim Z As Word
 
 
 Defines:
-
+dim templimit as byte
 dim mm as bit
-
+dim tbl as byte
 Dim Jstatus As Boolean
 Dim Changetime As Boolean
 Dim Lsec As Byte
@@ -358,21 +354,15 @@ Set Backlight
 Cls
 Call Beep
 Showpic 0 , 0 , Logo
-'(
-for i=1 to 4
-    ftime(i)=eftime(i)
-    waitms 5
-    ltime(i)=eltime(i)
-    waitms 5
-    ptime(i)=eptime(i)
-    waitms 5
-    wtime(i)=ewtime(i)
-    waitms 5
-    putime(i)=eputime(i)
-    waitms 5
-next
-')
 
+
+alarmtemp=ealarmtemp
+waitms 10
+if alarmtemp>50 and alarmtemp<10 then
+   ealarmtemp=40
+   waitms 10
+   alarmtemp=ealarmtemp
+end if
 
 eftime(1)=13:eftime(2)=13:eftime(3)=13:eftime(4)=14
 eltime(1)=13:eltime(2)=14:eltime(3)=13:eltime(4)=15
@@ -386,11 +376,11 @@ wtime(1)=13:wtime(2)=15:wtime(3)=13:wtime(4)=16
 ptime(1)=13:ptime(2)=16:ptime(3)=13:ptime(4)=17
 putime(1)=13:putime(2)=17:putime(3)=13:putime(4)=18
 
-Fdays=255:Fstatus=3
-pdays=255:pstatus=3
-pudays=255:pustatus=3
-ldays=255:lstatus=4
-wdays=255:wstatus=3
+Fdays=255:Fstatus=2
+pdays=255:pstatus=2
+pudays=255:pustatus=2
+ldays=255:lstatus=2
+wdays=255:wstatus=2
 
 Waitms 500
 Cls
@@ -407,7 +397,7 @@ Main:
       If _sec <> Lsec Then
          Shoewtime
          Temp
-         if _sec=0 or _sec=2 then Ifcheck
+         if _sec=0 then Ifcheck
       End If
       Lsec = _sec
       set mm
@@ -453,10 +443,7 @@ Rx:
 Return
 
 
-Conversion:
-   Readsens = Readsens * 10 : Readsens = Readsens \ 16
-   Temperature = Str(readsens) : Temperature = Format(temperature , "0.0")
-Return
+
 
 
 
@@ -801,6 +788,21 @@ Sub Shoewtime
 
    End Select
 
+   if tbl>0 then
+      beeperror
+      decr tbl
+      toggle backlight
+   end if
+   if tbl=0 then set backlight
+
+   if jstatus<>1 then
+      if fonoff=1 then Showpic 95 , 10 , Sfountain
+      if puonoff=1 then Showpic 63 , 32 , Spump
+      if ponoff=1 then  Showpic 95 , 32 , Splant
+      if wonoff=1 then  Showpic 0 , 32 , Swatersystem
+      if lonoff=1 then  Showpic 32 , 32 , Slight
+   end if
+
 End Sub
 
 Sub Setdate:
@@ -994,7 +996,7 @@ Sub Temp
       Sens1 = Temperature
 
 
-      If Jstatus = 0 Then
+      If Jstatus =0 Then
          Setfont Font16x16en
          Lcdat 3 , 1 , Sens1 ; "  "
       End If
@@ -1012,21 +1014,32 @@ Sub Temp
       Gosub Conversion
       Sens2 = Temperature
 
-      If Jstatus = 1 Then
-         Showpic 96 , 32 , Smalljacuzi
+      'If Jstatus = 1 Then
+         'Showpic 63 , 10 , Smalljacuzi
+         'Setfont Font16x16en
+         'Lcdat 3 , 1 , Sens2
+      'End If
+      if jstatus=1  then
+         showpic 63,10,Smalljacuzi
          Setfont Font16x16en
-         Lcdat 3 , 1 , Sens2 ; "  "
-      End If
+         lcdat 3,1,sens2
+         templimit = alarmtemp-1
+         if val(sens2) = templimit then tbl=10
+      end if
+      if val(sens2)>50 then
+         jstatus=0
+         findorder="resetjacuzi" :order
+      end if
    end if
 
 End Sub
 
+sub Conversion
+   Readsens = Readsens * 10 : Readsens = Readsens \ 16
+   Temperature = Str(readsens) : Temperature = Format(temperature , "0.0")
+end sub
+
 Sub Ifcheck
-   If Jstatus = 1 Then
-      If Sens2 = Alarmtemp Then
-         Beeperror
-      End If
-   End If
 
    If Ftime(1) = _hour And Ftime(2) = _min And Fstatus = 3 Then
       Findorder = "setfountain"
@@ -1039,6 +1052,41 @@ Sub Ifcheck
       cls
       Order
    End If
+
+   if lstatus=3 then
+      ltime(1)=lookup(sh_month,hon)
+      ltime(2)=lookup(sh_month,mon)
+      ltime(3)=lookup(sh_month,hoff)
+      ltime(4)=lookup(sh_month,moff)
+
+
+
+
+
+      If Ltime(1) = _hour And Ltime(2) = _min Then
+         Findorder = "setlight"
+         set lonoff
+         Order
+      End If
+      If Ltime(3) = _hour And Ltime(4) = _min  Then
+         Findorder = "resetlight"
+         reset lonoff
+         cls
+         Order
+      End If
+      If Ltime(1) = _hour And Ltime(2) = _min  Then
+         Findorder = "setlight"
+         set lonoff
+         Order
+      End If
+      If Ltime(3) = _hour And Ltime(4) = _min  Then
+         Findorder = "resetlight"
+         reset lonoff
+         cls
+         Order
+      End If
+   end if
+
 
 
    If Ltime(1) = _hour And Ltime(2) = _min And Lstatus = 4 Then
@@ -1093,11 +1141,6 @@ Sub Ifcheck
       Order
    End If
 
-   if fonoff=1 then Showpic 0 , 10 , Sfountain
-   if puonoff=1 then Showpic 63 , 10 , Spump
-   if ponoff=1 then  Showpic 95 , 10 , Splant
-   if wonoff=1 then  Showpic 0 , 32 , Swatersystem
-   if lonoff=1 then  Showpic 32 , 10 , Slight
 End Sub
 
 Sub Setting_menu
@@ -1185,8 +1228,13 @@ End Sub
 sub faston
     cls
     waitms 500
-    Showpic 0 , 0 , Jaccuziicon
+    if jstatus=1 then Showpic 0 , 0 , Jaccuziicon , 1 else Showpic 0 , 0 , Jaccuziicon , 0
+    do
+      reset mm
+      readtouch
+    loop until touch=0
     count=1
+    j=0
     do
       readtouch
       if touch=11 then
@@ -1197,25 +1245,51 @@ sub faston
                      if jstatus=1 then findorder="setjacuzi" else  findorder="resetjacuzi"
                      if jstatus=1 then Showpic 0 , 0 , Jaccuziicon , 1 else Showpic 0 , 0 , Jaccuziicon , 0
                 case 2
-                     if pstatus=1 then pstatus=0 else pstatus=1
+                     if pstatus=2 then pstatus=1 else pstatus=2
                      if pstatus=1 then findorder="setplant" else  findorder="resetplant"
-                     Showpic 0 , 0 , planticon,pstatus
+                     if pstatus=1 then
+                        j=1:set ponoff
+                     else
+                        j=0:reset ponoff
+                     end if
+
+                     Showpic 0 , 0 , planticon,j
                 case 3
-                     if wstatus=1 then wstatus=0 else wstatus=1
+                     if wstatus=2 then wstatus=1 else wstatus=2
                      if wstatus=1 then findorder="setwater" else  findorder="resetwater"
-                     Showpic 0 , 0 , watersystemicon,wstatus
+                     if wstatus=1 then
+                        j=1:set wonoff
+                     else
+                        j=0:reset wonoff
+                     end if
+                     Showpic 0 , 0 , watersystemicon,j
                 case 4
-                     if lstatus=1 then lstatus=0 else lstatus=1
+                     if lstatus=2 then lstatus=1 else lstatus=2
                      if lstatus=1 then findorder="setlight" else  findorder="resetlight"
-                     Showpic 0 , 0 , lighticon,lstatus
+                     if lstatus=1 then
+                        j=1:set lonoff
+                     else
+                        j=0:reset lonoff
+                     end if
+                     Showpic 0 , 0 , lighticon,j
                 case 5
-                     if fstatus=1 then fstatus=0 else fstatus=1
+                     if fstatus=2 then fstatus=1 else fstatus=2
                      if fstatus=1 then findorder="setfountain" else  findorder="resetfountain"
-                     Showpic 0 , 0 ,fountainicon,fstatus
+                     if fstatus=1 then
+                        j=1:set fonoff
+                     else
+                        j=0:reset fonoff
+                     end if
+                     Showpic 0 , 0 ,fountainicon,j
                 case 6
-                     if pustatus=1 then pustatus=0 else pustatus=1
+                     if pustatus=2 then pustatus=1 else pustatus=2
                      if pustatus=1 then findorder="setpump" else  findorder="resetpump"
-                     Showpic 0 , 0 , pumpicon,pustatus
+                     if pustatus=1 then
+                        j=1:set puonoff
+                     else
+                        j=0:reset puonoff
+                     end if
+                     Showpic 0 , 0 , pumpicon,j
          end select
          order
          waitms 500
@@ -1230,15 +1304,20 @@ sub faston
             Case 1
                if jstatus=1 then Showpic 0 , 0 , Jaccuziicon , 1 else Showpic 0 , 0 , Jaccuziicon , 0
             Case 2
-               Showpic 0 , 0 , Planticon , pstatus
+               if pstatus=1 then j=1 else j=0
+               Showpic 0 , 0 , Planticon , j
             Case 3
-               Showpic 0 , 0 , Watersystemicon ,wstatus
+               if wstatus=1 then j=1 else j=0
+               Showpic 0 , 0 , Watersystemicon ,j
             Case 4
-               Showpic 0 , 0 , Lighticon, lstatus
+               if lstatus=1 then j=1 else j=0
+               Showpic 0 , 0 , Lighticon, j
             Case 5
-               Showpic 0 , 0 , Fountainicon,fstatus
+               if fstatus=1 then j=1 else j=0
+               Showpic 0 , 0 , Fountainicon,j
             Case 6
-               Showpic 0 , 0 , Pumpicon,pustatus
+               if pustatus=1 then j=1 else j=0
+               Showpic 0 , 0 , Pumpicon,j
          end select
       end if
       if touch=14 then
@@ -1250,7 +1329,12 @@ sub faston
          waitms 30
          Exit Do
       end if
-
+      incr j
+      if j=50 then
+         cls
+         set backmenu
+         exit do
+      end if
     loop
 end sub
 
@@ -1583,7 +1667,6 @@ Sub Jacuzi_menu
     Cls
     Showpic 0 , 0 , Smalljacuzi
 
-
     Do
 
 
@@ -1597,14 +1680,14 @@ Sub Jacuzi_menu
         If Selection = 1 And Blink_ = 0 Then
            S1 = S1 + "      "
         Else
-           If Status = 1 Then S1 = S1 + " ON  "
-           If Status = 2 Then S1 = S1 + " OFF "
+           If jstatus = 1 Then S1 = S1 + " ON  "
+           If jstatus = 0 Then S1 = S1 + " OFF "
         End If
         S2 = ""
         If Selection = 2 And Blink_ = 0 Then
            S2 = S2 + "   "
         Else
-           S2 = " " + Str(alarmtemp) + "!"
+           S2 = " " + Str(alarmtemp) + "! "
         End If
         Setfont Font16x16en
         Lcdat 5 , 1 , S1
@@ -1619,6 +1702,7 @@ Sub Jacuzi_menu
            If Selection > 2 Then
                Selection = 1
                Set Backmenu
+               ealarmtemp=alarmtemp
                Cls
                Exit Do
             End If
@@ -1628,6 +1712,7 @@ Sub Jacuzi_menu
         If Touch = 14 Then
            Cls
            Set Backmenu
+           ealarmtemp=alarmtemp
            Setfont Font8x8
            Touch = 0
            Exit Do
@@ -1644,32 +1729,27 @@ Sub Jacuzi_menu
         end if
         '-----------------------------------
         If Touch = 12  Then
-              If Selection = 1 Then Incr Status
+              If Selection = 1 Then toggle jstatus
               If Selection = 2 Then Incr Alarmtemp
         End If
         '------------------------------------
         If Touch = 13  Then
-           If Selection = 1 Then Decr Status
+           If Selection = 1 Then toggle jstatus
            If Selection = 2 Then Decr Alarmtemp
         End If
 
         '--------------------------------------
-        If Status > 2 Then Status = 1
-        If Status < 1 Then Status = 2
 
         if selection=1 then
                 If Touch = 12 Or Touch = 13  Then
-                    If Status = 1 Then
+                    If jstatus = 1 Then
                           Cmd = 180 : Direct = Tooutput : Typ = Relaymodule : Tx
-                          Waitms 20
-                          Cmd = 182 : Direct = Tooutput : Typ = Relaymodule : Tx
-                          Waitms 20
+                          findorder="setjacuzi":order
                     End If
-                    If Status = 2 Then
+                    If jstatus = 0 Then
                           Cmd = 180 : Direct = Tooutput : Typ = Relaymodule : Tx
                           Waitms 20
-                          Cmd = 181 : Direct = Tooutput : Typ = Relaymodule : Tx
-                          Waitms 20
+                          findorder="resetjacuzi":order
                     End If
                     Touch = 0
                 End If
@@ -1684,7 +1764,6 @@ Sub Jacuzi_menu
         Waitms 50
 
     Loop
-    If Status = 1 Then Jstatus = 1 Else Jstatus = 0
 End Sub
 
 Sub Plant_menu
@@ -2218,9 +2297,9 @@ Sub readtouch
          incr j
          if j=2 then reset buz
          waitms 25
-         if j=20 then exit do
+         if j=40 then exit do
        loop until touch1=0
-       if j>19 then touch=21 else touch=11
+       if j>39 then touch=21 else touch=11
     end if
     if touch2=1 and mm=1 then
        j=0
@@ -2228,9 +2307,9 @@ Sub readtouch
          incr j
          if j=2 then reset buz
          waitms 25
-         if j=20 then exit do
+         if j=40 then exit do
        loop until touch2=0
-       if j>19 then touch=22 else touch=12
+       if j>39 then touch=22 else touch=12
     end if
     if touch1=1 and mm=0 then
        waitms 25
@@ -2251,7 +2330,10 @@ Sub readtouch
     reset buz
     reset mm
     waitms 150
-    if touch>0 then j=0
+    if touch>0 then
+     j=0
+     tbl=0:set backlight
+    endif
   '( If Touch1 = 1 Or Touch2 = 1 Or Touch3 = 1 Or Touch4 = 1 Then
       Checkkey
    End If
@@ -2473,6 +2555,9 @@ Sub Selectmenu
    Cls
    Set Backmenu
    Count = 1
+
+   Showpic 0 , 0 , Settingicon
+
    do
       reset mm
       readtouch
@@ -2579,6 +2664,7 @@ read_dt
  Selection = 1
  Cls
  Setfont Font8x8
+ reset backmenu
  Do
 
 
@@ -2769,9 +2855,13 @@ read_dt
 
  Cls
  Gosub Sh_to_m
- Setdate
- Settime
- Lcdat 1 , 1 , " SAVEING"
+ if backmenu=0 then
+   Setdate
+   Settime
+   Lcdat 1 , 1 , " SAVEING"
+ else
+    Lcdat 1 , 1 , "Canceled"
+ end if
  Set Backmenu
  Wait 1
  Cls
@@ -2828,8 +2918,6 @@ Function Sh_kabise(byref Sal As Word)as Byte
 End Function
 
 
-
-
 Sub Beeperror
 
     Set Buz
@@ -2837,3 +2925,16 @@ Sub Beeperror
     Reset Buz
 
 End Sub
+
+
+hoff:
+data 0,6,5,5,5,5,5,5,5,6,6,6,5
+
+moff:
+data 0,1,26,13,16,34,59,23,49,19,41,21,42
+
+hon:
+data 0,18,19,19,19,19,18,16,16,16,16,16,17
+
+mon:
+data 0,46,13,38,48,20,37,52,22,15,22,49,20
