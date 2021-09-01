@@ -1,6 +1,6 @@
-Report       : sim800 remote
+Report       : motor sms
 Date         : 09-02-2021
-Time         : 03:51:21
+Time         : 02:59:26
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 11E6 hex  -> Will fit into ROM
-ROMIMAGE     :  4582 dec
-FLASH USED   :  55  %
+ROMIMAGE     : 630 hex  -> Will fit into ROM
+ROMIMAGE     :  1584 dec
+FLASH USED   :  19  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  90  dec
+Space left   :  679  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -92,48 +92,13 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-I                                Byte              0060          96 
-B                                Byte              0061          97 
-SRET                             String * 100      0062          98 
-STEMP                            String * 6        00C7          199 
-U                                Byte              00CE          206 
-LIM                              Byte              00CF          207 
-MSG                              String * 70       00D0          208 
-NUM                              String * 13       0117          279 
-ENUM                             EEPROM String(3)  0000          0 
-NCOUNTER                         Byte              0125          293 
-SHARJ                            String * 100      0126          294 
-SHEADER                          String(5) * 30    018B          395 
-SBODY                            String(5) * 30    0226          550 
-NET                              String * 10       02C1          705 
-COUNT                            Byte              02CC          716 
-SCOUNT                           Byte              02CD          717 
-LENGTH                           Byte              02CE          718 
-ANTEN                            Word              02CF          719 
-A                                Bit [7]           0306          774 
-R                                Byte              0307          775 
-X                                Byte              0308          776 
-G                                Byte              0309          777 
-P                                Bit [6]           0306          774 
-SMS                              String * 70       030A          778 
-T0                               Byte              0351          849 
-S                                Word(24)          0352          850 
-SADDRESS                         String * 20       0382          898 
-SCODE                            String * 4        0397          919 
-ADDRESS                          Long              039C          924 
-CODE                             Byte              03A0          928 
-RA                               Long              03A1          929 
-RNUMBER                          Byte              03A5          933 
-RNUMBER_E                        EEPROM Byte       002A          42 
-OKREAD                           Bit [5]           0306          774 
-ERROR                            Bit [4]           0306          774 
-KEYCHECK                         Bit [3]           0306          774 
-T                                Word              03A6          934 
-EADDRESS                         Word              03A8          936 
-E_READ                           Byte              03AA          938 
-E_WRITE                          Byte              03AB          939 
-EEVAR                            EEPROM Long(3)    002B          43 
-NOBAT                            Byte              03AC          940 
+A                                Bit [7]           0060          96 
+R                                Byte              0061          97 
+X                                Byte              0062          98 
+B                                Byte              0063          99 
+G                                Byte              0064          100 
+P                                Bit [6]           0060          96 
+SMS                              String * 250      0065          101 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -506,13 +471,6 @@ _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
 _XTINY                           0
-_RS232_BUFSIZE0                  50
-_RS232_BUFSIZE_IN0P1             51
-_CHECKCHAR0                      0
-USELCD                           1
-SENDDEMO                         1
-PINCODE                          "AT+CPIN=1234"
-PHONENUMBER                      "AT+CMGS=09376921503"
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -536,17 +494,4 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-STEMP                            not used
-U                                not used
-NCOUNTER                         not used
-SHEADER                          not used
-SCOUNT                           not used
-LENGTH                           not used
-A                                not used
-G                                not used
-T0                               not used
-EADDRESS                         not used
-E_READ                           not used
-E_WRITE                          not used
-NOBAT                            not used
 
