@@ -6,9 +6,9 @@ $baud = 9600
 
 'HW stack 20, SW stack 8 , frame 10
 
-Config Lcdpin = 16 * 2 , Db4 = Portc.2 , Db5 = Portc.3 , Db6 = Portc.4 , Db7 = Portc.5 , E = Portc.1 , Rs = Portc.0
-Config Lcd = 16 * 2
-Cursor Off
+'Config 'lcdpin = 16 * 2 , Db4 = Portc.2 , Db5 = Portc.3 , Db6 = Portc.4 , Db7 = Portc.5 , E = Portc.1 , Rs = Portc.0
+'Config 'lcd = 16 * 2
+'Cursor Off
 
 config_sim:
 'some subroutines
@@ -29,7 +29,8 @@ Dim I As Byte , B As Byte
 Dim Sret As String * 100
 
 Dim Msg As String * 160
-Dim Num As String * 13 : Num = "+989376921503"
+Dim Num As String * 13 :Num = "+09155191622"
+'Num = "+989376921503"
 Dim Sharj As String * 160
 Dim Sheader(5) As String * 30
 Dim Sbody(5) As String * 30
@@ -38,7 +39,7 @@ Dim Count As Byte
 Dim Scount As Byte
 Dim Length As Byte
 Dim Anten As Word
-Simrst Alias Portb.1 : Config Simrst = Output
+Simrst Alias Portd.2 : Config Simrst = Output
 
 'we use a serial input buffer
 Config Serialin = Buffered , Size = 50                     ' buffer is small a bigger chip would allow a bigger buffer
@@ -46,35 +47,40 @@ Config Serialin = Buffered , Size = 50                     ' buffer is small a b
 'enable the interrupts because the serial input buffer works interrupts driven
 Enable Interrupts
 
-'define a constant to enable LCD feedback
-Const Uselcd = 1
+'define a constant to enable 'lcd feedback
+'Const Use lcd = 1
 Const Senddemo = 1                                          ' 1= send an sms
 Const Pincode = "AT+CPIN=1234"                              ' pincode change it into yours!
 Const Phonenumber = "AT+CMGS=09376921503"                   ' phonenumber to send sms to
-
+const password=1234
 
 
 Config_remote:
-
-
+declare sub check
+declare sub command
+declare sub _read
 declare sub do_learn
 declare sub del_remote
 '-------------------------------------------------------------------------------
-Config Portd.7 = Input :_in Alias Pind.7
-Config portd.6 = Output:Buzz Alias Portd.6
-config portd.5=input:key alias pind.5
-Config portb.0 = Output:Led1 Alias Portb.0
+Config Portd.4 = Input :_in Alias Pind.4
+'Config portd.6 = Output:buzz Alias Portd.6
+config portb.0=input:key alias pinb.0
+Config portb.1 = Output:led1 Alias Portb.1
+config portd.3=OUTPUT:relay alias portd.3
 
+ds1 alias portd.5:config portd.5=INPUT
+ds2 alias portd.6:config portd.6=INPUT
+ds3 alias portd.7:config portd.7=INPUT
 
 
 '--------------------------------- Timer ---------------------------------------
 Config Timer1 = Timer , Prescale = 8 : Stop Timer1 : Timer1 = 0
-config timer0= timer ,prescale=1024
-enable interrupts
-enable timer0
-on ovf0 t0rutin
+'config timer0= timer ,prescale=1024
+'enable interrupts
+'enable timer0
+'on ovf0 t0rutin
 dim t0 as byte
-start timer0
+'start timer0
 '--------------------------------- Variable ------------------------------------
 Dim S(24)as Word
 
@@ -86,6 +92,8 @@ Dim Code As Byte
 Dim Ra As Long                                              'fp address
 Dim Rnumber As Byte                                         'remote know
 Dim Rnumber_e As Eram Byte
+Rnumber=Rnumber_e
+waitms 10
 Dim Okread As Bit
 Dim Error As Bit
 Dim Keycheck As Bit
@@ -100,23 +108,15 @@ Dim E_write As Byte
 Dim Eevar(20) As Eram Long
 
 
-
-
-
 Startup:
 
 
 
 Resetsim
-Cls
-Lcd "     LOADING    "
-Lowerline
 For I = 1 To 15
-
-    Lcd "."
-    Wait 1
+    Waitms 300
 Next
-Cls
+
 
 
 Print "AT"                                                  ' send AT command twice to activate the modem
@@ -125,26 +125,23 @@ Flushbuf
 'Print "AT&F"
 Flushbuf                                                    ' flush the buffer
 Print "ATE0"
-    Home Lower
 
 
 
-'Do
+Do
   Flushbuf
    Print "AT" :                                             ' Waitms 100
-   Getline Sret                                             ' get data from modem
-       Lcd Sret                                             ' feedback on display
-'Loop Until Sret = "OK"                                      ' modem must send OK
+   Getline Sret                                             ' get data from modem                                             ' feedback on display
+Loop Until Sret = "OK"                                      ' modem must send OK
 Flushbuf                                                    ' flush the input buffer
 
 
 
-    Home Upper : Lcd "Get pin mode"
 
 Print "AT+cpin?"                                            ' get pin status
 Getline Sret
 
-    Home Lower : Lcd Sret
+
 
 If Sret = "+CPIN: SIM PIN" Then
    Print Pincode                                            ' send pincode
@@ -154,17 +151,9 @@ Flushbuf
 Print "AT+CMGF=1"                                           ' set SMS text mode
 Getline Sret                                                ' get OK status
 
-If Sret = "OK" Then
- Lcd "TEXTMODE OK"
-Else
- Lcd "ERROR"
-End If
-Wait 1
-Cls
 
 Print "At+Cusd=1"
 Getline Sret
-Cls : Lcd "USSD CODE" : Lowerline : Lcd Sret : Wait 3 : Cls : Waitms 500
 
 
 Flushbuf
@@ -182,67 +171,56 @@ Getline Sret
   Flushbuf
    Print "AT+CSMP?"
    Getline Sret
-       Cls : Lcd "CHR SETTING"
-       Wait 1
-       Cls
-       Lcd Sret
-       Wait 1
 
   Flushbuf
    Print "AT+CNMI?"
    Getline Sret
-       Cls : Lcd "INDICATE CNG"
-       Wait 1
-       Cls
-       Lcd Sret
-       Wait 1
-   Waitms 500
-Wait 1
-cls
 
-'Do
+
+
+Do
   Flushbuf
    Print "AT+CMGF=1"
    Getline Sret
-       Cls : Lcd "TEXT MODE" : Lowerline : Lcd Sret
-   Waitms 500
-'Loop Until Sret = "OK"
-Wait 2
+   Waitms 300
+Loop Until Sret = "OK"
+Wait 1
 
   Flushbuf
   Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
    Getline Sret
-   Cls : Lcd "FONT SETTING"
-   Wait 1
-   Cls
-   Lcd Sret
-   Wait 1
-Wait 2
+Wait 1
 
 
-'Do
+Do
    Delall
-   Cls : Lcd "DEL ALL" : Lowerline : Lcd Sret : Wait 2 : Cls : Waitms 500
    Waitms 500
-'Loop Until Sret = "OK"
-Wait 2
-
+Loop Until Sret = "OK"
 
 
 Main:
 
-Msg = "SIM800 IS ONLINE NOW"
-'Send_sms
-
-'Charge
-Wait 5
-
-cls
+Msg = "module is restarted"
+Send_sms
+for i=1 to 10
+    toggle led1
+    waitms 250
+next
+'set relay
+waitms 500
+'reset relay
+reset led1
 
 do
-  gosub _read
+  'start timer0
+  'if relay=0 then reset led1 else set led1
+
+   _read
   if key=0 then
-     waitms 25
+     'stop timer0
+     reset led1
+     waitms 250
+     set led1
      i=0
      do
        waitms 50
@@ -250,25 +228,25 @@ do
        if i>20 then exit do
      loop until  key=1
      if i>20 then del_remote else do_learn
+     'start timer0
   end if
-  'waitms 50
 
 
 loop
-
+'(
 Do
   Flushbuf
   Cls : Wait 1
   Antenna
 
   Wait 1
-  Cls : Lcd  "ANTEN= " ; Anten : Lowerline : Lcd Sharj : Lcd " $"
+  Cls : 'lcd  "ANTEN= " ; Anten : Lowerline : 'lcd Sharj : 'lcd " $"
 
  ' Print "AT+CNMI?"
   'Getline Sret
-  'Cls : Lcd Sret : Wait 2 : Cls
+  'Cls : 'lcd Sret : Wait 2 : Cls
   'If Sret = "OK" Then
-     'Cls : Lcd "NEW SMS" : Wait 2 : Cls
+     'Cls : 'lcd "NEW SMS" : Wait 2 : Cls
      Flushbuf
      Print "AT+CMGR=1"
      Getline Sret
@@ -279,11 +257,11 @@ Do
           Getline Sret
           Scount = Split(sret , Sbody(1) , " ")
           Num = Sheader(2)
-          Cls : Lcd Sbody(1)
+          Cls : 'lcd Sbody(1)
           Msg = ""
           If Sbody(1) = "?" Then
              Flushbuf
-             'If Led1 = 0 Then Msg = "LED IS OFF" Else Msg = "LED IS ON"
+             'If relay = 0 Then Msg = "LED IS OFF" Else Msg = "LED IS ON"
              'Msg = Msg + Chr(13)
              Msg = Msg + "ANTEN=" + Net
              Msg = Msg + Chr(13)
@@ -292,14 +270,14 @@ Do
              Send_sms
           End If
           If Lcase(sbody(1)) = "off" Then
-             Reset Led1
+             Reset relay
              Msg = "LED IS OFF"
 
 
              Send_sms
           End If
           If Lcase(sbody(1)) = "on" Then
-             Set Led1
+             Set relay
              Num = Sheader(2)
              Msg = "LED IS ON"
              Send_sms
@@ -313,19 +291,40 @@ Do
      End If
      Delread
 Loop
+')
 
 
 t0rutin:
-        stop timer0
+'(
+        'stop timer0
         incr t0
+        if relay=1 then led1=1 else led1=0
+        if t0>0 and t0<=4 then toggle led1
+        if t0>4 then
+           if relay=1 then  set led1 else reset led1
+        end if
         if t0=42 then
            t0=0
-           toggle buzz
+           incr refresh
+           if refresh=30 then
+              antenna
+              refresh=0
+           end if
+           if relay=1  and timeout>0 then
+              decr timeout
+              if timeout=0 then
+                 reset relay
+                 Msg = "alarm is off"
+                 'Send_sms
+              end if
+           end if
+           'toggle led1
         end if
-        start timer0
+        'start timer0
+')
 return
 '--------------------------------------------------------------------------read
-_read:
+sub _read:
       Okread = 0
       If _in = 1 Then
          Do
@@ -385,12 +384,12 @@ _read:
             I = 0
          End If
       End If
-Return
+end sub
 '================================================================ keys  learning
 
 
 '========================================================================= CHECK
-Check:
+sub Check:
       Okread = 1
       If Keycheck = 0 Then                                  'agar keycheck=1 bashad yani be releha farman nade
          For I = 1 To Rnumber
@@ -404,29 +403,25 @@ Check:
          Next
       End If
       Keycheck = 0
-Return
+end sub
 '-------------------------------- Relay command
-Command:
-
-       cls
-       lcd code
+sub Command:
        toggle led1
-
+       'toggle relay
         Waitms 500
-        cls
-Return
+end sub
 
 Sub Beep
-    Set Buzz
-    Waitms 80
-    Reset Buzz
-    Waitms 30
+    'Set led1
+    'Waitms 80
+    'Reset led1
+    'Waitms 30
 End Sub
 
 
 Sub del_remote
 
-     cls:lcd "delete remote"
+     cls:'lcd "delete remote"
      Rnumber = 0
      Rnumber_e = Rnumber
      waitms 20
@@ -444,9 +439,9 @@ End Sub
 
 
 Sub Do_learn:
-    cls:lcd "learning new"
+    'cls:lcd "learning new"
     Do
-           Gosub _read
+           _read
 
            If Okread = 1 Then
               Call Beep                                     'repeat check
@@ -462,9 +457,9 @@ Sub Do_learn:
                  For I = 1 To Rnumber
                      Ra = Eevar(i)
                      If Ra = Address Then                   'agar address remote tekrari bod yani ghablan learn shode
-                        Set Buzz
+                        Set led1
                         Wait 1
-                        Reset Buzz
+                        Reset led1
                         Error = 1
                         Exit For
                      Else
@@ -475,12 +470,9 @@ Sub Do_learn:
                     Incr Rnumber                            'be meghdare rnumber ke index tedade remote haye learn shode ast yek vahed ezafe kon
                     If Rnumber > 20 Then                    'agar bishtar az 100 remote learn shavad
                        Rnumber = 20
-                       Set Buzz
+                       Set led1
                        Wait 5
-                       Reset Buzz
-                       beep
-                       beep
-                       cls
+                       Reset led1
                     Else                                    'agar kamtar az 100 remote bod
                        Rnumber_e = Rnumber                  'meghdare rnumber ra dar eeprom zakhore mikonad
                        Ra = Address
@@ -494,7 +486,7 @@ Sub Do_learn:
               Exit Do
            End If
          Okread = 0
-         Reset Led1
+         Reset relay
 
     Loop
 
@@ -506,51 +498,53 @@ End Sub
 '+CMTI: "SM",5
 '(
 Sub Showsms(s As String )
-     #if Uselcd = 1
+     #if Use'lcd = 1
          Cls
      #endif
      I = Instr(s , ",")                                     ' find comma
      I = I + 1
      Stemp = Mid(s , I)                                     ' s now holds the index number
-     #if Uselcd = 1
-         Lcd "get " ; Stemp                                 'time to read the lcd
+     #if Use'lcd = 1
+         'lcd "get " ; Stemp                                 'time to read the 'lcd
      #endif
 
      Print "AT+CMGR=" ; Stemp                               ' get the message
      Getline S                                              ' header +CMGR: "REC READ","+316xxxxxxxx",,"02/04/05,01:42:49+00"
-     #if Uselcd = 1
+     #if Use'lcd = 1
          Lowerline
-         Lcd S
+         'lcd S
      #endif
      Do
        Getline S
-       Lcd S
+       'lcd S
        Wait 2
        Cls
        Wait 1
                                                ' get data from buffer
        Select Case S
               Case "MHB" :                                  'when you send PORT as sms text, this will be executed
-                   #if Uselcd = 1
-                       Cls : Lcd "do something!"
+                   #if Use'lcd = 1
+                       Cls : 'lcd "do something!"
                    #endif
               Case "OK" : Exit Do                           ' end of message
               Case Else
        End Select
 
      Loop
-     #if Uselcd = 1
-         Home Lower : Lcd "remove sms"
+     #if Use'lcd = 1
+         Home Lower : 'lcd "remove sms"
      #endif
      Print "AT+CMGD=" ; Stemp                               ' delete the message
      Getline S                                              ' get OK
-     #if Uselcd = 1
-         Lcd S
+     #if Use'lcd = 1
+         'lcd S
      #endif
 End Sub
 
 ')
 'get line of data from buffer
+
+
 Sub Getline(s As String)
     S = ""
     Do
@@ -583,10 +577,7 @@ Sub Send_sms
      Print Msg ; Chr(26)
      Wait 5
      Print "AT"
-     Cls : Lcd Num : Wait 5 : Cls : Lcd Msg : Wait 5 : Cls : Waitms 500
      Flushbuf
-     Charge
-     Wait 5 : Cls : Lcd Sharj : Wait 5 : Cls : Waitms 500
 
 End Sub
 
@@ -601,14 +592,14 @@ Sub Checksim
       Flushbuf
       Print "AT"
       Getline Sret
-      Lcd Sret
+      'lcd Sret
       If Sret <> "OK" Then
          Incr Lim
          If Lim = 5 Then
             Lim = 0
             Resetsim
             Cls
-            Lcd "sim was reset"
+            'lcd "sim was reset"
             Wait 2
             Cls
          End If
@@ -641,7 +632,6 @@ Sub Antenna
   Getline Sret
   Count = Split(sret , Sbody(1) , " ")
   Anten = Val(sbody(2))
-'  Cls : Lcd "ANTEN= " : Lcd Anten : Lowerline : Lcd Sret : Wait 5 : Cls : Waitms 500
   Select Case Anten
          Case 0
               Net = "BAD"
@@ -665,9 +655,10 @@ Sub Charge
 
 'Print "ATD*140#"
 Flushbuf
-Print "At+Cusd=1," ; Chr(34) ; "*140#" ; Chr(34)
 
-'Print "At+Cusd=1," ; Chr(34) ; "*555*1*2#" ; Chr(34)
+'Print "At+Cusd=1," ; Chr(34) ; "*140#" ; Chr(34)
+
+Print "At+Cusd=1," ; Chr(34) ; "*555*1*2#" ; Chr(34)
   Getline Sret
   Getline Sret
   Sharj = Right(sret , 17)
@@ -681,6 +672,7 @@ Sub Delall
      Print "AT+CMGDA=DEL ALL"
      Getline Sret
 End Sub
+
 
 Sub Delread
      Flushbuf

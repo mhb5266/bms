@@ -1,6 +1,6 @@
 Report       : sim800
-Date         : 08-31-2021
-Time         : 19:21:40
+Date         : 09-01-2021
+Time         : 19:51:25
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 153C hex  -> Will fit into ROM
-ROMIMAGE     :  5436 dec
-FLASH USED   :  66  %
+ROMIMAGE     : 1034 hex  -> Will fit into ROM
+ROMIMAGE     :  4148 dec
+FLASH USED   :  50  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -23,12 +23,12 @@ Framesize    : 20 hex
 Framestart   : 408 hex
 Space left   :  25  dec
 
-LCD DB7      : PORTC.5
-LCD DB6      : PORTC.4
-LCD DB5      : PORTC.3
-LCD DB4      : PORTC.2
-LCD E        : PORTC.1
-LCD RS       : PORTC.0
+LCD DB7      : PORTB.7
+LCD DB6      : PORTB.6
+LCD DB5      : PORTB.5
+LCD DB4      : PORTB.4
+LCD E        : PORTB.3
+LCD RS       : PORTB.2
 LCD mode     :  4  bit
 
 --------------------------------------------------------------------------------
@@ -494,31 +494,13 @@ _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
 _XTINY                           0
-_LCDDB4                          &H15
-_LCDDB4_PIN                      2
-_LCDDB4DIR                       &H14
-_LCDDB5                          &H15
-_LCDDB5_PIN                      3
-_LCDDB5DIR                       &H14
-_LCDDB6                          &H15
-_LCDDB6_PIN                      4
-_LCDDB6DIR                       &H14
-_LCDDB7                          &H15
-_LCDDB7_PIN                      5
-_LCDDB7DIR                       &H14
-_LCDDBE                          &H15
-_LCDDBE_PIN                      1
-_LCDDBEDIR                       &H14
-_LCDDBRS                         &H15
-_LCDDBRS_PIN                     0
-_LCDDBRSDIR                      &H14
 _RS232_BUFSIZE0                  50
 _RS232_BUFSIZE_IN0P1             51
 _CHECKCHAR0                      0
-USELCD                           1
 SENDDEMO                         1
 PINCODE                          "AT+CPIN=1234"
 PHONENUMBER                      "AT+CMGS=09376921503"
+PASSWORD                         1234
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -542,10 +524,11 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
+SHEADER                          not used
+SCOUNT                           not used
 LENGTH                           not used
+T0                               not used
 EADDRESS                         not used
 E_READ                           not used
 E_WRITE                          not used
 
-Source string could be too big to fit into target string [SHEADER(2)>NUM]  in line  280 
-Source string could be too big to fit into target string [SHEADER(2)>NUM]  in line  302 
