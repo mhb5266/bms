@@ -12,6 +12,14 @@ $crystal = 11059200
 
 'By default the modem works at 9600 baud
 $baud = 9600
+
+
+config lcdpin=16*2,db4=portc.2,db5=portc.3,db6=portc.4,db7=portc.5,e=portc.1,rs=portc.0
+config lcd=16*2
+cursor off
+cls:lcd "hi" :wait 1:cls
+
+
 config_sim:
 'HW stack 20, SW stack 8 , frame 10
 
@@ -33,11 +41,12 @@ Declare Sub Delall
 Declare Sub Delread
 'used variables
 Dim I As Byte , B As Byte
-Dim Sret As String * 100 , Stemp As String * 6
+Dim Sret As String * 50 , Stemp As String * 6
+dim massage as string *160
 Dim U As Byte
 Dim Lim As Byte
 
-Dim Msg As String * 70
+Dim Msg As String * 50
 Dim Num(3) As  String * 13
 
 Num(1) = "09155191622"
@@ -57,8 +66,8 @@ Dim Sharj As String * 100
 
 'dim a as byte
 
-Dim Sheader(5) As String * 30
-Dim Sbody(5) As String * 30
+Dim sbody(3) As String * 10
+Dim sheader(10) As String * 20
 Dim Net As String * 10
 Dim Count As Byte
 Dim Scount As Byte
@@ -69,7 +78,7 @@ Dim Anten As Word
 
 
 
-Simrst Alias Portd.2 : Config Simrst = Output
+Simrst Alias Portb.1 : Config Simrst = Output
 
 'we use a serial input buffer
 Config Serialin = Buffered , Size = 50                     ' buffer is small a bigger chip would allow a bigger buffer
@@ -101,15 +110,15 @@ declare sub command
 'declare sub do_learn
 'declare sub del_remote
 '-------------------------------------------------------------------------------
-Config Portd.4 = Input :_in Alias Pind.4
+Config Portd.7 = Input :_in Alias Pind.7
 'Config portd.6 = Output:buzz Alias Portd.6
-config portb.0=input:key alias pinb.0
-Config portb.1 = Output:led1 Alias Portb.1
-config portd.3=OUTPUT:relay alias portd.3
+config portd.5=input:key alias pind.5
+Config portb.0 = Output:led1 Alias Portb.0
+config portd.6=OUTPUT:relay alias portd.6
 
-ds1 alias pind.5:config portd.5=INPUT
-ds2 alias pind.6:config portd.6=INPUT
-ds3 alias pind.7:config portd.7=INPUT
+'ds1 alias pind.5:config portd.5=INPUT
+'ds2 alias pind.6:config portd.6=INPUT
+'ds3 alias pind.7:config portd.7=INPUT
 
 dim timeout as  byte
 '--------------------------------- Timer ---------------------------------------
@@ -206,7 +215,7 @@ Getline Sret
 
 
 Flushbuf
-
+'(
 'sms settings
 'Print "AT+CSMP=17,167,0,0"
 Print "AT+CSMP=17,167,2,25"
@@ -215,7 +224,11 @@ Getline Sret
 'Print "AT+CNMI=0,1,2,0,0"
 Print "AT+CNMI=2,2,0,0,0"
 Getline Sret
-
+  ')
+Print "AT+CSMP=17,167,0,0"
+Getline Sret
+Print "AT+CNMI=0,1,2,0,0"
+Getline Sret
 
   Flushbuf
    Print "AT+CSMP?"
@@ -258,12 +271,13 @@ next
 set relay
 waitms 250
 reset relay
+cls:lcd "config finished":wait 2:cls
 
 
 Main:
 
           msg= "Module Is Restarted"
-          send_sms
+          'send_sms
           waitms 500
 
 start timer0
@@ -281,8 +295,85 @@ Do
         if i>40 then gosub del_remote else gosub do_learn
      end if
 
-     'Print "AT+CMGR=1"
-            'waitms
+
+
+      Getline Sret ' wait for a modem response
+      Cls
+      Lcd "Msg from modem"
+      Home Lower : Lcd Sret
+      I = Instr(sret , ":") ' look for :
+      If I > 0 Then 'found it
+            Stemp = Left(sret , I)
+            Select Case Stemp
+            Case "+CMTI:"
+            cls:lcd"new sms" :wait 1:cls: Showsms Sret ' we received an SMS
+            ' hanle other cases here
+            End Select
+      End If
+
+     'Print "AT+CMTI"
+     '(
+     flushbuf
+     Print "AT+CMGR=1"
+     waitms 100
+     Getline Sret
+     Count = Split(sret , Sheader(1) , Chr(34))
+          for i=1 to 10
+                 cls:lcd sheader(i):lowerline : lcd"h ":lcd i: wait 2 :cls:waitms 500
+          next
+          ')
+     '(
+     Flushbuf
+     Print "AT+CMGR=1"
+     waitms 200
+     Getline Sret
+     cls:lcd sret:lcd "answer":wait 1:cls
+     If Sret = "OK" Then
+        waitms 50
+
+
+        Sret = ""
+          Getline Sret
+          cls:lcd sret:lcd "answer1":wait 1:cls
+          if sret<>"" then Count = Split(sret , Sheader(1) , Chr(34))
+          waitms 50
+          sret=""
+          Getline Sret
+          cls:lcd sret:lcd "answer2":wait 1:cls
+          if sret<>"" then Scount = Split(sret , Sbody(1) , " ")
+          for i=1 to 10
+                 cls:lcd sheader(i):lowerline : lcd"h ":lcd i: wait 2 :cls:waitms 500
+          next
+          for i=1 to 3
+                 cls:lcd sbody(i):lowerline : lcd"b " :lcd i: wait 2 :cls:waitms 500
+          next
+          select case lcase(sbody(1))
+                 case "on"
+                       set relay
+                 case "off"
+                       reset relay
+                 case "new1234"
+
+                 case "del1234"
+
+                 case else
+                      msg="wrong massage"
+                      send_sms
+          end select
+          for i=1 to 10
+                 sheader(i)=""
+          next
+          for i=1 to 3
+                 sbody(i)=""
+          next
+          'getline sret
+          'waitms 50
+          flushbuf
+     end if
+
+     ')
+     delread
+
 
  '(
 
@@ -442,6 +533,9 @@ End Sub
 
 Sub Send_sms
 stop timer0
+           incr nobat
+           msg=msg+" #"
+           msg=msg+str(nobat)
           for i=1 to 10
               Print "AT+CMGS=" ; Chr(34) ; Num(1) ; Chr(34)             'send sms
               Waitms 250
@@ -522,6 +616,35 @@ Waitms 600
 start timer0
 End Sub
 
+Sub Showsms(s As String )
+     Cls
+     I = Instr(s , ",") ' find comma
+     I = I + 1
+     Stemp = Mid(s , I) ' s now holds the index number
+     Lcd "get " ; Stemp
+     Waitms 1000 'time to read the lcd
+
+     Print "AT+CMGR=" ; Stemp ' get the message
+     Getline S ' header +CMGR: "REC READ","+316xxxxxxxx",,"02/04/05,01:42:49+00"
+     Lowerline
+     Lcd S
+     Do
+       Getline S ' get data from buffer
+       Select Case lcase(S)
+       Case "on" :
+       set relay: Cls : Lcd "do something!":wait 2:cls:waitms 500 'when you send PORT as sms text, this will be executed
+       Case "off" :
+       set relay: Cls : Lcd "do something!":wait 2:cls:waitms 500 'when you send PORT as sms text, this will be executed
+
+       Case "OK" : Exit Do ' end of message
+       Case Else
+     End Select
+     Loop
+     Home Lower : Lcd "remove sms"
+     Print "AT+CMGD=" ; Stemp  ' delete the message
+     Getline S ' get OK
+     Lcd S
+End Sub
 
 
 t0rutin:
@@ -636,13 +759,13 @@ End Sub
 Sub Delall
      Flushbuf
      Print "AT+CMGDA=DEL ALL"
-     Getline Sret
+     'Getline Sret
 End Sub
 
 Sub Delread
      Flushbuf
      Print "AT+CMGDA=DEL READ"
-     Getline Sret
+     'Getline Sret
 End Sub
 
 
@@ -800,11 +923,10 @@ sub Check
 end sub
 '-------------------------------- Relay command
 sub Command
-    incr nobat
        set led1
        timeout=10
        set relay
-          msg="ALARM# "+str(nobat)
+          msg="ALARM"
           send_sms
 
 end sub

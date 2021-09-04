@@ -1,6 +1,6 @@
-Report       : sim 800 with remote 14000612-1350
+Report       : sim800 remote getsms 0613-1613
 Date         : 09-04-2021
-Time         : 15:45:11
+Time         : 19:53:04
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 162A hex  -> Will fit into ROM
-ROMIMAGE     :  5674 dec
-FLASH USED   :  69  %
+ROMIMAGE     : 18D6 hex  -> Will fit into ROM
+ROMIMAGE     :  6358 dec
+FLASH USED   :  77  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,14 +21,14 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  47  dec
+Space left   :  23  dec
 
-LCD DB7      : PORTB.7
-LCD DB6      : PORTB.6
-LCD DB5      : PORTB.5
-LCD DB4      : PORTB.4
-LCD E        : PORTB.3
-LCD RS       : PORTB.2
+LCD DB7      : PORTC.5
+LCD DB6      : PORTC.4
+LCD DB5      : PORTC.3
+LCD DB4      : PORTC.2
+LCD E        : PORTC.1
+LCD RS       : PORTC.0
 LCD mode     :  4  bit
 
 --------------------------------------------------------------------------------
@@ -94,47 +94,48 @@ COMPARE1B                        Word              0048          72
 ERR                              Bit [2]           0006          6 
 I                                Byte              0060          96 
 B                                Byte              0061          97 
-SRET                             String * 100      0062          98 
-STEMP                            String * 6        00C7          199 
-U                                Byte              00CE          206 
-LIM                              Byte              00CF          207 
-MSG                              String * 70       00D0          208 
-NUM                              String(3) * 13    0117          279 
-NUMBER                           String * 13       0141          321 
-NCOUNTER                         Byte              014F          335 
-SHARJ                            String * 100      0150          336 
-SHEADER                          String(5) * 30    01B5          437 
-SBODY                            String(5) * 30    0250          592 
-NET                              String * 10       02EB          747 
-COUNT                            Byte              02F6          758 
-SCOUNT                           Byte              02F7          759 
-LENGTH                           Byte              02F8          760 
-ANTEN                            Word              02F9          761 
-A                                Bit [7]           0330          816 
-R                                Byte              0331          817 
-X                                Byte              0332          818 
-G                                Byte              0333          819 
-P                                Bit [6]           0330          816 
-SMS                              String * 70       0334          820 
-TIMEOUT                          Byte              037B          891 
-T0                               Byte              037C          892 
-S                                Word(24)          037D          893 
-SADDRESS                         String * 20       03AD          941 
-SCODE                            String * 4        03C2          962 
-ADDRESS                          Long              03C7          967 
-CODE                             Byte              03CB          971 
-RA                               Long              03CC          972 
-RNUMBER                          Byte              03D0          976 
+SRET                             String * 50       0062          98 
+STEMP                            String * 6        0095          149 
+MASSAGE                          String * 160      009C          156 
+U                                Byte              013D          317 
+LIM                              Byte              013E          318 
+MSG                              String * 50       013F          319 
+NUM                              String(3) * 13    0172          370 
+NUMBER                           String * 13       019C          412 
+NCOUNTER                         Byte              01AA          426 
+SHARJ                            String * 100      01AB          427 
+SBODY                            String(3) * 10    0210          528 
+SHEADER                          String(10) * 20   0231          561 
+NET                              String * 10       0303          771 
+COUNT                            Byte              030E          782 
+SCOUNT                           Byte              030F          783 
+LENGTH                           Byte              0310          784 
+ANTEN                            Word              0311          785 
+A                                Bit [7]           0348          840 
+R                                Byte              0349          841 
+X                                Byte              034A          842 
+G                                Byte              034B          843 
+P                                Bit [6]           0348          840 
+SMS                              String * 70       034C          844 
+TIMEOUT                          Byte              0393          915 
+T0                               Byte              0394          916 
+S                                Word(24)          0395          917 
+SADDRESS                         String * 20       03C5          965 
+SCODE                            String * 4        03DA          986 
+ADDRESS                          Long              03DF          991 
+CODE                             Byte              03E3          995 
+RA                               Long              03E4          996 
+RNUMBER                          Byte              03E8          1000 
 RNUMBER_E                        EEPROM Byte       0000          0 
-OKREAD                           Bit [5]           0330          816 
-ERROR                            Bit [4]           0330          816 
-KEYCHECK                         Bit [3]           0330          816 
-T                                Word              03D1          977 
-EADDRESS                         Word              03D3          979 
-E_READ                           Byte              03D5          981 
-E_WRITE                          Byte              03D6          982 
+OKREAD                           Bit [5]           0348          840 
+ERROR                            Bit [4]           0348          840 
+KEYCHECK                         Bit [3]           0348          840 
+T                                Word              03E9          1001 
+EADDRESS                         Word              03EB          1003 
+E_READ                           Byte              03ED          1005 
+E_WRITE                          Byte              03EE          1006 
 EEVAR                            EEPROM Long(3)    0001          1 
-NOBAT                            Byte              03D7          983 
+NOBAT                            Byte              03EF          1007 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -507,6 +508,24 @@ _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
 _XTINY                           0
+_LCDDB4                          &H15
+_LCDDB4_PIN                      2
+_LCDDB4DIR                       &H14
+_LCDDB5                          &H15
+_LCDDB5_PIN                      3
+_LCDDB5DIR                       &H14
+_LCDDB6                          &H15
+_LCDDB6_PIN                      4
+_LCDDB6DIR                       &H14
+_LCDDB7                          &H15
+_LCDDB7_PIN                      5
+_LCDDB7DIR                       &H14
+_LCDDBE                          &H15
+_LCDDBE_PIN                      1
+_LCDDBEDIR                       &H14
+_LCDDBRS                         &H15
+_LCDDBRS_PIN                     0
+_LCDDBRSDIR                      &H14
 _RS232_BUFSIZE0                  50
 _RS232_BUFSIZE_IN0P1             51
 _CHECKCHAR0                      0
@@ -537,7 +556,7 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-STEMP                            not used
+MASSAGE                          not used
 U                                not used
 NUMBER                           not used
 NCOUNTER                         not used
