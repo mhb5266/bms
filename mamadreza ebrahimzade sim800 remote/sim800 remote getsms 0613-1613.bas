@@ -298,7 +298,7 @@ Do
 
 
       Getline Sret ' wait for a modem response
-      Cls
+      home
       Lcd "Msg from modem"
       Home Lower : Lcd Sret
       I = Instr(sret , ":") ' look for :

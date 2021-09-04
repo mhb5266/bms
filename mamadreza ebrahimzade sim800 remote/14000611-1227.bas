@@ -40,7 +40,7 @@ Dim Msg As String * 70
 Dim Num(3) As  String * 13
 
 Num(1) = "09376921503"
-Num(2) = "09376921503"
+Num(2) = "09398291070"
 Num(3) = "09155191622"
 
 dim ncounter as byte
