@@ -201,10 +201,13 @@ If Sret = "+CPIN: SIM PIN" Then
    Print Pincode                                            ' send pincode
 End If
 Flushbuf
-
+do
 Print "AT+CMGF=1"                                           ' set SMS text mode
-Getline Sret                                                ' get OK status
-
+waitms 100
+Getline Sret
+cls:lcd sret:wait 1:cls
+                                                ' get OK status
+loop until sret="OK"
 
 Waitms 500
 

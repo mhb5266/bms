@@ -101,15 +101,23 @@ declare sub command
 'declare sub do_learn
 'declare sub del_remote
 '-------------------------------------------------------------------------------
+'(
 Config Portd.4 = Input :_in Alias Pind.4
 'Config portd.6 = Output:buzz Alias Portd.6
 config portb.0=input:key alias pinb.0
 Config portb.1 = Output:led1 Alias Portb.1
 config portd.3=OUTPUT:relay alias portd.3
+  ')
 
-ds1 alias pind.5:config portd.5=INPUT
-ds2 alias pind.6:config portd.6=INPUT
-ds3 alias pind.7:config portd.7=INPUT
+Config Portd.7 = Input :_in Alias Pind.7
+'Config portd.6 = Output:buzz Alias Portd.6
+config portd.5=input:key alias pind.5
+Config portb.0 = Output:led1 Alias Portb.0
+config portd.6=OUTPUT:relay alias portd.6
+
+'ds1 alias pind.5:config portd.5=INPUT
+'ds2 alias pind.6:config portd.6=INPUT
+'ds3 alias pind.7:config portd.7=INPUT
 
 dim timeout as  byte
 '--------------------------------- Timer ---------------------------------------

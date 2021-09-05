@@ -1,6 +1,6 @@
-Report       : bascom sms
+Report       : bascom site sim800 develop
 Date         : 09-05-2021
-Time         : 11:25:52
+Time         : 16:48:31
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : A02 hex  -> Will fit into ROM
-ROMIMAGE     :  2562 dec
-FLASH USED   :  31  %
+ROMIMAGE     : 1148 hex  -> Will fit into ROM
+ROMIMAGE     :  4424 dec
+FLASH USED   :  54  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  23  dec
+Space left   :  687  dec
 
 LCD DB7      : PORTC.5
 LCD DB6      : PORTC.4
@@ -92,50 +92,17 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-TIMEOUT                          Byte              0060          96 
-T0                               Byte              0061          97 
-S                                Word(24)          0062          98 
-SADDRESS                         String * 20       0092          146 
-SCODE                            String * 4        00A7          167 
-ADDRESS                          Long              00AC          172 
-CODE                             Byte              00B0          176 
-RA                               Long              00B1          177 
-RNUMBER                          Byte              00B5          181 
-RNUMBER_E                        EEPROM Byte       0000          0 
-OKREAD                           Bit [7]           00B6          182 
-ERROR                            Bit [6]           00B6          182 
-KEYCHECK                         Bit [5]           00B6          182 
-T                                Word              00B7          183 
-EADDRESS                         Word              00B9          185 
-E_READ                           Byte              00BB          187 
-E_WRITE                          Byte              00BC          188 
-EEVAR                            EEPROM Long(3)    0001          1 
-NOBAT                            Byte              00BD          189 
-I                                Byte              00BE          190 
-B                                Byte              00BF          191 
-SRET                             String * 50       00C0          192 
-STEMP                            String * 6        00F3          243 
-MASSAGE                          String * 160      00FA          250 
-U                                Byte              019B          411 
-LIM                              Byte              019C          412 
-MSG                              String * 50       019D          413 
-NUM                              String(3) * 13    01D0          464 
-NUMBER                           String * 13       01FA          506 
-NCOUNTER                         Byte              0208          520 
-SHARJ                            String * 100      0209          521 
-SBODY                            String(3) * 10    026E          622 
-SHEADER                          String(10) * 20   028F          655 
-NET                              String * 10       0361          865 
-COUNT                            Byte              036C          876 
-SCOUNT                           Byte              036D          877 
-LENGTH                           Byte              036E          878 
-ANTEN                            Word              036F          879 
-A                                Bit [4]           00B6          182 
-R                                Byte              03A6          934 
-X                                Byte              03A7          935 
-G                                Byte              03A8          936 
-P                                Bit [3]           00B6          182 
-SMS                              String * 70       03A9          937 
+NUMBER                           String * 13       0060          96 
+ENUM                             EEPROM String(3)  0000          0 
+NUM                              String(3) * 13    006E          110 
+R                                Byte              0098          152 
+MSG                              String * 50       0099          153 
+COUNT                            Byte              00CC          204 
+SHEADER                          String(3) * 15    00CD          205 
+I                                Byte              00FD          253 
+B                                Byte              00FE          254 
+SRET                             String * 66       00FF          255 
+STEMP                            String * 6        0142          322 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -508,13 +475,6 @@ _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
 _XTINY                           0
-_RS232_BUFSIZE0                  50
-_RS232_BUFSIZE_IN0P1             51
-_CHECKCHAR0                      0
-USELCD                           1
-SENDDEMO                         1
-PINCODE                          "AT+CPIN=1234"
-PHONENUMBER                      "AT+CMGS=09376921503"
 _LCDDB4                          &H15
 _LCDDB4_PIN                      2
 _LCDDB4DIR                       &H14
@@ -533,6 +493,13 @@ _LCDDBEDIR                       &H14
 _LCDDBRS                         &H15
 _LCDDBRS_PIN                     0
 _LCDDBRSDIR                      &H14
+_RS232_BUFSIZE0                  12
+_RS232_BUFSIZE_IN0P1             13
+_CHECKCHAR0                      0
+USELCD                           1
+SENDDEMO                         1
+PINCODE                          "AT+CPIN=1234"
+PHONENUMBER                      "AT+CMGS=+989376921503"
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -556,31 +523,5 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-S                                not used
-SADDRESS                         not used
-SCODE                            not used
-ADDRESS                          not used
-CODE                             not used
-RA                               not used
-EADDRESS                         not used
-E_READ                           not used
-E_WRITE                          not used
-EEVAR                            not used
-NOBAT                            not used
-MASSAGE                          not used
-U                                not used
-LIM                              not used
-MSG                              not used
-NUMBER                           not used
-NCOUNTER                         not used
-SHARJ                            not used
-SBODY                            not used
-SHEADER                          not used
-NET                              not used
-COUNT                            not used
-SCOUNT                           not used
-LENGTH                           not used
-ANTEN                            not used
-A                                not used
-G                                not used
 
+Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  228 

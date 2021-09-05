@@ -1,6 +1,6 @@
 Report       : sim 800 with remote 14000612-1350
-Date         : 09-04-2021
-Time         : 15:45:11
+Date         : 09-05-2021
+Time         : 15:20:32
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,8 +8,8 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 162A hex  -> Will fit into ROM
-ROMIMAGE     :  5674 dec
+ROMIMAGE     : 1624 hex  -> Will fit into ROM
+ROMIMAGE     :  5668 dec
 FLASH USED   :  69  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
