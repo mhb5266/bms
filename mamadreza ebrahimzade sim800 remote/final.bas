@@ -15,8 +15,8 @@ $baud = 9600
 
 config lcdpin=16*2,db4=portc.2,db5=portc.3,db6=portc.4,db7=portc.5,e=portc.1,rs=portc.0
 config lcd=16*2
-'cursor off
-cls:lcd "hi" :wait 2:cls
+cursor off
+'cls:lcd "hi" :wait 2:cls
 
 config_sim:
 'HW stack 20, SW stack 8 , frame 10
@@ -28,11 +28,11 @@ Declare Sub Getline(s As String)
 Declare Sub Flushbuf()
 Declare Sub Showsms(s As String )
 Declare Sub Send_sms
-Declare Sub Dial
+'Declare Sub Dial
 Declare Sub Resetsim
-Declare Sub Checksim
-Declare Sub Money
-Declare Sub Temp
+'Declare Sub Checksim
+'Declare Sub Money
+'Declare Sub Temp
 Declare Sub Antenna
 Declare Sub Charge
 Declare Sub Delall
@@ -40,19 +40,19 @@ Declare Sub Delread
 'used variables
 Dim I As Byte , B As Byte
 Dim Sret As String * 100 , Stemp As String * 6
-Dim U As Byte
-Dim Lim As Byte
+'Dim U As Byte
+'Dim Lim As Byte
 
 Dim Msg As String * 20
 dim number as string*13
 dim enum1 as eram string*13
 dim enum2 as eram string*13
 dim enum3 as eram string*13
-dim enum4 as eram string*13
+'dim enum4 as eram string*13
 dim num1 as  string*13
 dim num2 as  string*13
 dim num3 as  string*13
-dim num4 as  string*13
+'dim num4 as  string*13
 dim order as string*5
 
 num1=enum1
@@ -71,23 +71,27 @@ waitms 10
 num3=enum3
 waitms 10
 if left(num3,3)<>"+98" then num3="+989376921503"
-enum2=num2
+enum3=num3
 waitms 10
-
+'(
 num4=enum4
 waitms 10
 if left(num4,3)<>"+98" then num4="+989155191622"
 enum4=num4
 waitms 10
-
-dim ncounter as byte
+')
+'cls:lcd num1:lowerline:lcd "1":wait 2:cls
+'cls:lcd num2:lowerline:lcd "2":wait 2:cls
+'cls:lcd num3:lowerline:lcd "3":wait 2:cls
+'cls:lcd num4:lowerline:lcd "4":wait 2:cls
+'dim ncounter as byte
 
 Dim Sharj As String * 100
 
 'dim a as byte
 
 Dim Sheader(5) As String * 30
-Dim Sbody(5) As String * 30
+'Dim Sbody(5) As String * 30
 Dim Net As String * 10
 Dim Count As Byte
 Dim Scount As Byte
@@ -101,25 +105,25 @@ Dim Anten As Word
 Simrst Alias Portd.2 : Config Simrst = Output
 
 'we use a serial input buffer
-Config Serialin = Buffered , Size = 50                     ' buffer is small a bigger chip would allow a bigger buffer
+Config Serialin = Buffered , Size = 100                     ' buffer is small a bigger chip would allow a bigger buffer
 
 'enable the interrupts because the serial input buffer works interrupts driven
 Enable Interrupts
 
 'define a constant to enable LCD feedback
-Const Uselcd = 1
+'Const Uselcd = 1
 Const Senddemo = 1                                          ' 1= send an sms
 Const Pincode = "AT+CPIN=1234"                              ' pincode change it into yours!
-Const Phonenumber = "AT+CMGS=09376921503"                   ' phonenumber to send sms to
+'Const Phonenumber = "AT+CMGS=09376921503"                   ' phonenumber to send sms to
 
 
-Dim A As Bit
+'Dim A As Bit
 Dim R As Byte : R = 0
-Dim X As Byte : X = 0
+'Dim X As Byte : X = 0
 'Dim B As Byte
-Dim G As Byte
-Dim P As Bit : P = 0
-Dim Sms As String * 70 : Sms = ""
+'Dim G As Byte
+'Dim P As Bit : P = 0
+'Dim Sms As String * 70 : Sms = ""
 
 
 
@@ -178,12 +182,12 @@ Error = 0
 Okread = 0
 T = 0
 Keycheck = 0
-Dim Eaddress As Word                                        'eeprom address variable
-Dim E_read As Byte
-Dim E_write As Byte
+'Dim Eaddress As Word                                        'eeprom address variable
+'Dim E_read As Byte
+'Dim E_write As Byte
 Dim Eevar(3) As Eram Long
 
-declare sub beep
+'declare sub beep
 
 dim nobat as byte
 
@@ -215,7 +219,7 @@ Do
   Flushbuf
    Print "AT" :                                             ' Waitms 100
    Getline Sret                                             ' get data from modem
-       Lcd Sret                                             ' feedback on display
+       'Lcd Sret                                             ' feedback on display
 Loop Until Sret = "OK"                                      ' modem must send OK
 Flushbuf                                                    ' flush the input buffer
 
@@ -274,13 +278,13 @@ Do
   Flushbuf
    Print "AT+CMGF=1"
    Getline Sret
-   cls:lcd "text mode":lowerline : lcd sret: wait 1:cls
+   'cls:lcd "text mode":lowerline : lcd sret: wait 1:cls
 Loop Until Sret = "OK"
 
 print "AT+CMGF?"
 waitms 100
 getline sret
-cls:lcd "text mode?":lowerline : lcd sret: wait 1:cls
+'cls:lcd "text mode?":lowerline : lcd sret: wait 1:cls
 
   Flushbuf
   Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
@@ -308,15 +312,16 @@ reset relay
 Main:
 
           msg= "Module Is Restarted"
-          'send_sms
+          send_sms
 
           waitms 500
           flushbuf
-          cls
+          'cls
+          start timer0
 Do
-start timer0
-
+     'stop timer0
      gosub _read
+     'start timer0
      if key=0 then
         set led1
         i=0
@@ -330,11 +335,12 @@ start timer0
 
 
       Getline Sret ' wait for a modem response
-      #if Uselcd = 1
-      Cls
-      Lcd "Msg from modem"
-      Home Lower : Lcd Sret
-      #endif
+      'start timer0
+      '#if Uselcd = 1
+      'Cls
+      'Lcd "Msg from modem"
+      'Home Lower : Lcd Sret
+      '#endif
       I = Instr(sret , ":") ' look for :
       If I > 0 Then 'found it
       Stemp = Left(sret , I)
@@ -354,6 +360,7 @@ loop
 
 'get line of data from buffer
 Sub Getline(s As String)
+        'stop timer0
     S = ""
     Do
       B = Inkey()
@@ -367,7 +374,9 @@ Sub Getline(s As String)
              S = S + Chr(b)                                 ' build string
       End Select
 
+        'stop timer0
         gosub _read
+        'start timer0
         if key=0 then
            set led1
            i=0
@@ -381,21 +390,22 @@ Sub Getline(s As String)
 
 
     Loop
+    'start timer0
 End Sub
 
 
 Sub Showsms(s As String )
-stop timer0
- #if Uselcd = 1
- Cls
- #endif
+'stop timer0
+ '#if Uselcd = 1
+ 'Cls
+ '#endif
  I = Instr(s , ",") ' find comma
  I = I + 1
  stemp = Mid(s , I) ' s now holds the index number
- #if Uselcd = 1
- Lcd "get " ; Stemp
- Waitms 1000 'time to read the lcd
- #endif
+ '#if Uselcd = 1
+ 'Lcd "get " ; Stemp
+ 'Waitms 1000 'time to read the lcd
+ '#endif
  Print "AT+CMGR=1"
  'Print "AT+CMGR=" ; Stemp ' get the message
  Getline S ' header +CMGR: "REC READ","+316xxxxxxxx",,"02/04/05,01:42:49+00"
@@ -404,22 +414,22 @@ stop timer0
  r = I + 10
  number = mid(s , I , r) ' s now holds the index number
  count=split(number,sheader(1),chr(34))
- for i=1 to 3
-     cls:lcd sheader(i):lowerline :lcd i:wait 1:cls
- next
+ 'for i=1 to 3
+     'cls:lcd sheader(i):lowerline :lcd i:wait 1:cls
+ 'next
  number=sheader(1)
  '#if Uselcd = 1
   '   cls:Lcd number:wait 1:cls
  'Waitms 1000 'time to read the lcd
 ' #endif
 
- #if Uselcd = 1
+ '#if Uselcd = 1
  Lowerline
  Lcd S
- #endif
+ '#endif
  Do
   Getline S ' get data from buffer
-  cls:lcd s:wait 1:cls
+  'cls:lcd s:wait 1:cls
   order=lcase(s)
 
   Select Case lcase(S)
@@ -456,15 +466,15 @@ stop timer0
   End Select
 
  Loop
- #if Uselcd = 1
+ '#if Uselcd = 1
  Home Lower : Lcd "remove sms" : wait 1:cls
- #endif
+ '#endif
  Print "AT+CMGDA=DEL READ"
  'Print "AT+CMGD=" ; Stemp  ' delete the message
  Getline S ' get OK
- #if Uselcd = 1
- Lcd S
- #endif
+ '#if Uselcd = 1
+ 'Lcd S
+ '#endif
 
      if order<>"" then
         set led1
@@ -477,7 +487,7 @@ stop timer0
      end if
      order=""
      delread
-     start timer0
+     'start timer0
 
 End Sub
 
@@ -489,7 +499,7 @@ Sub Flushbuf()                                             'give some time to ge
 End Sub
 
 Sub Send_sms
-stop timer0
+'stop timer0
 
 incr nobat
 msg=msg+" *"
@@ -500,61 +510,84 @@ num2=enum2
 waitms 10
 num3=enum3
 waitms 10
-num4=enum4
-waitms 10
+'num4=enum4
+'waitms 10
 'cls:lcd num1:wait 2:cls
 'cls:lcd num2:wait 2:cls
 'cls:lcd num3:wait 2:cls
 'cls:lcd num4:wait 2:cls
+          'if left(num1,3)<>"+98" then
+             '(
+             for i=1 to 10
+                 Print "AT+CMGS=" ; Chr(34);"+989376921503"; Chr(34)             'send sms
+                 Waitms 250
+                 Print Msg ; Chr(26)
+                 Wait 1
+                 r=0
+                 do
+                   getline sret
+                   if lcase(sret)="ok" then exit do
+                   waitms 500
+                   incr r
+                   if r=10 then exit do
+                 loop until lcase(sret)="ok"
+                 if lcase(sret)="ok" then exit for
+             next
+             ')
+             for i=1 to 10
+                 Print "AT+CMGS=" ; Chr(34);num1; Chr(34)             'send sms
+                 Waitms 250
+                 Print Msg ; Chr(26)
+                 Wait 1
+                 r=0
+                 do
+                   getline sret
+                   if lcase(sret)="ok" then exit do
+                   waitms 500
+                   incr r
+                   if r=10 then exit do
+                 loop until lcase(sret)="ok"
+                 if lcase(sret)="ok" then exit for
+             next
+          'end if
 
-          for i=1 to 10
-              Print "AT+CMGS=" ; Chr(34);num1; Chr(34)             'send sms
-              Waitms 250
-              Print Msg ; Chr(26)
-              Wait 1
-              r=0
-              do
-                getline sret
-                if lcase(sret)="ok" then exit do
-                waitms 500
-                incr r
-                if r=10 then exit do
-              loop until lcase(sret)="ok"
-              if lcase(sret)="ok" then exit for
-          next
+          'if left(num2,3)<>"+98" then
+             for i=1 to 10
+                 Print "AT+CMGS=" ; Chr(34) ; num2 ; Chr(34)             'send sms
+                 Waitms 250
+                 Print Msg ; Chr(26)
+                 Wait 1
+                 r=0
+                 do
+                   getline sret
+                   if lcase(sret)="ok" then exit do
+                   waitms 500
+                   incr r
+                   if r=10 then exit do
+                 loop until lcase(sret)="ok"
+                 if lcase(sret)="ok" then exit for
+             next
+          'end if
 
-          for i=1 to 10
-              Print "AT+CMGS=" ; Chr(34) ; num2 ; Chr(34)             'send sms
-              Waitms 250
-              Print Msg ; Chr(26)
-              Wait 1
-              r=0
-              do
-                getline sret
-                if lcase(sret)="ok" then exit do
-                waitms 500
-                incr r
-                if r=10 then exit do
-              loop until lcase(sret)="ok"
-              if lcase(sret)="ok" then exit for
-          next
+          'if left(num3,3)<>"+98" then
+             for i=1 to 10
+                 Print "AT+CMGS=" ; Chr(34) ; num3 ; Chr(34)             'send sms
+                 Waitms 250
+                 Print Msg ; Chr(26)
+                 Wait 1
+                 r=0
+                 do
+                   getline sret
+                   if lcase(sret)="ok" then exit do
+                   waitms 500
+                   incr r
+                   if r=10 then exit do
+                 loop until lcase(sret)="ok"
+                 if lcase(sret)="ok" then exit for
+             next
+          'end if
 
-          for i=1 to 10
-              Print "AT+CMGS=" ; Chr(34) ; num3 ; Chr(34)             'send sms
-              Waitms 250
-              Print Msg ; Chr(26)
-              Wait 1
-              r=0
-              do
-                getline sret
-                if lcase(sret)="ok" then exit do
-                waitms 500
-                incr r
-                if r=10 then exit do
-              loop until lcase(sret)="ok"
-              if lcase(sret)="ok" then exit for
-          next
-
+          '(
           for i=1 to 10
               Print "AT+CMGS=" ; Chr(34) ; num4 ; Chr(34)             'send sms
               Waitms 250
@@ -570,7 +603,7 @@ waitms 10
               loop until lcase(sret)="ok"
               if lcase(sret)="ok" then exit for
           next
-
+          ')
 '(
           for i=1 to 10
               Print "AT+CMGS=" ; Chr(34);"+989376921503"; Chr(34)             'send sms
@@ -690,7 +723,7 @@ t0rutin:
         stop timer0
              incr t0
              if relay=0 then
-                if t0=24 then
+                if t0=12 then
                    t0=0
                    toggle led1
                 end if
@@ -711,13 +744,14 @@ t0rutin:
 
         start timer0
 return
-
+'(
 Sub Dial
     Print "Atd" ; 09376921503 ; ";"
     Wait 20
     Print "Ath"
 End Sub
-
+')
+'(
 Sub Checksim
       Flushbuf
       Print "AT"
@@ -737,13 +771,14 @@ Sub Checksim
          Lim = 0
       End If
 End Sub
-
+')
 Sub Resetsim
     Reset Simrst
     Wait 1
     Set Simrst
 End Sub
 
+ '(
 Sub Money
 Print "ATD*140#"
 Getline Sret
@@ -752,14 +787,14 @@ Sharj = Left(sret , 33)
 Sharj = Right(sharj , 6)
 Sharj = Ltrim(sharj)
 End Sub
-
+ ')
 
 Sub Antenna
   Flushbuf
   Print "AT+CSQ"
   Getline Sret
-  Count = Split(sret , Sbody(1) , " ")
-  Anten = Val(sbody(2))
+  'Count = Split(sret , Sbody(1) , " ")
+  'Anten = Val(sbody(2))
 '  Cls : Lcd "ANTEN= " : Lcd Anten : Lowerline : Lcd Sret : Wait 5 : Cls : Waitms 500
   Select Case Anten
          Case 0

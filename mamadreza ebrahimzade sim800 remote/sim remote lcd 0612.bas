@@ -12,16 +12,12 @@ $crystal = 11059200
 
 'By default the modem works at 9600 baud
 $baud = 9600
-
-config lcdpin=16*2,db4=portc.2,db5=portc.3,db6=portc.4,db7=portc.5,e=portc.1,rs=portc.0
-config lcd=16*2
-'cursor off
-cls:lcd "hi" :wait 2:cls
-
 config_sim:
 'HW stack 20, SW stack 8 , frame 10
 
-
+config lcdpin=16*2,db4=portc.2,db5=portc.3,db6=portc.4,db7=portc.5 ,e=portc.1,rs=portc.0
+config lcd=16*2
+cursor off
 
 'some subroutines
 Declare Sub Getline(s As String)
@@ -43,42 +39,17 @@ Dim Sret As String * 100 , Stemp As String * 6
 Dim U As Byte
 Dim Lim As Byte
 
-Dim Msg As String * 20
+Dim Msg As String * 70
+Dim Num(3) As  String * 13
+
+Num(1) = "09155191622"
+
+Num(2) = "09376921503"
+
+Num(3) = "09398291070"
+
 dim number as string*13
-dim enum1 as eram string*13
-dim enum2 as eram string*13
-dim enum3 as eram string*13
-dim enum4 as eram string*13
-dim num1 as  string*13
-dim num2 as  string*13
-dim num3 as  string*13
-dim num4 as  string*13
-dim order as string*5
 
-num1=enum1
-waitms 10
-if left(num1,3)<>"+98" then num1="+989376921503"
-enum1=num1
-waitms 10
-'Num(2) = "+989398291077"
-
-num2=enum2
-waitms 10
-if left(num2,3)<>"+98" then num2="+989155191622"
-enum2=num2
-waitms 10
-
-num3=enum3
-waitms 10
-if left(num3,3)<>"+98" then num3="+989376921503"
-enum2=num2
-waitms 10
-
-num4=enum4
-waitms 10
-if left(num4,3)<>"+98" then num4="+989155191622"
-enum4=num4
-waitms 10
 
 dim ncounter as byte
 
@@ -94,11 +65,12 @@ Dim Scount As Byte
 Dim Length As Byte
 Dim Anten As Word
 
+Simrst Alias Portb.1 : Config Simrst = Output :set simrst
 
 
 
 
-Simrst Alias Portd.2 : Config Simrst = Output
+
 
 'we use a serial input buffer
 Config Serialin = Buffered , Size = 50                     ' buffer is small a bigger chip would allow a bigger buffer
@@ -130,14 +102,6 @@ declare sub command
 'declare sub do_learn
 'declare sub del_remote
 '-------------------------------------------------------------------------------
-'(
-Config Portd.4 = Input :_in Alias Pind.4
-'Config portd.6 = Output:buzz Alias Portd.6
-config portb.0=input:key alias pinb.0
-Config portb.1 = Output:led1 Alias Portb.1
-config portd.3=OUTPUT:relay alias portd.3
-  ')
-
 Config Portd.7 = Input :_in Alias Pind.7
 'Config portd.6 = Output:buzz Alias Portd.6
 config portd.5=input:key alias pind.5
@@ -153,10 +117,10 @@ dim timeout as  byte
 Config Timer1 = Timer , Prescale = 8 : Stop Timer1 : Timer1 = 0
 config timer0= timer ,prescale=1024
 enable interrupts
-enable timer0
-on ovf0 t0rutin
+'enable timer0
+'on ovf0 t0rutin
 dim t0 as byte
-stop timer0
+'stop timer0
 '--------------------------------- Variable ------------------------------------
 Dim S(24)as Word
 
@@ -191,51 +155,63 @@ Startup:
 
 Resetsim
 
+cls
+lcd "hi"
+wait 1
+cls
+
 For I = 1 To 30
-   set led1
-   waitms 250
+   toggle led1
+   lcd "*"
+   waitms 500
 Next
 reset led1
 
-Print "AT&F"
-flushbuf
-Print "AT"                                                  ' send AT command twice to activate the modem
-Print "AT"
+
+                                                  ' send AT command twice to activate the modem
+Print "ATE0"
+'waitms 200
+getline sret
+waitms 200:cls:lcd "ATE0":lowerline:Lcd Sret:waitms 700
 Flushbuf
 'Print "AT&F"
-Flushbuf
-Print "AT&F"
-flushbuf                                                   ' flush the buffer
-Print "ATE0"
-
+'Flushbuf                                                    ' flush the buffer
+Print "AT"
+'waitms 200
+getline sret
+waitms 200:cls:lcd "AT":lowerline:Lcd Sret:waitms 700
 
 
 
 Do
   Flushbuf
-   Print "AT" :                                             ' Waitms 100
+   Print "AT"
+   'waitms 200                                            ' Waitms 100
    Getline Sret                                             ' get data from modem
-       Lcd Sret                                             ' feedback on display
+waitms 200:cls:lcd "AT":lowerline:Lcd Sret:waitms 700                                              ' feedback on display
 Loop Until Sret = "OK"                                      ' modem must send OK
 Flushbuf                                                    ' flush the input buffer
 
 
 
 
-
+'(
 Print "AT+cpin?"                                            ' get pin status
 Getline Sret
-
+   Getline Sret                                             ' get data from modem
+      waitms 200:cls:lcd "AT+cpin?":lowerline:Lcd Sret:waitms 700
 
 
 If Sret = "+CPIN: SIM PIN" Then
-   Print Pincode                                            ' send pincode
+   Print Pincode
+      Getline Sret                                             ' get data from modem
+        waitms 200: cls:lcd "+CPIN: SIM PIN":lowerline:Lcd Sret:waitms 700                                            ' send pincode
 End If
 Flushbuf
-
+  ')
 Print "AT+CMGF=1"                                           ' set SMS text mode
-Getline Sret                                                ' get OK status
-
+Getline Sret                                                ' get OK status                                           ' get data from modem
+    waitms 200:   cls:lcd "AT+CMGF=1":lowerline:Lcd Sret:waitms 700
 
 Waitms 500
 
@@ -243,49 +219,44 @@ Waitms 500
 Print "At+Cusd=1"
 Getline Sret
 
-
+       waitms 200:  cls:lcd "At+Cusd=1":lowerline:Lcd Sret:waitms 700
 
 Flushbuf
 
 'sms settings
-Print "AT+CSMP=17,167,0,0"
-'Print "AT+CSMP=17,167,2,25"
+'Print "AT+CSMP=17,167,0,0"
+Print "AT+CSMP=17,167,2,25"
 Getline Sret
-
+ waitms 200:cls:lcd "AT+CSMP=17,167,2,25":lowerline:Lcd Sret:waitms 700
 'Print "AT+CNMI=0,1,2,0,0"
-'Print "AT+CNMI=2,2,0,0,0"
-'Print "AT+CNMI=1,2,0,0,0"
-Print "AT+CNMI=2,1,0,0,0"
+Print "AT+CNMI=2,2,0,0,0"
 Getline Sret
-
+ waitms 200:cls:lcd "AT+CNMI=2,2,0,0,0":lowerline:Lcd Sret:waitms 700
 
   Flushbuf
    Print "AT+CSMP?"
    Getline Sret
-
+waitms 200: cls:lcd "AT+CSMP?":lowerline:Lcd Sret:waitms 700
 
   Flushbuf
    Print "AT+CNMI?"
    Getline Sret
-
+ waitms 200:cls:lcd "AT+CNMI?":lowerline:Lcd Sret:waitms 700
 Waitms 500
 
 Do
   Flushbuf
    Print "AT+CMGF=1"
    Getline Sret
-   cls:lcd "text mode":lowerline : lcd sret: wait 1:cls
+ waitms 200:cls:lcd "AT+CMGF=1":lowerline:Lcd Sret:waitms 700
+   Waitms 500
 Loop Until Sret = "OK"
 
-print "AT+CMGF?"
-waitms 100
-getline sret
-cls:lcd "text mode?":lowerline : lcd sret: wait 1:cls
 
   Flushbuf
   Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
    Getline Sret
-
+ waitms 200:cls:lcd "AT+CSCS=":lowerline:Lcd Sret:waitms 700
 
 Wait 1
 
@@ -293,6 +264,7 @@ Wait 1
 Do
    Delall
    Waitms 500
+   waitms 200: cls:lcd "Dell All":lowerline:Lcd Sret:waitms 700
 Loop Until Sret = "OK"
 
 for i=1 to 20
@@ -308,13 +280,11 @@ reset relay
 Main:
 
           msg= "Module Is Restarted"
-          'send_sms
-
+          send_sms
           waitms 500
-          flushbuf
-          cls
-Do
+
 start timer0
+Do
 
      gosub _read
      if key=0 then
@@ -329,22 +299,132 @@ start timer0
      end if
 
 
-      Getline Sret ' wait for a modem response
-      #if Uselcd = 1
-      Cls
-      Lcd "Msg from modem"
-      Home Lower : Lcd Sret
-      #endif
-      I = Instr(sret , ":") ' look for :
-      If I > 0 Then 'found it
-      Stemp = Left(sret , I)
-      Select Case Stemp
-      Case "+CMTI:" : Showsms Sret ' we received an SMS
-      ' hanle other cases here
-      End Select
-      End If
+
+ '(
+
+  Do
+     Print "AT+CMGR=1"
+     waitms 500
+     Getline Sret
+     If Sret = "OK" Then
+        set led1
+        waitms 200
+        reset led1
+        Sms = ""
+        G = 0
+        A = 0
+        Do
+           B = Inkey()
+           Select Case B
+
+              Case 0
+              Case 13
+                 Incr G
+                 If Sms <> "" Then
+                    A = 1
+                    Exit Do
+                 End If
+              Case 10
+                 If Sms <> "" Then
+                    A = 1
+                    Exit Do
+                 End If
+              Case Else
+                 If G = 3 Then
+                    Sms = Sms + Chr(b)
+                 End If
+           End Select
+        Loop
+     end if
 
 
+     If A = 1 Then
+        If lcase(Sms) = "on" Then
+             Set Led1
+             set relay
+             Msg = "Alarm Is On"
+             Send_sms
+        End If
+        If lcase(Sms) = "off" Then
+             reSet Led1
+             reset relay
+             Msg = "Alarm Is Off"
+             Send_sms
+        End If
+     End If
+  Loop
+
+  ')
+
+  '(
+     Flushbuf
+     Print "AT+CMGR=1"
+     Getline Sret
+     If Sret = "OK" Then
+        Sret = ""
+          Getline Sret
+          Count = Split(sret , Sheader(1) , Chr(34))
+          Getline Sret
+          Scount = Split(sret , Sbody(1) , " ")
+
+          If Lcase(sbody(1)) = "off" Then
+             Reset relay
+             reset led1
+             Msg = "Alarm Is Off"
+             Send_sms
+          End If
+          If Lcase(sbody(1)) = "on" Then
+             Set Led1
+             set relay
+             Msg = "Alarm Is On"
+             Send_sms
+          End If
+          If Lcase(sbody(1)) = "new1234" Then
+             set led1
+             Num = Sheader(2)
+             enum(1)=num
+             waitms 10
+             Msg = "New Number Is Saved"
+             Send_sms
+             reset led1
+             for i=1 to 10
+                 toggle led1
+                 waitms 250
+             next
+          End If
+          If Lcase(sbody(1)) = "del1234" Then
+             num=""
+             enum(1)=num
+             waitms 10
+             for i=1 to 10
+                 toggle led1
+                 waitms 250
+             next
+          End If
+
+          If Lcase(sbody(1)) = "learnnew" Then
+             for i=1 to 10
+                 toggle led1
+                 waitms 250
+             next
+             gosub do_learn
+          End If
+
+          If Lcase(sbody(1)) = "delremote" Then
+             for i=1 to 10
+                 toggle led1
+                 waitms 250
+             next
+             gosub del_remote
+          End If
+
+          For I = 1 To 10
+              Sheader(i) = ""
+              Sbody(i) = ""
+          Next
+     End If
+     Delread
+ ')
 loop
 'Charge
 'Wait 5
@@ -366,119 +446,7 @@ Sub Getline(s As String)
              Case Else
              S = S + Chr(b)                                 ' build string
       End Select
-
-        gosub _read
-        if key=0 then
-           set led1
-           i=0
-           do
-             waitms 25
-             incr i
-             if i>40 or key=1 then exit do
-           loop until key=1
-           if i>40 then gosub del_remote else gosub do_learn
-        end if
-
-
     Loop
-End Sub
-
-
-Sub Showsms(s As String )
-stop timer0
- #if Uselcd = 1
- Cls
- #endif
- I = Instr(s , ",") ' find comma
- I = I + 1
- stemp = Mid(s , I) ' s now holds the index number
- #if Uselcd = 1
- Lcd "get " ; Stemp
- Waitms 1000 'time to read the lcd
- #endif
- Print "AT+CMGR=1"
- 'Print "AT+CMGR=" ; Stemp ' get the message
- Getline S ' header +CMGR: "REC READ","+316xxxxxxxx",,"02/04/05,01:42:49+00"
-
- I = Instr(s , "+98") ' find comma
- r = I + 10
- number = mid(s , I , r) ' s now holds the index number
- count=split(number,sheader(1),chr(34))
- for i=1 to 3
-     cls:lcd sheader(i):lowerline :lcd i:wait 1:cls
- next
- number=sheader(1)
- '#if Uselcd = 1
-  '   cls:Lcd number:wait 1:cls
- 'Waitms 1000 'time to read the lcd
-' #endif
-
- #if Uselcd = 1
- Lowerline
- Lcd S
- #endif
- Do
-  Getline S ' get data from buffer
-  cls:lcd s:wait 1:cls
-  order=lcase(s)
-
-  Select Case lcase(S)
-         Case "on"  'when you send PORT as sms text, this will be executed
-               set relay
-               msg="relay is on"
-         Case "ok"
-               Exit Do ' end of message
-         Case "off"
-               reset relay
-               msg="relay is off"
-         Case "new1"
-               enum1=number
-               waitms 10
-               msg="number#1 is saved"
-         Case "new2"
-               enum2=number
-               msg="number#2 is saved"
-         Case "new3"
-               enum3=number
-               msg="number#3 is saved"
-         Case "del1"
-               num1=""
-               msg="num#1 is deleted"
-         Case "del2"
-               num2=""
-               msg="num#2 is deleted"
-         Case "del3"
-               num3=""
-               msg="num#3 is deleted"
-         Case Else
-              msg="wrong sms"
-              set led1:wait 1: reset led1
-  End Select
-
- Loop
- #if Uselcd = 1
- Home Lower : Lcd "remove sms" : wait 1:cls
- #endif
- Print "AT+CMGDA=DEL READ"
- 'Print "AT+CMGD=" ; Stemp  ' delete the message
- Getline S ' get OK
- #if Uselcd = 1
- Lcd S
- #endif
-
-     if order<>"" then
-        set led1
-        for i=1 to 10
-            toggle led1
-            toggle relay
-            waitms 200
-        next
-        send_sms
-     end if
-     order=""
-     delread
-     start timer0
-
 End Sub
 
 'flush input buffer
@@ -491,162 +459,23 @@ End Sub
 Sub Send_sms
 stop timer0
 
-incr nobat
-msg=msg+" *"
-msg=msg+str(nobat)
-num1=enum1
-waitms 10
-num2=enum2
-waitms 10
-num3=enum3
-waitms 10
-num4=enum4
-waitms 10
-'cls:lcd num1:wait 2:cls
-'cls:lcd num2:wait 2:cls
-'cls:lcd num3:wait 2:cls
-'cls:lcd num4:wait 2:cls
-
-          for i=1 to 10
-              Print "AT+CMGS=" ; Chr(34);num1; Chr(34)             'send sms
-              Waitms 250
-              Print Msg ; Chr(26)
-              Wait 1
-              r=0
-              do
-                getline sret
-                if lcase(sret)="ok" then exit do
-                waitms 500
-                incr r
-                if r=10 then exit do
-              loop until lcase(sret)="ok"
-              if lcase(sret)="ok" then exit for
-          next
-
-          for i=1 to 10
-              Print "AT+CMGS=" ; Chr(34) ; num2 ; Chr(34)             'send sms
-              Waitms 250
-              Print Msg ; Chr(26)
-              Wait 1
-              r=0
-              do
-                getline sret
-                if lcase(sret)="ok" then exit do
-                waitms 500
-                incr r
-                if r=10 then exit do
-              loop until lcase(sret)="ok"
-              if lcase(sret)="ok" then exit for
-          next
-
-          for i=1 to 10
-              Print "AT+CMGS=" ; Chr(34) ; num3 ; Chr(34)             'send sms
-              Waitms 250
-              Print Msg ; Chr(26)
-              Wait 1
-              r=0
-              do
-                getline sret
-                if lcase(sret)="ok" then exit do
-                waitms 500
-                incr r
-                if r=10 then exit do
-              loop until lcase(sret)="ok"
-              if lcase(sret)="ok" then exit for
-          next
-
-          for i=1 to 10
-              Print "AT+CMGS=" ; Chr(34) ; num4 ; Chr(34)             'send sms
-              Waitms 250
-              Print Msg ; Chr(26)
-              Wait 1
-              r=0
-              do
-                getline sret
-                if lcase(sret)="ok" then exit do
-                waitms 500
-                incr r
-                if r=10 then exit do
-              loop until lcase(sret)="ok"
-              if lcase(sret)="ok" then exit for
-          next
-
-'(
-          for i=1 to 10
-              Print "AT+CMGS=" ; Chr(34);"+989376921503"; Chr(34)             'send sms
-              Waitms 250
-              Print Msg ; Chr(26)
-              Wait 1
-              r=0
-              do
-                getline sret
-                if lcase(sret)="ok" then exit do
-                waitms 500
-                incr r
-                if r=10 then exit do
-              loop until lcase(sret)="ok"
-              if lcase(sret)="ok" then exit for
-          next
-
-          for i=1 to 10
-              Print "AT+CMGS=" ; Chr(34) ; "+989155191622" ; Chr(34)             'send sms
-              Waitms 250
-              Print Msg ; Chr(26)
-              Wait 1
-              r=0
-              do
-                getline sret
-                if lcase(sret)="ok" then exit do
-                waitms 500
-                incr r
-                if r=10 then exit do
-              loop until lcase(sret)="ok"
-              if lcase(sret)="ok" then exit for
-          next
-  ')
-  '(
-          for i=1 to 10
-              Print "AT+CMGS=" ; Chr(34) ; Num(3) ; Chr(34)             'send sms
-              Waitms 250
-              Print Msg ; Chr(26)
-              Wait 1
-              r=0
-              do
-                getline sret
-                if lcase(sret)="ok" then exit do
-                waitms 500
-                incr r
-                if r=10 then exit do
-              loop until lcase(sret)="ok"
-              if lcase(sret)="ok" then exit for
-          next
-      ')
-
-      '(          '
-          Print "AT+CMGS=" ; Chr(34) ; number ; Chr(34)             'send sms
+          Print "AT+CMGS=" ; Chr(34) ; Num(1) ; Chr(34)             'send sms
           Waitms 250
           Print Msg ; Chr(26)
           Wait 1
-        ')
-    '(
-      Print "AT"
-      Waitms 250
-      Print "AT+CMGF=1"
-      Waitms 250
-      Print "AT+CMGS=" ; Chr(34) ; "+989376921503" ; Chr(34)
-      Waitms 250
-      Print msg ; Chr(26)
-      Waitms 800
-      Print "AT"
-      Waitms 250
-      Print "AT+CMGF=1"
-      Waitms 250
-      Print "AT+CMGS=" ; Chr(34) ; "+989155191622" ; Chr(34)
-      Waitms 250
-      Print msg ; Chr(26)
-      Waitms 800
-      ')
- '(
+          Print "AT"
+          Print "AT+CMGS=" ; Chr(34) ; Num(2) ; Chr(34)             'send sms
+          Waitms 250
+          Print Msg ; Chr(26)
+          Wait 1
+          Print "AT"
+          Print "AT+CMGS=" ; Chr(34) ; Num(3) ; Chr(34)             'send sms
+          Waitms 250
+          Print Msg ; Chr(26)
+          Wait 1
+          Print "AT"
+
+Print "AT"
 Waitms 500
 Print "AT+CMGF=1"
 Waitms 500
@@ -655,6 +484,7 @@ Waitms 500
 Print msg ; Chr(26)
 Waitms 600
 
+Print "AT"
 Waitms 500
 Print "AT+CMGF=1"
 Waitms 500
@@ -663,25 +493,16 @@ Waitms 500
 Print msg ; Chr(26)
 Waitms 600
 
- ')
+Print "AT"
+Waitms 500
+Print "AT+CMGF=1"
+Waitms 500
+Print "AT+CMGS=" ; Chr(34) ; num(3) ; Chr(34)
+Waitms 500
+Print msg ; Chr(26)
+Waitms 600
 
-        '(
-          for i=1 to 10
-              Print "AT+CMGS=" ; Chr(34) ; number ; Chr(34)             'send sms
-              Waitms 250
-              Print Msg ; Chr(26)
-              Wait 1
-              r=0
-              do
-                getline sret
-                if lcase(sret)="ok" then exit do
-                waitms 500
-                incr r
-                if r=10 then exit do
-              loop until lcase(sret)="ok"
-              if lcase(sret)="ok" then exit for
-          next
-          ')
+start timer0
 End Sub
 
 
@@ -962,14 +783,21 @@ sub Check
 end sub
 '-------------------------------- Relay command
 sub Command
+    incr nobat
        set led1
        timeout=10
        set relay
-          msg="ALARM"
+          msg="ALARM# "+str(nobat)
           send_sms
 
 end sub
 
+Sub Beep
+    'Set led1
+    'Waitms 80
+    'Reset led1
+    'Waitms 30
+End Sub
 
 
 end

@@ -1,6 +1,6 @@
-Report       : send and recieve is ok
-Date         : 09-05-2021
-Time         : 23:23:56
+Report       : sim remote lcd 0612
+Date         : 09-03-2021
+Time         : 19:01:47
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1FB8 hex  -> Will fit into ROM
-ROMIMAGE     :  8120 dec
-FLASH USED   :  99  %
+ROMIMAGE     : 150A hex  -> Will fit into ROM
+ROMIMAGE     :  5386 dec
+FLASH USED   :  65  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  77  dec
+Space left   :  47  dec
 
 LCD DB7      : PORTC.5
 LCD DB6      : PORTC.4
@@ -98,51 +98,43 @@ SRET                             String * 100      0062          98
 STEMP                            String * 6        00C7          199 
 U                                Byte              00CE          206 
 LIM                              Byte              00CF          207 
-MSG                              String * 20       00D0          208 
-NUMBER                           String * 13       00E5          229 
-ENUM1                            EEPROM String     0000          0 
-ENUM2                            EEPROM String     000E          14 
-ENUM3                            EEPROM String     001C          28 
-ENUM4                            EEPROM String     002A          42 
-NUM1                             String * 13       00F3          243 
-NUM2                             String * 13       0101          257 
-NUM3                             String * 13       010F          271 
-NUM4                             String * 13       011D          285 
-ORDER                            String * 5        012B          299 
-NCOUNTER                         Byte              0131          305 
-SHARJ                            String * 100      0132          306 
-SHEADER                          String(5) * 30    0197          407 
-SBODY                            String(5) * 30    0232          562 
-NET                              String * 10       02CD          717 
-COUNT                            Byte              02D8          728 
-SCOUNT                           Byte              02D9          729 
-LENGTH                           Byte              02DA          730 
-ANTEN                            Word              02DB          731 
-A                                Bit [7]           0312          786 
-R                                Byte              0313          787 
-X                                Byte              0314          788 
-G                                Byte              0315          789 
-P                                Bit [6]           0312          786 
-SMS                              String * 70       0316          790 
-TIMEOUT                          Byte              035D          861 
-T0                               Byte              035E          862 
-S                                Word(24)          035F          863 
-SADDRESS                         String * 20       038F          911 
-SCODE                            String * 4        03A4          932 
-ADDRESS                          Long              03A9          937 
-CODE                             Byte              03AD          941 
-RA                               Long              03AE          942 
-RNUMBER                          Byte              03B2          946 
-RNUMBER_E                        EEPROM Byte       0038          56 
-OKREAD                           Bit [5]           0312          786 
-ERROR                            Bit [4]           0312          786 
-KEYCHECK                         Bit [3]           0312          786 
-T                                Word              03B3          947 
-EADDRESS                         Word              03B5          949 
-E_READ                           Byte              03B7          951 
-E_WRITE                          Byte              03B8          952 
-EEVAR                            EEPROM Long(3)    0039          57 
-NOBAT                            Byte              03B9          953 
+MSG                              String * 70       00D0          208 
+NUM                              String(3) * 13    0117          279 
+NUMBER                           String * 13       0141          321 
+NCOUNTER                         Byte              014F          335 
+SHARJ                            String * 100      0150          336 
+SHEADER                          String(5) * 30    01B5          437 
+SBODY                            String(5) * 30    0250          592 
+NET                              String * 10       02EB          747 
+COUNT                            Byte              02F6          758 
+SCOUNT                           Byte              02F7          759 
+LENGTH                           Byte              02F8          760 
+ANTEN                            Word              02F9          761 
+A                                Bit [7]           0330          816 
+R                                Byte              0331          817 
+X                                Byte              0332          818 
+G                                Byte              0333          819 
+P                                Bit [6]           0330          816 
+SMS                              String * 70       0334          820 
+TIMEOUT                          Byte              037B          891 
+T0                               Byte              037C          892 
+S                                Word(24)          037D          893 
+SADDRESS                         String * 20       03AD          941 
+SCODE                            String * 4        03C2          962 
+ADDRESS                          Long              03C7          967 
+CODE                             Byte              03CB          971 
+RA                               Long              03CC          972 
+RNUMBER                          Byte              03D0          976 
+RNUMBER_E                        EEPROM Byte       0000          0 
+OKREAD                           Bit [5]           0330          816 
+ERROR                            Bit [4]           0330          816 
+KEYCHECK                         Bit [3]           0330          816 
+T                                Word              03D1          977 
+EADDRESS                         Word              03D3          979 
+E_READ                           Byte              03D5          981 
+E_WRITE                          Byte              03D6          982 
+EEVAR                            EEPROM Long(3)    0001          1 
+NOBAT                            Byte              03D7          983 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -563,8 +555,11 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
+STEMP                            not used
 U                                not used
+NUMBER                           not used
 NCOUNTER                         not used
+SHEADER                          not used
 SCOUNT                           not used
 LENGTH                           not used
 A                                not used
@@ -573,4 +568,3 @@ EADDRESS                         not used
 E_READ                           not used
 E_WRITE                          not used
 
-Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  409 
