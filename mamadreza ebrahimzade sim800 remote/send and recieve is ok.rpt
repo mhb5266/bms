@@ -1,6 +1,6 @@
 Report       : send and recieve is ok
 Date         : 09-05-2021
-Time         : 19:26:39
+Time         : 19:33:14
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1B6C hex  -> Will fit into ROM
-ROMIMAGE     :  7020 dec
-FLASH USED   :  85  %
+ROMIMAGE     : 1B88 hex  -> Will fit into ROM
+ROMIMAGE     :  7048 dec
+FLASH USED   :  86  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -567,4 +567,4 @@ EADDRESS                         not used
 E_READ                           not used
 E_WRITE                          not used
 
-Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  373 
+Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  375 

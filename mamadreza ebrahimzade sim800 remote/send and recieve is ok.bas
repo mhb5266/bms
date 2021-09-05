@@ -48,16 +48,18 @@ dim number as string*13
 dim enum(3) as eram string*13
 dim num(3) as  string*13
 dim order as string*5
-Num(1) = "+989155191622"
+Num(1) = "+989376921503"
 
 'Num(2) = "+989398291077"
 
-Num(2) = "+989376921503"
+Num(2) = "+989155191622"
 
 'Num(3) = "09218782318"
 
 'dim number as string*13
 
+lcd num(1):wait 2:cls
+lcd num(2):wait 2:cls
 
 dim ncounter as byte
 
@@ -461,7 +463,7 @@ msg=msg+str(nobat)
 
 
           for i=1 to 10
-              Print "AT+CMGS=" ; Chr(34) ; num(1) ; Chr(34)             'send sms
+              Print "AT+CMGS=" ; Chr(34);"+989376921503"; Chr(34)             'send sms
               Waitms 250
               Print Msg ; Chr(26)
               Wait 1
@@ -477,7 +479,7 @@ msg=msg+str(nobat)
           next
 
           for i=1 to 10
-              Print "AT+CMGS=" ; Chr(34) ; num(2) ; Chr(34)             'send sms
+              Print "AT+CMGS=" ; Chr(34) ; "+989155191622" ; Chr(34)             'send sms
               Waitms 250
               Print Msg ; Chr(26)
               Wait 1
