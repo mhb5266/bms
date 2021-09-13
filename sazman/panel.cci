@@ -1,5 +1,6 @@
-VERSION:3 SOURCE_TIMESTAMP:53058374
+VERSION:3 SOURCE_TIMESTAMP:532D92CD
 NODE:I LEVEL:0 LINE:24 "C:\cvavr\inc\mega32a.h"
+NODE:M LEVEL:0 LINE:25 "xtal"
 NODE:I LEVEL:0 LINE:28 "C:\cvavr\inc\1wire.h"
 NODE:I LEVEL:0 LINE:29 "C:\cvavr\inc\stdio.h"
 NODE:I LEVEL:0 LINE:30 "C:\cvavr\inc\ds1307.h"
@@ -14,4 +15,4 @@ NODE:I LEVEL:0 LINE:49 "C:\cvavr\inc\delay.h"
 NODE:I LEVEL:0 LINE:52 "C:\cvavr\inc\font5x7.h"
 NODE:I LEVEL:0 LINE:55 "defines.c"
 NODE:F LEVEL:0 LINE:57 "timer1_ovf_isr(void)"
-NODE:F LEVEL:0 LINE:66 "main(void)"
+NODE:F LEVEL:0 LINE:68 "main(void)"

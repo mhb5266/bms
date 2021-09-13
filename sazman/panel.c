@@ -22,7 +22,7 @@ Data Stack size         : 512
 *******************************************************/
 
 #include <mega32a.h>
-
+#define xtal 11059200
 
 // 1 Wire Bus interface functions
 #include <1wire.h>
@@ -63,8 +63,12 @@ TCNT1L=0x5740 & 0xff;
 
 }
 
+
+
 void main(void)
 {
+
+
 // Declare your local variables here
 // Variable used to store graphic display
 // controller initialization data
@@ -91,7 +95,7 @@ PORTC=(0<<PORTC7) | (0<<PORTC6) | (0<<PORTC5) | (0<<PORTC4) | (0<<PORTC3) | (0<<
 
 // Port D initialization
 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In 
-DDRD=(0<<DDD7) | (0<<DDD6) | (0<<DDD5) | (0<<DDD4) | (0<<DDD3) | (0<<DDD2) | (0<<DDD1) | (0<<DDD0);
+DDRD=(0<<DDD7) | (1<<DDD6) | (0<<DDD5) | (0<<DDD4) | (0<<DDD3) | (0<<DDD2) | (0<<DDD1) | (0<<DDD0);
 // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T 
 PORTD=(0<<PORTD7) | (0<<PORTD6) | (0<<PORTD5) | (0<<PORTD4) | (0<<PORTD3) | (0<<PORTD2) | (0<<PORTD1) | (0<<PORTD0);
 
@@ -210,80 +214,172 @@ glcd_init(&glcd_init_data);
 // Global enable interrupts
 #asm("sei")
 glcd_cleargraphics();
-//rtc_init(0,0,0);
-//rtc_set_time(15,20,0);
-//rtc_set_date(6,14,05,00);
+rtc_init(0,0,0);
+//rtc_set_time(13,43,0);
+//rtc_set_date(2,21,06,00);
 while (1)
-      {     
-      
+{     
+      //glcd_clear();
+      //delay_ms(1000);
+      rtc_init(0,0,0);
       rtc_get_time(&_hour,&_min,&_sec);
       sprintf(strsec,"%02d:%02d:%02d",_hour,_min,_sec);
-
-
+      //if(PIND.5==0){
       lcd_gotoxy(0,1);
       lcd_puts(strsec); 
       rtc_get_date(&_wday,&_day,&_month,&_year);
       _wday--;
       sh_year=_year+1400;
       sprintf(strsec,"%4d/%02d/%02d",sh_year,_month,_day);
-      //switch(_wday){
-       //case(1):_weekday="SAT";
-       //case(2):_weekday="SUN";
-       //case(3):_weekday="MON";
-       //case(4):_weekday="TUE";
-       //case(5):_weekday="WED";
-       //case(6):_weekday="THU";
-       //case(7):_weekday="FRI"; 
-       //default:_weekday="___"; 
-      //}     
-     
       lcd_gotoxy(0,0);
       lcd_puts(strsec); 
       //_weekday[]="s";     
       //if (_sec==2) a^;
       //glcd_display(a);
-      
+      if (_wday>6)_wday=0;
       strcpy(strsec,_weekday[_wday]);
       lcd_gotoxy(11,0);
-      lcd_puts(strsec);       
-      /*lcd_gotoxy(0,0); 
-      lcd_puts("11");                     
-      glcd_rectangle(0, 0, 18, 18);
-      delay_ms(2000);                   
-      glcd_clear();
-      delay_ms(750);
-      //glcd_setcolor(0);
-      //glcd_setbkcolor(1);
-      delay_ms(2000);   
-      glcd_setfont(she);
-      delay_ms(2000);      
-      glcd_outtext("!");
-      //lcd_puts("!");
-      //glcd_setcolor(1);
-      //glcd_setbkcolor(0);
-      //lcd_puts("!");
-      delay_ms(500);
-      glcd_clear();
-      
-    
-      glcd_rectangle(30, 30, 45, 45); 
-      glcd_setfont(she);
-      glcd_setcolor(0);
-      glcd_setbkcolor(1);
-      glcd_outtextxy(33, 33, "!"); 
-      delay_ms(2000);   
-      glcd_setcolor(1);
-      glcd_setbkcolor(0);
-      glcd_cleartext();   
-      delay_ms(2000);   
-      rtc_get_time(_hour,_min,_sec);
-      sprintf(strsec,"%d",_sec);
-      lcd_gotoxy(0,0); 
       lcd_puts(strsec);
-      delay_ms(2000);
-      glcd_clear();
-    
-*/
+      
+      if(menu==0){
+        selection=0;
+        delay_ms(50);
+        if(menu==0){
+            while(menu==0){
+            }
+            
+            while(1){
+                delay_ms(50);
+                j++;
+                if (j==10){
+                    blank=!blank;
+                    j=0;
+                } 
+                strcpyf(str,"          ");
+                sh_year=1400+_year;
+                if (selection==1 & blank==0)sprintf(str,"%04d/",sh_year);
+                else if(selection==1 & blank==1) strcpyf(str,"    ");
+                else if(selection!=1) sprintf(str,"%04d/",sh_year);
+                lcd_gotoxy(0,0);
+                lcd_puts(str);
+
+                if (selection==2 & blank==0)sprintf(str,"%02d/",_month);
+                else if(selection==2 & blank==1) strcpyf(str,"  ");
+                else if(selection!=2) sprintf(str,"%02d",_month);
+                lcd_gotoxy(5,0);
+                lcd_puts(str);
+                
+                if (selection==3 & blank==0)sprintf(str,"%02d",_day);
+                else if(selection==3 & blank==1) strcpyf(str,"  ");
+                else if(selection!=3) sprintf(str,"%02d",_day);
+                lcd_gotoxy(8,0);
+                lcd_puts(str);
+                
+                if (selection==4 & blank==0) strcpy(str,_weekday[_wday]);
+                else if(selection==4 & blank==1) strcpyf(str,"   ");
+                else if(selection!=4)strcpy(str,_weekday[_wday]);
+                lcd_gotoxy(11,0);
+                lcd_puts(str);
+                //sprintf(str,"%02d",_wday);
+                //lcd_gotoxy(11,1);
+                //lcd_puts(str);
+                
+                if (selection==5 & blank==0)sprintf(str,"%02d:",_hour);
+                else if(selection==5 & blank==1) strcpyf(str,"  ");
+                else if(selection!=5) sprintf(str,"%02d",_hour);
+                lcd_gotoxy(0,1);
+                lcd_puts(str);                
+                
+                if (selection==6 & blank==0)sprintf(str,"%02d:",_min);
+                else if(selection==6 & blank==1) strcpyf(str,"  ");
+                else if(selection!=6) sprintf(str,"%02d:",_min);
+                lcd_gotoxy(3,1);
+                lcd_puts(str);                                                
+  
+                if (selection==7 & blank==0)sprintf(str,"%02d",_sec);
+                else if(selection==7 & blank==1) strcpyf(str,"  ");
+                else if(selection!=7) sprintf(str,"%02d",_sec);
+                lcd_gotoxy(6,1);
+                lcd_puts(str);   
+                              
+                if(up==0) {
+                    delay_ms(200);
+                    if(up==0) {
+                        blank=0;
+                        j=0;
+                        if(selection==1)_year++;
+                        if(selection==2)_month++;
+                        if(selection==3)_day++;
+                        if(selection==4)_wday++;
+                        if(selection==5)_hour++;
+                        if(selection==6)_min++;
+                        if(selection==7)_sec++;
+                    }    
+                }  
+                
+                if(down==0) {
+                    delay_ms(200);
+                    if(down==0) {
+                        blank=0;
+                        j=0;                    
+                        if(selection==1) _year--;
+                        if(selection==2)_month--;
+                        if(selection==3)_day--;
+                        if(selection==4)_wday--;
+                        if(selection==5)_hour--;
+                        if(selection==6)_min--;
+                        if(selection==7)_sec--;                        
+                    }    
+                }  
+                
+                if (_year>99 & _year<101)_year=0;
+                if (_year>101)_year=99;
+                
+                if (_month>12 & _month<14)_month=1;
+                if (_month>14 )_month=12;
+                
+                if (_day>30 & _day<32)_day=0;
+                if (_day>32)_day=31;
+                
+                if (_wday>6 & _wday<8) _wday=0;
+                if (_wday>8)_wday=6;
+                
+                if (_hour>23 & _hour<25)_hour=0;
+                if (_hour>25)_hour=23;
+                
+                if (_min>59 & _min<61)_min=0;
+                if (_min>61)_min=59;
+                
+                if (_sec>59 & _sec<61)_sec=0;
+                if (_sec>61)_sec=59;
+                
+                
+                
+                if(menu==0) {
+                    delay_ms(100);
+                    if(menu==1) {
+                        selection++;
+                        if(selection==8){
+                           //rtc_init(0,0,0);
+                           delay_ms(100);
+                           rtc_set_time(_hour,_min,_sec);
+                           delay_ms(100);
+                           rtc_set_date(_wday,_day,_month,_year);
+                           glcd_clear();
+                           lcd_puts("all saved");
+                           delay_ms(3000);     
+                           glcd_clear();
+                           
+                           break;
+                        }                    
+                    }    
+                }                                                                                                                               
+            
+            }
+        }
+      } 
+             
+
   // Place your code here
       //lcd_clear(); 
       //delay_ms(500);          
@@ -306,6 +402,7 @@ while (1)
       glcd_putimagef(0,0,bfreeze,3);
       delay_ms(2000);      
       lcd_clear();*/
-           
+          
       }
-}
+}      
+
