@@ -18,7 +18,7 @@ OutputListFilesDirectory=Release\List
 OutputObjectFilesDirectory=Release
 OutputExecutableFilesDirectory=Release\Exe
 OutputLinkerFilesDirectory=Release\Exe
-AllowDisplayFunctionCallTree=1
+AllowDisplayFunctionCallTree=0
 CleanUp=2
 EditorPanelMode=0
 ActiveEditorPanel=0
@@ -163,8 +163,8 @@ WatchAVR8LAutoVariables=0
 UseEEPROMLocation0=1
 RebuildAll=0
 LinkageInformationPresent=1
-COFFileTimeStamp=1395559931
-Build=387
+COFFileTimeStamp=1395625416
+Build=434
 [DefinedSymbolsDebug]
 Count=0
 [Compiler]
@@ -266,7 +266,7 @@ UseEEPROMLocation0=1
 RebuildAll=1
 LinkageInformationPresent=0
 COFFileTimeStamp=-1
-Build=387
+Build=434
 IncludePath0=
 IncludePath1=
 IncludePath2=
@@ -401,8 +401,8 @@ Count=0
 DisableWatchdog=0
 [Libraries]
 Use1Wire=1
-1WirePort=1
-1WireBit=0
+1WirePort=3
+1WireBit=7
 UseI2C=1
 I2CPort=2
 SDA=1
@@ -522,10 +522,10 @@ L13=Enhanced function parameters passing: Yes
 L14=Automatic register allocation: Yes
 L15=Smart register allocation: Yes
 L16=
-L17=Build: 386
-L18=25050 line(s) compiled
+L17=Build: 434
+L18=25248 line(s) compiled
 L19=No errors
-L20=7 warning(s)
+L20=8 warning(s)
 L21=
 L22=Bit variables area: 0x2 to 0x2
 L23=Bit variables size: 1 byte(s)
@@ -534,29 +534,29 @@ L25=Data Stack area: 0x60 to 0x25F
 L26=Data Stack size: 512 byte(s)
 L27=Estimated Data Stack usage: 139 byte(s)
 L28=
-L29=RAM Global variables area: 0x260 to 0x31D
-L30=RAM Global variables size: 190 byte(s)
+L29=RAM Global variables area: 0x260 to 0x321
+L30=RAM Global variables size: 194 byte(s)
 L31=
-L32=Hardware Stack area: 0x31E to 0x85F
-L33=Hardware Stack size: 1346 byte(s)
+L32=Hardware Stack area: 0x322 to 0x85F
+L33=Hardware Stack size: 1342 byte(s)
 L34=
 L35=Heap size: 0 byte(s)
 L36=
 L37=EEPROM usage: 0 byte(s), 0.0% of EEPROM
-L38=Program size: 7803 words (15606 bytes), 47.6% of FLASH
-L39=488 words (976 bytes), 5.9% reduced by Code Compression
+L38=Program size: 8068 words (16136 bytes), 49.2% of FLASH
+L39=494 words (988 bytes), 5.8% reduced by Code Compression
 Lines=39
 [BuildInfoAssembler]
 L1=AVRASM: AVR macro assembler 2.1.30 (build 592 Nov  7 2008 12:38:17)
 L2=Copyright (C) 1995-2008 ATMEL Corporation
 L3=
-L4=C:\Users\Barouei\Desktop\Bms\sazman\Debug\List\panel.asm(9872): No EEPROM data, deleting C:\Users\Barouei\Desktop\Bms\sazman\Debug\Exe\panel.eep
+L4=C:\Users\Barouei\Desktop\Bms\sazman\Debug\List\panel.asm(10321): No EEPROM data, deleting C:\Users\Barouei\Desktop\Bms\sazman\Debug\Exe\panel.eep
 L5=
 L6=ATmega32A memory use summary [bytes]:
 L7=Segment   Begin    End      Code   Data   Used    Size   Use%
 L8=---------------------------------------------------------------
-L9=[.cseg] 0x000000 0x003cf6  10580   5026  15606   32768  47.6%
-L10=[.dseg] 0x000060 0x00031e      0    190    190    2048   9.3%
+L9=[.cseg] 0x000000 0x003f08  11102   5034  16136   32768  49.2%
+L10=[.dseg] 0x000060 0x000322      0    194    194    2048   9.5%
 L11=[.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 L12=
 Lines=12
@@ -567,7 +567,7 @@ ScrollPosX=0
 ScrollPosY=0
 TimeStamp=1395560027
 [BookmarksFoldedCode]
-Files=29
+Files=32
 F1=panel.c
 F2=C:\cvavr\inc\glcd_st7920.h
 F3=C:\cvavr\inc\graphics.h
@@ -597,6 +597,9 @@ F26=configall.h
 F27=C:\Users\Barouei\Desktop\Bms\sazman\clockread.h
 F28=clockchange.h
 F29=clockread.h
+F30=C:\Users\Barouei\Desktop\Bms\sazman\panel-14000624-1441.c
+F31=C:\Users\Barouei\Desktop\Bms\sazman\tempread.h
+F32=tempread.h
 [Bookmarks1]
 TimeStamp=1395559928
 Row=132
@@ -618,7 +621,7 @@ TimeStamp=1392809575
 Row=132
 Column=7
 ScrollPosX=0
-ScrollPosY=105
+ScrollPosY=90
 BK0=-1
 BK1=-1
 BK2=-1
@@ -650,7 +653,7 @@ TimeStamp=1079330574
 Row=0
 Column=0
 ScrollPosX=0
-ScrollPosY=120
+ScrollPosY=30
 BK0=-1
 BK1=-1
 BK2=-1
@@ -666,7 +669,7 @@ TimeStamp=1145531141
 Row=49
 Column=45
 ScrollPosX=0
-ScrollPosY=15
+ScrollPosY=0
 BK0=-1
 BK1=-1
 BK2=-1
@@ -788,8 +791,8 @@ HIDMouse=0
 HIDJoystick=0
 [Bookmarks12]
 TimeStamp=965772153
-Row=33
-Column=6
+Row=44
+Column=15
 ScrollPosX=0
 ScrollPosY=33
 BK0=-1
@@ -803,8 +806,6 @@ BK7=-1
 BK8=-1
 BK9=-1
 [FoldedCode10]
-Blocks=0
-[FoldedCode12]
 Blocks=0
 [Bookmarks13]
 TimeStamp=1045060692
@@ -875,11 +876,11 @@ BK9=-1
 [FoldedCode16]
 Blocks=0
 [Bookmarks17]
-TimeStamp=1395559844
-Row=39
-Column=15
+TimeStamp=1395624505
+Row=42
+Column=22
 ScrollPosX=0
-ScrollPosY=24
+ScrollPosY=27
 BK0=-1
 BK1=-1
 BK2=-1
@@ -912,11 +913,6 @@ Blocks=0
 Blocks=0
 [FoldedCode18]
 Blocks=0
-[FoldedCode2]
-Line1=68
-Blocks=1
-[FoldedCode5]
-Blocks=0
 [Bookmarks19]
 TimeStamp=1025934069
 Row=17
@@ -935,10 +931,10 @@ BK8=-1
 BK9=-1
 [Bookmarks20]
 TimeStamp=711006688
-Row=0
-Column=0
+Row=16
+Column=43
 ScrollPosX=0
-ScrollPosY=9
+ScrollPosY=15
 BK0=-1
 BK1=-1
 BK2=-1
@@ -949,8 +945,6 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
-[FoldedCode20]
-Blocks=0
 [Bookmarks21]
 TimeStamp=1045597212
 Row=0
@@ -1083,8 +1077,8 @@ Blocks=0
 Blocks=0
 [Bookmarks28]
 TimeStamp=1395557907
-Row=79
-Column=32
+Row=43
+Column=11
 ScrollPosX=0
 ScrollPosY=33
 BK0=-1
@@ -1099,8 +1093,8 @@ BK8=-1
 BK9=-1
 [Bookmarks29]
 TimeStamp=1395557698
-Row=10
-Column=12
+Row=17
+Column=29
 ScrollPosX=0
 ScrollPosY=0
 BK0=-1
@@ -1113,17 +1107,88 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
-[FoldedCode29]
-Blocks=0
 [FoldedCode14]
 Blocks=0
+[FoldedCode1]
+Blocks=0
+[FoldedCode19]
+Blocks=0
+[Bookmarks30]
+TimeStamp=1395619323
+Row=117
+Column=36
+ScrollPosX=0
+ScrollPosY=114
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode30]
+Blocks=0
+[FoldedCode28]
+Blocks=0
+[FoldedCode2]
+Line1=68
+Blocks=1
+[Bookmarks31]
+TimeStamp=1395619424
+Row=0
+Column=0
+ScrollPosX=0
+ScrollPosY=0
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode31]
+Blocks=0
+[FoldedCode29]
+Blocks=0
+[FoldedCode5]
+Blocks=0
 [FoldedCode4]
+Blocks=0
+[Bookmarks32]
+TimeStamp=1395621616
+Row=11
+Column=16
+ScrollPosX=0
+ScrollPosY=0
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode32]
+Blocks=0
+[FoldedCode17]
+Blocks=0
+[FoldedCode12]
+Blocks=0
+[FoldedCode20]
 Blocks=0
 [HeadersList]
 Files=1
 F1=C:\Users\Barouei\Desktop\Bms\sazman\panel.c
 [Header1]
-Files=29
+Files=31
 F1=C:\cvavr\inc\mega32a.h
 F2=C:\cvavr\inc\mega32_bits.h
 F3=C:\cvavr\inc\1wire.h
@@ -1150,14 +1215,8 @@ F23=heater.c
 F24=cooler.c
 F25=sheater.c
 F26=scooler.c
-F27=clockchange.h
-F28=clockread.h
-F29=configall.h
-[FoldedCode1]
-Blocks=0
-[FoldedCode28]
-Blocks=0
-[FoldedCode19]
-Blocks=0
-[FoldedCode17]
-Blocks=0
+F27=days.c
+F28=tempread.h
+F29=clockchange.h
+F30=clockread.h
+F31=configall.h

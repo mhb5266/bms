@@ -28,6 +28,7 @@ unsigned char ds1820_rom_codes[MAX_DS1820][9];
 // on the graphic display
 #include <font5x7.h>
 #include <defines.c>
+#include "tempread.h"
 #include "clockchange.h"
 #include "clockread.h"
 // Declare your global variables here
@@ -48,7 +49,9 @@ TCNT1L=0x5740 & 0xff;
 
 
 void main(void)
-    {
+    {          
+
+        
         #include "configall.h"
         #asm("sei")
         glcd_cleargraphics();
@@ -59,15 +62,35 @@ void main(void)
         //rtc_init(0,0,0);
         //rtc_set_time(13,43,0);
         //rtc_set_date(2,21,06,00);
+        /*
+        while(1){
+            glcd_clear();
+            glcd_putimagef(0,0,cooler,1);
+            delay_ms(5000);
+            glcd_putimagef(0,0,cooler,3);
+            delay_ms(5000);
+        }        
+         */
          while (1){     
 
               readclock();
+              readtemp();
+              sprintf(str,"%2.1f%`C",temp);
+              //sprintf(buffer,"Temp=%2.1f%`C",temp);
+              lcd_gotoxy(10,1);
+              lcd_puts(str);
+              
+              
+              //glcd_display(1);
+              //lcd_putsf("hi")
               
               if (lsec!=_sec){
                 led=~led;
                 lsec=_sec;
+                
               }          
-
+              
+              
 
               if(up==0){
                 j=0;
@@ -131,7 +154,6 @@ void main(void)
                 else if(issame==0)glcd_putimagef(0,0,cooler,1);
                 delay_ms(3000);                                
                 glcd_clear();
-                
                 /*
                 //glcd_clear();
                 //if (state=="cooler")glcd_putimagef(0,0,snow,1);
