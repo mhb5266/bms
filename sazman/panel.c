@@ -31,6 +31,7 @@ unsigned char ds1820_rom_codes[MAX_DS1820][9];
 #include "tempread.h"
 #include "clockchange.h"
 #include "clockread.h"
+#include "calender.h"
 // Declare your global variables here
 
 // Timer1 overflow interrupt service routine                                                                
@@ -57,7 +58,7 @@ void main(void)
         glcd_cleargraphics();
         glcd_clear();
         glcd_putimagef(0,0,logo,1);
-        delay_ms(3000); 
+        delay_ms(1000); 
         glcd_clear();
         //rtc_init(0,0,0);
         //rtc_set_time(13,43,0);
@@ -70,7 +71,18 @@ void main(void)
             glcd_putimagef(0,0,cooler,3);
             delay_ms(5000);
         }        
-         */
+         */  
+         
+         while (1){
+            for (i=0;i<=11;i++){
+                delay_ms(1000);
+                sprintf(str,"%01d%",i);
+                lcd_gotoxy(0,0);
+                lcd_puts(str);
+            }                  
+            glcd_clear();
+            delay_ms(2000);
+         }
          while (1){     
 
               readclock();
@@ -80,6 +92,7 @@ void main(void)
               lcd_gotoxy(10,1);
               lcd_puts(str);
               
+              _wday=readcalender(_year);
               
               //glcd_display(1);
               //lcd_putsf("hi")
@@ -145,7 +158,7 @@ void main(void)
                 if (state=="cooler")glcd_putimagef(0,0,snow,1);
                 else if(state=="heater")glcd_putimagef(0,0,snow,1);
                 issame=strcmpf(state,"cooler");
-                sprintf(str,"%01d",issame);
+                sprintf(str,"%02d",issame);
                 lcd_puts(str);
                 lcd_puts(state);
                 delay_ms(1000);

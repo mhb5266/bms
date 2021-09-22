@@ -1,6 +1,6 @@
 Report       : disinfection
-Date         : 07-26-2021
-Time         : 18:13:39
+Date         : 09-22-2021
+Time         : 17:07:58
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M328
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : B6 hex  -> Will fit into ROM
-ROMIMAGE     :  182 dec
-FLASH USED   :  0  %
+ROMIMAGE     : 212 hex  -> Will fit into ROM
+ROMIMAGE     :  530 dec
+FLASH USED   :  1  %
 BAUD         : 9600 Baud
 XTAL         : 16000000 Hz
 BAUD error   : 0.16%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 8D8 hex
 Framesize    : 20 hex
 Framestart   : 8A8 hex
-Space left   :  1959  dec
+Space left   :  1932  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -98,6 +98,11 @@ PWM0B                            Byte              0048          72
 PWM2A                            Byte              00B3          179 
 PWM2B                            Byte              00B4          180 
 ERR                              Bit [2]           0006          6 
+A                                Word              0100          256 
+F                                Word(10)          0102          258 
+X                                Word              0116          278 
+B                                Word              0118          280 
+I                                Byte              011A          282 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -611,7 +616,7 @@ _HWMUL                           1
 _DOSFILEWRITE                    0
 _DOSDIRWRITE                     0
 _1WEXT                           0
-_ADC_REFMODEL                    0
+_ADC_REFMODEL                    1
 _UARTS                           1
 _HWSTACKSTART                    2303
 _TIMEOUT                         0
@@ -649,4 +654,8 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
+F                                not used
+X                                not used
+B                                not used
+I                                not used
 

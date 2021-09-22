@@ -3,7 +3,7 @@
     //char a=0;
     //char buffer[16];
 
-    char c=1;
+    char c=1,i;
     //char j=250;
     char _hour=0,_min=0,_sec=0,_wday,_year,_month,_day;
     int sh_year;
