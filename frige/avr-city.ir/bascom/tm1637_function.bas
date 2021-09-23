@@ -183,7 +183,31 @@ Local I As Byte                                             'Write byte variable
    Next I
 End Sub
 
-
+sub displight(byval light as byte)
+    select case light
+         case 1
+              light=&H88
+         case 2
+              light=&H89
+         case 3
+              light=&H8A
+         case 4
+              light=&H8B
+         case 5
+             light=&H8C
+         case 6
+             light=&H8D
+         case 7
+              light=&H8E
+         case 8
+              light=&H8F
+         case 0
+              light=&H80
+    end select
+    _start
+    Call Wrbyte(light) : _ack
+    _stop
+end sub
 '____________________________________________________________
 
 Table_7s:

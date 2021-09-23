@@ -16,3 +16,5 @@ Declare Sub Wrbyte(byval _data As Byte)
 Declare Sub _start()
 Declare Sub _stop()
 Declare Sub _ack()
+
+declare sub displight(byval light as byte)

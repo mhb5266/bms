@@ -1,2 +1,2 @@
-Error : 97    Line :   1     SUB or FUNCTION must be DECLARED first [TM1637_INIT]  , in File : K:\project\tm1637\bascom\tm1637\tm1637_function.bas
-Error : 12    Line :   2     Unknown CONFIG parameter [CLK]  , in File : K:\project\tm1637\bascom\tm1637\tm1637_function.bas
+Error : 97    Line :   1     SUB or FUNCTION must be DECLARED first [TM1637_INIT]  , in File : C:\Users\Barouei\Desktop\Bms\frige\avr-city.ir\bascom\tm1637_function.bas
+Error : 12    Line :   2     Unknown CONFIG parameter [CLK]  , in File : C:\Users\Barouei\Desktop\Bms\frige\avr-city.ir\bascom\tm1637_function.bas

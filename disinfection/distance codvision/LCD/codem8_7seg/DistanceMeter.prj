@@ -6,9 +6,9 @@ A=
 C=
 D=3/9/2012 8:46:34 AM
 Files=2
-OpenedFiles=3
+OpenedFiles=1
 OF1=DistanceMeter.c
-Active1=0
+Active1=1
 OutputListFilesDirectory=List
 OutputObjectFilesDirectory=Obj
 OutputExecutableFilesDirectory=Exe
@@ -379,11 +379,11 @@ Row=0
 Column=0
 ScrollPosX=0
 ScrollPosY=0
-TimeStamp=1396082851
+TimeStamp=1396143438
 [Bookmarks5]
 TimeStamp=1092842901
-Row=0
-Column=0
+Row=9
+Column=63
 ScrollPosX=0
 ScrollPosY=0
 BK0=-1
@@ -435,9 +435,9 @@ RebuildAll=0
 LinkageInformationPresent=1
 Build=161
 UseEEPROMLocation0=1
-[FoldedCode5]
-Blocks=0
 [FoldedCode3]
 Blocks=0
 [FoldedCode4]
+Blocks=0
+[FoldedCode5]
 Blocks=0
