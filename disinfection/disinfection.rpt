@@ -1,6 +1,6 @@
 Report       : disinfection
-Date         : 09-22-2021
-Time         : 17:07:58
+Date         : 09-23-2021
+Time         : 09:02:47
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M328
@@ -8,8 +8,8 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 212 hex  -> Will fit into ROM
-ROMIMAGE     :  530 dec
+ROMIMAGE     : 214 hex  -> Will fit into ROM
+ROMIMAGE     :  532 dec
 FLASH USED   :  1  %
 BAUD         : 9600 Baud
 XTAL         : 16000000 Hz

@@ -55,6 +55,7 @@ if a>315 then   'less than 20 cm
       waitms 200
       if dip2=0 then
             set buzz
+            set blue
             set motor
             wait 1
             reset green
