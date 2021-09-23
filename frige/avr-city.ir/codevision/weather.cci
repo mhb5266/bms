@@ -1,0 +1,8 @@
+VERSION:3 SOURCE_TIMESTAMP:4EC38CE5
+NODE:I LEVEL:0 LINE:1 "C:\Program Files (x86)\cvavr\inc\mega16.h"
+NODE:I LEVEL:0 LINE:2 "C:\Program Files (x86)\cvavr\inc\stdio.h"
+NODE:I LEVEL:0 LINE:3 "C:\Program Files (x86)\cvavr\inc\math.h"
+NODE:I LEVEL:0 LINE:4 "C:\Program Files (x86)\cvavr\inc\tm1637.h"
+NODE:I LEVEL:0 LINE:5 "K:\project\tm1637\codevision\New folder\DHT22.h"
+NODE:V LEVEL:0 LINE:18 "str -> RAM:????"
+NODE:F LEVEL:0 LINE:20 "main(void)"

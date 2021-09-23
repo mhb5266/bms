@@ -1,0 +1,29 @@
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+_point                                                                            0x0176       1
+_scrolldelay                                                                      0x0177       2
+_brightness                                                                       0x0179       1
+
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+main                                                                              0x00083      9
+Tm1637_table_str                                                                  0x0008C    287
+tm1637_init                                                                       0x001AB     23
+tm1637_scrolldelay                                                                0x001C2      9
+tm1637_display_all                                                                0x001CB     48
+tm1637_scroll                                                                     0x001FB     65
+I2CStart                                                                          0x0023C      7
+I2Cack                                                                            0x00243      8
+I2CStop                                                                           0x0024B     14
+I2CWrByte                                                                         0x00259     27
+strlen                                                                            0x00274     12

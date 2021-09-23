@@ -1,0 +1,33 @@
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+_point                                                                            0x0175       1
+_scrolldelay                                                                      0x0176       2
+_brightness                                                                       0x0178       1
+str                                                                               0x0179      23
+_seed                                                                             0x0190       4
+
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+dht22_read                                                                        0x000A3    244
+main                                                                              0x00197     81
+ftrunc                                                                            0x001E8     49
+ceil                                                                              0x00219     22
+Tm1637_table_str                                                                  0x0022F    287
+tm1637_init                                                                       0x0034E     23
+tm1637_display_all                                                                0x00365     48
+tm1637_scroll                                                                     0x00395     65
+I2CStart                                                                          0x003D6      7
+I2Cack                                                                            0x003DD      8
+I2CStop                                                                           0x003E5     14
+I2CWrByte                                                                         0x003F3     27
+strlen                                                                            0x0040E     12

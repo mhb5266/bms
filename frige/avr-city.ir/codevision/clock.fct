@@ -1,0 +1,5 @@
+main DSTACK_USAGE:0 DSTACK_LEVEL:0 FILE:"clock.c" LINE:18
+tm1637_putsf DSTACK_USAGE:7 DSTACK_LEVEL:7 FILE:"C:\Program Files (x86)\cvavr\lib\tm1637.lib" LINE:213
+tm1637_display_all DSTACK_USAGE:4 DSTACK_LEVEL:11 FILE:"C:\Program Files (x86)\cvavr\lib\tm1637.lib" LINE:145
+I2CWrByte DSTACK_USAGE:2 DSTACK_LEVEL:13 FILE:"C:\Program Files (x86)\cvavr\lib\tm1637.lib" LINE:296
+timer2_ovf_isr DSTACK_USAGE:2 DSTACK_LEVEL:15 FILE:"clock.c" LINE:49

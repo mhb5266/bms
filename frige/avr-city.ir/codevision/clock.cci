@@ -1,0 +1,12 @@
+VERSION:3 SOURCE_TIMESTAMP:4EC4713B
+NODE:I LEVEL:0 LINE:1 "C:\Program Files (x86)\cvavr\inc\mega16.h"
+NODE:I LEVEL:0 LINE:2 "C:\Program Files (x86)\cvavr\inc\tm1637.h"
+NODE:V LEVEL:0 LINE:13 "Update_Time -> R5"
+NODE:V LEVEL:0 LINE:14 "ClockPoint -> R4"
+NODE:V LEVEL:0 LINE:15 "second -> R7"
+NODE:V LEVEL:0 LINE:15 "minute -> R6"
+NODE:V LEVEL:0 LINE:15 "hour -> R9"
+NODE:C LEVEL:0 LINE:16 "s1 -> FLASH"
+NODE:V LEVEL:0 LINE:17 "s2 -> RAM:????"
+NODE:F LEVEL:0 LINE:18 "main(void)"
+NODE:F LEVEL:0 LINE:49 "timer2_ovf_isr(void)"

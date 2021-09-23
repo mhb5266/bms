@@ -1,0 +1,4 @@
+main DSTACK_USAGE:0 DSTACK_LEVEL:0 FILE:"scroll.c" LINE:16
+tm1637_scroll DSTACK_USAGE:8 DSTACK_LEVEL:8 FILE:"C:\Program Files (x86)\cvavr\lib\tm1637.lib" LINE:224
+tm1637_display_all DSTACK_USAGE:4 DSTACK_LEVEL:12 FILE:"C:\Program Files (x86)\cvavr\lib\tm1637.lib" LINE:145
+I2CWrByte DSTACK_USAGE:2 DSTACK_LEVEL:14 FILE:"C:\Program Files (x86)\cvavr\lib\tm1637.lib" LINE:296

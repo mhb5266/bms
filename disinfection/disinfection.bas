@@ -43,7 +43,7 @@ A = Getadc(0)
 
 
 
-if a>315 then   'less than 20 cm
+if a>600 then   'less than 20 cm
       reset red:reset green:set blue
       set buzz
       set motor
@@ -67,14 +67,14 @@ if a>315 then   'less than 20 cm
         A = Getadc(0)
         toggle red
         waitms 300
-      loop until a<307 'more then 20cm
+      loop until a<500 'more then 20cm
       set blue
       set red
       wait 1
       reset blue
 end if
 
-if a<307 then 'more then 20cm
+if a<500 then 'more then 20cm
       reset red:set green:reset blue
       reset buzz
 end if
