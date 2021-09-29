@@ -6,9 +6,9 @@ A=
 C=
 D=3/9/2012 8:46:34 AM
 Files=2
-OpenedFiles=1
+OpenedFiles=2
 OF1=DistanceMeter.c
-Active1=1
+Active1=0
 OutputListFilesDirectory=List
 OutputObjectFilesDirectory=Obj
 OutputExecutableFilesDirectory=Exe
@@ -299,13 +299,14 @@ UserProgPath=
 UserProgCmdLine=
 UserProgWorkDir=
 [BookmarksFoldedCode]
-Files=6
+Files=7
 F1=gp2d120.h
 F2=gp2d120.c
 F3=GP2Y0A21.c
 F4=GP2Y0A21.h
 F5=DistanceMeter.c
 F6=untitled.c
+F7=..\..\..\..\frige\dl lib\TM1638-master\tm1638.cpp
 [Bookmarks1]
 TimeStamp=883665634
 Row=0
@@ -379,7 +380,7 @@ Row=0
 Column=0
 ScrollPosX=0
 ScrollPosY=0
-TimeStamp=1396143438
+TimeStamp=1396333571
 [Bookmarks5]
 TimeStamp=1092842901
 Row=9
@@ -435,9 +436,27 @@ RebuildAll=0
 LinkageInformationPresent=1
 Build=161
 UseEEPROMLocation0=1
-[FoldedCode3]
-Blocks=0
 [FoldedCode4]
 Blocks=0
+[Bookmarks7]
+TimeStamp=1182379020
+Row=0
+Column=0
+ScrollPosX=0
+ScrollPosY=81
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode7]
+Blocks=0
 [FoldedCode5]
+Blocks=0
+[FoldedCode3]
 Blocks=0

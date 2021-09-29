@@ -37,48 +37,56 @@ pg alias portd.6:config portd.6=OUTPUT
 
 Do
 
-A = Getadc(0)
+if dip1=0 or dip2=0 then
+
+   A = Getadc(0)
 
 
 
 
 
-if a>600 then   'less than 20 cm
-      reset red:reset green:set blue
-      set buzz
-      set motor
-      wait 1
-      reset green
-      reset blue
-      reset buzz
-      reset motor
-      waitms 200
-      if dip2=0 then
-            set buzz
-            set blue
-            set motor
-            wait 1
-            reset green
-            reset blue
-            reset buzz
-            reset motor
-      end if
-      do
-        A = Getadc(0)
-        toggle red
-        waitms 300
-      loop until a<500 'more then 20cm
-      set blue
-      set red
-      wait 1
-      reset blue
+   if a>400 then   'less than 20 cm
+         reset red:reset green:set blue
+
+         set buzz
+         set motor
+         waitms 250
+         reset green
+         reset blue
+         reset buzz
+         reset motor
+         waitms 100
+         if dip2=0 then
+               set buzz
+               set blue
+               set motor
+               waitms 250
+               reset green
+               reset blue
+               reset buzz
+               reset motor
+         end if
+         do
+           A = Getadc(0)
+           toggle red
+           waitms 300
+         loop until a<350 'more then 20cm
+         set blue
+         set red
+         wait 1
+         reset blue
+      endif
+
+
+   if a<400 then 'more then 20cm
+         reset red:set green:reset blue
+         reset buzz
+   end if
+else
+    waitms 500
+    reset green :reset blue: toggle red
+
 end if
-
-if a<500 then 'more then 20cm
-      reset red:set green:reset blue
-      reset buzz
-end if
-
 
 
 'A = A - 3

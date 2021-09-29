@@ -1,6 +1,6 @@
 
 $regfile = "m8def.dat"
-$crystal = 1000000
+$crystal = 8000000
 $hwstack = 100
 $swstack = 100
 $framesize = 100
@@ -11,7 +11,7 @@ config_timer:
              enable interrupts
              enable timer1
              on ovf1 t1rutin
-             timer1=64535:start timer1
+             timer1=57535:start timer1
              dim onn as word
              dim offf as word
 
@@ -30,8 +30,11 @@ fan alias portd.5:config portd.5=OUTPUT
 out1 alias portb.1:config portb.1=OUTPUT
 out2 alias portb.2 :config portb.2=OUTPUT
 'buzz alias portb.0:config portb.0=output
-stb alias portb.5:config portb.5=OUTPUT:reset stb
+stb alias portC.5:config portC.5=OUTPUT:reset stb
 csel alias portc.1:config portc.1=OUTPUT:reset csel
+
+dim ads as word :ads=192
+
 Config_temp:
 
 Config 1wire = Portb.0
@@ -49,17 +52,25 @@ Dim Sens2 As String * 6
 dim upside as bit
 dim downside as bit
 
+dim seg(8) as byte
+dim grid(8) as byte
+dim j as byte
+
 
 Dim Readsens As Integer
 
 
 Dim Tmpread As Boolean
-Dim Tmp1 As Integer
+Dim Tmp As Integer
 
 
 declare sub temp
 declare sub  conversion
 declare sub fridge
+
+const num=8
+dim segment as byte
+dim light as byte
 
 
 config_tm1637:
@@ -74,12 +85,14 @@ Tm1637_din Alias Pinb.4
 
 Config Portc.3= Output                                     ' for TM1637 clock
 Config Portc.4 = Output                                     ' for TM1637 data
-Tm1637_clk Alias Portc.3
-Tm1637_dout Alias Portc.4
-Tm1637_din Alias Pinc.4
+clk Alias Portc.3
+dout Alias Portc.4
+din Alias Pinc.4
 
-Declare Sub disp(byval Bdispdata As integer)            'The display can only show numbers
+Declare Sub convert(byval Bdispdata As integer)            'The display can only show numbers
 Declare Sub wrbyte(byval Bdata As Byte)
+declare sub disp
+
 Declare Sub dispon()
 Declare Sub Tm1637_off()
 Declare Sub _start()
@@ -99,24 +112,101 @@ dim i as word
 '     Start main
 '
 '========================================================================
+stop timer1
+'(
+  set stb :set clk:waitus 2: reset stb
+  wrbyte &H40
+  set stb :set clk:waitus 2: reset stb
+  wrbyte &HC0
+  for i=1 to 16
+      wrbyte &H01
+      waitus 2
+  next
+  segment=&H88
+  for i= 1 to 8
+      incr segment
+      toggle led
+      wait 1
+      set stb :set clk:waitus 2: reset stb
+      wrbyte segment
+  next
+  for i=1 to 8
+      waitms 200
+      toggle led
+  next
+')
+'start timer1
 
-for i=1 to 4
-   'toggle buzz
-   waitms 250
-next
+  set stb :set clk:waitus 2: reset stb
+  wrbyte &H44
+  set stb :set clk:waitus 2: reset stb
+  wrbyte &HC0
+  wrbyte &H06
+  waitus 2
 
-dispon
+  set stb :set clk:waitus 2: reset stb
+  wrbyte &HC2
+  wrbyte &H02
+  waitus 2
+
+  set stb :set clk:waitus 2: reset stb
+  wrbyte &HC4
+  wrbyte &H00
+  waitus 2
+
+  set stb :set clk:waitus 2: reset stb
+  wrbyte &HC6
+  wrbyte &H06
+  waitus 2
+
+  set stb :set clk:waitus 2: reset stb
+  wrbyte &HC8
+  wrbyte &H07
+  waitus 2
+
+  set stb :set clk:waitus 2: reset stb
+  wrbyte &HCA
+  wrbyte &H05
+  waitus 2
+
+  set stb :set clk:waitus 2: reset stb
+  wrbyte &HCC
+  wrbyte &H06
+  waitus 2
+
+  set stb :set clk:waitus 2: reset stb
+  wrbyte &HCE
+  wrbyte &H00
+  waitus 2
+  set stb :set clk:waitus 2: reset stb
+  wrbyte &H8F
+  for i=1 to 8
+      toggle led
+      waitms 200
+  next
+  wait 1
 
 main:
 
-Do
 
+
+Do
+'incr tmp
+temp
+tmp=tmp*-1
+tmp=tmp+20
+convert tmp
+waitms 500
 'incr i
 'toggle led
-waitms 50
-if tmp1<-17 then set downside:reset upside
-if tmp1>-10 then set upside:reset downside
+'waitms 50
+'if tmp<-17 then set downside:reset upside
+'if tmp>-10 then set upside:reset downside
 
+      'disp num
+      'dispon
+'wait 1
+'toggle led
 'Tm1637_off
 
 'fridge
@@ -128,31 +218,36 @@ t1rutin:
 stop timer1
 
    toggle led
-   temp
-      disp tmp1
 
-   if tmp1>maxtmp then
+   '(
+   temp
+      disp num
+      dispon
+   if tmp>maxtmp then
        set motor
        set fan
        set out1
        set out2
     end if
 
-    if tmp1<mintmp then
+    if tmp<mintmp then
        reset motor
        reset fan
        set out1
        set out2
     end if
 
-    if tmp1>-16 and upside=0 and downside=1 then
+    if tmp>-16 and upside=0 and downside=1 then
       reset out1
     end if
-    if tmp1>-13 and upside=0 and downside=1 then
+    if tmp>-13 and upside=0 and downside=1 then
       reset out2
     end if
 
-timer1=64535
+    ')
+
+timer1=57535
+
 start timer1
 
 return
@@ -162,7 +257,7 @@ return
 '     Subroutines
 '
 '========================================================================
-
+'(
 Sub _ack()
 
    Reset Tm1637_clk
@@ -173,101 +268,148 @@ Sub _ack()
    Waitus 2
    Reset Tm1637_clk
    Set Tm1637_dout
-   
-End Sub
 
+End Sub
+')
 
 
 Sub Tm1637_off()
-   _start
+   '_start
    wrbyte &H80                                       'Turn display off
-   _ack
-   _stop
+   '_ack
+   '_stop
 End Sub
 
 
 
 Sub dispon()
-   _start
-   wrbyte &H8A                                       'Turn display on and set PWM for brightness to 25%
-   _ack
-   _stop
+   '_start
+  set clk :set stb:waitus 2: reset stb
+   wrbyte &H8F
+   waitus 2                                       'Turn display on and set PWM for brightness to 25%
+   '_ack
+   '_stop
 End Sub
 
 
-
+'(
 Sub _start()
    set stb
    waitus 2
-   reset stb
    Set Tm1637_clk
    Set Tm1637_dout
    Waitus 2
    Reset Tm1637_dout
+   reset stb
 End Sub
 
 
 Sub _stop()
    set stb
    waitus 2
-   reset stb
    Reset Tm1637_clk
    Waitus 2
    Reset Tm1637_dout
    Waitus 2
    Set Tm1637_clk
-   Waitus 2
    Set Tm1637_dout
+   reset stb
 End Sub
 
+')
 
 
-Sub disp(byval Bdispdata As integer)
-   Local Bcounter As Byte
-   Local Strdisp As String * 5
 
-   Strdisp = Str(bdispdata)
-   Strdisp = Format(strdisp , "     ")
+Sub convert (byval Bdispdata As integer)
+    Local Bcounter As Byte
+   Local Strdisp As String * 3
 
-   _start
-   wrbyte &H40                                       'autoincrement adress mode
-   _ack
-   _stop
-   _start
-   wrbyte &HC0                                       'startaddress first digit (HexC0) = MSB display
-   _ack
-
-   For Bcounter = 2 To 6
-      Select Case Asc(strdisp , Bcounter)
-         Case "0" : wrbyte &B00111111
-         Case "1" : wrbyte &B00000110
-         Case "2" : wrbyte &B01011011
-         Case "3" : wrbyte &B01001111
-         Case "4" : wrbyte &B01100110
-         Case "5" : wrbyte &B01101101
-         Case "6" : wrbyte &B01111101
-         Case "7" : wrbyte &B00000111
-         Case "8" : wrbyte &B01111111
-         Case "9" : wrbyte &B01101111
-         case "-" : wrbyte &B01000000                    '-    29
-         Case Else : wrbyte &B00000000
+   'Strdisp = Str(bdispdata)
+   'Strdisp = Format(strdisp , "   5")
+   if tmp<0 then
+      'tmp=tmp*10
+      strdisp="-"
+      strdisp=strdisp+str(abs(tmp))
+   elseif tmp>0 then
+       strdisp=str(tmp)
+   end if
+   'strdisp="123"
+   strdisp=format(strdisp,"   ")
+   bcounter=len(strdisp)
+   incr bcounter
+   For i = 1 To bcounter
+      Select Case Asc(strdisp ,bcounter-i)
+                              '.gfedcba
+         Case "0" : segment= &B00111111
+         Case "1" : segment= &B00110000
+         Case "2" : segment= &B01011011
+         Case "3" : segment= &B01111001
+         Case "4" : segment= &B01110100
+         Case "5" : segment= &B01101101
+         Case "6" : segment= &B01101111
+         Case "7" : segment= &B00111100
+         Case "8" : segment= &B01111111
+         Case "9" : segment= &B01111101
+         case "-" : segment= &B01000000                    '-    29
+         Case Else : segment= &B00000000
       End Select
-      _ack
+      seg(i)=segment
+
    Next
-   _stop
+   disp
+
 End Sub
 
+sub disp
+         for i=0 to 7
+           grid(1).i=seg(i+1).0
+           grid(2).i=seg(i+1).1
+           grid(3).i=seg(i+1).2
+           grid(4).i=seg(i+1).3
+           grid(5).i=seg(i+1).4
+           grid(6).i=seg(i+1).5
+           grid(7).i=seg(i+1).6
+           grid(8).i=seg(i+1).7
+         next
+   set stb :set clk:waitus 2: reset stb
+   wrbyte &H44
+   set stb :set clk:waitus 2: reset stb
+   wrbyte &HC0
+   wrbyte grid(1)
+   set stb :set clk:waitus 2: reset stb
+   wrbyte &HC2
+   wrbyte grid(2)
+   set stb :set clk:waitus 2: reset stb
+   wrbyte &HC4
+   wrbyte grid(3)
+   set stb :set clk:waitus 2: reset stb
+   wrbyte &HC6
+   wrbyte grid(4)
+   set stb :set clk:waitus 2: reset stb
+   wrbyte &HC8
+   wrbyte grid(5)
+   set stb :set clk:waitus 2: reset stb
+   wrbyte &HCA
+   wrbyte grid(6)
+   set stb :set clk:waitus 2: reset stb
+   wrbyte &HCC
+   wrbyte grid(7)
+   set stb :set clk:waitus 2: reset stb
+   wrbyte &HCE
+   wrbyte grid(8)
+   set stb :set clk:waitus 2: reset stb
+   wrbyte &H88
 
+end sub
 
 Sub wrbyte(byval Bdata As Byte)
    Local Bbitcounter As Byte
-
    For Bbitcounter = 0 To 7                                 'LSB first
-      Reset Tm1637_clk
-      Tm1637_dout = Bdata.bbitcounter
-      Waitus 3
-      Set Tm1637_clk
-      Waitus 3
+      Reset clk
+      dout = Bdata.bbitcounter
+      Waitus 2
+      Set clk
+      Waitus 2
    Next
 End Sub
 
@@ -285,7 +427,7 @@ sub temp
       Readsens = 1wread(2)
 
 
-      Tmp1 = Readsens
+      tmp = Readsens
 
       Gosub Conversion
       Sens1 = Temperature
@@ -297,21 +439,21 @@ end sub
 
 sub Conversion
    Readsens = Readsens * 10 : Readsens = Readsens \ 16
-   tmp1=readsens
-   tmp1=tmp1/10
+   tmp=readsens
+   tmp=tmp/10
    Temperature = Str(readsens) : Temperature = Format(temperature , "0.0")
 end sub
 
 sub fridge
 
-    if tmp1>maxtmp then
+    if tmp>maxtmp then
        reset motor
        reset fan
        reset out1
        reset out2
     end if
 
-    if tmp1<mintmp then
+    if tmp<mintmp then
        set motor
        set fan
        set out1

@@ -1,6 +1,6 @@
-Report       : m8
-Date         : 09-26-2021
-Time         : 12:33:10
+Report       : my own tm1638
+Date         : 09-29-2021
+Time         : 17:34:11
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,11 +8,11 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : BD2 hex  -> Will fit into ROM
-ROMIMAGE     :  3026 dec
-FLASH USED   :  36  %
+ROMIMAGE     : 10A0 hex  -> Will fit into ROM
+ROMIMAGE     :  4256 dec
+FLASH USED   :  51  %
 BAUD         : 9600 Baud
-XTAL         : 1000000 Hz
+XTAL         : 8000000 Hz
 BAUD error   : 0.16%
 
 Stack start  : 45F hex
@@ -21,7 +21,7 @@ S-Stacksize  : 64 hex
 S-Stackstart : 3FC hex
 Framesize    : 64 hex
 Framestart   : 334 hex
-Space left   :  661  dec
+Space left   :  640  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -94,18 +94,24 @@ COMPARE1B                        Word              0048          72
 ERR                              Bit [2]           0006          6 
 ONN                              Word              0060          96 
 OFFF                             Word              0062          98 
-DS18B20_ID_1                     Byte(9)           0064          100 
-DS18B20_ID_2                     Byte(8)           006D          109 
-ACTION                           Byte              0075          117 
-TEMPERATURE                      String * 6        0082          130 
-SENS1                            String * 6        0089          137 
-SENS2                            String * 6        0090          144 
-UPSIDE                           Bit [7]           0097          151 
-DOWNSIDE                         Bit [6]           0097          151 
-READSENS                         Integer           0098          152 
-TMPREAD                          Bit [5]           0097          151 
-TMP1                             Integer           009A          154 
-I                                Word              009C          156 
+ADS                              Word              0064          100 
+DS18B20_ID_1                     Byte(9)           0066          102 
+DS18B20_ID_2                     Byte(8)           006F          111 
+ACTION                           Byte              0077          119 
+TEMPERATURE                      String * 6        0084          132 
+SENS1                            String * 6        008B          139 
+SENS2                            String * 6        0092          146 
+UPSIDE                           Bit [7]           0099          153 
+DOWNSIDE                         Bit [6]           0099          153 
+SEG                              Byte(8)           009A          154 
+GRID                             Byte(8)           00A2          162 
+J                                Byte              00AA          170 
+READSENS                         Integer           00AB          171 
+TMPREAD                          Bit [5]           0099          153 
+TMP                              Integer           00AD          173 
+SEGMENT                          Byte              00AF          175 
+LIGHT                            Byte              00B0          176 
+I                                Word              00B1          177 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -456,7 +462,7 @@ _ERAMSIZE                        512
 _SIM                             0
 _HUGE                            0
 _BASE                            1
-_XTAL                            1000000
+_XTAL                            8000000
 _BUILD                           20830
 _COMPILER                        90
 _HWMUL                           1
@@ -480,6 +486,7 @@ _XMEGA                           0
 _XTINY                           0
 MAXTMP                           -10
 MINTMP                           -17
+NUM                              8
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -507,7 +514,11 @@ ONN                              not used
 OFFF                             not used
 ACTION                           not used
 SENS2                            not used
+UPSIDE                           not used
+DOWNSIDE                         not used
+J                                not used
 TMPREAD                          not used
+LIGHT                            not used
 
-Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  229 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  302 
+Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  336 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  444 
