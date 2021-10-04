@@ -92,7 +92,8 @@ din Alias Pinc.4
 Declare Sub convert(byval Bdispdata As integer)            'The display can only show numbers
 Declare Sub wrbyte(byval Bdata As Byte)
 declare sub disp
-
+Declare Sub showtext
+dim text as string*5
 Declare Sub dispon()
 Declare Sub Tm1637_off()
 Declare Sub _start()
@@ -180,23 +181,32 @@ stop timer1
   waitus 2
   set stb :set clk:waitus 2: reset stb
   wrbyte &H8F
-  for i=1 to 8
-      'toggle led
-      'waitms 200
-  next
-  wait 1
+  set out1
+  set out2
+  wait 3
+  reset out1
+  reset out2
+  wait 2
 
+  text="HI"
+  showtext
+  set stb :set clk:waitus 2: reset stb
+  wrbyte &H8F
+  wait 3
+  text="   "
+  showtext
 main:
 
 
-
+start timer1
 Do
 'incr tmp
 'temp
 'tmp=tmp*-1
 'tmp=tmp+20
-convert tmp
-waitms 500
+
+
+waitms 10
 'incr i
 'toggle led
 'waitms 50
@@ -221,6 +231,7 @@ stop timer1
 
 
    temp
+   convert tmp
       'disp num
       'dispon
    if tmp>maxtmp then
@@ -237,12 +248,12 @@ stop timer1
        set out2
     end if
 
-    if tmp>-16 and upside=0 and downside=1 then
-      reset out1
-    end if
-    if tmp>-13 and upside=0 and downside=1 then
-      reset out2
-    end if
+    'if tmp>-16 and upside=0 and downside=1 then
+      'reset out1
+   ' end if
+    'if tmp>-13 and upside=0 and downside=1 then
+      'reset out2
+    'end if
 
 
 
@@ -359,6 +370,37 @@ Sub convert (byval Bdispdata As integer)
    disp
 
 End Sub
+
+sub showtext()
+    Local Bcounter As Byte
+   Local Strdisp As String * 3
+    strdisp=text
+   strdisp=format(strdisp,"   ")
+   bcounter=len(strdisp)
+   incr bcounter
+   For i = 1 To bcounter
+      Select Case Asc(strdisp ,bcounter-i)
+                              '.gfedcba
+         Case "0" : segment= &B00111111
+         Case "1" : segment= &B00110000
+         Case "2" : segment= &B01011011
+         Case "3" : segment= &B01111001
+         Case "4" : segment= &B01110100
+         Case "5" : segment= &B01101101
+         Case "6" : segment= &B01101111
+         Case "7" : segment= &B00111100
+         Case "8" : segment= &B01111111
+         Case "9" : segment= &B01111101
+         case "-" : segment= &B01000000                    '-    29
+         Case "H" : segment= &B01110110
+         Case "I" : segment= &B00000110
+         Case Else : segment= &B00000000
+      End Select
+      seg(i)=segment
+
+   Next
+   disp
+end sub
 
 sub disp
          for i=0 to 7

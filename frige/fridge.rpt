@@ -1,6 +1,6 @@
-Report       : my own tm1638
+Report       : fridge
 Date         : 10-04-2021
-Time         : 14:49:58
+Time         : 15:36:47
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1124 hex  -> Will fit into ROM
-ROMIMAGE     :  4388 dec
-FLASH USED   :  53  %
+ROMIMAGE     : 129A hex  -> Will fit into ROM
+ROMIMAGE     :  4762 dec
+FLASH USED   :  58  %
 BAUD         : 9600 Baud
 XTAL         : 8000000 Hz
 BAUD error   : 0.16%
@@ -21,7 +21,7 @@ S-Stacksize  : 64 hex
 S-Stackstart : 3FC hex
 Framesize    : 64 hex
 Framestart   : 334 hex
-Space left   :  640  dec
+Space left   :  634  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -111,7 +111,8 @@ TMPREAD                          Bit [5]           0099          153
 TMP                              Integer           00AD          173 
 SEGMENT                          Byte              00AF          175 
 LIGHT                            Byte              00B0          176 
-I                                Word              00B1          177 
+TEXT                             String * 5        00B1          177 
+I                                Word              00B7          183 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -514,9 +515,13 @@ ONN                              not used
 OFFF                             not used
 ACTION                           not used
 SENS2                            not used
+UPSIDE                           not used
+DOWNSIDE                         not used
 J                                not used
 TMPREAD                          not used
 LIGHT                            not used
 
-Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  336 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  444 
+Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  347 
+Source string could be too big to fit into target string [TEXT>STRDISP]  in line  376 
+Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  377 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  486 
