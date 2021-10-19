@@ -7,7 +7,7 @@ A=
 C=
 D=6/29/2021
 Files=1
-OpenedFiles=4
+OpenedFiles=3
 OF1=panel.c
 Active1=1
 DebugOutputListFilesDirectory=Debug\List
@@ -18,7 +18,7 @@ OutputListFilesDirectory=Release\List
 OutputObjectFilesDirectory=Release
 OutputExecutableFilesDirectory=Release\Exe
 OutputLinkerFilesDirectory=Release\Exe
-AllowDisplayFunctionCallTree=1
+AllowDisplayFunctionCallTree=0
 CleanUp=2
 EditorPanelMode=0
 ActiveEditorPanel=0
@@ -26,32 +26,32 @@ Active0=0
 EditorPanel0=0
 PageIndex0=0
 EditorPanel1=0
-TimeStamp1=1396014125
+TimeStamp1=1397918153
 PageIndex1=1
-OF2=defines.c
+OF2=configall.h
 Active2=0
 EditorPanel2=0
-TimeStamp2=1395888540
+TimeStamp2=1397916148
 PageIndex2=2
-OF3=calender.h
+OF3=defines.c
 Active3=0
 EditorPanel3=0
-TimeStamp3=1395683488
+TimeStamp3=1395886492
 PageIndex3=3
 OF4=days.c
 Active4=0
 EditorPanel4=0
-TimeStamp4=1395624585
+TimeStamp4=1395622537
 PageIndex4=4
-OF5=defines.c
+OF5=clockchange.h
 Active5=0
 EditorPanel5=0
-TimeStamp5=1395888540
+TimeStamp5=1397910491
 PageIndex5=5
-OF6=C:\cvavr\inc\graphics.h
+OF6=clockread.h
 Active6=0
 EditorPanel6=0
-TimeStamp6=1392800911
+TimeStamp6=1397913703
 PageIndex6=6
 OF7=C:\cvavr\inc\ds1307.h
 Active7=0
@@ -101,7 +101,7 @@ ExternalStartupFileWarning=0
 BitVariablesSize=16
 UseHiGPIORbit=0
 StackEndMarkers=0
-Warnings=1
+Warnings=0
 WarningConstantRange=0
 WarningPossibleLossOfPrecision=0
 WarningArrayIndex=1
@@ -162,9 +162,9 @@ DebugBootLoader=0
 WatchAVR8LAutoVariables=0
 UseEEPROMLocation0=1
 RebuildAll=0
-LinkageInformationPresent=1
-COFFileTimeStamp=1396014127
-Build=467
+LinkageInformationPresent=0
+COFFileTimeStamp=-1
+Build=556
 [DefinedSymbolsDebug]
 Count=0
 [Compiler]
@@ -266,7 +266,7 @@ UseEEPROMLocation0=1
 RebuildAll=1
 LinkageInformationPresent=0
 COFFileTimeStamp=-1
-Build=467
+Build=556
 IncludePath0=
 IncludePath1=
 IncludePath2=
@@ -439,10 +439,10 @@ UserProgPath=
 UserProgCmdLine=
 UserProgWorkDir=
 [AfterMake]
-ProgrammChip=0
+ProgrammChip=1
 MergeROMFile=0
 ROMFilePath=
-SCKFrequency=6478
+SCKFrequency=15360
 LockBits=0
 BootLockBits0=0
 BootLockBits1=0
@@ -497,14 +497,14 @@ Fuse46=0
 Fuse47=0
 Fuse48=0
 CheckSignature=1
-CheckErasure=1
+CheckErasure=0
 PreserveEEPROM=0
 VerifyProgramming=1
 ProgrammingCounter=0
-RunUserProg=0
-UserProgPath=C:\Users\Barouei\Downloads\Compressed\codevision usbasp\USBASP\pgm.bat
+RunUserProg=1
+UserProgPath=C:\cvavr\USBASP\pgm.bat
 UserProgCmdLine=m32 %h
-UserProgWorkDir=C:\Users\Barouei\Desktop\Bms\sazman
+UserProgWorkDir=
 [BuildInfoCompiler]
 L1=Build configuration: Debug
 L2=Chip: ATmega32A
@@ -522,52 +522,52 @@ L13=Enhanced function parameters passing: Yes
 L14=Automatic register allocation: Yes
 L15=Smart register allocation: Yes
 L16=
-L17=Build: 466
-L18=25275 line(s) compiled
+L17=Build: 556
+L18=5572 line(s) compiled
 L19=No errors
-L20=13 warning(s)
+L20=No warnings
 L21=
-L22=Bit variables area: 0x2 to 0x2
-L23=Bit variables size: 1 byte(s)
-L24=
-L25=Data Stack area: 0x60 to 0x25F
-L26=Data Stack size: 512 byte(s)
-L27=Estimated Data Stack usage: 139 byte(s)
-L28=
-L29=RAM Global variables area: 0x260 to 0x321
-L30=RAM Global variables size: 194 byte(s)
-L31=
-L32=Hardware Stack area: 0x322 to 0x85F
-L33=Hardware Stack size: 1342 byte(s)
+L22=Bit variables size: 0 byte(s)
+L23=
+L24=Data Stack area: 0x60 to 0x25F
+L25=Data Stack size: 512 byte(s)
+L26=Estimated Data Stack usage: 139 byte(s)
+L27=
+L28=RAM Global variables size: 0 byte(s)
+L29=
+L30=Hardware Stack area: 0x260 to 0x85F
+L31=Hardware Stack size: 1536 byte(s)
+L32=
+L33=Heap size: 0 byte(s)
 L34=
 L35=Heap size: 0 byte(s)
 L36=
 L37=EEPROM usage: 0 byte(s), 0.0% of EEPROM
-L38=Program size: 8176 words (16352 bytes), 49.9% of FLASH
-L39=498 words (996 bytes), 5.7% reduced by Code Compression
-Lines=39
+L38=Program size: 8396 words (16792 bytes), 51.2% of FLASH
+L39=539 words (1078 bytes), 6.0% reduced by Code Compression
+Lines=34
 [BuildInfoAssembler]
 L1=AVRASM: AVR macro assembler 2.1.30 (build 592 Nov  7 2008 12:38:17)
 L2=Copyright (C) 1995-2008 ATMEL Corporation
 L3=
-L4=C:\Users\Barouei\Desktop\Bms\sazman\Debug\List\panel.asm(10462): No EEPROM data, deleting C:\Users\Barouei\Desktop\Bms\sazman\Debug\Exe\panel.eep
+L4=C:\Users\Barouei\Desktop\Bms\sazman\Debug\List\panel.asm(10497): No EEPROM data, deleting C:\Users\Barouei\Desktop\Bms\sazman\Debug\Exe\panel.eep
 L5=
 L6=ATmega32A memory use summary [bytes]:
 L7=Segment   Begin    End      Code   Data   Used    Size   Use%
 L8=---------------------------------------------------------------
-L9=[.cseg] 0x000000 0x003fe0  11320   5032  16352   32768  49.9%
+L9=[.cseg] 0x000000 0x004198  11234   5558  16792   32768  51.2%
 L10=[.dseg] 0x000060 0x000322      0    194    194    2048   9.5%
 L11=[.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 L12=
-Lines=12
+Lines=0
 [Bookmarks0]
 Row=0
 Column=0
 ScrollPosX=0
 ScrollPosY=0
-TimeStamp=1396015516
+TimeStamp=1397918221
 [BookmarksFoldedCode]
-Files=35
+Files=36
 F1=panel.c
 F2=C:\cvavr\inc\glcd_st7920.h
 F3=C:\cvavr\inc\graphics.h
@@ -603,12 +603,13 @@ F32=tempread.h
 F33=C:\cvavr\inc\stdarg.h
 F34=calender.h
 F35=days.c
+F36=C:\cvavr\inc\io.h
 [Bookmarks1]
-TimeStamp=1396014125
-Row=81
-Column=31
+TimeStamp=1397918153
+Row=91
+Column=22
 ScrollPosX=0
-ScrollPosY=71
+ScrollPosY=81
 BK0=-1
 BK1=-1
 BK2=-1
@@ -879,11 +880,11 @@ BK9=-1
 [FoldedCode16]
 Blocks=0
 [Bookmarks17]
-TimeStamp=1395888540
-Row=16
-Column=19
+TimeStamp=1395886492
+Row=37
+Column=46
 ScrollPosX=0
-ScrollPosY=3
+ScrollPosY=12
 BK0=-1
 BK1=-1
 BK2=-1
@@ -1041,11 +1042,11 @@ BK9=-1
 [FoldedCode25]
 Blocks=0
 [Bookmarks26]
-TimeStamp=1395551187
-Row=3
-Column=6
+TimeStamp=1397916148
+Row=28
+Column=0
 ScrollPosX=0
-ScrollPosY=78
+ScrollPosY=72
 BK0=-1
 BK1=-1
 BK2=-1
@@ -1075,11 +1076,11 @@ BK9=-1
 [FoldedCode27]
 Blocks=0
 [Bookmarks28]
-TimeStamp=1395557907
-Row=43
-Column=11
+TimeStamp=1397910491
+Row=120
+Column=28
 ScrollPosX=0
-ScrollPosY=33
+ScrollPosY=72
 BK0=-1
 BK1=-1
 BK2=-1
@@ -1091,9 +1092,9 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks29]
-TimeStamp=1395557698
-Row=17
-Column=29
+TimeStamp=1397913703
+Row=19
+Column=43
 ScrollPosX=0
 ScrollPosY=0
 BK0=-1
@@ -1128,8 +1129,6 @@ BK8=-1
 BK9=-1
 [FoldedCode30]
 Blocks=0
-[FoldedCode28]
-Blocks=0
 [Bookmarks31]
 TimeStamp=1395619424
 Row=0
@@ -1147,8 +1146,6 @@ BK7=-1
 BK8=-1
 BK9=-1
 [FoldedCode31]
-Blocks=0
-[FoldedCode29]
 Blocks=0
 [Bookmarks32]
 TimeStamp=1395621616
@@ -1191,9 +1188,9 @@ BK9=-1
 [FoldedCode33]
 Blocks=0
 [Bookmarks34]
-TimeStamp=1395683488
-Row=9
-Column=0
+TimeStamp=1395681440
+Row=7
+Column=17
 ScrollPosX=0
 ScrollPosY=0
 BK0=-1
@@ -1211,18 +1208,16 @@ Blocks=0
 [FoldedCode2]
 Line1=68
 Blocks=1
-[FoldedCode26]
-Blocks=0
 [FoldedCode3]
 Blocks=0
 [FoldedCode4]
 Blocks=0
 [Bookmarks35]
-TimeStamp=1395624585
-Row=55
-Column=100
+TimeStamp=1395622537
+Row=0
+Column=0
 ScrollPosX=0
-ScrollPosY=9
+ScrollPosY=0
 BK0=-1
 BK1=-1
 BK2=-1
@@ -1233,6 +1228,38 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
+[Bookmarks36]
+TimeStamp=1132885423
+Row=0
+Column=0
+ScrollPosX=0
+ScrollPosY=12
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode36]
+Blocks=0
+[FoldedCode29]
+Blocks=0
+[FoldedCode28]
+Blocks=0
+[FoldedCode35]
+Blocks=0
+[FoldedCode34]
+Blocks=0
+[FoldedCode1]
+Blocks=0
+[FoldedCode17]
+Blocks=0
+[FoldedCode26]
+Blocks=0
 [HeadersList]
 Files=1
 F1=C:\Users\Barouei\Desktop\Bms\sazman\panel.c
@@ -1270,11 +1297,3 @@ F29=clockchange.h
 F30=clockread.h
 F31=calender.h
 F32=configall.h
-[FoldedCode1]
-Blocks=0
-[FoldedCode35]
-Blocks=0
-[FoldedCode34]
-Blocks=0
-[FoldedCode17]
-Blocks=0

@@ -8,7 +8,7 @@ void readclock(void){
           lcd_gotoxy(0,1);
           lcd_puts(strsec); 
           rtc_get_date(&_wday,&_day,&_month,&_year);
-          _wday--;
+          //_wday--;
           sh_year=_year+1400;
           sprintf(strsec,"%4d/%02d/%02d",sh_year,_month,_day);
           lcd_gotoxy(0,0);
@@ -20,4 +20,11 @@ void readclock(void){
           strcpy(strsec,_weekday[_wday]);
           lcd_gotoxy(11,0);
           lcd_puts(strsec);
+          lcd_gotoxy(9,2);
+          lcd_puts(state); 
+          
+
+                          
+          //if (state=="cooler")glcd_putimagef(0,32,scooler,1);
+          //if (state=="heater")glcd_putimagef(0,32,sheater,1);
 }          

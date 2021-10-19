@@ -20,4 +20,10 @@ void readclock(void){
           strcpy(strsec,_weekday[_wday]);
           lcd_gotoxy(11,0);
           lcd_puts(strsec);
+ 
+          
+
+                          
+          //if (state=="cooler")glcd_putimagef(0,32,scooler,1);
+          //if (state=="heater")glcd_putimagef(0,32,sheater,1);
 }          
