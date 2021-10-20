@@ -26,11 +26,26 @@
            
     bit blank=false,issame;
     byte selection,j;
-    char lsec,str[10],state[7]="cooler",buffer[16];
+    char lsec,str[10],state=0,buffer[16];
     float temp;
     unsigned char ds1820_rom_codes[MAX_DS1820][9]; 
+    
+    unsigned char outs;
+    
+    eeprom char onmin,offmin,onhour,offhour,edays;
  
+    
 
+        bit chiller;
+        bit heateng;
+        bit motor;
+        bit non3;
+        bit non4;
+        bit non5;
+        bit non6;
+        bit non7;                                                 
+
+        
 
    
     #include "logo.c"
