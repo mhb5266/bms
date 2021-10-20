@@ -696,15 +696,27 @@
 ;    float temp;
 ;    unsigned char ds1820_rom_codes[MAX_DS1820][9];
 ;
-;    unsigned char outs;
+;    char outs[9];
 ;
-;    eeprom char onmin,offmin,onhour,offhour,edays;
-;
-;
-;
+;    eeprom char onhour=15,offhour=15,onmin=45,offmin=47,edays;
+; /*
+;    struct outs{
 ;        bit chiller;
 ;        bit heateng;
 ;        bit motor;
+;        bit non3;
+;        bit non4;
+;        bit non5;
+;        bit non6;
+;        bit non7;
+;    }
+; */
+;
+;
+;
+;        bit motor;
+;        bit heateng;
+;        bit chiller;
 ;        bit non3;
 ;        bit non4;
 ;        bit non5;
@@ -3859,109 +3871,74 @@ _0x55:
 ; 0000 00A7                     }
 ;PCODE: $000004C1 VOL: 0
 ; 0000 00A8 
-; 0000 00A9 
-; 0000 00AA                 }
+; 0000 00A9                    outs[1]=motor;
 ;PCODE: $000004C2 VOL: 0
-; 0000 00AB 
-; 0000 00AC                 /*
-; 0000 00AD                 issame=0;
-; 0000 00AE                 issame=strcmpf(state,"cooler");
-; 0000 00AF                 if (issame==1)glcd_putimagef(0,32,sheater,1);
-; 0000 00B0                 //sprintf(str,"%02d",issame);
-; 0000 00B1                 //lcd_puts(str);
-; 0000 00B2                 //lcd_puts(state);
-; 0000 00B3                 //delay_ms(1000);
-; 0000 00B4                 //glcd_clear();
-; 0000 00B5                 issame=0;
-; 0000 00B6                 issame=strcmpf(state,"heater");
-; 0000 00B7                 if(issame==1)glcd_putimagef(0,32,scooler,1);
-; 0000 00B8                 */
-; 0000 00B9               }
 ;PCODE: $000004C3 VOL: 0
-; 0000 00BA 
-; 0000 00BB               readtemp();
 ;PCODE: $000004C4 VOL: 0
 ;PCODE: $000004C5 VOL: 0
-; 0000 00BC               sprintf(str,"%2.1f%`C",temp);
 ;PCODE: $000004C6 VOL: 0
+; 0000 00AA                    outs[2]=heateng;
 ;PCODE: $000004C7 VOL: 0
 ;PCODE: $000004C8 VOL: 0
 ;PCODE: $000004C9 VOL: 0
 ;PCODE: $000004CA VOL: 0
+; 0000 00AB                    outs[3]=chiller;
 ;PCODE: $000004CB VOL: 0
 ;PCODE: $000004CC VOL: 0
 ;PCODE: $000004CD VOL: 0
 ;PCODE: $000004CE VOL: 0
+; 0000 00AC                    outs[4]=non3;
 ;PCODE: $000004CF VOL: 0
 ;PCODE: $000004D0 VOL: 0
-; 0000 00BD               //sprintf(buffer,"Temp=%2.1f%`C",temp);
-; 0000 00BE               lcd_gotoxy(10,1);
 ;PCODE: $000004D1 VOL: 0
 ;PCODE: $000004D2 VOL: 0
+; 0000 00AD                    outs[5]=non4;
 ;PCODE: $000004D3 VOL: 0
 ;PCODE: $000004D4 VOL: 0
-; 0000 00BF               lcd_puts(str);
 ;PCODE: $000004D5 VOL: 0
 ;PCODE: $000004D6 VOL: 0
-; 0000 00C0 
-; 0000 00C1               //_wday=readcalender(_year);
-; 0000 00C2 
-; 0000 00C3               //glcd_display(1);
-; 0000 00C4               //lcd_putsf("hi")
-; 0000 00C5 
-; 0000 00C6 
-; 0000 00C7 
-; 0000 00C8 
-; 0000 00C9               if(up==0){
+; 0000 00AE                    outs[6]=non5;
 ;PCODE: $000004D7 VOL: 0
 ;PCODE: $000004D8 VOL: 0
 ;PCODE: $000004D9 VOL: 0
-; 0000 00CA                 j=0;
 ;PCODE: $000004DA VOL: 0
+; 0000 00AF                    outs[7]=non6;
 ;PCODE: $000004DB VOL: 0
-; 0000 00CB 
-; 0000 00CC                 do{
 ;PCODE: $000004DC VOL: 0
-; 0000 00CD                   delay_ms(25);
 ;PCODE: $000004DD VOL: 0
 ;PCODE: $000004DE VOL: 0
+; 0000 00B0                    outs[8]=non7;
 ;PCODE: $000004DF VOL: 0
-; 0000 00CE                   j++;
 ;PCODE: $000004E0 VOL: 0
 ;PCODE: $000004E1 VOL: 0
 ;PCODE: $000004E2 VOL: 0
-; 0000 00CF                    if (j==80) {
+; 0000 00B1 
+; 0000 00B2                    for (j=1;j<9;j++){
 ;PCODE: $000004E3 VOL: 0
 ;PCODE: $000004E4 VOL: 0
 ;PCODE: $000004E5 VOL: 0
-; 0000 00D0                         glcd_clear();
 ;PCODE: $000004E6 VOL: 0
-; 0000 00D1                         state=1;
 ;PCODE: $000004E7 VOL: 0
 ;PCODE: $000004E8 VOL: 0
-; 0000 00D2                         glcd_putimagef(0,0,heater,0);
 ;PCODE: $000004E9 VOL: 0
 ;PCODE: $000004EA VOL: 0
 ;PCODE: $000004EB VOL: 0
 ;PCODE: $000004EC VOL: 0
+; 0000 00B3                      printf("*ID= %2d #",outs[j]);
 ;PCODE: $000004ED VOL: 0
 ;PCODE: $000004EE VOL: 0
 ;PCODE: $000004EF VOL: 0
 ;PCODE: $000004F0 VOL: 0
-; 0000 00D3                     }
-; 0000 00D4                 }
 ;PCODE: $000004F1 VOL: 0
-; 0000 00D5                 while(up==0);
 ;PCODE: $000004F2 VOL: 0
 ;PCODE: $000004F3 VOL: 0
 ;PCODE: $000004F4 VOL: 0
 ;PCODE: $000004F5 VOL: 0
 ;PCODE: $000004F6 VOL: 0
 ;PCODE: $000004F7 VOL: 0
-; 0000 00D6                 glcd_clear();
 ;PCODE: $000004F8 VOL: 0
-; 0000 00D7                 glcd_putimagef(0,32,sheater,0);
 ;PCODE: $000004F9 VOL: 0
+; 0000 00B4                      sprintf(str,"id=%2d  %2d",outs[j],j);
 ;PCODE: $000004FA VOL: 0
 ;PCODE: $000004FB VOL: 0
 ;PCODE: $000004FC VOL: 0
@@ -3969,92 +3946,111 @@ _0x55:
 ;PCODE: $000004FE VOL: 0
 ;PCODE: $000004FF VOL: 0
 ;PCODE: $00000500 VOL: 0
-; 0000 00D8               }
-; 0000 00D9 
-; 0000 00DA               if(down==0){
 ;PCODE: $00000501 VOL: 0
 ;PCODE: $00000502 VOL: 0
 ;PCODE: $00000503 VOL: 0
 ;PCODE: $00000504 VOL: 0
-; 0000 00DB                 j=0;
 ;PCODE: $00000505 VOL: 0
 ;PCODE: $00000506 VOL: 0
-; 0000 00DC                 do{
 ;PCODE: $00000507 VOL: 0
-; 0000 00DD                   delay_ms(25);
 ;PCODE: $00000508 VOL: 0
 ;PCODE: $00000509 VOL: 0
 ;PCODE: $0000050A VOL: 0
-; 0000 00DE                   j++;
 ;PCODE: $0000050B VOL: 0
+; 0000 00B5                      lcd_clear();
 ;PCODE: $0000050C VOL: 0
+; 0000 00B6                      lcd_puts(str);
 ;PCODE: $0000050D VOL: 0
-; 0000 00DF                    if (j==80) {
 ;PCODE: $0000050E VOL: 0
+; 0000 00B7                      delay_ms(3000);
 ;PCODE: $0000050F VOL: 0
 ;PCODE: $00000510 VOL: 0
-; 0000 00E0                         glcd_clear();
+; 0000 00B8                    }
 ;PCODE: $00000511 VOL: 0
-; 0000 00E1                         state=2;
 ;PCODE: $00000512 VOL: 0
 ;PCODE: $00000513 VOL: 0
-; 0000 00E2                         glcd_putimagef(0,0,cooler,0);
 ;PCODE: $00000514 VOL: 0
 ;PCODE: $00000515 VOL: 0
 ;PCODE: $00000516 VOL: 0
+; 0000 00B9                 }
+; 0000 00BA 
+; 0000 00BB                 /*
+; 0000 00BC                 issame=0;
+; 0000 00BD                 issame=strcmpf(state,"cooler");
+; 0000 00BE                 if (issame==1)glcd_putimagef(0,32,sheater,1);
+; 0000 00BF                 //sprintf(str,"%02d",issame);
+; 0000 00C0                 //lcd_puts(str);
+; 0000 00C1                 //lcd_puts(state);
+; 0000 00C2                 //delay_ms(1000);
+; 0000 00C3                 //glcd_clear();
+; 0000 00C4                 issame=0;
+; 0000 00C5                 issame=strcmpf(state,"heater");
+; 0000 00C6                 if(issame==1)glcd_putimagef(0,32,scooler,1);
+; 0000 00C7                 */
+; 0000 00C8               }
 ;PCODE: $00000517 VOL: 0
+; 0000 00C9 
+; 0000 00CA               readtemp();
 ;PCODE: $00000518 VOL: 0
 ;PCODE: $00000519 VOL: 0
+; 0000 00CB               sprintf(str,"%2.1f%`C",temp);
 ;PCODE: $0000051A VOL: 0
 ;PCODE: $0000051B VOL: 0
-; 0000 00E3                     }
-; 0000 00E4                 }
 ;PCODE: $0000051C VOL: 0
-; 0000 00E5                 while(down==0);
 ;PCODE: $0000051D VOL: 0
 ;PCODE: $0000051E VOL: 0
 ;PCODE: $0000051F VOL: 0
 ;PCODE: $00000520 VOL: 0
 ;PCODE: $00000521 VOL: 0
 ;PCODE: $00000522 VOL: 0
-; 0000 00E6                 glcd_clear();
 ;PCODE: $00000523 VOL: 0
-; 0000 00E7                 glcd_putimagef(0,32,scooler,0);
 ;PCODE: $00000524 VOL: 0
+; 0000 00CC               //sprintf(buffer,"Temp=%2.1f%`C",temp);
+; 0000 00CD               lcd_gotoxy(10,1);
 ;PCODE: $00000525 VOL: 0
 ;PCODE: $00000526 VOL: 0
 ;PCODE: $00000527 VOL: 0
 ;PCODE: $00000528 VOL: 0
+; 0000 00CE               lcd_puts(str);
 ;PCODE: $00000529 VOL: 0
 ;PCODE: $0000052A VOL: 0
+; 0000 00CF 
+; 0000 00D0               //_wday=readcalender(_year);
+; 0000 00D1 
+; 0000 00D2               //glcd_display(1);
+; 0000 00D3               //lcd_putsf("hi")
+; 0000 00D4 
+; 0000 00D5 
+; 0000 00D6 
+; 0000 00D7 
+; 0000 00D8               if(up==0){
 ;PCODE: $0000052B VOL: 0
-; 0000 00E8               }
-; 0000 00E9 
-; 0000 00EA               if(menu==0){
 ;PCODE: $0000052C VOL: 0
 ;PCODE: $0000052D VOL: 0
+; 0000 00D9                 j=0;
 ;PCODE: $0000052E VOL: 0
 ;PCODE: $0000052F VOL: 0
-; 0000 00EB                 j=0;
+; 0000 00DA 
+; 0000 00DB                 do{
 ;PCODE: $00000530 VOL: 0
+; 0000 00DC                   delay_ms(25);
 ;PCODE: $00000531 VOL: 0
-; 0000 00EC                 do{
 ;PCODE: $00000532 VOL: 0
-; 0000 00ED                   delay_ms(25);
 ;PCODE: $00000533 VOL: 0
+; 0000 00DD                   j++;
 ;PCODE: $00000534 VOL: 0
 ;PCODE: $00000535 VOL: 0
-; 0000 00EE                   j++;
 ;PCODE: $00000536 VOL: 0
+; 0000 00DE                    if (j==80) {
 ;PCODE: $00000537 VOL: 0
 ;PCODE: $00000538 VOL: 0
-; 0000 00EF                    if (j==80) {
 ;PCODE: $00000539 VOL: 0
+; 0000 00DF                         glcd_clear();
 ;PCODE: $0000053A VOL: 0
+; 0000 00E0                         state=1;
 ;PCODE: $0000053B VOL: 0
-; 0000 00F0                         glcd_clear();
 ;PCODE: $0000053C VOL: 0
-; 0000 00F1                         glcd_putimagef(0,0,settingicon2,1);
+; 0000 00E1                         glcd_putimagef(0,0,heater,0);
 ;PCODE: $0000053D VOL: 0
 ;PCODE: $0000053E VOL: 0
 ;PCODE: $0000053F VOL: 0
@@ -4063,41 +4059,156 @@ _0x55:
 ;PCODE: $00000542 VOL: 0
 ;PCODE: $00000543 VOL: 0
 ;PCODE: $00000544 VOL: 0
-; 0000 00F2                     }
-; 0000 00F3                     if(j==100){
+; 0000 00E2                     }
+; 0000 00E3                 }
 ;PCODE: $00000545 VOL: 0
+; 0000 00E4                 while(up==0);
 ;PCODE: $00000546 VOL: 0
 ;PCODE: $00000547 VOL: 0
 ;PCODE: $00000548 VOL: 0
-; 0000 00F4                         glcd_clear();
 ;PCODE: $00000549 VOL: 0
-; 0000 00F5                         changeclock();
 ;PCODE: $0000054A VOL: 0
-; 0000 00F6                     }
-; 0000 00F7                 }
 ;PCODE: $0000054B VOL: 0
-; 0000 00F8                 while(menu==0);
+; 0000 00E5                 glcd_clear();
 ;PCODE: $0000054C VOL: 0
+; 0000 00E6                 glcd_putimagef(0,32,sheater,0);
 ;PCODE: $0000054D VOL: 0
 ;PCODE: $0000054E VOL: 0
 ;PCODE: $0000054F VOL: 0
 ;PCODE: $00000550 VOL: 0
 ;PCODE: $00000551 VOL: 0
-; 0000 00F9                 glcd_clear();
 ;PCODE: $00000552 VOL: 0
-; 0000 00FA               }
-; 0000 00FB 
-; 0000 00FC 
-; 0000 00FD 
-; 0000 00FE         }
 ;PCODE: $00000553 VOL: 0
 ;PCODE: $00000554 VOL: 0
+; 0000 00E7               }
+; 0000 00E8 
+; 0000 00E9               if(down==0){
 ;PCODE: $00000555 VOL: 0
-; 0000 00FF     }
 ;PCODE: $00000556 VOL: 0
 ;PCODE: $00000557 VOL: 0
 ;PCODE: $00000558 VOL: 0
+; 0000 00EA                 j=0;
 ;PCODE: $00000559 VOL: 0
+;PCODE: $0000055A VOL: 0
+; 0000 00EB                 do{
+;PCODE: $0000055B VOL: 0
+; 0000 00EC                   delay_ms(25);
+;PCODE: $0000055C VOL: 0
+;PCODE: $0000055D VOL: 0
+;PCODE: $0000055E VOL: 0
+; 0000 00ED                   j++;
+;PCODE: $0000055F VOL: 0
+;PCODE: $00000560 VOL: 0
+;PCODE: $00000561 VOL: 0
+; 0000 00EE                    if (j==80) {
+;PCODE: $00000562 VOL: 0
+;PCODE: $00000563 VOL: 0
+;PCODE: $00000564 VOL: 0
+; 0000 00EF                         glcd_clear();
+;PCODE: $00000565 VOL: 0
+; 0000 00F0                         state=2;
+;PCODE: $00000566 VOL: 0
+;PCODE: $00000567 VOL: 0
+; 0000 00F1                         glcd_putimagef(0,0,cooler,0);
+;PCODE: $00000568 VOL: 0
+;PCODE: $00000569 VOL: 0
+;PCODE: $0000056A VOL: 0
+;PCODE: $0000056B VOL: 0
+;PCODE: $0000056C VOL: 0
+;PCODE: $0000056D VOL: 0
+;PCODE: $0000056E VOL: 0
+;PCODE: $0000056F VOL: 0
+; 0000 00F2                     }
+; 0000 00F3                 }
+;PCODE: $00000570 VOL: 0
+; 0000 00F4                 while(down==0);
+;PCODE: $00000571 VOL: 0
+;PCODE: $00000572 VOL: 0
+;PCODE: $00000573 VOL: 0
+;PCODE: $00000574 VOL: 0
+;PCODE: $00000575 VOL: 0
+;PCODE: $00000576 VOL: 0
+; 0000 00F5                 glcd_clear();
+;PCODE: $00000577 VOL: 0
+; 0000 00F6                 glcd_putimagef(0,32,scooler,0);
+;PCODE: $00000578 VOL: 0
+;PCODE: $00000579 VOL: 0
+;PCODE: $0000057A VOL: 0
+;PCODE: $0000057B VOL: 0
+;PCODE: $0000057C VOL: 0
+;PCODE: $0000057D VOL: 0
+;PCODE: $0000057E VOL: 0
+;PCODE: $0000057F VOL: 0
+; 0000 00F7               }
+; 0000 00F8 
+; 0000 00F9               if(menu==0){
+;PCODE: $00000580 VOL: 0
+;PCODE: $00000581 VOL: 0
+;PCODE: $00000582 VOL: 0
+;PCODE: $00000583 VOL: 0
+; 0000 00FA                 j=0;
+;PCODE: $00000584 VOL: 0
+;PCODE: $00000585 VOL: 0
+; 0000 00FB                 do{
+;PCODE: $00000586 VOL: 0
+; 0000 00FC                   delay_ms(25);
+;PCODE: $00000587 VOL: 0
+;PCODE: $00000588 VOL: 0
+;PCODE: $00000589 VOL: 0
+; 0000 00FD                   j++;
+;PCODE: $0000058A VOL: 0
+;PCODE: $0000058B VOL: 0
+;PCODE: $0000058C VOL: 0
+; 0000 00FE                    if (j==80) {
+;PCODE: $0000058D VOL: 0
+;PCODE: $0000058E VOL: 0
+;PCODE: $0000058F VOL: 0
+; 0000 00FF                         glcd_clear();
+;PCODE: $00000590 VOL: 0
+; 0000 0100                         glcd_putimagef(0,0,settingicon2,1);
+;PCODE: $00000591 VOL: 0
+;PCODE: $00000592 VOL: 0
+;PCODE: $00000593 VOL: 0
+;PCODE: $00000594 VOL: 0
+;PCODE: $00000595 VOL: 0
+;PCODE: $00000596 VOL: 0
+;PCODE: $00000597 VOL: 0
+;PCODE: $00000598 VOL: 0
+; 0000 0101                     }
+; 0000 0102                     if(j==100){
+;PCODE: $00000599 VOL: 0
+;PCODE: $0000059A VOL: 0
+;PCODE: $0000059B VOL: 0
+;PCODE: $0000059C VOL: 0
+; 0000 0103                         glcd_clear();
+;PCODE: $0000059D VOL: 0
+; 0000 0104                         changeclock();
+;PCODE: $0000059E VOL: 0
+; 0000 0105                     }
+; 0000 0106                 }
+;PCODE: $0000059F VOL: 0
+; 0000 0107                 while(menu==0);
+;PCODE: $000005A0 VOL: 0
+;PCODE: $000005A1 VOL: 0
+;PCODE: $000005A2 VOL: 0
+;PCODE: $000005A3 VOL: 0
+;PCODE: $000005A4 VOL: 0
+;PCODE: $000005A5 VOL: 0
+; 0000 0108                 glcd_clear();
+;PCODE: $000005A6 VOL: 0
+; 0000 0109               }
+; 0000 010A 
+; 0000 010B 
+; 0000 010C 
+; 0000 010D         }
+;PCODE: $000005A7 VOL: 0
+;PCODE: $000005A8 VOL: 0
+;PCODE: $000005A9 VOL: 0
+; 0000 010E     }
+;PCODE: $000005AA VOL: 0
+;PCODE: $000005AB VOL: 0
+;PCODE: $000005AC VOL: 0
+;PCODE: $000005AD VOL: 0
 
 	.DSEG
 _0x63:

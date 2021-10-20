@@ -166,7 +166,22 @@ void main(void)
                         }                                                                    
                     }  
                          
-                       
+                   outs[1]=motor;
+                   outs[2]=heateng;
+                   outs[3]=chiller;
+                   outs[4]=non3;
+                   outs[5]=non4;
+                   outs[6]=non5;
+                   outs[7]=non6;
+                   outs[8]=non7;
+                   
+                   for (j=1;j<9;j++){
+                     printf("*ID= %2d #",outs[j]);
+                     sprintf(str,"id=%2d  %2d",outs[j],j);
+                     lcd_clear();
+                     lcd_puts(str);
+                     delay_ms(3000);
+                   }                                                                                                                                         
                 }
                 
                 /*

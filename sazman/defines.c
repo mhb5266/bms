@@ -30,15 +30,27 @@
     float temp;
     unsigned char ds1820_rom_codes[MAX_DS1820][9]; 
     
-    unsigned char outs;
+    char outs[9];
     
-    eeprom char onmin,offmin,onhour,offhour,edays;
- 
-    
-
+    eeprom char onhour=15,offhour=15,onmin=45,offmin=47,edays;
+ /*
+    struct outs{
         bit chiller;
         bit heateng;
         bit motor;
+        bit non3;
+        bit non4;
+        bit non5;
+        bit non6;
+        bit non7;      
+    }     
+ */
+ 
+ 
+
+        bit motor;
+        bit heateng;
+        bit chiller;
         bit non3;
         bit non4;
         bit non5;
