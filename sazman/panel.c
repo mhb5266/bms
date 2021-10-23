@@ -32,6 +32,7 @@ unsigned char ds1820_rom_codes[MAX_DS1820][9];
 #include "clockchange.h"
 #include "clockread.h"
 #include "calender.h"
+#include "settingmenu.h"
 // Declare your global variables here
 
 // Timer1 overflow interrupt service routine                                                                
@@ -164,8 +165,50 @@ void main(void)
                             heateng=0;
                             chiller=0;
                         }                                                                    
-                    }  
-                         
+                    }      
+                    
+                    if (onhour==_hour & onmin==_min){
+                                            
+                            printf("*Motor >> ON #");
+                            delay_ms(3000);
+                            
+                            printf("*Chiller >> ON #");
+                            delay_ms(3000);
+                            
+                            printf("*Heater >> ON #");
+                            delay_ms(3000);                                                        
+                      
+                    }
+                    
+                    if (offhour==_hour & offmin==_min){
+                            printf("*Motor >> OFF #");
+                            delay_ms(3000);
+                            
+                            printf("*Chiller >> OFF #");
+                            delay_ms(3000);
+                            
+                            printf("*Heater >> OFF #");
+                            delay_ms(3000);  
+                    }                        
+                    /*
+                    if (onhour==_hour & onmin==_min){
+                        for (j=1;j<9;j++){
+                            printf("*ID= %02d #",j);
+                            delay_ms(1000);
+                        }
+                    }
+                    
+                    if (offhour==_hour & offmin==_min){
+                        for (j=10;j<19;j++){
+                            printf("*ID= %02d #",j);
+                            delay_ms(1000);
+                        }
+                    } 
+                    */  
+                    
+                                  
+                   
+                /*      
                    outs[1]=motor;
                    outs[2]=heateng;
                    outs[3]=chiller;
@@ -181,7 +224,8 @@ void main(void)
                      lcd_clear();
                      lcd_puts(str);
                      delay_ms(3000);
-                   }                                                                                                                                         
+                   }
+                   */                                                                                                                                         
                 }
                 
                 /*
@@ -250,17 +294,40 @@ void main(void)
                 j=0;
                 do{
                   delay_ms(25);
-                  j++;
-                   if (j==80) {
+                  j++;  
+                               
+                    if (j==80) {
                         glcd_clear();
                         glcd_putimagef(0,0,settingicon2,1);
                     }
-                    if(j==100){
+                                    
+                    if(j==140){
                         glcd_clear();
-                        changeclock();
-                    }  
-                }
+                        glcd_putimagef(0,0,clock,1);
+                    }
+                  
+                                  
+                    if (menu==1) break;
+                }      
                 while(menu==0);
+
+                if (j>=80 & j<=140) { 
+                        glcd_clear();
+                        lcd_gotoxy(0,0);
+                        lcd_puts("settign menu");
+                        delay_ms(2000);                
+                        menusetting();          
+                        glcd_clear();
+                }
+                
+                if(j>=140 & j<=180){ 
+                        glcd_clear();
+                        lcd_gotoxy(0,0);
+                        lcd_puts("Clock menu");
+                        delay_ms(2000);                                
+                        changeclock();
+                        glcd_clear();
+                }  
                 glcd_clear();          
               }    
 

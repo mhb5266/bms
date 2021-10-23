@@ -1,4 +1,4 @@
-VERSION:3 SOURCE_TIMESTAMP:53547E8F
+VERSION:3 SOURCE_TIMESTAMP:53577B35
 NODE:I LEVEL:0 LINE:1 "C:\cvavr\inc\mega32a.h"
 NODE:M LEVEL:0 LINE:2 "xtal"
 NODE:I LEVEL:0 LINE:5 "C:\cvavr\inc\1wire.h"
@@ -18,6 +18,7 @@ NODE:I LEVEL:0 LINE:31 "C:\Users\Barouei\Desktop\Bms\sazman\tempread.h"
 NODE:I LEVEL:0 LINE:32 "C:\Users\Barouei\Desktop\Bms\sazman\clockchange.h"
 NODE:I LEVEL:0 LINE:33 "C:\Users\Barouei\Desktop\Bms\sazman\clockread.h"
 NODE:I LEVEL:0 LINE:34 "C:\Users\Barouei\Desktop\Bms\sazman\calender.h"
-NODE:F LEVEL:0 LINE:38 "timer1_ovf_isr(void)"
-NODE:F LEVEL:0 LINE:52 "main(void)"
-NODE:I LEVEL:0 LINE:56 "C:\Users\Barouei\Desktop\Bms\sazman\configall.h"
+NODE:I LEVEL:0 LINE:35 "C:\Users\Barouei\Desktop\Bms\sazman\settingmenu.h"
+NODE:F LEVEL:0 LINE:39 "timer1_ovf_isr(void)"
+NODE:F LEVEL:0 LINE:53 "main(void)"
+NODE:I LEVEL:0 LINE:57 "C:\Users\Barouei\Desktop\Bms\sazman\configall.h"

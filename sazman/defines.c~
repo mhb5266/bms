@@ -32,7 +32,7 @@
     
     char outs[9];
     
-    eeprom char onmin,offmin,onhour,offhour,edays;
+    eeprom char onhour=15,offhour=15,onmin=45,offmin=47,edays;
  /*
     struct outs{
         bit chiller;

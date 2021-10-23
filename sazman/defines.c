@@ -67,4 +67,5 @@
     #include "cooler.c"
     #include "sheater.c"
     #include "scooler.c"    
-    #include "days.c" 
+    #include "days.c"
+    #include "clock.c" 

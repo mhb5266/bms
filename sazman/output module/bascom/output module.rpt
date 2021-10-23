@@ -1,6 +1,6 @@
 Report       : output module
-Date         : 10-19-2021
-Time         : 15:02:39
+Date         : 10-23-2021
+Time         : 15:35:31
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 33C hex  -> Will fit into ROM
-ROMIMAGE     :  828 dec
-FLASH USED   :  10  %
+ROMIMAGE     : 442 hex  -> Will fit into ROM
+ROMIMAGE     :  1090 dec
+FLASH USED   :  13  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  921  dec
+Space left   :  877  dec
 
 LCD DB7      : PORTC.5
 LCD DB6      : PORTC.4
@@ -92,10 +92,11 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-BUFFER                           Byte              0060          96 
-A                                Byte              0061          97 
-J                                Byte              0062          98 
-STRIN                            String * 10       0063          99 
+BUFFER                           Byte              0081          129 
+A                                Byte              0082          130 
+J                                Byte              0083          131 
+STRIN                            String * 20       0084          132 
+I                                Byte              0099          153 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -486,6 +487,9 @@ _LCDDBEDIR                       &H14
 _LCDDBRS                         &H15
 _LCDDBRS_PIN                     0
 _LCDDBRSDIR                      &H14
+_RS232_BUFSIZE0                  30
+_RS232_BUFSIZE_IN0P1             31
+_CHECKCHAR0                      0
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -510,4 +514,5 @@ Warnings:
 ADCD                             not used
 COMPARE1                         not used
 A                                not used
+J                                not used
 

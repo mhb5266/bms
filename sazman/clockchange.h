@@ -1,11 +1,12 @@
 
 void changeclock(void){
+
+
         j=0;
         selection=1;
         delay_ms(50);
         rtc_get_time(&_hour,&_min,&_sec);
         rtc_get_date(&_wday,&_day,&_month,&_year);
-        if(menu==0){
             glcd_clear();
             while(menu==0){
             } 
@@ -77,6 +78,7 @@ void changeclock(void){
                         if(selection==7)_sec++;
                     }    
                 }  
+                 
                 
                 if(down==0) {
                     delay_ms(150);
@@ -123,7 +125,7 @@ void changeclock(void){
                     }
                     while(menu==0);
                         selection++;
-                        if(selection==8){
+                        if(selection==9){
                            //rtc_init(0,0,0);
                            delay_ms(100);
                            rtc_set_time(_hour,_min,_sec);
@@ -138,5 +140,5 @@ void changeclock(void){
                         }                        
                 }                                                                                                                                
             }
-        }
+       
 }        
