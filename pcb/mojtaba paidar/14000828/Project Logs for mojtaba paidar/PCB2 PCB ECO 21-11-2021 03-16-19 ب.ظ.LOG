@@ -1,0 +1,13 @@
+Removed Pin From Net: NetName=key1 Pin=key & seg-1
+Removed Pin From Net: NetName=key2 Pin=key & seg-2
+Removed Pin From Net: NetName=key3 Pin=key & seg-3
+Removed Pin From Net: NetName=dio Pin=key & seg-4
+Removed Pin From Net: NetName=clk Pin=key & seg-5
+Added Pin To Net: NetName=clk Pin=key & seg-1
+Added Pin To Net: NetName=dio Pin=key & seg-2
+Added Pin To Net: NetName=key1 Pin=key & seg-3
+Added Pin To Net: NetName=key2 Pin=key & seg-4
+Added Pin To Net: NetName=key3 Pin=key & seg-5
+Added Member To Class: ClassName=Sheet2 Member=Component C4 470uF
+Added Member To Class: ClassName=Sheet2 Member=Component R13 RES
+Added Room: Name=Sheet2

@@ -1,0 +1,25 @@
+Added Component: Designator=crystal(FOX-FOXSLF160-20)
+Add component (AddParameter): Name = "Case\Package"; Value = "Axial"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "Manufacturer URL"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "http://www.foxonline.com/"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2Description"; Value = "Datasheet"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2URL"; Value = "http://www.foxonline.com/pdfs/hc49slf.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "DatasheetVersion"; Value = "Mar-15"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Length"; Value = "0.248 inch"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Max Operating Temperature"; Value = "155 degC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Min Operating Temperature"; Value = "-55 degC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mount"; Value = "Through Hole"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package Quantity"; Value = "200"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "2-Pin Through Hole Device, Body 11.35 x 4.65 mm"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "FOXSLF160-20"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Packaging"; Value = "Bulk"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Power Rating"; Value = "250 mW"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Resistance"; Value = "221 kohm"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "RoHSCompliant"; Value = "true"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Tolerance"; Value = "1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Voltage Rating"; Value = "250 V"; VariantName = "[No Variations]"
+Added Member To Class: ClassName=Sheet1 Member=Component crystal 11.0592MHZ
+Added Member To Class: ClassName=Sheet1 Member=Component U? DS1307
+Added Member To Class: ClassName=Sheet1 Member=Component U? ATmega8A-AU
+Added Member To Class: ClassName=Sheet1 Member=Component U? 24C02C-I/P
+Added Room: Name=Sheet1

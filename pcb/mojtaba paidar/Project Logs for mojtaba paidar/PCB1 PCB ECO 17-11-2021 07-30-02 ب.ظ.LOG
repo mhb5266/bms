@@ -1,0 +1,25 @@
+Removed Member From Class: ClassName=Sheet1 Member=out
+Added Component: Designator=T?(phoenix terminal 6)
+Add component (AddParameter): Name = "ComponentLinkURL"; Value = "www.picpars.com"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Designer"; Value = "Seyed Mohsen Ghasemain"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "E-mail"; Value = "picpars@gmail.com"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=Netrelay1_1 Pin=relay1-1
+Added Pin To Net: NetName=Netrelay1_1 Pin=T?-1
+Added Net: Name=Netrelay1_1
+Added Pin To Net: NetName=Netrelay1_3 Pin=relay1-3
+Added Pin To Net: NetName=Netrelay1_3 Pin=T?-2
+Added Net: Name=Netrelay1_3
+Added Pin To Net: NetName=Netrelay2_1 Pin=relay2-1
+Added Pin To Net: NetName=Netrelay2_1 Pin=T?-3
+Added Net: Name=Netrelay2_1
+Added Pin To Net: NetName=Netrelay2_3 Pin=relay2-3
+Added Pin To Net: NetName=Netrelay2_3 Pin=T?-4
+Added Net: Name=Netrelay2_3
+Added Pin To Net: NetName=Netrelay3_1 Pin=relay3-1
+Added Pin To Net: NetName=Netrelay3_1 Pin=T?-5
+Added Net: Name=Netrelay3_1
+Added Pin To Net: NetName=Netrelay3_3 Pin=relay3-3
+Added Pin To Net: NetName=Netrelay3_3 Pin=T?-6
+Added Net: Name=Netrelay3_3
+Added Member To Class: ClassName=Sheet1 Member=Component T? Phoenix terminal
+Added Room: Name=Sheet1

@@ -1,0 +1,14 @@
+Removed Pin From Net: NetName=out1 Pin=U?-1
+Removed Pin From Net: NetName=out2 Pin=U?-2
+Removed Pin From Net: NetName=out3 Pin=U?-9
+Removed Pin From Net: NetName=dio Pin=U?-10
+Removed Pin From Net: NetName=clk Pin=U?-11
+Added Pin To Net: NetName=dio Pin=U?-1
+Added Pin To Net: NetName=clk Pin=U?-2
+Added Pin To Net: NetName=out1 Pin=U?-9
+Added Pin To Net: NetName=out2 Pin=U?-10
+Added Pin To Net: NetName=out3 Pin=U?-11
+Added Member To Class: ClassName=Sheet1 Member=Component C1 470uF
+Added Member To Class: ClassName=Sheet1 Member=Component C2 470uF
+Added Member To Class: ClassName=Sheet1 Member=Component C3 470uF
+Added Room: Name=Sheet1

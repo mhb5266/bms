@@ -1,0 +1,6 @@
+Removed Pin From Net: NetName=NetD?_1 Pin=R10-2
+Removed Member From Class: ClassName=Sheet2 Member=R10
+Added Pin To Net: NetName=NetD?_1 Pin=optocoupler-1
+Added Member To Class: ClassName=Sheet2 Member=Component C4 470uF
+Added Member To Class: ClassName=Sheet2 Member=Component R13 RES
+Added Room: Name=Sheet2

@@ -1,0 +1,13 @@
+Change Component Footprint: Designator=crystal Old Footprint=RAD_ADA New Footprint=XTAL3
+Added Component: Designator=U?(DIP-4)
+Add component (AddParameter): Name = "DatasheetVersion"; Value = "Nov-2003"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "04-Mar-2005"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Sch pins 3 & 4 Swapped."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "DIP-4"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "24-Mar-1999"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=Vin(PHONIX2)
+Added Member To Class: ClassName=Sheet1 Member=Component crystal 22pF
+Added Member To Class: ClassName=Sheet1 Member=Component U? Optoisolator1
+Added Member To Class: ClassName=Sheet1 Member=Component Vin PHONIX2
+Added Room: Name=Sheet1

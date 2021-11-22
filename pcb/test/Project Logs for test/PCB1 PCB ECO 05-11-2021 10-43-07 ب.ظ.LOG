@@ -1,0 +1,9 @@
+Added Pin To Net: NetName=Netdiode bridge_2 Pin=diode bridge-2
+Added Pin To Net: NetName=Netdiode bridge_2 Pin=output-7
+Added Pin To Net: NetName=Netdiode bridge_2 Pin=relay-5
+Added Net: Name=Netdiode bridge_2
+Added Pin To Net: NetName=Netdiode bridge_3 Pin=diode bridge-3
+Added Pin To Net: NetName=Netdiode bridge_3 Pin=input-5
+Added Pin To Net: NetName=Netdiode bridge_3 Pin=output-5
+Added Net: Name=Netdiode bridge_3
+Added Room: Name=Sheet1

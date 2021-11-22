@@ -1,0 +1,8 @@
+Added Component: Designator=R?(AXIAL0.4)
+Added Member To Class: ClassName=Sheet1 Member=Component out1 PHONIX2
+Added Member To Class: ClassName=Sheet1 Member=Component out2 PHONIX2
+Added Member To Class: ClassName=Sheet1 Member=Component out3 PHONIX2
+Added Member To Class: ClassName=Sheet1 Member=Component R? RES
+Added Member To Class: ClassName=Sheet1 Member=Component temp PHONIX3
+Added Member To Class: ClassName=Sheet1 Member=Component Vdc PHONIX2
+Added Room: Name=Sheet1

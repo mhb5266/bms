@@ -1,0 +1,22 @@
+Added Component: Designator=K?(RELAY NT90TNC12CB)
+Add component (AddParameter): Name = "Category"; Value = "NT90TNC12CB"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Company"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "Datasheet"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Designer"; Value = "Abbas Basereh"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "HelpURL"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mounting Technology"; Value = "Through-Hole"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "31.7x26.7x28"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "RELAY NT90TNC12CB"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Pin Count"; Value = "0"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Update Date"; Value = "2017-3-4"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "RELAY NT90TNC12CB"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Voltage"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=NetK?_1 Pin=K?-1
+Added Pin To Net: NetName=NetK?_1 Pin=K?-2
+Added Net: Name=NetK?_1
+Added Pin To Net: NetName=NetK?_4 Pin=K?-4
+Added Pin To Net: NetName=NetK?_4 Pin=K?-5
+Added Net: Name=NetK?_4
+Added Class: Name=Sheet1
+Added Room: Name=Sheet1

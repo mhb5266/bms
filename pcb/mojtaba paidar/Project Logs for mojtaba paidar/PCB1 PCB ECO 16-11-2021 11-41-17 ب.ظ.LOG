@@ -1,0 +1,4 @@
+Removed Pin From Net: NetName=GND Pin=ATmega8-3
+Removed Pin From Net: NetName=+5 Pin=ATmega8-4
+Removed Pin From Net: NetName=GND Pin=ATmega8-21
+Added Room: Name=Sheet1

@@ -1,0 +1,7 @@
+Change Net Name : Old Net Name=e1 New Net Name=sensor1
+Change Net Name : Old Net Name=e2 New Net Name=sensor2
+Change Net Name : Old Net Name=sensor1 New Net Name=e1
+Change Net Name : Old Net Name=sensor2 New Net Name=e2
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Room: Name=Sheet2

@@ -1,0 +1,48 @@
+Removed Pin From Net: NetName=clk Pin=7segment-1
+Removed Pin From Net: NetName=dio Pin=7segment-2
+Removed Pin From Net: NetName=+5v Pin=7segment-3
+Removed Pin From Net: NetName=GND Pin=7segment-4
+Removed Pin From Net: NetName=key1 Pin=button-1
+Removed Pin From Net: NetName=key2 Pin=button-2
+Removed Pin From Net: NetName=GND Pin=button-3
+Removed Pin From Net: NetName=key3 Pin=button-4
+Removed Pin From Net: NetName=vcc Pin=R4-2
+Removed Pin From Net: NetName=vcc Pin=R5-2
+Removed Pin From Net: NetName=vcc Pin=R6-2
+Removed Pin From Net: NetName=out3 Pin=U?-1
+Removed Pin From Net: NetName=out2 Pin=U?-2
+Removed Pin From Net: NetName=out1 Pin=U?-3
+Removed Pin From Net: NetName=buzzer Pin=U?-4
+Removed Pin From Net: NetName=out4 Pin=U?-13
+Removed Pin From Net: NetName=Netrelay1_4 Pin=U?-14
+Removed Pin From Net: NetName=Netrelay2_4 Pin=U?-15
+Removed Pin From Net: NetName=Netrelay3_4 Pin=U?-16
+Removed Member From Class: ClassName=Sheet2 Member=7segment
+Removed Member From Class: ClassName=Sheet2 Member=button
+Added Component: Designator=key & seg(HDR1X7)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=key1 Pin=key & seg-1
+Added Pin To Net: NetName=key2 Pin=key & seg-2
+Added Pin To Net: NetName=key3 Pin=key & seg-3
+Added Pin To Net: NetName=dio Pin=key & seg-4
+Added Pin To Net: NetName=clk Pin=key & seg-5
+Added Pin To Net: NetName=+5v Pin=key & seg-6
+Added Pin To Net: NetName=GND Pin=key & seg-7
+Added Pin To Net: NetName=+5v Pin=R4-2
+Added Pin To Net: NetName=+5v Pin=R5-2
+Added Pin To Net: NetName=+5v Pin=R6-2
+Added Pin To Net: NetName=+5v Pin=R7-2
+Added Pin To Net: NetName=+5v Pin=R8-2
+Added Pin To Net: NetName=buzzer Pin=U?-1
+Added Pin To Net: NetName=out3 Pin=U?-2
+Added Pin To Net: NetName=out2 Pin=U?-3
+Added Pin To Net: NetName=out1 Pin=U?-4
+Added Pin To Net: NetName=Netrelay1_4 Pin=U?-13
+Added Pin To Net: NetName=Netrelay2_4 Pin=U?-14
+Added Pin To Net: NetName=Netrelay3_4 Pin=U?-15
+Added Member To Class: ClassName=Sheet2 Member=Component C4 470uF
+Added Member To Class: ClassName=Sheet2 Member=Component key & seg Header 7
+Added Member To Class: ClassName=Sheet2 Member=Component R13 RES
+Added Room: Name=Sheet2

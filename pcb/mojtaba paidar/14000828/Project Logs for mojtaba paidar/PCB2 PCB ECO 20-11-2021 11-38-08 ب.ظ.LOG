@@ -1,0 +1,7 @@
+Removed Pin From Net: NetName=xtal2 Pin=C4-1
+Added Pin To Net: NetName=xtal1 Pin=C4-1
+Added Member To Class: ClassName=Sheet2 Member=Component C4 C0805
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Member To Class: ClassName=Sheet2 Member=Component R13 RES
+Added Room: Name=Sheet2

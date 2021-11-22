@@ -22,7 +22,7 @@ const mintmp=-16
 
 
 'led alias portd.7:config portd.7=output
-'stb alias portb.5:config portb.5=OUTPUT:reset stb
+'stb alias portb.5:config portb.5=OUTPUT:reset stb : reset csel
 'csel alias portc.1:config portc.1=OUTPUT:reset csel
 
 motor alias portd.6:config portd.6=OUTPUT
@@ -115,9 +115,9 @@ dim i as word
 '========================================================================
 stop timer1
 '(
-  set stb :set clk:waitus 2: reset stb
+  set stb : set csel :set clk:waitus 2: reset stb : reset csel
   wrbyte &H40
-  set stb :set clk:waitus 2: reset stb
+  set stb : set csel :set clk:waitus 2: reset stb : reset csel
   wrbyte &HC0
   for i=1 to 16
       wrbyte &H01
@@ -128,7 +128,7 @@ stop timer1
       incr segment
       toggle led
       wait 1
-      set stb :set clk:waitus 2: reset stb
+      set stb : set csel :set clk:waitus 2: reset stb : reset csel
       wrbyte segment
   next
   for i=1 to 8
@@ -138,48 +138,48 @@ stop timer1
 ')
 'start timer1
 
-  set stb :set clk:waitus 2: reset stb
+  set stb : set csel :set clk:waitus 2: reset stb : reset csel
   wrbyte &H44
-  set stb :set clk:waitus 2: reset stb
+  set stb : set csel :set clk:waitus 2: reset stb : reset csel
   wrbyte &HC0
   wrbyte &H06
   waitus 2
 
-  set stb :set clk:waitus 2: reset stb
+  set stb : set csel :set clk:waitus 2: reset stb : reset csel
   wrbyte &HC2
   wrbyte &H02
   waitus 2
 
-  set stb :set clk:waitus 2: reset stb
+  set stb : set csel :set clk:waitus 2: reset stb : reset csel
   wrbyte &HC4
   wrbyte &H00
   waitus 2
 
-  set stb :set clk:waitus 2: reset stb
+  set stb : set csel :set clk:waitus 2: reset stb : reset csel
   wrbyte &HC6
   wrbyte &H06
   waitus 2
 
-  set stb :set clk:waitus 2: reset stb
+  set stb : set csel :set clk:waitus 2: reset stb : reset csel
   wrbyte &HC8
   wrbyte &H07
   waitus 2
 
-  set stb :set clk:waitus 2: reset stb
+  set stb : set csel :set clk:waitus 2: reset stb : reset csel
   wrbyte &HCA
   wrbyte &H05
   waitus 2
 
-  set stb :set clk:waitus 2: reset stb
+  set stb : set csel :set clk:waitus 2: reset stb : reset csel
   wrbyte &HCC
   wrbyte &H06
   waitus 2
 
-  set stb :set clk:waitus 2: reset stb
+  set stb : set csel :set clk:waitus 2: reset stb : reset csel
   wrbyte &HCE
   wrbyte &H00
   waitus 2
-  set stb :set clk:waitus 2: reset stb
+  set stb : set csel :set clk:waitus 2: reset stb : reset csel
   wrbyte &H8F
   set out1
   set out2
@@ -190,7 +190,7 @@ stop timer1
 
   text="HI"
   showtext
-  set stb :set clk:waitus 2: reset stb
+  set stb : set csel :set clk:waitus 2: reset stb : reset csel
   wrbyte &H8F
   wait 3
   text="   "
@@ -295,7 +295,7 @@ End Sub
 
 Sub dispon()
    '_start
-  set clk :set stb:waitus 2: reset stb
+  set clk :set stb : set csel:waitus 2: reset stb : reset csel
    wrbyte &H8F
    waitus 2                                       'Turn display on and set PWM for brightness to 25%
    '_ack
@@ -305,18 +305,18 @@ End Sub
 
 '(
 Sub _start()
-   set stb
+   set stb : set csel
    waitus 2
    Set Tm1637_clk
    Set Tm1637_dout
    Waitus 2
    Reset Tm1637_dout
-   reset stb
+   reset stb : reset csel
 End Sub
 
 
 Sub _stop()
-   set stb
+   set stb : set csel
    waitus 2
    Reset Tm1637_clk
    Waitus 2
@@ -324,7 +324,7 @@ Sub _stop()
    Waitus 2
    Set Tm1637_clk
    Set Tm1637_dout
-   reset stb
+   reset stb : reset csel
 End Sub
 
 ')
@@ -413,33 +413,33 @@ sub disp
            grid(7).i=seg(i+1).6
            grid(8).i=seg(i+1).7
          next
-   set stb :set clk:waitus 2: reset stb
+   set stb : set csel :set clk:waitus 2: reset stb : reset csel
    wrbyte &H44
-   set stb :set clk:waitus 2: reset stb
+   set stb : set csel :set clk:waitus 2: reset stb : reset csel
    wrbyte &HC0
    wrbyte grid(1)
-   set stb :set clk:waitus 2: reset stb
+   set stb : set csel :set clk:waitus 2: reset stb : reset csel
    wrbyte &HC2
    wrbyte grid(2)
-   set stb :set clk:waitus 2: reset stb
+   set stb : set csel :set clk:waitus 2: reset stb : reset csel
    wrbyte &HC4
    wrbyte grid(3)
-   set stb :set clk:waitus 2: reset stb
+   set stb : set csel :set clk:waitus 2: reset stb : reset csel
    wrbyte &HC6
    wrbyte grid(4)
-   set stb :set clk:waitus 2: reset stb
+   set stb : set csel :set clk:waitus 2: reset stb : reset csel
    wrbyte &HC8
    wrbyte grid(5)
-   set stb :set clk:waitus 2: reset stb
+   set stb : set csel :set clk:waitus 2: reset stb : reset csel
    wrbyte &HCA
    wrbyte grid(6)
-   set stb :set clk:waitus 2: reset stb
+   set stb : set csel :set clk:waitus 2: reset stb : reset csel
    wrbyte &HCC
    wrbyte grid(7)
-   set stb :set clk:waitus 2: reset stb
+   set stb : set csel :set clk:waitus 2: reset stb : reset csel
    wrbyte &HCE
    wrbyte grid(8)
-   set stb :set clk:waitus 2: reset stb
+   set stb : set csel :set clk:waitus 2: reset stb : reset csel
    wrbyte &H88
 
 end sub

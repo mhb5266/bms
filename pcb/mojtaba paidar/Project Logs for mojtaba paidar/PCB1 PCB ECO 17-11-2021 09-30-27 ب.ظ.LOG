@@ -1,0 +1,65 @@
+Removed Pin From Net: NetName=+5 Pin=R1-1
+Removed Pin From Net: NetName=temp Pin=R1-2
+Removed Pin From Net: NetName=sda Pin=R2-1
+Removed Pin From Net: NetName=+5 Pin=R2-2
+Removed Pin From Net: NetName=scl Pin=R3-1
+Removed Pin From Net: NetName=+5 Pin=R3-2
+Removed Pin From Net: NetName=NetATmega8_23 Pin=R4-1
+Removed Pin From Net: NetName=+5 Pin=R4-2
+Removed Pin From Net: NetName=NetATmega8_24 Pin=R5-1
+Removed Pin From Net: NetName=+5 Pin=R5-2
+Removed Pin From Net: NetName=NetATmega8_25 Pin=R6-1
+Removed Pin From Net: NetName=+5 Pin=R6-2
+Removed Pin From Net: NetName=clk Pin=R7-1
+Removed Pin From Net: NetName=+5 Pin=R7-2
+Removed Pin From Net: NetName=dio Pin=R8-1
+Removed Pin From Net: NetName=+5 Pin=R8-2
+Added Component: Designator=R1(CC2012-0805)
+Add component (AddParameter): Name = "DatasheetDocument"; Value = "Nov-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "5-Jan-2004"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=R2(CC2012-0805)
+Add component (AddParameter): Name = "DatasheetDocument"; Value = "Nov-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "5-Jan-2004"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=R3(CC2012-0805)
+Add component (AddParameter): Name = "DatasheetDocument"; Value = "Nov-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "5-Jan-2004"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=R4(CC2012-0805)
+Add component (AddParameter): Name = "DatasheetDocument"; Value = "Nov-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "5-Jan-2004"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=R5(CC2012-0805)
+Add component (AddParameter): Name = "DatasheetDocument"; Value = "Nov-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "5-Jan-2004"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=R6(CC2012-0805)
+Add component (AddParameter): Name = "DatasheetDocument"; Value = "Nov-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "5-Jan-2004"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=R7(CC2012-0805)
+Add component (AddParameter): Name = "DatasheetDocument"; Value = "Nov-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "5-Jan-2004"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=R8(CC2012-0805)
+Add component (AddParameter): Name = "DatasheetDocument"; Value = "Nov-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "5-Jan-2004"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=+5 Pin=R1-1
+Added Pin To Net: NetName=temp Pin=R1-2
+Added Pin To Net: NetName=sda Pin=R2-1
+Added Pin To Net: NetName=+5 Pin=R2-2
+Added Pin To Net: NetName=scl Pin=R3-1
+Added Pin To Net: NetName=+5 Pin=R3-2
+Added Pin To Net: NetName=NetATmega8_23 Pin=R4-1
+Added Pin To Net: NetName=+5 Pin=R4-2
+Added Pin To Net: NetName=NetATmega8_24 Pin=R5-1
+Added Pin To Net: NetName=+5 Pin=R5-2
+Added Pin To Net: NetName=NetATmega8_25 Pin=R6-1
+Added Pin To Net: NetName=+5 Pin=R6-2
+Added Pin To Net: NetName=dio Pin=R7-1
+Added Pin To Net: NetName=+5 Pin=R7-2
+Added Pin To Net: NetName=clk Pin=R8-1
+Added Pin To Net: NetName=+5 Pin=R8-2
+Added Room: Name=Sheet1

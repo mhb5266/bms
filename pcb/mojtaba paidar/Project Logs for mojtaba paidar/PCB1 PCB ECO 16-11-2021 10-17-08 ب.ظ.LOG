@@ -1,0 +1,6 @@
+Change Component Comment : Designator=7segment Old Comment=Header 4 New Comment=7segment
+Change Component Comment : Designator=remote Old Comment=Header 4 New Comment=remote
+Change Component Comment : Designator=Programmer Old Comment=Header 6 New Comment=programmer
+Added Member To Class: ClassName=Sheet1 Member=Component U? ATmega8A-AU
+Added Member To Class: ClassName=Sheet1 Member=Component U? DS1307
+Added Room: Name=Sheet1

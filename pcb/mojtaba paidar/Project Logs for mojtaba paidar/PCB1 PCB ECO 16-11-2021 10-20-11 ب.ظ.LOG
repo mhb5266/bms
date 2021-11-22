@@ -1,0 +1,7 @@
+Change Component Designator: OldDesignator=24c16 NewDesignator=U?
+Change Component Designator: OldDesignator=DS1307 NewDesignator=U?
+Change Component Designator: OldDesignator=Xtal NewDesignator=crystal
+Added Pin To Net: NetName=remote Pin=U?-12
+Added Member To Class: ClassName=Sheet1 Member=Component U? DS1307
+Added Member To Class: ClassName=Sheet1 Member=Component U? ATmega8A-AU
+Added Room: Name=Sheet1

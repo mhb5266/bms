@@ -1,0 +1,12 @@
+Added Component: Designator=Y?(My_Crystal)
+Added Pin To Net: NetName=NetU?_7 Pin=U?-7
+Added Pin To Net: NetName=NetU?_7 Pin=Y?-1
+Added Net: Name=NetU?_7
+Added Pin To Net: NetName=NetU?_8 Pin=U?-8
+Added Pin To Net: NetName=NetU?_8 Pin=Y?-2
+Added Net: Name=NetU?_8
+Added Member To Class: ClassName=Sheet1 Member=Component U? DS1307
+Added Member To Class: ClassName=Sheet1 Member=Component U? 24C02C-I/P
+Added Member To Class: ClassName=Sheet1 Member=Component U? ATmega8A-AU
+Added Member To Class: ClassName=Sheet1 Member=Component Y? 6 MHz
+Added Room: Name=Sheet1

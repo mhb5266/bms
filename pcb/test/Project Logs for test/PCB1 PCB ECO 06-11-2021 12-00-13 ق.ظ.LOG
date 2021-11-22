@@ -1,0 +1,15 @@
+Removed Pin From Net: NetName=Nettm1638_1 Pin=U1-2
+Removed Pin From Net: NetName=Nettm1638_2 Pin=U1-3
+Removed Pin From Net: NetName=Nettm1638_3 Pin=U1-4
+Removed Pin From Net: NetName=Nettm1638_4 Pin=U1-5
+Removed Pin From Net: NetName=Nettm1638_5 Pin=U1-6
+Removed Pin From Net: NetName=Nettm1638_6 Pin=U1-11
+Removed Pin From Net: NetName=out Pin=U1-23
+Added Pin To Net: NetName=out Pin=U1-2
+Added Pin To Net: NetName=Nettm1638_6 Pin=U1-23
+Added Pin To Net: NetName=Nettm1638_5 Pin=U1-24
+Added Pin To Net: NetName=Nettm1638_4 Pin=U1-25
+Added Pin To Net: NetName=Nettm1638_3 Pin=U1-26
+Added Pin To Net: NetName=Nettm1638_2 Pin=U1-27
+Added Pin To Net: NetName=Nettm1638_1 Pin=U1-28
+Added Room: Name=Sheet1

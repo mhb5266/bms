@@ -1,0 +1,13 @@
+Removed Pin From Net: NetName=Netout1_1 Pin=relay1-1
+Removed Pin From Net: NetName=Netout1_2 Pin=relay1-3
+Removed Pin From Net: NetName=Netout2_1 Pin=relay2-1
+Removed Pin From Net: NetName=Netout2_2 Pin=relay2-3
+Removed Pin From Net: NetName=Netout3_1 Pin=relay3-1
+Removed Pin From Net: NetName=Netout3_2 Pin=relay3-3
+Added Pin To Net: NetName=Netout1_2 Pin=relay1-1
+Added Pin To Net: NetName=Netout1_1 Pin=relay1-3
+Added Pin To Net: NetName=Netout2_2 Pin=relay2-1
+Added Pin To Net: NetName=Netout2_1 Pin=relay2-3
+Added Pin To Net: NetName=Netout3_2 Pin=relay3-1
+Added Pin To Net: NetName=Netout3_1 Pin=relay3-3
+Added Room: Name=Sheet1

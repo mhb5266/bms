@@ -1,0 +1,12 @@
+Added Component: Designator=D1(DIOM4629X24N)
+Add component (AddParameter): Name = "Data"; Value = "16-12-2016"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Designer"; Value = "Abbas Basereh"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Link"; Value = "http://www.tme.eu/en/details/m7/smd-universal-diodes/dc-components/"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "DC COMPONENTS"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Part. No"; Value = "M7"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=vcc Pin=D1-1
+Added Pin To Net: NetName=+3.3v Pin=D1-2
+Added Member To Class: ClassName=Sheet2 Member=Component D1 1n4007
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Room: Name=Sheet2

@@ -1,0 +1,6 @@
+Added Net: Name=NetD?_3
+Added Net: Name=NetD?_4
+Added Member To Class: ClassName=Sheet2 Member=Component C4 C0805
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Member To Class: ClassName=Sheet2 Member=Component R13 RES
+Added Room: Name=Sheet2

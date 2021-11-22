@@ -1,6 +1,6 @@
 Report       : fridge
 Date         : 10-04-2021
-Time         : 15:36:47
+Time         : 17:25:38
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 129A hex  -> Will fit into ROM
-ROMIMAGE     :  4762 dec
-FLASH USED   :  58  %
+ROMIMAGE     : 12F2 hex  -> Will fit into ROM
+ROMIMAGE     :  4850 dec
+FLASH USED   :  59  %
 BAUD         : 9600 Baud
 XTAL         : 8000000 Hz
 BAUD error   : 0.16%
