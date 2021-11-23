@@ -1,0 +1,15 @@
+Added Component: Designator=R7(Axial 0_5W 5_0mm)
+Add component (AddParameter): Name = "Data"; Value = "4-1-2017"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Desc."; Value = "RES Axial 0.5W"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Designer"; Value = "Abbas Basereh"; VariantName = "[No Variations]"
+Added Component: Designator=R8(Axial 0_5W 5_0mm)
+Add component (AddParameter): Name = "Data"; Value = "4-1-2017"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Desc."; Value = "RES Axial 0.5W"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Designer"; Value = "Abbas Basereh"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=clk Pin=R7-1
+Added Pin To Net: NetName=+5 Pin=R7-2
+Added Pin To Net: NetName=dio Pin=R8-1
+Added Pin To Net: NetName=+5 Pin=R8-2
+Added Member To Class: ClassName=Sheet1 Member=Component R7 10K
+Added Member To Class: ClassName=Sheet1 Member=Component R8 10K
+Added Room: Name=Sheet1

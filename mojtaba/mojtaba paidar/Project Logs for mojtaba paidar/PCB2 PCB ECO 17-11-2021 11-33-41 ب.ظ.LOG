@@ -1,0 +1,9 @@
+Removed Pin From Net: NetName=mosi Pin=R13-1
+Removed Pin From Net: NetName=miso Pin=R14-1
+Removed Pin From Net: NetName=miso Pin=sensor-1
+Removed Pin From Net: NetName=mosi Pin=sensor-2
+Added Pin To Net: NetName=sensor1 Pin=R13-1
+Added Pin To Net: NetName=sensor2 Pin=R14-1
+Added Pin To Net: NetName=sensor2 Pin=sensor-1
+Added Pin To Net: NetName=sensor1 Pin=sensor-2
+Added Room: Name=Sheet2

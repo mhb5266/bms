@@ -1,0 +1,6 @@
+Added Pin To Net: NetName=temp Pin=R1-2
+Added Pin To Net: NetName=temp Pin=temp-2
+Added Pin To Net: NetName=temp Pin=U?-26
+Added Pin To Net: NetName=sensor1 Pin=U?-43
+Added Pin To Net: NetName=sensor2 Pin=U?-44
+Added Room: Name=Sheet2

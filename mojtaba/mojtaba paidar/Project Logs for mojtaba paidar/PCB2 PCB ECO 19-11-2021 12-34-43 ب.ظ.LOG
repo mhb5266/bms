@@ -1,0 +1,42 @@
+Removed Pin From Net: NetName=poweron Pin=optocoupler-4
+Removed Pin From Net: NetName=poweron Pin=R12-1
+Removed Pin From Net: NetName=sensor2 Pin=sensor-1
+Removed Pin From Net: NetName=sensor1 Pin=sensor-2
+Added Component: Designator=jumper?(AXIAL-0.2)
+Add component (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Revision"; Value = "July-2002: Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "1K"; VariantName = "[No Variations]"
+Added Component: Designator=jumper?(AXIAL-0.2)
+Add component (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Revision"; Value = "July-2002: Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "1K"; VariantName = "[No Variations]"
+Added Component: Designator=jumper?(AXIAL-0.2)
+Add component (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Revision"; Value = "July-2002: Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "1K"; VariantName = "[No Variations]"
+Added Component: Designator=jumper(AXIAL-0.2)
+Add component (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Revision"; Value = "July-2002: Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "1K"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=sensor1 Pin=jumper-1
+Added Pin To Net: NetName=poweron Pin=jumper?-1
+Added Pin To Net: NetName=sensor2 Pin=jumper?-1
+Added Pin To Net: NetName=Netjumper?_1 Pin=jumper?-1
+Added Pin To Net: NetName=Netjumper?_1 Pin=jumper?-2
+Added Net: Name=Netjumper?_1
+Added Pin To Net: NetName=Netjumper?_2 Pin=jumper?-2
+Added Pin To Net: NetName=Netjumper?_2 Pin=optocoupler-4
+Added Pin To Net: NetName=Netjumper?_2 Pin=R12-1
+Added Net: Name=Netjumper?_2
+Added Pin To Net: NetName=Netjumper_2 Pin=jumper-2
+Added Pin To Net: NetName=Netjumper_2 Pin=sensor-2
+Added Net: Name=Netjumper_2
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Member To Class: ClassName=Sheet2 Member=Component jumper 10K
+Added Room: Name=Sheet2

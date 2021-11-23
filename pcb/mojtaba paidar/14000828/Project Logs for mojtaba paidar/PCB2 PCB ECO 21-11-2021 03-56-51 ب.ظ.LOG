@@ -1,8 +1,0 @@
-Removed Pin From Net: NetName=NetD?_1 Pin=R10-2
-Added Component: Designator=R10(Axial 1W  7_0mm)
-Add component (AddParameter): Name = "Data"; Value = "4-1-2017"; VariantName = "[No Variations]"
-Add component (AddParameter): Name = "Desc."; Value = "RES Axial 1W"; VariantName = "[No Variations]"
-Add component (AddParameter): Name = "Designer"; Value = "Abbas Basereh"; VariantName = "[No Variations]"
-Added Pin To Net: NetName=NetD?_1 Pin=R10-2
-Added Member To Class: ClassName=Sheet2 Member=Component C4 470uF
-Added Member To Class: ClassName=Sheet2 Member=Component R13 RES

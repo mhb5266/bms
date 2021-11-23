@@ -1,0 +1,6 @@
+Removed Pin From Net: NetName=sensor1 Pin=U?-34
+Removed Pin From Net: NetName=sensor2 Pin=U?-35
+Added Pin To Net: NetName=e1 Pin=U?-34
+Added Pin To Net: NetName=e2 Pin=U?-35
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K

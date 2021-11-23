@@ -55,7 +55,9 @@
         bit non4;
         bit non5;
         bit non6;
-        bit non7;                                                 
+        bit non7; 
+        
+        bit heaters,coolers;                                                
 
         
 

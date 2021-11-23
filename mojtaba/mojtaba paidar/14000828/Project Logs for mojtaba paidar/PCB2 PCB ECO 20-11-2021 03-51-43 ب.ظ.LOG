@@ -1,0 +1,14 @@
+Removed Pin From Net: NetName=vcc Pin=78M05-3
+Removed Pin From Net: NetName=vcc Pin=Atmega16-5
+Removed Pin From Net: NetName=vcc Pin=Atmega16-17
+Removed Pin From Net: NetName=vcc Pin=Atmega16-38
+Removed Pin From Net: NetName=vcc Pin=C1-1
+Removed Pin From Net: NetName=vcc Pin=C2-1
+Removed Pin From Net: NetName=vcc Pin=C3-1
+Removed Pin From Net: NetName=vcc Pin=D1-1
+Change Net Name : Old Net Name=vcc New Net Name=+5v
+Added Net: Name=vcc
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Member To Class: ClassName=Sheet2 Member=Component uln2003 ULN2003AN
+Added Room: Name=Sheet2

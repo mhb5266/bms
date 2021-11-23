@@ -1,6 +1,0 @@
-Removed Pin From Net: NetName=Netcrystal_1 Pin=crystal-1
-Removed Pin From Net: NetName=Netcrystal_2 Pin=crystal-2
-Added Component: Designator=crystal(RAD_ADA)
-Added Pin To Net: NetName=Netcrystal_1 Pin=crystal-1
-Added Pin To Net: NetName=Netcrystal_2 Pin=crystal-2
-Added Room: Name=Sheet1

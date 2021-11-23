@@ -1,0 +1,11 @@
+Removed Pin From Net: NetName=Netcrystal_2 Pin=crystal-2
+Removed Pin From Net: NetName=Netcrystal_2 Pin=U?-8
+Added Component: Designator=crystal(My_Crystal)
+Added Pin To Net: NetName=Netcrystal_2 Pin=crystal-2
+Added Pin To Net: NetName=Netcrystal_2 Pin=U?-2
+Added Member To Class: ClassName=Sheet1 Member=Component crystal 11.0592 MHz
+Added Member To Class: ClassName=Sheet1 Member=Component U? ULN2003AN
+Added Member To Class: ClassName=Sheet1 Member=Component U? ATmega8A-AU
+Added Member To Class: ClassName=Sheet1 Member=Component U? 24C02C-I/P
+Added Member To Class: ClassName=Sheet1 Member=Component U? DS1307
+Added Room: Name=Sheet1

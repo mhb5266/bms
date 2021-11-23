@@ -266,12 +266,44 @@ void main(void)
                    if (j==80) {
                         glcd_clear();
                         state=1;
-                        glcd_putimagef(0,0,heater,0); 
+                        glcd_putimagef(0,0,heater,0);
+                        heaters=!heaters;
+                        coolers=0; 
                     }
                 }
                 while(up==0);
                 glcd_clear();
-                glcd_putimagef(0,32,sheater,0);          
+                if (heaters==1){     
+                    
+                    glcd_putimagef(0,32,sheater,0);
+                    printf("*Motor >> OFF #");
+                    delay_ms(100);
+                                
+                    printf("*Chiller >> OFF #");
+                    delay_ms(100);
+                                
+                    printf("*Heater >> OFF #");
+                    delay_ms(100);
+                                        
+                    printf("*Motor >> ON #");
+                    delay_ms(3000);
+                                
+                    printf("*Chiller >> OFF #");
+                    delay_ms(3000);
+                                
+                    printf("*Heater >> ON #");
+                    delay_ms(3000);
+                    }
+                else {
+                    printf("*Motor >> OFF #");
+                    delay_ms(3000);
+                                
+                    printf("*Chiller >> OFF #");
+                    delay_ms(3000);
+                                
+                    printf("*Heater >> OFF #");
+                    delay_ms(3000);                
+                }            
               } 
               
               if(down==0){
@@ -282,12 +314,44 @@ void main(void)
                    if (j==80) {
                         glcd_clear();                
                         state=2;
-                        glcd_putimagef(0,0,cooler,0); 
+                        glcd_putimagef(0,0,cooler,0);
+                        coolers=!coolers;
+                        heaters=0; 
                     }
                 }
                 while(down==0);
                 glcd_clear();
-                glcd_putimagef(0,32,scooler,0);          
+                if (coolers==1){  
+                    
+                    glcd_putimagef(0,32,scooler,0);
+                    printf("*Motor >> OFF #");
+                    delay_ms(100);
+                                
+                    printf("*Chiller >> OFF #");
+                    delay_ms(100);
+                                
+                    printf("*Heater >> OFF #");
+                    delay_ms(100);
+                                                         
+                    printf("*Motor >> ON #");
+                    delay_ms(3000);
+                                
+                    printf("*Chiller >> ON #");
+                    delay_ms(3000);
+                                
+                    printf("*Heater >> OFF #");
+                    delay_ms(3000);
+                    }
+                else {
+                    printf("*Motor >> OFF #");
+                    delay_ms(3000);
+                                
+                    printf("*Chiller >> OFF #");
+                    delay_ms(3000);
+                                
+                    printf("*Heater >> OFF #");
+                    delay_ms(3000);                
+                }                          
               }               
               
               if(menu==0){

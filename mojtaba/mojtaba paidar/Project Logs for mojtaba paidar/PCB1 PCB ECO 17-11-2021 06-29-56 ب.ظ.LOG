@@ -1,0 +1,10 @@
+Removed Member From Class: ClassName=Sheet1 Member=R?
+Change Component Footprint: Designator=R1 Old Footprint=Axial 0_5W 5_0mm New Footprint=AXIAL0.4
+Change Component Footprint: Designator=R2 Old Footprint=Axial 0_5W 5_0mm New Footprint=AXIAL0.4
+Change Component Footprint: Designator=R3 Old Footprint=Axial 0_5W 5_0mm New Footprint=AXIAL0.4
+Change Component Footprint: Designator=R4 Old Footprint=Axial 0_5W 5_0mm New Footprint=AXIAL0.4
+Change Component Footprint: Designator=R5 Old Footprint=Axial 0_5W 5_0mm New Footprint=AXIAL0.4
+Change Component Footprint: Designator=R6 Old Footprint=Axial 0_5W 5_0mm New Footprint=AXIAL0.4
+Change Component Footprint: Designator=R7 Old Footprint=Axial 0_5W 5_0mm New Footprint=AXIAL0.4
+Change Component Footprint: Designator=R8 Old Footprint=Axial 0_5W 5_0mm New Footprint=AXIAL0.4
+Added Room: Name=Sheet1

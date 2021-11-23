@@ -1,27 +1,27 @@
 Report       : RC522-BascomV11
-Date         : 10-17-2021
-Time         : 14:29:06
+Date         : 11-15-2021
+Time         : 14:50:19
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
-Processor    : M32
-SRAM         : 800 hex
-EEPROM       : 400 hex
-ROMSIZE      : 8000 hex
+Processor    : M8
+SRAM         : 400 hex
+EEPROM       : 200 hex
+ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 180E hex  -> Will fit into ROM
-ROMIMAGE     :  6158 dec
-FLASH USED   :  18  %
+ROMIMAGE     : 194C hex  -> Will fit into ROM
+ROMIMAGE     :  6476 dec
+FLASH USED   :  79  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
 
-Stack start  : 85F hex
-Stack size   : FA hex
-S-Stacksize  : 96 hex
-S-Stackstart : 766 hex
-Framesize    : C8 hex
-Framestart   : 608 hex
-Space left   :  1286  dec
+Stack start  : 45F hex
+Stack size   : 28 hex
+S-Stacksize  : 10 hex
+S-Stackstart : 438 hex
+Framesize    : 20 hex
+Framestart   : 408 hex
+Space left   :  769  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -42,7 +42,6 @@ ICR1                             Word              0046          70
 EEAR                             Word              003E          62 
 ADC                              Word              0024          36 
 TIMER1                           Word              004C          76 
-COUNTER1                         Word              004C          76 
 COMPARE1A                        Word              004A          74 
 COMPARE1B                        Word              0048          72 
 PWM1A                            Word              004A          74 
@@ -92,34 +91,33 @@ PWM1A                            Word              004A          74
 COMPARE1                         Word              004A          74 
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
-PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-RC522_BUFFER                     Byte(18)          0060          96 
-RC522_INBUFFER                   Byte(18)          0072          114 
-TAG_TYP                          Word              0084          132 
-TAG_TYPA                         Byte(2)           0084          132 
-TAG_IDW                          Dword             0086          134 
-TAG_ID                           Byte(4)           0086          134 
-TAG_CRC                          Byte              008A          138 
-TEXTBYTE                         Byte(16)          008B          139 
-TEXT                             String * 16       008B          139 
-TAG_FOUND                        Byte              009B          155 
-STATUS                           Byte              009C          156 
-LASTBITS                         Byte              009D          157 
-BACKLENG                         Byte              009E          158 
-ERROR1                           Byte              009F          159 
-CRC_LOW                          Byte              00A0          160 
-CRC_HIGH                         Byte              00A1          161 
-GEYMA_LONG                       Long              00A2          162 
-GEYMAT_ARR                       Byte(10)          00A6          166 
-S2                               String * 2        00B0          176 
-CRC32_LONG                       Long              00B3          179 
-CRC16_WORD                       Word              00B7          183 
-LONGG                            Long              00B9          185 
-SECTOR_ONE                       String * 16       00BD          189 
-SECTOR_TWO                       String * 16       00CE          206 
-SECTOR_TREE                      String * 16       00DF          223 
-STR_DATA_16                      String * 16       00F0          240 
+RC522_BUFFER                     Byte(18)          0065          101 
+RC522_INBUFFER                   Byte(18)          0077          119 
+TAG_TYP                          Word              0089          137 
+TAG_TYPA                         Byte(2)           0089          137 
+TAG_IDW                          Dword             008B          139 
+TAG_ID                           Byte(4)           008B          139 
+TAG_CRC                          Byte              008F          143 
+TEXTBYTE                         Byte(16)          0090          144 
+TEXT                             String * 16       0090          144 
+TAG_FOUNT                        Byte              00A0          160 
+STATUS                           Byte              00A1          161 
+LASTBITS                         Byte              00A2          162 
+BACKLENG                         Byte              00A3          163 
+ERROR1                           Byte              00A4          164 
+CRC_LOW                          Byte              00A5          165 
+CRC_HIGH                         Byte              00A6          166 
+GEYMA_LONG                       Long              00A7          167 
+GEYMAT_ARR                       Byte(10)          00AB          171 
+S2                               String * 2        00B5          181 
+CRC32_LONG                       Long              00B8          184 
+CRC16_WORD                       Word              00BC          188 
+LONGG                            Long              00BE          190 
+SECTOR_ONE                       String * 16       00C2          194 
+SECTOR_TWO                       String * 16       00D3          211 
+SECTOR_TREE                      String * 16       00E4          228 
+STR_DATA_16                      String * 16       00F5          245 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -127,17 +125,14 @@ Constant                         Value
 SREG                             &H3F
 SPH                              &H3E
 SPL                              &H3D
-OCR0                             &H3C
-PWM0                             &H3C
-COMPARE0                         &H3C
 GIMSK                            &H3B
 GICR                             &H3B
 GIFR                             &H3A
 TIMSK                            &H39
 TIFR                             &H38
-TIFR1                            &H38
 SPMCR                            &H37
 SPMCSR                           &H37
+I2CR                             &H36
 TWCR                             &H36
 MCUCR                            &H35
 MCUSR                            &H34
@@ -167,15 +162,12 @@ PWM2                             &H23
 COMPARE2                         &H23
 ASSR                             &H22
 WDTCR                            &H21
+UBRRH                            &H20
 UBRRHI                           &H20
-UCSRC                            &H20
 EEARH                            &H1F
 EEARL                            &H1E
 EEDR                             &H1D
 EECR                             &H1C
-PORTA                            &H1B
-DDRA                             &H1A
-PINA                             &H19
 PORTB                            &H18
 DDRB                             &H17
 PINB                             &H16
@@ -189,35 +181,37 @@ SPDR                             &H0F
 SPSR                             &H0E
 SPCR                             &H0D
 UDR                              &H0C
-USR                              &H0B
 UCSRA                            &H0B
 UCSR0A                           &H0B
-UCR                              &H0A
+USR                              &H0B
 UCSRB                            &H0A
-UBRR                             &H09
+UCR                              &H0A
+UCSRC                            &H20
 UBRRL                            &H09
+UBRR                             &H09
 ACSR                             &H08
 ADMUX                            &H07
 ADCSR                            &H06
 ADCSRA                           &H06
 ADCH                             &H05
 ADCL                             &H04
+I2DR                             &H03
+I2AR                             &H02
+I2SR                             &H01
+I2BR                             &H00
 TWDR                             &H03
 TWAR                             &H02
 TWSR                             &H01
 TWBR                             &H00
-_ROMSIZE                         32768
-_CHIP                            23
+_ROMSIZE                         8192
+_CHIP                            17
 INT1                             7
 INT0                             6
-INT2                             5
 IVSEL                            1
 IVCE                             0
 INTF1                            7
 INTF0                            6
-INTF2                            5
 TOIE0                            0
-OCIE0                            1
 TOIE1                            2
 OCIE1B                           3
 OCIE1A                           4
@@ -225,7 +219,6 @@ TICIE1                           5
 TOIE2                            6
 OCIE2                            7
 TOV0                             0
-OCF0                             1
 TOV1                             2
 OCF1B                            3
 OCF1A                            4
@@ -233,8 +226,8 @@ ICF1                             5
 TOV2                             6
 OCF2                             7
 SPMIE                            7
-ASB                              6
-ASRE                             4
+RWWSB                            6
+RWWSRE                           4
 BLBSET                           3
 PGWRT                            2
 PGERS                            1
@@ -248,19 +241,10 @@ ISC11                            3
 ISC10                            2
 ISC01                            1
 ISC00                            0
-JTD                              7
-ISC2                             6
-EIH                              5
-JTRF                             4
 WDRF                             3
 BORF                             2
 EXTRF                            1
 PORF                             0
-FOC0                             7
-WGM00                            6
-COM01                            5
-COM00                            4
-WGM01                            3
 CS02                             2
 CS01                             1
 CS00                             0
@@ -272,30 +256,34 @@ FOC1A                            3
 FOC1B                            2
 PWM11                            1
 PWM10                            0
+WGM11                            1
+WGM10                            0
 ICNC1                            7
 ICES1                            6
 CTC11                            4
 CTC10                            3
+WGM13                            4
+WGM12                            3
 CTC1                             3
 CS12                             2
 CS11                             1
 CS10                             0
 FOC2                             7
 PWM2BIT                          6
+WGM20                            6
 COM21                            5
 COM20                            4
 CTC2                             3
+WGM21                            3
 CS22                             2
 CS21                             1
 CS20                             0
-RPDD                             7
-RPDC                             6
-RPDB                             5
-RPDA                             4
+ADHSM                            4
 ACME                             3
 PUD                              2
 PSR2                             1
 PSR10                            0
+WDCE                             4
 WDTOE                            4
 WDE                              3
 WDP2                             2
@@ -304,32 +292,8 @@ WDP0                             0
 EERIE                            3
 EEMWE                            2
 EEWE                             1
-EERE                             0
 EEPE                             1
-PA7                              7
-PA6                              6
-PA5                              5
-PA4                              4
-PA3                              3
-PA2                              2
-PA1                              1
-PA0                              0
-DDA7                             7
-DDA6                             6
-DDA5                             5
-DDA4                             4
-DDA3                             3
-DDA2                             2
-DDA1                             1
-DDA0                             0
-PINA7                            7
-PINA6                            6
-PINA5                            5
-PINA4                            4
-PINA3                            3
-PINA2                            2
-PINA1                            1
-PINA0                            0
+EERE                             0
 PB7                              7
 PB6                              6
 PB5                              5
@@ -354,7 +318,6 @@ PINB3                            3
 PINB2                            2
 PINB1                            1
 PINB0                            0
-PC7                              7
 PC6                              6
 PC5                              5
 PC4                              4
@@ -362,7 +325,6 @@ PC3                              3
 PC2                              2
 PC1                              1
 PC0                              0
-DDC7                             7
 DDC6                             6
 DDC5                             5
 DDC4                             4
@@ -370,7 +332,6 @@ DDC3                             3
 DDC2                             2
 DDC1                             1
 DDC0                             0
-PINC7                            7
 PINC6                            6
 PINC5                            5
 PINC4                            4
@@ -406,7 +367,9 @@ RXC                              7
 TXC                              6
 UDRE                             5
 FE                               4
+OR                               3
 DOR                              3
+UPE                              2
 PE                               2
 U2X                              1
 MPCM                             0
@@ -449,7 +412,6 @@ ACIS0                            0
 REFS1                            7
 REFS0                            6
 ADLAR                            5
-MUX4                             4
 MUX3                             3
 MUX2                             2
 MUX1                             1
@@ -468,9 +430,22 @@ TWSTA                            5
 TWSTO                            4
 TWWC                             3
 TWEN                             2
-TWI_TST                          1
 TWIE                             0
+TWA6                             7
+TWA5                             6
+TWA4                             5
+TWA3                             4
+TWA2                             3
+TWA1                             2
+TWA0                             1
 TWGCE                            0
+TWS7                             7
+TWS6                             6
+TWS5                             5
+TWS4                             4
+TWS3                             3
+TWPS1                            1
+TWPS0                            0
 AS2                              3
 TCN2UB                           2
 OCR2UB                           1
@@ -478,7 +453,7 @@ TCR2UB                           0
 _RESET                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
-_GSTRBUF                         1544
+_GSTRBUF                         1032
 _DECIMALPOINT                    46
 _RTSCTS                          0
 _RTSCTS1                         0
@@ -488,8 +463,8 @@ _RTSCTS5                         0
 _RTSCTS6                         0
 _RTSCTS7                         0
 _RTSCTS8                         0
-_RAMSIZE                         2048
-_ERAMSIZE                        1024
+_RAMSIZE                         1024
+_ERAMSIZE                        512
 _SIM                             0
 _HUGE                            0
 _BASE                            1
@@ -502,7 +477,7 @@ _DOSDIRWRITE                     0
 _1WEXT                           0
 _ADC_REFMODEL                    0
 _UARTS                           1
-_HWSTACKSTART                    2143
+_HWSTACKSTART                    1119
 _TIMEOUT                         0
 _PBIN_EXTENDED                   0
 _SPI_EXTENDED                    0
@@ -510,12 +485,18 @@ _INPBIN_EXTENDED                 0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
-_HWSTACK_LOW                     &H0765
-_SWSTACK_LOW                     &H06D0
-_FRAME_HIGH                      &H06D1
+_HWSTACK_LOW                     &H0437
+_SWSTACK_LOW                     &H0428
+_FRAME_HIGH                      &H0429
 _XMEGA                           0
 _XTINY                           0
+_GLCD_PORT                       &H12
+_GLCD_PORT_DDR                   &H11
+_GLCD_PORT_IN                    &H10
+_GLCD_PORTM                      &H15
 READ_WRITE                       1
+_SPI_SS                          &H18
+_SPI_SSP                         2
 PCD_AUTHENT                      &H0E
 PCD_TRANSCEIVE                   &H0C
 BITFRAMINGREG                    &H0D
@@ -552,6 +533,6 @@ ADCD                             not used
 COMPARE1                         not used
 TAG_IDW                          not used
 
-Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  196 
-Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  203 
-Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  246 
+Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  223 
+Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  230 
+Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  273 

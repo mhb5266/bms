@@ -1,0 +1,8 @@
+Added Component: Designator=out(phonix 6)
+Added Net: Name=Netout_1
+Added Net: Name=Netout_2
+Added Net: Name=Netout_3
+Added Net: Name=Netout_4
+Added Net: Name=Netout_5
+Added Net: Name=Netout_6
+Added Member To Class: ClassName=Sheet1 Member=Component out PHOENIX 6

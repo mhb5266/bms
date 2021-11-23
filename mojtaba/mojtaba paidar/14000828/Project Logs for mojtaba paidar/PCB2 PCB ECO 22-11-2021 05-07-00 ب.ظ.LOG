@@ -1,0 +1,8 @@
+Removed Pin From Net: NetName=NetLabel106 Pin=Atmega16-21
+Added Pin To Net: NetName=GND Pin=Atmega16-6
+Added Pin To Net: NetName=NetLabel111 Pin=Atmega16-21
+Added Net: Name=NetLabel111
+Added Member To Class: ClassName=Sheet2 Member=Component R13 RES
+Added Member To Class: ClassName=Sheet2 Member=Component U? L78M05ACDT-TR
+Added Member To Class: ClassName=Sheet2 Member=Component U? ULN2003D1013TR
+Added Room: Name=Sheet2

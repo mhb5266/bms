@@ -1,0 +1,12 @@
+Removed Pin From Net: NetName=out3 Pin=Atmega16-42
+Removed Pin From Net: NetName=out2 Pin=Atmega16-43
+Removed Pin From Net: NetName=out1 Pin=Atmega16-44
+Added Pin To Net: NetName=out2 Pin=Atmega16-42
+Added Pin To Net: NetName=out1 Pin=Atmega16-43
+Added Pin To Net: NetName=du Pin=Atmega16-44
+Added Net: Name=du
+Added Member To Class: ClassName=Sheet2 Member=Component C4 470uF
+Added Member To Class: ClassName=Sheet2 Member=Component R13 RES
+Added Member To Class: ClassName=Sheet2 Member=Component U? Optoisolator1
+Added Member To Class: ClassName=Sheet2 Member=Component U? ULN2003D1013TR
+Added Room: Name=Sheet2

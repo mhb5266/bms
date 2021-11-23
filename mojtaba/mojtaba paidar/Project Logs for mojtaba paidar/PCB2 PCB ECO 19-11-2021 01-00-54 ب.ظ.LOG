@@ -1,0 +1,7 @@
+Removed Pin From Net: NetName=sensor1 Pin=R13-1
+Removed Pin From Net: NetName=sensor2 Pin=R14-1
+Added Pin To Net: NetName=e1 Pin=R13-1
+Added Pin To Net: NetName=e2 Pin=R14-1
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Room: Name=Sheet2

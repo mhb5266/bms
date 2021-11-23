@@ -1,8 +1,0 @@
-Added Component: Designator=antenna(SMA-Right)
-Added Pin To Net: NetName=Netantenna_1 Pin=antenna-1
-Added Pin To Net: NetName=Netantenna_1 Pin=Sim800-1
-Added Net: Name=Netantenna_1
-Added Member To Class: ClassName=Sheet2 Member=Component antenna
-Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
-Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
-Added Room: Name=Sheet2

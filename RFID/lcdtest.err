@@ -1,0 +1,4 @@
+Error : 93    Line :   167   Variable not dimensioned [READ522(COMMIRQREG)]  , in File : C:\Users\Barouei\Desktop\Bms\RFID\lcdtest.bas
+Error : 93    Line :   177   Variable not dimensioned [READ522(ERRORREG)]  , in File : C:\Users\Barouei\Desktop\Bms\RFID\lcdtest.bas
+Error : 7     Line :   177   IF THEN expected [ 177]  , in File : C:\Users\Barouei\Desktop\Bms\RFID\lcdtest.bas
+Error : 123   Line :   177   END IF expected  , in File : C:\Users\Barouei\Desktop\Bms\RFID\lcdtest.bas

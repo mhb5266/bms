@@ -1,7 +1,0 @@
-Removed Pin From Net: NetName=vcc Pin=key & seg-6
-Added Pin To Net: NetName=+5v Pin=key & seg-6
-Added Member To Class: ClassName=Sheet2 Member=Component C4 470uF
-Added Member To Class: ClassName=Sheet2 Member=Component R13 RES
-Added Member To Class: ClassName=Sheet2 Member=Component U? ULN2003D1013TR
-Added Member To Class: ClassName=Sheet2 Member=Component U? Optoisolator1
-Added Room: Name=Sheet2

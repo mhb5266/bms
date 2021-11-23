@@ -1,0 +1,7 @@
+Added Component: Designator=T?(phoenix terminal 6)
+Add component (AddParameter): Name = "ComponentLinkURL"; Value = "www.picpars.com"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Designer"; Value = "Seyed Mohsen Ghasemain"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "E-mail"; Value = "picpars@gmail.com"; VariantName = "[No Variations]"
+Added Member To Class: ClassName=Sheet1 Member=Component out PHOENIX 6
+Added Member To Class: ClassName=Sheet1 Member=Component T? Phoenix terminal
+Added Room: Name=Sheet1

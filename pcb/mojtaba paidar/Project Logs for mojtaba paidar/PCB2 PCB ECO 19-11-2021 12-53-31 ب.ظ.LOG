@@ -1,7 +1,0 @@
-Change Net Name : Old Net Name=Netjumper_1 New Net Name=e1
-Added Pin To Net: NetName=e2 Pin=jumper?-1
-Added Pin To Net: NetName=e2 Pin=R14-1
-Added Net: Name=e2
-Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
-Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
-Added Room: Name=Sheet2

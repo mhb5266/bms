@@ -1,7 +1,0 @@
-Removed Pin From Net: NetName=out1 Pin=U?-1
-Removed Pin From Net: NetName=out3 Pin=U?-3
-Added Pin To Net: NetName=out3 Pin=U?-1
-Added Pin To Net: NetName=out1 Pin=U?-3
-Added Member To Class: ClassName=Sheet2 Member=Component C4 470uF
-Added Member To Class: ClassName=Sheet2 Member=Component R13 RES
-Added Room: Name=Sheet2

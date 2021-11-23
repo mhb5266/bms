@@ -1,0 +1,41 @@
+Removed Pin From Net: NetName=out1 Pin=U?-1
+Removed Pin From Net: NetName=out2 Pin=U?-2
+Removed Pin From Net: NetName=out3 Pin=U?-3
+Removed Pin From Net: NetName=GND Pin=U?-8
+Removed Pin From Net: NetName=+12 Pin=U?-9
+Removed Pin From Net: NetName=Netrelay3_5 Pin=U?-14
+Removed Pin From Net: NetName=Netrelay2_5 Pin=U?-15
+Removed Pin From Net: NetName=Netrelay1_5 Pin=U?-16
+Added Component: Designator=U?(N0016A)
+Add component (AddParameter): Name = "Category"; Value = "DarlingtonBJT"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Configuration"; Value = "Array7"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Datasheet URL"; Value = "http://www.ti.com/general/docs/lit/getliterature.tsp?genericPartNumber=uln2003a&fileType=pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Datasheet Version"; Value = "Rev. O, 01/2016"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "TexasInstruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer URL"; Value = "http://www.ti.com/"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Maximum Collector Emitter Saturation Voltage"; Value = "1.1@100mA"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Maximum Collector Emitter Voltage"; Value = "50V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mounting"; Value = "ThroughHole"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mounting Technology"; Value = "ThroughHole"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "16PDIP"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package Description"; Value = "16-Pin Plastic In-Line, Body 19.305 x 6.35 mm, Pitch 2.54 mm"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package Reference"; Value = "N16"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package URL"; Value = "http://www.ti.com/litv/pdf/mpdi002c"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package Version"; Value = "4040049/E, 12/2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Packaging"; Value = "Rail/Tube"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Peak DC Collector Current"; Value = "0.5A"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Rad Hard"; Value = "No"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Type"; Value = "NPN"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=out1 Pin=U?-1
+Added Pin To Net: NetName=out2 Pin=U?-2
+Added Pin To Net: NetName=out3 Pin=U?-3
+Added Pin To Net: NetName=GND Pin=U?-8
+Added Pin To Net: NetName=+12 Pin=U?-9
+Added Pin To Net: NetName=Netrelay3_5 Pin=U?-14
+Added Pin To Net: NetName=Netrelay2_5 Pin=U?-15
+Added Pin To Net: NetName=Netrelay1_5 Pin=U?-16
+Added Member To Class: ClassName=Sheet1 Member=Component crystal 32.768KHZ
+Added Member To Class: ClassName=Sheet1 Member=Component U? ULN2003AN
+Added Member To Class: ClassName=Sheet1 Member=Component U? DS1307
+Added Member To Class: ClassName=Sheet1 Member=Component U? ATmega8A-AU
+Added Room: Name=Sheet1

@@ -1,9 +1,0 @@
-Added Component: Designator=Bridge(MBF)
-Added Net: Name=NetBridge_1
-Added Net: Name=NetBridge_2
-Added Net: Name=NetBridge_3
-Added Net: Name=NetBridge_4
-Added Member To Class: ClassName=Sheet2 Member=Component Bridge Diode Bridge
-Added Member To Class: ClassName=Sheet2 Member=Component C4 C0805
-Added Member To Class: ClassName=Sheet2 Member=Component R13 RES
-Added Room: Name=Sheet2

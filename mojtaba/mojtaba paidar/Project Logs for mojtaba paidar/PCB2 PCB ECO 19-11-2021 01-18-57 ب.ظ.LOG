@@ -1,0 +1,4 @@
+Change Component Footprint: Designator=bridge Old Footprint=Bridge KBU PACKAGE New Footprint=Bridge DB107 Package
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Member To Class: ClassName=Sheet2 Member=Component jumper? 10K
+Added Room: Name=Sheet2

@@ -1,9 +1,0 @@
-Removed Pin From Net: NetName=out1 Pin=U?-41
-Removed Pin From Net: NetName=out2 Pin=U?-42
-Removed Pin From Net: NetName=out3 Pin=U?-43
-Removed Pin From Net: NetName=buzzer Pin=U?-44
-Added Pin To Net: NetName=buzzer Pin=U?-41
-Added Pin To Net: NetName=out3 Pin=U?-42
-Added Pin To Net: NetName=out2 Pin=U?-43
-Added Pin To Net: NetName=out1 Pin=U?-44
-Added Room: Name=Sheet2

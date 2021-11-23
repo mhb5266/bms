@@ -1,0 +1,78 @@
+Removed Pin From Net: NetName=dio Pin=ATmega8-1
+Removed Pin From Net: NetName=clk Pin=ATmega8-2
+Removed Pin From Net: NetName=GND Pin=ATmega8-5
+Removed Pin From Net: NetName=+5 Pin=ATmega8-6
+Removed Pin From Net: NetName=out1 Pin=ATmega8-9
+Removed Pin From Net: NetName=out2 Pin=ATmega8-10
+Removed Pin From Net: NetName=out3 Pin=ATmega8-11
+Removed Pin From Net: NetName=remote Pin=ATmega8-12
+Removed Pin From Net: NetName=poweron Pin=ATmega8-13
+Removed Pin From Net: NetName=sensor Pin=ATmega8-14
+Removed Pin From Net: NetName=mosi Pin=ATmega8-15
+Removed Pin From Net: NetName=miso Pin=ATmega8-16
+Removed Pin From Net: NetName=sck Pin=ATmega8-17
+Removed Pin From Net: NetName=temp Pin=ATmega8-26
+Removed Pin From Net: NetName=sda Pin=ATmega8-27
+Removed Pin From Net: NetName=scl Pin=ATmega8-28
+Removed Pin From Net: NetName=reset Pin=ATmega8-29
+Removed Pin From Net: NetName=RX Pin=ATmega8-30
+Removed Pin From Net: NetName=TX Pin=ATmega8-31
+Removed Pin From Net: NetName=RST Pin=ATmega8-32
+Removed Pin From Net: NetName=mosi Pin=R14-1
+Removed Pin From Net: NetName=mosi Pin=sensor-1
+Removed Member From Class: ClassName=Sheet1 Member=ATmega8
+Added Component: Designator=U?(28P3)
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "Manufacturer URL"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "http://www.atmel.com/"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2Description"; Value = "ATmega8(L)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2URL"; Value = "http://www.atmel.com/dyn/resources/prod_documents/doc2486.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink3Description"; Value = "ATmega8(L) Summary"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink3URL"; Value = "http://www.atmel.com/dyn/resources/prod_documents/2486S.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "DatasheetVersion"; Value = "revZ, Feb-2011"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "28-lead (0.300"/7.62mm Wide) Plastic Dual Inline Package (PDIP)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "28P3"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageVersion"; Value = "revB, Sep-2001"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=out1 Pin=button-1
+Added Pin To Net: NetName=out2 Pin=button-2
+Added Pin To Net: NetName=out3 Pin=button-3
+Added Pin To Net: NetName=out1 Pin=R4-1
+Added Pin To Net: NetName=out2 Pin=R5-1
+Added Pin To Net: NetName=out3 Pin=R6-1
+Added Pin To Net: NetName=reset Pin=U?-1
+Added Pin To Net: NetName=RX Pin=U?-2
+Added Pin To Net: NetName=TX Pin=U?-3
+Added Pin To Net: NetName=RST Pin=U?-4
+Added Pin To Net: NetName=poweron Pin=U?-5
+Added Pin To Net: NetName=clk Pin=U?-6
+Added Pin To Net: NetName=+5 Pin=U?-7
+Added Pin To Net: NetName=GND Pin=U?-8
+Added Pin To Net: NetName=dio Pin=U?-11
+Added Pin To Net: NetName=remote Pin=U?-12
+Added Pin To Net: NetName=poweron Pin=U?-13
+Added Pin To Net: NetName=mosi Pin=U?-17
+Added Pin To Net: NetName=miso Pin=U?-18
+Added Pin To Net: NetName=sck Pin=U?-19
+Added Pin To Net: NetName=out1 Pin=U?-23
+Added Pin To Net: NetName=out2 Pin=U?-24
+Added Pin To Net: NetName=out3 Pin=U?-25
+Added Pin To Net: NetName=temp Pin=U?-26
+Added Pin To Net: NetName=sda Pin=U?-27
+Added Pin To Net: NetName=scl Pin=U?-28
+Change Net Name : Old Net Name=+5 New Net Name=vcc
+Added Pin To Net: NetName=NetLabel94 Pin=U?-16
+Added Net: Name=NetLabel94
+Added Pin To Net: NetName=sensor1 Pin=U?-14
+Added Net: Name=sensor1
+Added Pin To Net: NetName=sensor2 Pin=R14-1
+Added Pin To Net: NetName=sensor2 Pin=sensor-1
+Added Pin To Net: NetName=sensor2 Pin=U?-15
+Added Net: Name=sensor2
+Added Pin To Net: NetName=xtal1 Pin=U?-9
+Added Net: Name=xtal1
+Added Pin To Net: NetName=xtal2 Pin=U?-10
+Added Pin To Net: NetName=xtal2 Pin=Y?-2
+Added Net: Name=xtal2
+Added Pin To Net: NetName=xtl1 Pin=Y?-1
+Added Net: Name=xtl1
+Added Member To Class: ClassName=Sheet1 Member=Component U? ATmega8-16PU
+Added Room: Name=Sheet1

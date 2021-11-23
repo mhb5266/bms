@@ -17,16 +17,41 @@
 '
 'in working read 7Byte Tag ID
 '*******************************************************************************
-$regfile = "m32def.dat"
+$regfile = "m8def.dat"
 $crystal = 11059200
 
-$hwstack = 250
-$swstack = 150
-$framesize = 200
-$baud = 9600
+'$hwstack = 250
+'$swstack = 150
+'$framesize = 200
+'$baud = 9600
+
+defines:
+$lib "glcdKS108.lib"
+Config Graphlcd = 128 * 64sed , Dataport = Portd , Controlport = Portc , Ce = 1 , Ce2 = 0 , Cd = 5 , Rd = 4 , Reset = 2 , Enable = 3
+$include "font8x8.font"
+
+setfont font8x8
+
+'$include "font16x16.font"
+
+'setfont font16x16
 
 
-Const Read_write = 1                                        ' 0= only Read TAG ID  1=Read and Write Data to Card
+config portd=OUTPUT
+config portc=OUTPUT
+
+
+do
+  cls
+  lcdat 1,1,"MHB",0
+  wait 5
+
+loop
+
+configs:
+
+
+Const Read_write = 1               ' 0= only Read TAG ID  1=Read and Write Data to Card
 
 'Voltage = 3,3V
 'PortB.7 --> SCK RC522
@@ -36,32 +61,31 @@ Const Read_write = 1                                        ' 0= only Read TAG I
 'PortD.6 --> Rst RC522
  Print "besmellahe rahmane rahim"
 '*******************************************************************************
-Config Pina.0 = Output
-Led Alias Porta.0
 
-Config Pina.1 = Output
-Led_popwer_on Alias Porta.1
-Led_popwer_on = 1
+'Led Alias Portc.4 : Config Pinc.4 = Output
 
-Config Pinb.0 = Output
-Buzeer Alias Portb.0
+'Led_popwer_on Alias Portc.3:Config Pinc.3 = Output :Led_popwer_on = 1
 
-Config Pinb.1 = Input
-Key Alias Pinb.1
 
-Config Pina.5 = Output
-Led_write Alias Porta.5
+Buzeer Alias Portb.0 :Config Pinb.0 = Output
 
-Config Pind.6 = Output                                      'Reset Pin
-Rst522 Alias Portd.6
-Set Rst522
 
-Config Pind.5 = Output                                      'CS Pin
-Cs_pn Alias Portd.5
-Set Cs_pn
+Key Alias Pinb.1:Config Pinb.1 = Input
 
-Config Spi = Soft , Din = Pinb.6 , Dout = Portb.5 , Ss = None , Clock = Portb.7 , Mode = 3
-'Config Spi = Hard , Interrupt = Off , Data Order = Msb , Master = Yes , Polarity = low , Phase = 0 , Clockrate = 16 , Noss =1
+
+'Led_write Alias Portc.5 :Config Pinc.5 = Output
+
+
+Rst522 Alias Portb.1 :Config Pinb.1 = Output:Set Rst522                                       'Reset Pin
+
+
+
+Cs_pn Alias Portb.0 :Config Pinb.0 = Output:Set Cs_pn                                      'CS Pin
+
+
+
+'Config Spi = Soft , Din = Pinb.6 , Dout = Portb.5 , Ss = None , Clock = Portb.7 , Mode = 3
+Config Spi = Hard , Interrupt = Off , Data Order = Msb , Master = Yes , Polarity = low , Phase = 0 , Clockrate = 16 , Noss =1
 Spiinit
 '*******************************************************************************
 Dim Rc522_buffer(18) As Byte                                'out Buffer
@@ -89,7 +113,7 @@ Const Commandreg = &H01
 Const Errorreg = &H06
 Const Picc_auth1a = &H60
 
-Dim Tag_found As Byte
+Dim Tag_fount As Byte
 Dim Status As Byte
 Dim Lastbits As Byte
 Dim Backleng As Byte
@@ -132,29 +156,32 @@ Declare Sub Rc522_write(byval Block As Byte)
 Declare Sub Rc522_stop()
 '*******************************************************************************
 Print "Initrc522"
-Led_popwer_on = 0
+'Led_popwer_on = 0
 Call Initrc522()
 '*******************************************************************************
 Waitms 500
-Led_popwer_on = 1
+'Led_popwer_on = 1
 Print "Start"
 '*******************************************************************************
-Buzeer = 1 : Waitms 500 : Buzeer = 0
+'Buzeer = 1 : Waitms 500 : Buzeer = 0
+
+
+
 
 Do
-   Led_write = Key
-   Toggle Led_write
+   'Led_write = Key
+   'Toggle Led_write
 
 
    Call Is_card()
-   'Print "tag found=" ; Tag_found ; "       "
+   'Print "tag found=" ; Tag_fount ; "       "
 
 
-   If Tag_found = 1 Then
-      Buzeer = 1 : Waitms 100 : Buzeer = 0
+   If Tag_fount = 1 Then
+      'Buzeer = 1 : Waitms 100 : Buzeer = 0
 
       Call Anticoll()                                       'Read Tag ID
-      Print "Chip found"
+      Print "Chip fount"
       Print "Tag Typ= " ; Hex(tag_typ)
       Print "Tag ID= " ; Hex(tag_id(1)) ; "-" ; Hex(tag_id(2)) ; "-" ; Hex(tag_id(3)) ; "-" ; Hex(tag_id(4))
 '*******************************************************************************
@@ -167,7 +194,7 @@ Do
 
               If Key = 1 Then
                 'Read Data From Card
-                Led_write = 0
+                'Led_write = 0
                 Call Rc522_read(12)                         'read Data Sector 2 0
                 Sector_one = "                "
                 Sector_one = Str_data_16
@@ -190,7 +217,7 @@ Do
                Geyma_long = 10100
 
                Write1:
-               Led_write = 1
+               'Led_write = 1
 
                Text = "                "
                Text = Str(geyma_long)
@@ -275,32 +302,32 @@ Do
 
      Do
        Call Is_card()
-       Toggle Led
+       'Toggle Led
 
-       'Print "tag2=" ; Tag_found ; "   "
+       'Print "tag2=" ; Tag_fount ; "   "
 
-       If Tag_found = 1 Then
+       If Tag_fount = 1 Then
           Call Anticoll()
           Call Rc522_stop()                                 'Stop Auth Mode
           Call Rc522_halt()
        End If
 
        Waitms 200
-     Loop Until Tag_found = 0
+     Loop Until Tag_fount = 0
 
      Buzeer = 1 : Waitms 500 : Buzeer = 0
    Else
-      'Print "No Chip found"
+      'Print "No Chip fount"
    End If
 
    ' Call Rc522_halt()
    Waitms 400
-   Toggle Led
+   'Toggle Led
 Loop
 End
 '*******************************************************************************
 '*******************************************************************************
-' is Chip Card found Call RC522 Request (Help Sub)
+' is Chip Card fount Call RC522 Request (Help Sub)
 '*******************************************************************************
 Sub Is_card()
    Call Rc522_request(&H26)                                 'PICC_REQIDL           0x26
@@ -316,7 +343,7 @@ Sub Anticoll()
    Rc522_buffer(2) = &H20
    Call Rc522to_card(pcd_transceive , 2)
 
-   If Backleng = 40 Then                                    'found 5 Bytes Byte 5 is CRC
+   If Backleng = 40 Then                                    'fount 5 Bytes Byte 5 is CRC
       Tag_id(1) = Rc522_inbuffer(1)
       Tag_id(2) = Rc522_inbuffer(2)
       Tag_id(3) = Rc522_inbuffer(3)
@@ -484,18 +511,18 @@ End Sub
 '  H4403 = Mifare_desfire
 '*******************************************************************************
 Sub Rc522_request(byval Reqmode As Byte)
-   Tag_found = 0
+   Tag_fount = 0
    Call Write522(bitframingreg , &H07)                      'BitFramingReg  = 0x0D
    Rc522_buffer(1) = Reqmode
 
    Call Rc522to_card(pcd_transceive , 1)
 
    If Backleng = 16 Then
-      Tag_found = 1                                         'Chip found
+      Tag_fount = 1                                         'Chip fount
       Tag_typa(2) = Rc522_inbuffer(1)                       'Little Endian
       Tag_typa(1) = Rc522_inbuffer(2)
    Else
-      Tag_found = 0
+      Tag_fount = 0
    End If
 End Sub
 '*******************************************************************************
