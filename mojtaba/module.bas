@@ -14,6 +14,12 @@ Tm1637_din Alias Pinc.2
 
 rst alias portd.2:config portd.2=OUTPUT
 
+config lcdpin=pin;db7=porta.4;db6=portb.4;db5=portb.3;db4=portb.2;rs=portb.0;en=portb.1
+config lcd=16*2
+cls
+lcd "hi"
+
+
 defines:
 
 declare sub flushbuf
@@ -41,7 +47,7 @@ dim num3 as  string*13
 dim nobat as byte
 
 Const Pincode = "AT+CPIN=1234"
-
+const uselcd=1
 Declare Sub disp(byval Bdispdata As integer)            'The display can only show numbers
 declare sub dispstr(byval strshow as string*5)
 
@@ -125,11 +131,12 @@ End If
 for i=1 to 8
     toggle led3
     waitms 250
+
 next
 reset led3
 waitms 500
 
-
+'(
 Startup:
 
 Resetsim
@@ -240,7 +247,7 @@ Loop Until Sret = "OK"
 
    msg="first time"
     adminsms
-
+')
 settime
 dispon
  _start
@@ -248,6 +255,7 @@ dispon
  for i=1 to 16
      toggle buzz
      waitms 200
+     lcd "*"
  next
 
 Main:
@@ -469,6 +477,7 @@ Command:
   _start
   disp code
         toggle led4
+        cls:lcd code
         wait 1
 
 
@@ -773,7 +782,7 @@ Sub disp(byval Bdispdata As integer)
 
    Strdisp = Str(bdispdata)
    Strdisp = Format(strdisp , "     ")
-
+   home ; lcd _sec
    _start
    wrbyte &H40                                       'autoincrement adress mode
    _ack
@@ -803,41 +812,7 @@ Sub disp(byval Bdispdata As integer)
    _stop
 End Sub
 
-Sub dispstr(byval strshow as string*5)
-   Local Bcounter As Byte
-   Local Strdisp As String * 5
 
-   'Strdisp = strshow
-   Strdisp = Format(strshow , "     ")
-
-   _start
-   wrbyte &H40                                       'autoincrement adress mode
-   _ack
-   _stop
-   _start
-   wrbyte &HC0                                       'startaddress first digit (HexC0) = MSB display
-   _ack
-
-   For Bcounter = 2 To 6
-      Select Case Asc(strdisp , Bcounter)
-         Case "0" : wrbyte &B00111111
-         Case "1" : wrbyte &B00000110
-         Case "2" : wrbyte &B01011011
-         Case "3" : wrbyte &B01001111
-         Case "4" : wrbyte &B01100110
-         Case "5" : wrbyte &B01101101
-         Case "6" : wrbyte &B01111101
-         Case "7" : wrbyte &B00000111
-         Case "8" : wrbyte &B01111111
-         Case "9" : wrbyte &B01101111
-         case "-" : wrbyte &B01000000
-         case "c" : wrbyte &B01111001
-         Case Else : wrbyte &B00000000
-      End Select
-      _ack
-   Next
-   _stop
-End Sub
 
 
 Sub wrbyte(byval Bdata As Byte)
@@ -926,6 +901,8 @@ Sub Getline(ss As String)
            if i>40 then gosub delremote else learnnew
         end if
         readtime
+        cls
+        lcd _sec
         if _sec<>lsec then
            disp _sec
            lsec=_sec
@@ -1104,9 +1081,9 @@ Sub Showsms(ss As String )
   End Select
 
  Loop
- '#if Uselcd = 1
- Home Lower : Lcd "remove sms" : wait 1:cls
- '#endif
+ #if Uselcd = 1
+ 'Home Lower : Lcd "remove sms" : wait 1:cls
+ #endif
 do
  Print "AT+CMGDA=DEL READ"
  'Print "AT+CMGD=" ; Stemp  ' delete the message

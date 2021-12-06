@@ -1,6 +1,6 @@
-Report       : module
+Report       : sms module
 Date         : 12-04-2021
-Time         : 15:58:17
+Time         : 15:36:31
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 2C9A hex  -> Will fit into ROM
-ROMIMAGE     :  11418 dec
-FLASH USED   :  34  %
+ROMIMAGE     : 2A46 hex  -> Will fit into ROM
+ROMIMAGE     :  10822 dec
+FLASH USED   :  33  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 838 hex
 Framesize    : 20 hex
 Framestart   : 808 hex
-Space left   :  1439  dec
+Space left   :  1337  dec
 
 LCD DB7      : PORTA.4
 LCD DB6      : PORTB.4
@@ -94,46 +94,47 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-B                                Byte              0060          96 
-R                                Byte              0061          97 
-MSG                              String * 60       0062          98 
-NUMBER                           String * 13       009F          159 
-SHEADER                          String(5) * 30    00AD          173 
-ORDER                            String * 10       0148          328 
-COUNT                            Byte              0153          339 
+I                                Byte              0060          96 
+B                                Byte              0061          97 
+SRET                             String * 100      0062          98 
+STEMP                            String * 6        00C7          199 
+MSG                              String * 60       00CE          206 
+NUMBER                           String * 13       010B          267 
 ENUM1                            EEPROM String     0000          0 
 ENUM2                            EEPROM String     000E          14 
 ENUM3                            EEPROM String     001C          28 
-NUM1                             String * 13       0154          340 
-NUM2                             String * 13       0162          354 
-NUM3                             String * 13       0170          368 
-NOBAT                            Byte              017E          382 
-SHOWW                            Integer           017F          383 
-STRSHOW                          String * 5        0181          385 
-LSEC                             Byte              0187          391 
-TIMEE                            Integer           018B          395 
-SRET                             String * 100      018D          397 
-STEMP                            String * 6        01F2          498 
-S                                Word(24)          01F9          505 
-I                                Byte              0229          553 
-SADDRESS                         String * 20       022A          554 
-SCODE                            String * 4        023F          575 
-ADDRESS                          Long              0244          580 
-CODE                             Byte              0248          584 
-RA                               Long              0249          585 
-RNUMBER                          Byte              024D          589 
-OKREAD                           Bit [7]           024E          590 
-ERROR                            Bit [6]           024E          590 
-KEYCHECK                         Bit [5]           024E          590 
-T                                Word              024F          591 
-EADDRESS                         Word              0251          593 
-DATAREAD                         Byte              0253          595 
-DATAWRITE                        Byte              0254          596 
-M                                String * 8        0255          597 
-M1                               String * 2        025E          606 
-M2                               String * 2        0261          609 
-M3                               String * 2        0264          612 
-RAW                              Byte              0267          615 
+NUM1                             String * 13       0119          281 
+NUM2                             String * 13       0127          295 
+NUM3                             String * 13       0135          309 
+ORDER                            String * 10       0143          323 
+EFIRST                           EEPROM Byte       002A          42 
+FIRST                            Byte              014E          334 
+SHEADER                          String(5) * 30    014F          335 
+NET                              String * 10       01EA          490 
+COUNT                            Byte              01F5          501 
+R                                Byte              025D          605 
+TIMEOUT                          Byte              025E          606 
+T0                               Byte              025F          607 
+S                                Word(24)          0260          608 
+SADDRESS                         String * 20       0290          656 
+SCODE                            String * 4        02A5          677 
+ADDRESS                          Long              02AA          682 
+CODE                             Byte              02AE          686 
+RA                               Long              02AF          687 
+RNUMBER                          Byte              02B3          691 
+OKREAD                           Bit [7]           02B4          692 
+ERROR                            Bit [6]           02B4          692 
+KEYCHECK                         Bit [5]           02B4          692 
+T                                Word              02B5          693 
+EADDRESS                         Word              02B7          695 
+DATAREAD                         Byte              02B9          697 
+DATAWRITE                        Byte              02BA          698 
+M                                String * 8        02BB          699 
+M1                               String * 2        02C4          708 
+M2                               String * 2        02C7          711 
+M3                               String * 2        02CA          714 
+RAW                              Byte              02CD          717 
+NOBAT                            Byte              02CE          718 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -529,10 +530,11 @@ _SWSTACK_LOW                     &H0828
 _FRAME_HIGH                      &H0829
 _XMEGA                           0
 _XTINY                           0
+_RS232_BUFSIZE0                  100
+_RS232_BUFSIZE_IN0P1             101
+_CHECKCHAR0                      0
 PINCODE                          "AT+CPIN=1234"
 USELCD                           1
-DS1307W                          &HD0
-DS1307R                          &HD1
 WRITE_ADDRESS                    160
 READ_ADDRESS                     161
 _SDA                             1
@@ -561,10 +563,7 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-SHOWW                            not used
-STRSHOW                          not used
-TIMEE                            not used
+NET                              not used
 RAW                              not used
 
-Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  783 
-Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  994 
+Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  406 

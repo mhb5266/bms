@@ -1,6 +1,6 @@
-Report       : module
-Date         : 12-04-2021
-Time         : 15:58:17
+Report       : sms module 14000913
+Date         : 12-06-2021
+Time         : 17:46:34
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 2C9A hex  -> Will fit into ROM
-ROMIMAGE     :  11418 dec
-FLASH USED   :  34  %
+ROMIMAGE     : 357C hex  -> Will fit into ROM
+ROMIMAGE     :  13692 dec
+FLASH USED   :  41  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 838 hex
 Framesize    : 20 hex
 Framestart   : 808 hex
-Space left   :  1439  dec
+Space left   :  1294  dec
 
 LCD DB7      : PORTA.4
 LCD DB6      : PORTB.4
@@ -94,46 +94,58 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-B                                Byte              0060          96 
-R                                Byte              0061          97 
-MSG                              String * 60       0062          98 
-NUMBER                           String * 13       009F          159 
-SHEADER                          String(5) * 30    00AD          173 
-ORDER                            String * 10       0148          328 
-COUNT                            Byte              0153          339 
-ENUM1                            EEPROM String     0000          0 
-ENUM2                            EEPROM String     000E          14 
-ENUM3                            EEPROM String     001C          28 
-NUM1                             String * 13       0154          340 
-NUM2                             String * 13       0162          354 
-NUM3                             String * 13       0170          368 
-NOBAT                            Byte              017E          382 
-SHOWW                            Integer           017F          383 
-STRSHOW                          String * 5        0181          385 
-LSEC                             Byte              0187          391 
-TIMEE                            Integer           018B          395 
-SRET                             String * 100      018D          397 
-STEMP                            String * 6        01F2          498 
-S                                Word(24)          01F9          505 
-I                                Byte              0229          553 
-SADDRESS                         String * 20       022A          554 
-SCODE                            String * 4        023F          575 
-ADDRESS                          Long              0244          580 
-CODE                             Byte              0248          584 
-RA                               Long              0249          585 
-RNUMBER                          Byte              024D          589 
-OKREAD                           Bit [7]           024E          590 
-ERROR                            Bit [6]           024E          590 
-KEYCHECK                         Bit [5]           024E          590 
-T                                Word              024F          591 
-EADDRESS                         Word              0251          593 
-DATAREAD                         Byte              0253          595 
-DATAWRITE                        Byte              0254          596 
-M                                String * 8        0255          597 
-M1                               String * 2        025E          606 
-M2                               String * 2        0261          609 
-M3                               String * 2        0264          612 
-RAW                              Byte              0267          615 
+LSEC                             Byte              0063          99 
+STRI                             String * 4        0065          101 
+STRSC                            String * 1        006A          106 
+SMIN                             String * 2        006C          108 
+SHOUR                            String * 2        006F          111 
+SSEC                             String * 2        0072          114 
+DS18B20_ID_1                     Byte(9)           0075          117 
+DS18B20_ID_2                     Byte(8)           007E          126 
+ACTION                           Byte              0086          134 
+TEMPERATURE                      String * 6        0093          147 
+SENS1                            String * 6        009A          154 
+SENS2                            String * 6        00A1          161 
+READSENS                         Integer           00A8          168 
+TMPREAD                          Bit [7]           00AA          170 
+TMP                              Integer           00AB          171 
+TIMESTR                          String * 8        00AD          173 
+READY                            Bit [6]           00AA          170 
+I                                Byte              00B6          182 
+B                                Byte              00B7          183 
+SRET                             String * 100      00B8          184 
+STEMP                            String * 6        011D          285 
+MSG                              String * 60       0124          292 
+NUMBER                           String * 13       0161          353 
+ORDER                            String * 10       016F          367 
+EFIRST                           EEPROM Byte       0000          0 
+FIRST                            Byte              017A          378 
+SHEADER                          String(5) * 30    017B          379 
+NET                              String * 10       0216          534 
+COUNT                            Byte              0221          545 
+R                                Byte              0289          649 
+TIMEOUT                          Byte              028A          650 
+T0                               Byte              028B          651 
+S                                Word(24)          028C          652 
+SADDRESS                         String * 20       02BC          700 
+SCODE                            String * 4        02D1          721 
+ADDRESS                          Long              02D6          726 
+CODE                             Byte              02DA          730 
+RA                               Long              02DB          731 
+RNUMBER                          Byte              02DF          735 
+OKREAD                           Bit [5]           00AA          170 
+ERROR                            Bit [4]           00AA          170 
+KEYCHECK                         Bit [3]           00AA          170 
+T                                Word              02E0          736 
+EADDRESS                         Word              02E2          738 
+DATAREAD                         Byte              02E4          740 
+DATAWRITE                        Byte              02E5          741 
+M                                String * 8        02E6          742 
+M1                               String * 2        02EF          751 
+M2                               String * 2        02F2          754 
+M3                               String * 2        02F5          757 
+RAW                              Byte              02F8          760 
+NOBAT                            Byte              02F9          761 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -529,10 +541,13 @@ _SWSTACK_LOW                     &H0828
 _FRAME_HIGH                      &H0829
 _XMEGA                           0
 _XTINY                           0
-PINCODE                          "AT+CPIN=1234"
-USELCD                           1
 DS1307W                          &HD0
 DS1307R                          &HD1
+_RS232_BUFSIZE0                  100
+_RS232_BUFSIZE_IN0P1             101
+_CHECKCHAR0                      0
+PINCODE                          "AT+CPIN=1234"
+USELCD                           1
 WRITE_ADDRESS                    160
 READ_ADDRESS                     161
 _SDA                             1
@@ -561,10 +576,21 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-SHOWW                            not used
-STRSHOW                          not used
-TIMEE                            not used
+ACTION                           not used
+SENS2                            not used
+TMPREAD                          not used
+NET                              not used
 RAW                              not used
 
-Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  783 
-Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  994 
+Source string could be too big to fit into target string [TIMESTR>___STRBUF]  in line  373 
+Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  437 
+Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  438 
+Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  438 
+Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  489 
+Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  490 
+Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  490 
+Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  529 
+Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  1174 
+Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  1210 
+Source string could be too big to fit into target string [NUMBER>M]  in line  1286 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1358 
