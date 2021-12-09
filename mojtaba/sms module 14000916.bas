@@ -193,7 +193,7 @@ End If
 dim nobat as byte
 
 
-
+stop timer0
 Startup:
 
 Resetsim
@@ -343,11 +343,12 @@ end if
 ')
 lcd "Ready":wait 2:cls
 set ready
+start timer0
 Main:
           msg=""
           msg= "System Is Online Now"
-          'send_sms
-          'adminsms
+          send_sms
+          adminsms
 
           waitms 500
           flushbuf
@@ -356,7 +357,7 @@ Main:
 Do
  'start timer0
      'stop timer0
-     gosub _read
+     'gosub _read
      'start timer0
 
      '(
@@ -419,7 +420,6 @@ Sub Getline(ss As String)
              ss = ss + Chr(b)                                 ' build string
       End Select
 
-        'stop timer0
         gosub _read
 
 
@@ -436,6 +436,7 @@ Sub Getline(ss As String)
         'home
         'lcd _hour;":";_min;":";_sec
         'start timer0
+        '(
         if key=0 then
            stop timer0
            set led1
@@ -475,9 +476,10 @@ Sub Getline(ss As String)
          loop
          settime
       end if
-
+     ')
     Loop
-    'start timer0
+
+
 End Sub
 
 
@@ -706,10 +708,11 @@ end sub
 t0rutin:
         stop timer0
              incr t0
+             gosub _read
              if t0>40 then
                 t0=0
                 toggle led1
-                gosub _read
+
 
                      if key=0 then
                         set led1
@@ -722,8 +725,36 @@ t0rutin:
                         if i>40 then gosub delremote else gosub newlearn
                      end if
 
+                         if key2=0 or key3=0 then
+                              do
+                                    if key2=0 then
+                                       waitms 250
+                                       incr _min
+                                       if _min>59 then _min=0
+                                    end if
+
+                                    if key3=0 then
+                                       waitms 250
+                                       incr _hour
+                                       if _hour>23 then _hour=0
+                                    end if
+
+                                     shour=str(_hour):smin=str(_min):ssec=str(_sec):_secc=_sec mod 2
+                                     shour=format(shour,"00"): smin=format(smin,"00"): ssec=format(ssec,"00")
+                                     timestr=shour+":"+smin+":"+ssec
+                                     'timestr=format(timestr,"00000000")
+                                     stri=shour:stri=stri+smin
+                                     home : lcd timestr
+                                     lowerline:lcd sens1;" 'C  "
+                                     dispstr
+                                if key2=1 and key3=1 then exit do
+                              loop
+                              settime
+                              wait 2
+                         end if
+
                        if ready=1 then
-                        gosub _read
+                        'gosub _read
                         readtime
                                 if lsec<>_sec then
                                                 shour=str(_hour):smin=str(_min):ssec=str(_sec):_secc=_sec mod 2
@@ -740,8 +771,13 @@ t0rutin:
                                                 'lcd _hour;":";_min;":";_sec
                                                 'tmp=tmp-35
                                                 stri=""
-                                                stri=str(tmp)
-                                                stri=stri+" C"
+                                                if tmp>0 then
+                                                   stri=str(tmp)
+                                                   stri=stri+" C"
+                                                else
+                                                   stri=str(tmp)
+                                                   stri=stri+"C"
+                                                end if
                                                 _secc=0
                                                 dispstr
                                                 #if uselcd=1
@@ -750,6 +786,23 @@ t0rutin:
                                                 lsec=_sec
                                 end if
                         end if
+
+
+                            Getline Sret ' wait for a modem response
+                              'start timer0
+                              '#if Uselcd = 1
+                              'Cls
+                              'Lcd "Msg from modem"
+                              'Home Lower : Lcd Sret
+                              '#endif
+                              I = Instr(sret , ":") ' look for :
+                              If I > 0 Then 'found it
+                              Stemp = Left(sret , I)
+                              Select Case Stemp
+                              Case "+CMTI:" : Showsms Sret ' we received an SMS
+                              ' hanle other cases here
+                              End Select
+                              End If
              end if
 
         start timer0
@@ -972,10 +1025,10 @@ end sub
             Address = Binval(saddress)
             Code = Binval(scode)
             Check
-            #if uselcd=1
-                cls
-                lcd code : lowerline : lcd address :wait 2
-            #endif
+            '#if uselcd=1
+                'cls
+                'lcd code : lowerline : lcd address :wait 2
+            '#endif
             I = 0
          End If
       End If
@@ -1007,6 +1060,7 @@ sub Command
        'msg=""
          ' msg="ALARM"
          ' send_sms
+         stop timer0
          toggle relay
         cls:lcd code
         dispon
@@ -1021,7 +1075,7 @@ sub Command
              lcd ra
              wait 1
              cls
-
+       start timer0
 
 end sub
 

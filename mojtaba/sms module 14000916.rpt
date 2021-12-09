@@ -1,6 +1,6 @@
-Report       : sms module 14000913
+Report       : sms module 14000916
 Date         : 12-07-2021
-Time         : 17:32:52
+Time         : 17:55:50
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,8 +8,8 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 351A hex  -> Will fit into ROM
-ROMIMAGE     :  13594 dec
+ROMIMAGE     : 3528 hex  -> Will fit into ROM
+ROMIMAGE     :  13608 dec
 FLASH USED   :  41  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
@@ -583,14 +583,14 @@ NET                              not used
 TIMEOUT                          not used
 RAW                              not used
 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  466 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  467 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  467 
-Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  506 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  729 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  730 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  730 
-Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  1180 
-Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  1216 
-Source string could be too big to fit into target string [NUMBER>M]  in line  1292 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1364 
+Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  508 
+Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  742 
+Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  743 
+Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  743 
+Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  760 
+Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  761 
+Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  761 
+Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  1234 
+Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  1270 
+Source string could be too big to fit into target string [NUMBER>M]  in line  1346 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1418 
