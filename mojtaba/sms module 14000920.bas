@@ -156,8 +156,11 @@ configint:
 
 Config Timer1 = Timer , Prescale = 8 : Stop Timer1 : Timer1 = 0
 'Config Watchdog = 2048
+'start timer1
 config timer2=TIMER,prescale=1024
-start timer2
+'start timer2
+'enable timer2
+'on ovf2 t2rutin
 
 
 config timer0= timer ,prescale=1024
@@ -165,17 +168,22 @@ enable interrupts
 enable timer0
 on ovf0 t0rutin
 dim t0 as word
-start timer0
+'start timer0
 
 enable int0
-config int0=falling
+config int0=RISING
 on int0 powerin
 dim syc as byte
 dim poweroff as byte
 
+          Const Maxlight = 0
+          Const Dark = 65535
+          Const Midlight = 4500
+          Const Minlight = 9000
+
 
 triac alias porta.6:config porta.6=OUTPUT
-dim fire as byte,steps as byte,tfire as byte
+dim fire as word,steps as byte,tfire as word
 
 '--------------------------------- Variable ------------------------------------
 Dim S(24)as Word
@@ -226,22 +234,6 @@ stop timer0
 
 
 Startup:
-
-'(
-start timer0
-do
-
-
-loop
-
-do
-  number="+989376921503"
-  numsave
-  wait 3
-  numread
-
-loop
-')
 
 Resetsim
 
@@ -407,14 +399,14 @@ Main:
           number="+09155191622"
 
           'send_sms
-          'adminsms
+          adminsms
 
           waitms 500
           flushbuf
           'cls
-
+start timer1
 Do
- 'start timer0
+
      'stop timer0
      'gosub _read
      'start timer0
@@ -435,7 +427,7 @@ Do
                 lsec=_sec
         end if
       ')
-      if timer2>tfire then
+      if timer1>tfire then
          set triac
       else
           reset triac
@@ -587,6 +579,12 @@ local try as byte
       incr try
       if try>100 then exit do
 
+      if timer1>tfire then
+         set triac
+      else
+          reset triac
+      end if
+
         'timestr=""
         'timestr=str(_hour)+":"+str(_min)+ ":"+str(_sec)
         'timestr=format(timestr,"00:00:00")
@@ -683,7 +681,11 @@ Sub Showsms(ss As String )
  Do
   Getline Sret ' get data from buffer
   'cls:lcd s:wait 1:cls
-
+       if timer1>tfire then
+         set triac
+      else
+          reset triac
+      end if
 
 
   Select Case lcase(sret)
@@ -870,7 +872,7 @@ Sub Flushbuf()                                             'give some time to ge
 End Sub
 
 Sub Send_sms
-'stop timer0
+stop timer0
 #if uselcd=1
     cls
     lcd "send sms":lowerline:lcd number:wait 2:cls
@@ -927,7 +929,7 @@ msg=msg+str(nobat)
 End Sub
 
 sub adminsms
-
+stop timer0
 #if uselcd=1
     cls
     lcd "send sms":lowerline:lcd number:wait 3:cls
@@ -951,7 +953,7 @@ sub adminsms
      next
 
 
-
+start timer0
 end sub
 
 sub emsms
@@ -971,16 +973,19 @@ sub emsms
        Waitms 50
 end sub
 
+
+
+
 t0rutin:
-      if timer2>tfire then
+      if timer1>tfire then
          set triac
       else
           reset triac
       end if
         stop timer0
              incr t0
-             if poweroff< 250 then incr poweroff
-             if poweroff=60 then
+             if ready=1 and poweroff< 10 then incr poweroff
+             if poweroff=5 then
                 disable int0
                 tm1637_off
                 reset led1
@@ -996,7 +1001,7 @@ t0rutin:
                 loop until key=0
              end if
              'gosub _read
-             if t0>500 then
+             if t0>50 then
                 t0=0
                 toggle led1
                 readtime
@@ -1022,7 +1027,7 @@ t0rutin:
                               End If
                               ')
              end if
-        timer0=245
+        timer0=0
         start timer0
 return
 '(
@@ -1190,13 +1195,14 @@ end sub
 
 powerin:
         'reset triac
-        timer2=0
-
+        'home :lcd timer2
+        timer1=0
+        'lowerline :lcd timer2
+        reset triac
         incr syc
         poweroff=0
 
         if syc=50 then
-
            toggle led2
            syc=0
         endif
@@ -1209,34 +1215,44 @@ return
          Do
            'Reset Watchdog
            If _in = 0 Then Exit Do
+                 if timer1>tfire then
+                    set triac
+                 else
+                     reset triac
+                 end if
          Loop
-         Timer1 = 0
-         Start Timer1
+         Timer2 = 0
+         Start Timer2
          While _in = 0
                'Reset Watchdog
          Wend
-         Stop Timer1
-         If Timer1 >= 9722 And Timer1 <= 23611 Then
+         Stop Timer2
+         If Timer2 >= 76 And Timer2 <= 185 Then
             Do
               If _in = 1 Then
-                 Timer1 = 0
-                 Start Timer1
+                 Timer2 = 0
+                 Start Timer2
                  While _in = 1
                     'Reset Watchdog
                  Wend
-                 Stop Timer1
+                 Stop Timer2
                  Incr I
-                 S(i) = Timer1
+                 S(i) = Timer2
               End If
               'Reset Watchdog
               If I = 24 Then Exit Do
+                    if timer1>tfire then
+                       set triac
+                    else
+                        reset triac
+                    end if
             Loop
             For I = 1 To 24
                 'Reset Watchdog
-                If S(i) >= 332 And S(i) <= 972 Then
+                If S(i) >= 3 And S(i) <= 8 Then
                    S(i) = 0
                 Else
-                   If S(i) >= 1111 And S(i) <= 2361 Then
+                   If S(i) >= 9 And S(i) <= 19 Then
                       S(i) = 1
                    Else
                        I = 0
@@ -1246,6 +1262,11 @@ return
                        Return
                    End If
                 End If
+                    if timer1>tfire then
+                       set triac
+                    else
+                        reset triac
+                    end if
             Next
             I = 0
             Saddress = ""
@@ -1294,7 +1315,7 @@ sub Command
        'msg=""
          ' msg="ALARM"
          ' send_sms
-         stop timer0
+         'stop timer0
          if code=4 then
             incr steps
             if steps=1 then tfire=100
@@ -1305,6 +1326,21 @@ sub Command
              steps=0
             end if
          end if
+
+         if code=2 then incr steps
+         select case steps
+                case 1
+                   tfire=minlight
+                case 2
+                   tfire=midlight
+                case 3
+                   tfire=maxlight
+                case 4
+                   tfire=dark
+                   steps=0
+         end select
+         waitms 300
+        '(
          if license=1 then
                   toggle relay
                   #if uselcd=1
@@ -1342,7 +1378,7 @@ sub Command
                       'cls
 
          end if
-
+           ')
        start timer0
 
 end sub

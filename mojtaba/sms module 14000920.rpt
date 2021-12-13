@@ -1,6 +1,6 @@
 Report       : sms module 14000920
-Date         : 12-12-2021
-Time         : 17:55:02
+Date         : 12-13-2021
+Time         : 17:50:19
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,8 +8,8 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 3F20 hex  -> Will fit into ROM
-ROMIMAGE     :  16160 dec
+ROMIMAGE     : 3F8C hex  -> Will fit into ROM
+ROMIMAGE     :  16268 dec
 FLASH USED   :  49  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 838 hex
 Framesize    : 20 hex
 Framestart   : 808 hex
-Space left   :  1218  dec
+Space left   :  1216  dec
 
 LCD DB7      : PORTA.4
 LCD DB6      : PORTB.4
@@ -129,32 +129,32 @@ TIMEOUT                          Byte              028B          651
 T0                               Word              028C          652 
 SYC                              Byte              028E          654 
 POWEROFF                         Byte              028F          655 
-FIRE                             Byte              0290          656 
-STEPS                            Byte              0291          657 
-TFIRE                            Byte              0292          658 
-S                                Word(24)          0293          659 
-SADDRESS                         String * 20       02C3          707 
-SCODE                            String * 4        02D8          728 
-ADDRESS                          Long              02DD          733 
-CODE                             Byte              02E1          737 
-RA                               Long              02E2          738 
-RNUMBER                          Byte              02E6          742 
+FIRE                             Word              0290          656 
+STEPS                            Byte              0292          658 
+TFIRE                            Word              0293          659 
+S                                Word(24)          0295          661 
+SADDRESS                         String * 20       02C5          709 
+SCODE                            String * 4        02DA          730 
+ADDRESS                          Long              02DF          735 
+CODE                             Byte              02E3          739 
+RA                               Long              02E4          740 
+RNUMBER                          Byte              02E8          744 
 OKREAD                           Bit [5]           00AA          170 
 ERROR                            Bit [4]           00AA          170 
 KEYCHECK                         Bit [3]           00AA          170 
-T                                Word              02E7          743 
-EADDRESS                         Word              02E9          745 
-DATAREAD                         Byte              02EB          747 
-DATAWRITE                        Byte              02EC          748 
-M                                String * 8        02ED          749 
-M1                               String * 2        02F6          758 
-M2                               String * 2        02F9          761 
-M3                               String * 2        02FC          764 
-NUM                              String * 13       02FF          767 
-NUM1                             String(6) * 8     030D          781 
-X                                Byte              0343          835 
-RAW                              Byte              0344          836 
-NOBAT                            Byte              0345          837 
+T                                Word              02E9          745 
+EADDRESS                         Word              02EB          747 
+DATAREAD                         Byte              02ED          749 
+DATAWRITE                        Byte              02EE          750 
+M                                String * 8        02EF          751 
+M1                               String * 2        02F8          760 
+M2                               String * 2        02FB          763 
+M3                               String * 2        02FE          766 
+NUM                              String * 13       0301          769 
+NUM1                             String(6) * 8     030F          783 
+X                                Byte              0345          837 
+RAW                              Byte              0346          838 
+NOBAT                            Byte              0347          839 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -559,6 +559,10 @@ _CHECKCHAR0                      0
 PINCODE                          "AT+CPIN=1234"
 WRITE_ADDRESS                    160
 READ_ADDRESS                     161
+MAXLIGHT                         0
+DARK                             65535
+MIDLIGHT                         4500
+MINLIGHT                         9000
 _SDA                             1
 _SCL                             0
 ___I2CDELAY                      5
@@ -592,12 +596,12 @@ TIMEOUT                          not used
 FIRE                             not used
 RAW                              not used
 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  453 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  454 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  454 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  532 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  533 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  533 
-Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  671 
-Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  1503 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1845 
+Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  445 
+Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  446 
+Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  446 
+Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  524 
+Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  525 
+Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  525 
+Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  669 
+Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  1539 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1881 
