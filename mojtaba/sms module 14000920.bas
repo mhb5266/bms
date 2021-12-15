@@ -24,14 +24,16 @@ Declare Sub Flushbuf()
 Declare Sub Showsms(ss As String )
 Declare Sub Send_sms
 declare sub adminsms
-declare sub emsms
+'declare sub emsms
 'Declare Sub Dial
 Declare Sub Resetsim
 'Declare Sub Checksim
 'Declare Sub Money
 'Declare Sub Temp
-'Declare Sub Antenna
-'Declare Sub Charge
+Declare Sub Antenna
+dim anten as byte
+Declare Sub Charge
+dim sharj as string*100
 Declare Sub Delall
 Declare Sub Delread
 declare sub delremote
@@ -89,6 +91,12 @@ Dim Readsens As Integer
 
 Dim Tmpread As Boolean
 Dim Tmp As Integer
+Dim Tmp1 As Integer
+Dim Tmp2 As Integer
+
+dim maxtemp as integer :maxtemp=40
+dim mintemp as integer :mintemp=5
+dim hightemp as byte
 
 dim timestr as string*8
 dim ready as bit
@@ -100,8 +108,10 @@ Dim Sret As String * 100 , Stemp As String * 6
 'Dim U As Byte
 'Dim Lim As Byte
 
-Dim Msg As String * 60
+Dim Msg As String * 140
 dim number as string*13
+
+dim aa as byte , bb as byte
 '(
 dim enum1 as eram string*13
 dim enum2 as eram string*13
@@ -176,10 +186,7 @@ on int0 powerin
 dim syc as byte
 dim poweroff as byte
 
-          Const Maxlight = 0
-          Const Dark = 65535
-          Const Midlight = 4500
-          Const Minlight = 9000
+
 
 
 triac alias porta.6:config porta.6=OUTPUT
@@ -391,6 +398,8 @@ end if
     lcd license
 #endif
 
+
+
 set ready
 start timer0
 Main:
@@ -398,12 +407,14 @@ Main:
           msg= "System Is Online Now"
           number="+09155191622"
 
-          'send_sms
+          send_sms
+
+          msg= "System Is Online Now"
           adminsms
 
           waitms 500
           flushbuf
-          'cls
+          cls
 start timer1
 Do
 
@@ -427,21 +438,27 @@ Do
                 lsec=_sec
         end if
       ')
+      '(
       if timer1>tfire then
          set triac
       else
           reset triac
       end if
+      ')
       if license=1 then gosub _read
 
                              'if ready=1 then
                         'gosub _read
 
+
                                 if lsec<>_sec then
-                                if _min=0 and _sec=0 then
-                                   msg="system is on"
-                                   send_sms
-                                end if
+                                'if _min=0 and _sec=0 then
+                                   'msg="system is on"
+                                   'send_sms
+                                'end if
+
+                                                if _sec=22 then antenna
+
                                                 shour=str(_hour):smin=str(_min):ssec=str(_sec):_secc=_sec mod 2
                                                 shour=format(shour,"00"): smin=format(smin,"00"): ssec=format(ssec,"00")
                                                 timestr=shour+":"+smin+":"+ssec
@@ -452,9 +469,31 @@ Do
                                                 #endif
 
                                                 temp
+                                                if tmp1<maxtemp or tmp2<maxtemp then
+                                                   hightemp=0
+                                                endif
+                                                if tmp1>maxtemp or tmp2>maxtemp then
+                                                   incr hightemp
+                                                   if hightemp>30 then
+                                                      msg="Hi Tempereture"
+                                                      msg=msg+" Sensor1= "+str(tmp1)
+                                                      msg=msg+" Sensor2= "+str(tmp2)
+                                                      reset led1
+                                                      reset buzz
+                                                      reset relay
+                                                      adminsms
+                                                      cls
+                                                      lcd "press any key"
+                                                      do
+                                                        if key=0 or key2=0 or key3=0 then exit do
+                                                      loop
+                                                      cls
+                                                   endif
+
+                                                end if
 
                                                 #if uselcd=1
-                                                    lowerline:lcd sens1;" ";sens2
+                                                    lowerline:lcd sens1;" ";sens2;"  "
                                                 #endif
 
                                                 'disp tmp
@@ -579,11 +618,6 @@ local try as byte
       incr try
       if try>100 then exit do
 
-      if timer1>tfire then
-         set triac
-      else
-          reset triac
-      end if
 
         'timestr=""
         'timestr=str(_hour)+":"+str(_min)+ ":"+str(_sec)
@@ -681,11 +715,7 @@ Sub Showsms(ss As String )
  Do
   Getline Sret ' get data from buffer
   'cls:lcd s:wait 1:cls
-       if timer1>tfire then
-         set triac
-      else
-          reset triac
-      end if
+
 
 
   Select Case lcase(sret)
@@ -762,13 +792,13 @@ Sub Showsms(ss As String )
                eaddress=25
                numread
                msg=num
-               msg=msg+"/  /"
+               msg=msg+chr(10)
                eaddress=32
                numread
-               msg=msg+num+"/  /"
+               msg=msg+num+chr(10)
                eaddress=39
                numread
-               msg=msg+num+"/  /"
+               msg=msg+num+chr(10)
 
          case "rf1234"
                order=lcase(sret)
@@ -834,11 +864,19 @@ do
         next
         send_sms
      elseif order="status" then
+            msg=msg+chr(10)
+            msg=msg+"sensor1= "
+            msg=msg+sens1+"  'C"
+            msg=msg+chr(10)
+            msg=msg+"sensor2= "
+            msg=msg+sens2 +"  'C"+chr(10)
+            msg=msg+"NET= "+net+chr(10)
+            msg=msg+"sharj= "+sharj+" rial"+chr(10)
             send_sms
      end if
      if order="new1" or order="new2" or order="new3" then
         msg=""
-        msg="new number /  /"
+        msg="new number= "+chr(10)
         msg=msg+number
         adminsms
      end if
@@ -874,9 +912,9 @@ End Sub
 Sub Send_sms
 stop timer0
 #if uselcd=1
-    cls
-    lcd "send sms":lowerline:lcd number:wait 2:cls
-    lcd msg:wait 2
+   ' cls
+    'lcd "send sms":lowerline:lcd number:wait 2:cls
+    'lcd msg:wait 2
 #endif
 
 msg=msg+" *"
@@ -900,6 +938,7 @@ msg=msg+str(nobat)
        if lcase(sret)="ok" then exit for
      next
  incr nobat
+ charge
  msg=""
 
  '(
@@ -952,36 +991,13 @@ stop timer0
        if lcase(sret)="ok" then exit for
      next
 
-
+charge
 start timer0
 end sub
 
-sub emsms
-       Print "AT+CMGS=" ; Chr(34);"+989155609631"; Chr(34)             'send sms
-       Waitms 50
-       Print Msg ; Chr(26)
-       Waitms 50
-       flushbuf
-       Print "AT+CMGS=" ; Chr(34);"+989155191622"; Chr(34)             'send sms
-       Waitms 50
-       Print Msg ; Chr(26)
-       Waitms 50
-       flushbuf
-       Print "AT+CMGS=" ; Chr(34);"+989376921503"; Chr(34)             'send sms
-       Waitms 50
-       Print Msg ; Chr(26)
-       Waitms 50
-end sub
-
-
-
 
 t0rutin:
-      if timer1>tfire then
-         set triac
-      else
-          reset triac
-      end if
+
         stop timer0
              incr t0
              if ready=1 and poweroff< 10 then incr poweroff
@@ -997,11 +1013,15 @@ t0rutin:
                 number=num
                 msg="Power Is Off"
                 send_sms
-                do
-                loop until key=0
+                      cls
+                      lcd "press any key"
+                      do
+                        if key=0 or key2=0 or key3=0 then exit do
+                      loop
+                      cls
              end if
              'gosub _read
-             if t0>50 then
+             if t0>20 then
                 t0=0
                 toggle led1
                 readtime
@@ -1074,21 +1094,21 @@ Sharj = Right(sharj , 6)
 Sharj = Ltrim(sharj)
 End Sub
  ')
-'(
+
 Sub Antenna
   Flushbuf
   Print "AT+CSQ"
   Getline Sret
-  'Count = Split(sret , Sbody(1) , " ")
-  'Anten = Val(sbody(2))
-'  Cls : Lcd "ANTEN= " : Lcd Anten : Lowerline : Lcd Sret : Wait 5 : Cls : Waitms 500
+  Count = Split(sret , sheader(1) , " ")
+  Anten = Val(sheader(2))
+  'Cls : Lcd "ANTEN= " : Lcd Anten : Lowerline : Lcd Sret : Wait 5 : Cls : Waitms 500
   Select Case Anten
          Case 0
               Net = "BAD"
          Case 1
               Net = "WEAK"
          Case 2 To 15
-              Net = "MID"
+              Net = "Not Bad"
          Case 16 To 30
               Net = "GOOD"
          Case 31
@@ -1098,24 +1118,51 @@ Sub Antenna
   End Select
 
 End Sub
-  ')
- '(
+
+
 Sub Charge
+'Print "At+Cusd=1," ; Chr(34) ; "*140#" ; Chr(34)
 
-
-'Print "ATD*140#"
-Flushbuf
-Print "At+Cusd=1," ; Chr(34) ; "*140#" ; Chr(34)
-
+'wait 3
+Print "ATD*140#"
+'Flushbuf
+'Print "At+Cusd=1," ; Chr(34) ; "*140#" ; Chr(34)
+wait 5
 'Print "At+Cusd=1," ; Chr(34) ; "*555*1*2#" ; Chr(34)
   Getline Sret
+  'cls:lcd sret:wait 1:cls :waitms 500
   Getline Sret
-  Sharj = Right(sret , 17)
+    'cls:lcd sret:wait 1:cls :waitms 500
+  'Sharj = Right(sret , 17)
   Getline Sret
+    'cls:lcd sret:wait 2:cls :waitms 500
+    msg=""
+    aa=instr(sret,"003A")
+    aa=aa+4
+    bb=instr(sret,"0020")
+    bb=bb-aa
+    msg=mid(sret,aa,bb)
+    'aa=split(msg,sheader(1),"003")
+    aa=len(msg)
+    'cls:lcd msg:wait 3:cls:lowerline :lcd aa:wait 3:cls
+    sharj=""
+    for i= 4 to aa step 4
+        sharj=sharj+mid(msg,i,1)
+    next
+    '(
+    sharj=""
+    for i=1 to aa
+        lcd sheader(i):wait 1
+        sharj=sharj+sheader(i)
+    next
+    ')
+    'wait 5
+    'adminsms
+    cls :lcd msg:lowerline: lcd sharj: wait 5:cls
 
 
 End Sub
-   ')
+
 Sub Delall
      Flushbuf
      Print "AT+CMGDA=DEL ALL"
@@ -1215,11 +1262,7 @@ return
          Do
            'Reset Watchdog
            If _in = 0 Then Exit Do
-                 if timer1>tfire then
-                    set triac
-                 else
-                     reset triac
-                 end if
+
          Loop
          Timer2 = 0
          Start Timer2
@@ -1241,11 +1284,7 @@ return
               End If
               'Reset Watchdog
               If I = 24 Then Exit Do
-                    if timer1>tfire then
-                       set triac
-                    else
-                        reset triac
-                    end if
+
             Loop
             For I = 1 To 24
                 'Reset Watchdog
@@ -1262,11 +1301,7 @@ return
                        Return
                    End If
                 End If
-                    if timer1>tfire then
-                       set triac
-                    else
-                        reset triac
-                    end if
+
             Next
             I = 0
             Saddress = ""
@@ -1316,30 +1351,9 @@ sub Command
          ' msg="ALARM"
          ' send_sms
          'stop timer0
-         if code=4 then
-            incr steps
-            if steps=1 then tfire=100
-            if steps=2 then tfire=65
-            if steps=3 then tfire=35
-            if steps=4 then
-             tfire=0
-             steps=0
-            end if
-         end if
-
-         if code=2 then incr steps
-         select case steps
-                case 1
-                   tfire=minlight
-                case 2
-                   tfire=midlight
-                case 3
-                   tfire=maxlight
-                case 4
-                   tfire=dark
-                   steps=0
-         end select
-         waitms 300
+         cls:lcd code
+         wait 3
+         cls
         '(
          if license=1 then
                   toggle relay
@@ -1711,7 +1725,7 @@ sub numsave
     nuM = ""
     'M = Hex(ra)
     #if uselcd=1
-        cls:lcd "save num":lowerline:lcd number:wait 3:cls
+        'cls:lcd "save num":lowerline:lcd number:wait 3:cls
     #endif
     num=number
     x=0
@@ -1755,7 +1769,7 @@ sub numread
         incr eaddress
     next
     #if uselcd=1
-        cls:lcd "read num":lowerline:lcd num:wait 3:cls
+        'cls:lcd "read num":lowerline:lcd num:wait 3:cls
     #endif
  '(   num=""
     eaddress=25
@@ -1809,7 +1823,8 @@ End Sub
 
 
 sub temp
-
+Ds18b20_id_1(1) = 1wsearchfirst()
+Ds18b20_id_2(1) = 1wsearchnext()
     if license=1 then
        1wreset
        1wwrite &HCC
@@ -1826,17 +1841,22 @@ sub temp
           tmp = Readsens
 
           Gosub Conversion
+          tmp1=tmp
           Sens1 = Temperature
           'tmp=tmp-16
+
           if _sec<30 then
+
           stri=""
-          if tmp>0 then
-             stri=str(tmp)
+          if tmp1>0 then
+             stri=str(tmp1)
              stri=stri+" C"
           else
-             stri=str(tmp)
+             stri=str(tmp1)
              stri=stri+"C"
           end if
+
+
           _secc=0
           dispstr
           endif
@@ -1852,19 +1872,22 @@ sub temp
           tmp = Readsens
 
           Gosub Conversion
+          tmp2=tmp
           Sens2 = Temperature
           'tmp=tmp-16
           if _sec>30 then
+
                     stri=""
-                    if tmp>0 then
-                       stri=str(tmp)
+                    if tmp2>0 then
+                       stri=str(tmp2)
                        stri=stri+" C"
                     else
-                       stri=str(tmp)
+                       stri=str(tmp2)
                        stri=stri+"C"
                     end if
                     _secc=0
                     dispstr
+
           end if
 
        end if
