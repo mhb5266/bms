@@ -308,8 +308,7 @@ Do
 Loop Until Sret = "OK"
 
     cls
-
-'(do
+do
   flushbuf
 'Print "ATD*130#"
 'Print "At+Cusd=1," ; Chr(34) ; "*130#" ; Chr(34)
@@ -317,13 +316,14 @@ Loop Until Sret = "OK"
     home : lcd "push button"
     if key=0 then
     charge
+    adminsms
     end if
     waitms 100
 
 
 
 loop
-')
+
 
 set ready
 start timer0
@@ -612,17 +612,20 @@ wait 5
     cls:lcd sret:wait 2:cls :waitms 500
     msg=""
     aa=instr(sret,"003A")
+    cls:lcd "aa":lowerline :lcd aa:wait 3:cls
     aa=aa+4
     bb=instr(sret,"0020")
     bb=bb-aa
+     cls:lcd "bb":lowerline :lcd bb:wait 3:cls
     msg=mid(sret,aa,bb)
     'aa=split(msg,sheader(1),"003")
     aa=len(msg)
-    cls:lcd msg:wait 3:cls:lowerline :lcd aa:wait 3:cls
+    cls:lcd msg:lowerline :lcd aa;"  ";bb:wait 3:cls
     sharj=""
     for i= 4 to aa step 4
         sharj=sharj+mid(msg,i,1)
     next
+    msg=sret
     '(
     sharj=""
     for i=1 to aa

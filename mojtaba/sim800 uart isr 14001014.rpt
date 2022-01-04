@@ -1,6 +1,6 @@
-Report       : sms module 14000920
-Date         : 12-25-2021
-Time         : 13:55:51
+Report       : sim800 uart isr 14001014
+Date         : 01-04-2022
+Time         : 14:15:04
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 429A hex  -> Will fit into ROM
-ROMIMAGE     :  17050 dec
-FLASH USED   :  52  %
+ROMIMAGE     : 118 hex  -> Will fit into ROM
+ROMIMAGE     :  280 dec
+FLASH USED   :  0  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 838 hex
 Framesize    : 20 hex
 Framestart   : 808 hex
-Space left   :  1023  dec
+Space left   :  2054  dec
 
 LCD DB7      : PORTA.4
 LCD DB6      : PORTB.4
@@ -94,76 +94,6 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-ANTEN                            Byte              0060          96 
-SHARJ                            String * 100      0061          97 
-LSEC                             Byte              00C9          201 
-STRI                             String * 4        00CB          203 
-STRSC                            String * 1        00D0          208 
-SMIN                             String * 2        00D2          210 
-SHOUR                            String * 2        00D5          213 
-SSEC                             String * 2        00D8          216 
-DS18B20_ID_1                     Byte(9)           00DB          219 
-DS18B20_ID_2                     Byte(8)           00E4          228 
-ACTION                           Byte              00EC          236 
-TEMPERATURE                      String * 6        00F9          249 
-SENS1                            String * 6        0100          256 
-SENS2                            String * 6        0107          263 
-READSENS                         Integer           010E          270 
-TMPREAD                          Bit [7]           0110          272 
-TMP                              Integer           0111          273 
-TMP1                             Integer           0113          275 
-TMP2                             Integer           0115          277 
-MAXTEMP                          Integer           0117          279 
-MINTEMP                          Integer           0119          281 
-HIGHTEMP                         Byte              011B          283 
-TIMESTR                          String * 8        011C          284 
-READY                            Bit [6]           0110          272 
-LICENSE                          Byte              0125          293 
-I                                Byte              0126          294 
-B                                Byte              0127          295 
-SRET                             String * 100      0128          296 
-STEMP                            String * 6        018D          397 
-MSG                              String * 140      0194          404 
-NUMBER                           String * 13       0221          545 
-AA                               Byte              022F          559 
-BB                               Byte              0230          560 
-ORDER                            String * 10       0231          561 
-EFIRST                           EEPROM Byte       0000          0 
-FIRST                            Byte              023C          572 
-SHEADER                          String(5) * 30    023D          573 
-NET                              String * 10       02D8          728 
-COUNT                            Byte              02E3          739 
-R                                Byte              034B          843 
-TIMEOUT                          Byte              034C          844 
-T0                               Word              034D          845 
-SYC                              Byte              034F          847 
-POWEROFF                         Byte              0350          848 
-FIRE                             Word              0351          849 
-STEPS                            Byte              0353          851 
-TFIRE                            Word              0354          852 
-S                                Word(24)          0356          854 
-SADDRESS                         String * 20       0386          902 
-SCODE                            String * 4        039B          923 
-ADDRESS                          Long              03A0          928 
-CODE                             Byte              03A4          932 
-RA                               Long              03A5          933 
-RNUMBER                          Byte              03A9          937 
-OKREAD                           Bit [5]           0110          272 
-ERROR                            Bit [4]           0110          272 
-KEYCHECK                         Bit [3]           0110          272 
-T                                Word              03AA          938 
-EADDRESS                         Word              03AC          940 
-DATAREAD                         Byte              03AE          942 
-DATAWRITE                        Byte              03AF          943 
-M                                String * 8        03B0          944 
-M1                               String * 2        03B9          953 
-M2                               String * 2        03BC          956 
-M3                               String * 2        03BF          959 
-NUM                              String * 13       03C2          962 
-NUM1                             String(6) * 8     03D0          976 
-X                                Byte              0406          1030 
-RAW                              Byte              0407          1031 
-NOBAT                            Byte              0408          1032 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -559,18 +489,6 @@ _SWSTACK_LOW                     &H0828
 _FRAME_HIGH                      &H0829
 _XMEGA                           0
 _XTINY                           0
-USELCD                           1
-DS1307W                          &HD0
-DS1307R                          &HD1
-_RS232_BUFSIZE0                  100
-_RS232_BUFSIZE_IN0P1             101
-_CHECKCHAR0                      0
-PINCODE                          "AT+CPIN=1234"
-WRITE_ADDRESS                    160
-READ_ADDRESS                     161
-_SDA                             1
-_SCL                             0
-___I2CDELAY                      5
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -594,20 +512,4 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-ACTION                           not used
-TMPREAD                          not used
-TIMEOUT                          not used
-FIRE                             not used
-STEPS                            not used
-TFIRE                            not used
-RAW                              not used
 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  462 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  463 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  463 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  564 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  565 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  565 
-Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  704 
-Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  1556 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1862 

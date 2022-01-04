@@ -12,8 +12,8 @@ const uselcd=1
 
 
 config_sim:
-'$hwstack = 30
-'$swstack = 20
+'$hwstack = 50
+'$swstack = 50
 '$framesize = 20
 
 
@@ -56,7 +56,7 @@ dim _sec as byte,_min as byte, _hour as byte, lsec as byte
 dim _secc as byte
 Const Ds1307w = &HD0
 Const Ds1307r = &HD1
-
+'(
 Tm1637_clk Alias Portc.3: config portc.3 =output
 Tm1637_dout Alias Portc.2 :config portc.2=output
 Tm1637_din Alias Pinc.2
@@ -68,6 +68,7 @@ Declare Sub Tm1637_off()
 Declare Sub _start()
 Declare Sub _stop()
 Declare Sub _ack()
+')
 'declare sub sendtm
 dim stri as string*4
 dim strsc as string*1
@@ -100,7 +101,7 @@ dim hightemp as byte
 
 dim timestr as string*8
 dim ready as bit
-dim license as byte :license=1
+
 
 'used variables
 Dim I As Byte , B As Byte
@@ -111,7 +112,7 @@ Dim Sret As String * 100 , Stemp As String * 6
 Dim Msg As String * 140
 dim number as string*13
 
-dim aa as byte , bb as byte
+dim aa as byte , bb as byte ,pos as byte
 '(
 dim enum1 as eram string*13
 dim enum2 as eram string*13
@@ -245,11 +246,12 @@ Startup:
 Resetsim
 
 For I = 1 To 30
-   set led1
+
    waitms 250
 Next
-reset led1
+
 Wait 1
+
 Print "AT&F"
 flushbuf
 Print "AT"                                                  ' send AT command twice to activate the modem
@@ -258,9 +260,18 @@ Flushbuf
 'Print "AT&F"
 Flushbuf
 Print "AT&F"
-flushbuf                                                   ' flush the buffer
+flushbuf                                               ' flush the buffer
 Print "ATE0"
 
+Do
+  Flushbuf
+   Print "ATE0" :                                             ' Waitms 100
+   Getline Sret                                             ' get data from modem
+#if uselcd=1
+    cls:lcd "ATE0?":lowerline : lcd sret: wait 1:cls
+#endif                                            ' feedback on display
+Loop Until Sret = "OK"                                      ' modem must send OK
+Flushbuf
 
 
 
@@ -391,71 +402,52 @@ end if
     lcd "Ready":wait 2:cls
 #endif
 
-'eaddress=50
-'numread
-'license=binval(num)
-#if uselcd=1
-    lcd license
-#endif
+
 
 
 
 set ready
+
+antenna
+waitms 250
+
+
+msg=""
+msg= "System Is Online Now"
+number="+09155191622"
+
+send_sms
+
+msg= "System Is Online Now"
+adminsms
+
+waitms 500
+flushbuf
+cls
+
 start timer0
+
+
 Main:
-          msg=""
-          msg= "System Is Online Now"
-          number="+09155191622"
 
-          send_sms
 
-          msg= "System Is Online Now"
-          adminsms
-
-          waitms 500
-          flushbuf
-          cls
-start timer1
 Do
 
-     'stop timer0
-     'gosub _read
-     'start timer0
 
-     '(
-        readtime
-                if lsec<>_sec then
-                timestr=str(_hour)+":"+str(_min)+ ":"+str(_sec)
-                timestr=format(timestr,"00:00:00")
+      gosub _read
 
-                home : lcd timestr
-                lowerline:lcd sens1;" 'C  "
-                'disp tmp
-                dispstr
-                home
-                lcd _hour;":";_min;":";_sec
-                temp
-                lsec=_sec
-        end if
-      ')
-      '(
-      if timer1>tfire then
-         set triac
-      else
-          reset triac
-      end if
-      ')
-      if license=1 then gosub _read
+             if t0>20 then
+                t0=0
+                toggle led1
+                readtime
+             end if
 
                              'if ready=1 then
                         'gosub _read
 
 
                                 if lsec<>_sec then
-                                'if _min=0 and _sec=0 then
-                                   'msg="system is on"
-                                   'send_sms
-                                'end if
+
 
                                                 if _sec=22 then antenna
 
@@ -503,9 +495,9 @@ Do
                                                 'lcd _hour;":";_min;":";_sec
 
 
-                                                #if uselcd=1
-                                                    locate 2,12:lcd stri;"  "
-                                                #endif
+                                                '#if uselcd=1
+                                                   ' locate 2,12:lcd stri;"  "
+                                               ' #endif
                                                 lsec=_sec
 
 
@@ -519,11 +511,11 @@ Do
                                                       '#endif
                                                       I = Instr(sret , ":") ' look for :
                                                       If I > 0 Then 'found it
-                                                      Stemp = Left(sret , I)
-                                                      Select Case Stemp
-                                                      Case "+CMTI:" : Showsms Sret ' we received an SMS
-                                                      ' hanle other cases here
-                                                      End Select
+                                                         Stemp = Left(sret , I)
+                                                         Select Case Stemp
+                                                              Case "+CMTI:" : Showsms Sret ' we received an SMS
+                                                              ' hanle other cases here
+                                                         End Select
                                                       End If
                                                       start timer0
 
@@ -550,13 +542,13 @@ Do
 
 
                                     if key2=0 then
-                                       waitms 900
+                                       waitms 300
                                        incr _min
                                        if _min>59 then _min=0
                                     end if
 
                                     if key3=0 then
-                                       waitms 900
+                                       waitms 300
                                        incr _hour
                                        if _hour>23 then _hour=0
                                     end if
@@ -568,15 +560,15 @@ Do
                                      stri=shour:stri=stri+smin
                                      #if uselcd=1
                                          home : lcd timestr
-                                         lowerline:lcd sens1;" 'C "
+                                         'lowerline:lcd sens1;" 'C "
                                      #endif
 
-                                     dispstr
+                                     'dispstr
 
                                 if key2=1 and key3=1 then exit do
                               loop
                               settime
-                              wait 2
+                              waitms 500
                          end if
                          start timer0
 
@@ -589,7 +581,7 @@ loop
 
 'get line of data from buffer
 Sub Getline(ss As String)
-        'stop timer0
+        stop timer0
 local try as byte
     ss = ""
     try=0
@@ -817,18 +809,6 @@ Sub Showsms(ss As String )
                eaddress=39
                numsave
                msg="All numbers Was deleted"
-         case "active"
-               order=lcase(sret)
-               if number="+989155609631" then license=1
-               msg="Module Was Activated"
-               eaddress=50
-               datawrite=license
-
-         case "disactive"
-               order=lcase(sret)
-               if number="+989155609631" then license=0
-               msg="Module Was Disactivated"
-               eaddress=50
 
 
 
@@ -887,18 +867,13 @@ do
         msg=msg+number
         adminsms
      end if
-     if order="active" then
-               adminsms
-               eew
-     end if
-     if order="disactive" then
-               adminsms
-               eer
-               license=dataread
-     end if
+
 
      order=""
-     'delread
+     delall
+
+     Flushbuf
+     Print "AT+CMGDA=DEL SENT"
      'start timer0
 
 End Sub
@@ -911,7 +886,8 @@ Sub Flushbuf()                                             'give some time to ge
 End Sub
 
 Sub Send_sms
-stop timer0
+'stop timer0
+'disable int0
 #if uselcd=1
    ' cls
     'lcd "send sms":lowerline:lcd number:wait 2:cls
@@ -929,6 +905,20 @@ msg=msg+str(nobat)
        Print Msg ; Chr(26)
        Wait 1
        r=0
+       pos=0
+       do
+         getline sret
+         sret=lcase (sret)
+         pos=instr(sret,"+cmgs")
+         if pos>0 then
+            'cls:lcd sret:wait 2: cls:waitms 500
+         endif
+         waitms 500
+         incr r
+         if r=10 or pos>0 then exit do
+       loop until lcase(sret)="ok"
+       if pos>0 then exit for
+       '(
        do
          getline sret
          if lcase(sret)="ok" then exit do
@@ -937,8 +927,11 @@ msg=msg+str(nobat)
          if r=10 then exit do
        loop until lcase(sret)="ok"
        if lcase(sret)="ok" then exit for
+       ')
      next
  incr nobat
+     'Flushbuf
+     'Print "AT+CMGDA=DEL ALL"
  charge
  msg=""
 
@@ -969,7 +962,8 @@ msg=msg+str(nobat)
 End Sub
 
 sub adminsms
-stop timer0
+'stop timer0
+'disable int0
 #if uselcd=1
     cls
     lcd "send sms":lowerline:lcd number:wait 3:cls
@@ -982,18 +976,26 @@ stop timer0
        Print Msg ; Chr(26)
        Wait 1
        r=0
+       pos=0
        do
          getline sret
-         if lcase(sret)="ok" then exit do
+         sret=lcase (sret)
+         pos=instr(sret,"+cmgs")
+         if pos>0 then
+            'cls:lcd sret:wait 2: cls:waitms 500
+         endif
          waitms 500
          incr r
-         if r=10 then exit do
+         if r=10 or pos>0 then exit do
        loop until lcase(sret)="ok"
-       if lcase(sret)="ok" then exit for
+       if pos>0 then exit for
      next
-
-charge
-start timer0
+     'Flushbuf
+     'Print "AT+CMGDA=DEL ALL"
+'charge
+msg=""
+'enable int0
+'start timer0
 end sub
 
 
@@ -1001,10 +1003,11 @@ t0rutin:
 
         stop timer0
              incr t0
+             '(
              if ready=1 and poweroff< 10 then incr poweroff
              if poweroff=5 then
-                disable int0
-                tm1637_off
+                'disable int0
+                'tm1637_off
                 reset led1
                 reset led2
                 reset buzz
@@ -1021,33 +1024,9 @@ t0rutin:
                       loop
                       cls
              end if
+             ')
              'gosub _read
-             if t0>20 then
-                t0=0
-                toggle led1
-                readtime
 
-
-
-
-                          '(
-                            Getline Sret ' wait for a modem response
-                              'start timer0
-                              '#if Uselcd = 1
-                              'Cls
-                              'Lcd "Msg from modem"
-                              'Home Lower : Lcd Sret
-                              '#endif
-                              I = Instr(sret , ":") ' look for :
-                              If I > 0 Then 'found it
-                              Stemp = Left(sret , I)
-                              Select Case Stemp
-                              Case "+CMTI:" : Showsms Sret ' we received an SMS
-                              ' hanle other cases here
-                              End Select
-                              End If
-                              ')
-             end if
         timer0=0
         start timer0
 return
@@ -1123,7 +1102,7 @@ End Sub
 
 Sub Charge
 'Print "At+Cusd=1," ; Chr(34) ; "*140#" ; Chr(34)
-
+ flushbuf
 'wait 3
 Print "ATD*140#"
 'Flushbuf
@@ -1345,55 +1324,11 @@ sub Check
 end sub
 '-------------------------------- Relay command
 sub Command
-       'set led1
-       'timeout=10
-       'set relay
-       'msg=""
-         ' msg="ALARM"
-         ' send_sms
-         'stop timer0
+
          cls:lcd code
          wait 3
          cls
-        '(
-         if license=1 then
-                  toggle relay
-                  #if uselcd=1
-                      cls:lcd code:lowerline :lcd steps:lcd "   ":lcd tfire
-                  #endif
 
-                 dispon
-                 _start
-                 disp code
-                 if code=8 then
-                    eaddress=25
-                    numread
-                    #if uselcd=1
-                        cls:lcd m:wait 1:cls
-                    #endif
-                    eaddress=32
-                    numread
-                    #if uselcd=1
-                        cls:lcd m:wait 1:cls
-                    #endif
-                    eaddress=39
-                    numread
-                    #if uselcd=1
-                        cls:lcd m:wait 1:cls
-                    #endif
-                 end if
-                 _stop
-                 wait 1
-                 tm1637_off
-
-                      'eaddress=25
-                      'Gosub Ra_r
-                      'lcd ra
-                      'wait 1
-                      'cls
-
-         end if
-           ')
        start timer0
 
 end sub
@@ -1491,185 +1426,7 @@ end sub
 
 
 
-Sub _ack()
 
-   Reset Tm1637_clk
-   Waitus 5
-   Reset Tm1637_dout
-   Bitwait Tm1637_din , Reset
-   Set Tm1637_clk
-   Waitus 2
-   Reset Tm1637_clk
-   Set Tm1637_dout
-
-End Sub
-
-
-
-Sub Tm1637_off()
-   _start
-   wrbyte &H80                                       'Turn display off
-   _ack
-   _stop
-End Sub
-
-
-
-Sub dispon()
-   _start
-   wrbyte &H8A                                       'Turn display on and set PWM for brightness to 25%
-   _ack
-   _stop
-End Sub
-
-
-
-Sub _start()
-
-   Set Tm1637_clk
-   Set Tm1637_dout
-   Waitus 2
-   Reset Tm1637_dout
-End Sub
-
-
-Sub _stop()
-
-   Reset Tm1637_clk
-   Waitus 2
-   Reset Tm1637_dout
-   Waitus 2
-   Set Tm1637_clk
-   Waitus 2
-   Set Tm1637_dout
-End Sub
-
-
-
-
-
-Sub disp(byval Bdispdata As integer)
-
-       Local Bcounter As Byte
-       Local Strdisp As String * 4
-    if license=1 then
-       Strdisp = Str(bdispdata)
-       Strdisp = Format(strdisp , "    ")
-       'home ; lcd _sec
-       _start
-       wrbyte &H40                                       'autoincrement adress mode
-       _ack
-       _stop
-       _start
-       wrbyte &HC0                                       'startaddress first digit (HexC0) = MSB display
-       _ack
-
-       For Bcounter = 1 To 4
-          Select Case Asc(strdisp , Bcounter)
-             Case "0" : wrbyte &B00111111
-             Case "1" : wrbyte &B00000110
-             Case "2" : wrbyte &B01011011
-             Case "3" : wrbyte &B01001111
-             Case "4" : wrbyte &B01100110
-             Case "5" : wrbyte &B01101101
-             Case "6" : wrbyte &B01111101
-             Case "7" : wrbyte &B00000111
-             Case "8" : wrbyte &B01111111
-             Case "9" : wrbyte &B01101111
-             case "-" : wrbyte &B01000000
-             case "c" : wrbyte &B01111001
-             Case Else : wrbyte &B00000000
-          End Select
-          _ack
-       Next
-       _stop
-   end if
-End Sub
-
-Sub dispstr()
-
-       Local Bcounter As Byte
-       Local Strdisp As String * 4
-    if license=1 then
-       strdisp=stri
-       'Strdisp = Format(strdisp , "0000")
-       #if uselcd=1
-           home ; lcd _sec
-       #endif
-               dispon
-       _start
-       wrbyte &H40                                       'autoincrement adress mode
-       _ack
-       _stop
-       _start
-       wrbyte &HC0                                       'startaddress first digit (HexC0) = MSB display
-       _ack
-
-
-       For Bcounter = 1 To 4
-          strsc =mid (strdisp,bcounter,1)
-          'cls:lcd strdisp;"  ":lcd bcounter:lowerline :lcd strsc:waitms 500:cls
-          'cls
-          'lcd strdisp;"   "; bcounter
-          'lowerline:lcd strin
-          'wait 1
-          if _secc=0 then
-          select case strsc
-             Case "0" : wrbyte &B00111111
-             Case "1" : wrbyte &B00000110
-             Case "2" : wrbyte &B01011011
-             Case "3" : wrbyte &B01001111
-             Case "4" : wrbyte &B01100110
-             Case "5" : wrbyte &B01101101
-             Case "6" : wrbyte &B01111101
-             Case "7" : wrbyte &B00000111
-             Case "8" : wrbyte &B01111111
-             Case "9" : wrbyte &B01101111
-             case "-" : wrbyte &B01000000
-             case "C" : wrbyte &B00111001
-             Case Else : wrbyte &B00000000
-          End Select
-          _ack
-
-          else
-          select case strsc
-             Case "0" : wrbyte &B10111111
-             Case "1" : wrbyte &B10000110
-             Case "2" : wrbyte &B11011011
-             Case "3" : wrbyte &B11001111
-             Case "4" : wrbyte &B11100110
-             Case "5" : wrbyte &B11101101
-             Case "6" : wrbyte &B11111101
-             Case "7" : wrbyte &B10000111
-             Case "8" : wrbyte &B11111111
-             Case "9" : wrbyte &B11101111
-             case "-" : wrbyte &B11000000
-             case "C" : wrbyte &B00111001
-             Case Else : wrbyte &B10000000
-          End Select
-          _ack
-          end if
-
-       Next
-
-       _stop
-     end if
-End Sub
-
-
-
-
-Sub wrbyte(byval Bdata As Byte)
-   Local Bbitcounter As Byte
-
-   For Bbitcounter = 0 To 7                                 'LSB first
-      Reset Tm1637_clk
-      Tm1637_dout = Bdata.bbitcounter
-      Waitus 3
-      Set Tm1637_clk
-      Waitus 3
-   Next
-End Sub
 
 sub numsave
               ' eaddress=25
@@ -1780,7 +1537,7 @@ disable int0
 
 Ds18b20_id_1(1) = 1wsearchfirst()
 Ds18b20_id_2(1) = 1wsearchnext()
-    if license=1 then
+
        1wreset
        1wwrite &HCC
        1wwrite &H44
@@ -1813,10 +1570,10 @@ Ds18b20_id_2(1) = 1wsearchnext()
 
 
           _secc=0
-          dispstr
+          'dispstr
           endif
 
-       end if
+
 
        1wverify Ds18b20_id_2(1)
        if err=0 then
@@ -1841,7 +1598,7 @@ Ds18b20_id_2(1) = 1wsearchnext()
                        stri=stri+"C"
                     end if
                     _secc=0
-                    dispstr
+                    'dispstr
 
           end if
 

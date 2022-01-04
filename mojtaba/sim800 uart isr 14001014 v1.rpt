@@ -1,6 +1,6 @@
-Report       : sms module 14000920
-Date         : 12-25-2021
-Time         : 13:55:51
+Report       : sim800 uart isr 14001014 v1
+Date         : 01-04-2022
+Time         : 17:14:32
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 429A hex  -> Will fit into ROM
-ROMIMAGE     :  17050 dec
-FLASH USED   :  52  %
+ROMIMAGE     : 36D4 hex  -> Will fit into ROM
+ROMIMAGE     :  14036 dec
+FLASH USED   :  42  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -118,15 +118,15 @@ MINTEMP                          Integer           0119          281
 HIGHTEMP                         Byte              011B          283 
 TIMESTR                          String * 8        011C          284 
 READY                            Bit [6]           0110          272 
-LICENSE                          Byte              0125          293 
-I                                Byte              0126          294 
-B                                Byte              0127          295 
-SRET                             String * 100      0128          296 
-STEMP                            String * 6        018D          397 
-MSG                              String * 140      0194          404 
-NUMBER                           String * 13       0221          545 
-AA                               Byte              022F          559 
-BB                               Byte              0230          560 
+I                                Byte              0125          293 
+B                                Byte              0126          294 
+SRET                             String * 100      0127          295 
+STEMP                            String * 6        018C          396 
+MSG                              String * 140      0193          403 
+NUMBER                           String * 13       0220          544 
+AA                               Byte              022E          558 
+BB                               Byte              022F          559 
+POS                              Byte              0230          560 
 ORDER                            String * 10       0231          561 
 EFIRST                           EEPROM Byte       0000          0 
 FIRST                            Byte              023C          572 
@@ -594,6 +594,7 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
+STRSC                            not used
 ACTION                           not used
 TMPREAD                          not used
 TIMEOUT                          not used
@@ -602,12 +603,11 @@ STEPS                            not used
 TFIRE                            not used
 RAW                              not used
 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  462 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  463 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  463 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  564 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  565 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  565 
-Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  704 
-Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  1556 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1862 
+Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  454 
+Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  455 
+Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  455 
+Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  556 
+Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  557 
+Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  557 
+Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  696 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1619 

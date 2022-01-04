@@ -1,6 +1,6 @@
 Report       : sms module 14000923
-Date         : 12-15-2021
-Time         : 17:20:03
+Date         : 01-01-2022
+Time         : 13:19:32
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 1482 hex  -> Will fit into ROM
-ROMIMAGE     :  5250 dec
-FLASH USED   :  16  %
+ROMIMAGE     : 1442 hex  -> Will fit into ROM
+ROMIMAGE     :  5186 dec
+FLASH USED   :  15  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
