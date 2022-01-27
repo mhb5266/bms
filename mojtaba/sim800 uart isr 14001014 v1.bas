@@ -12,9 +12,7 @@ const uselcd=1
 
 
 config_sim:
-'$hwstack = 50
-'$swstack = 50
-'$framesize = 20
+
 
 
 
@@ -56,20 +54,7 @@ dim _sec as byte,_min as byte, _hour as byte, lsec as byte
 dim _secc as byte
 Const Ds1307w = &HD0
 Const Ds1307r = &HD1
-'(
-Tm1637_clk Alias Portc.3: config portc.3 =output
-Tm1637_dout Alias Portc.2 :config portc.2=output
-Tm1637_din Alias Pinc.2
-Declare Sub disp(byval Bdispdata As integer)            'The display can only show numbers)
-Declare Sub dispstr()
-Declare Sub wrbyte(byval Bdata As Byte)
-Declare Sub dispon()
-Declare Sub Tm1637_off()
-Declare Sub _start()
-Declare Sub _stop()
-Declare Sub _ack()
-')
-'declare sub sendtm
+
 dim stri as string*4
 dim strsc as string*1
 dim smin as string*2
@@ -103,8 +88,11 @@ dim timestr as string*8
 dim ready as bit
 
 
+dim readkey as bit:dim readclock as bit  :dim a as byte
+dim keytouched as bit
+
 'used variables
-Dim I As Byte , B As Byte
+Dim I As Byte , B As Byte , j as byte
 Dim Sret As String * 100 , Stemp As String * 6
 'Dim U As Byte
 'Dim Lim As Byte
@@ -113,16 +101,7 @@ Dim Msg As String * 140
 dim number as string*13
 
 dim aa as byte , bb as byte ,pos as byte
-'(
-dim enum1 as eram string*13
-dim enum2 as eram string*13
-dim enum3 as eram string*13
-'dim enum4 as eram string*13
-dim num1 as  string*13
-dim num2 as  string*13
-dim num3 as  string*13
-dim num4 as  string*13
-')
+
 dim order as string*10
 
 dim efirst as eram byte
@@ -224,6 +203,7 @@ dim num as string*13
 dim num1(6) as string*8
 dim x as byte
 
+dim learnen as bit
 
 dim raw as byte
 '-------------------------- read rnumber index from eeprom
@@ -236,194 +216,16 @@ End If
 'declare sub beep
 
 dim nobat as byte
-
+dim k1p as byte
+dim keypushed as bit
 
 stop timer0
 
 
 Startup:
 
-Resetsim
-
-For I = 1 To 30
-
-   waitms 250
-Next
-
-Wait 1
-
-Print "AT&F"
-flushbuf
-Print "AT"                                                  ' send AT command twice to activate the modem
-Print "AT"
-Flushbuf
-'Print "AT&F"
-Flushbuf
-Print "AT&F"
-flushbuf                                               ' flush the buffer
-Print "ATE0"
-
-Do
-  Flushbuf
-   Print "ATE0" :                                             ' Waitms 100
-   Getline Sret                                             ' get data from modem
-#if uselcd=1
-    cls:lcd "ATE0?":lowerline : lcd sret: wait 1:cls
-#endif                                            ' feedback on display
-Loop Until Sret = "OK"                                      ' modem must send OK
-Flushbuf
 
 
-
-Do
-  Flushbuf
-   Print "AT" :                                             ' Waitms 100
-   Getline Sret                                             ' get data from modem
-#if uselcd=1
-    cls:lcd "At?":lowerline : lcd sret: wait 1:cls
-#endif                                            ' feedback on display
-Loop Until Sret = "OK"                                      ' modem must send OK
-Flushbuf                                                    ' flush the input buffer
-
-
-
-
-
-Print "AT+cpin?"                                            ' get pin status
-Getline Sret
-#if uselcd=1
-    cls:lcd "AT+cpin?":lowerline : lcd sret: wait 1:cls
-#endif
-
-
-If Sret = "+CPIN: SIM PIN" Then
-   Print Pincode                                            ' send pincode
-End If
-Flushbuf
-
-Print "AT+CMGF=1"                                           ' set SMS text mode
-Getline Sret                                                ' get OK status
-#if uselcd=1
-    cls:lcd "AT+CMGF=1":lowerline : lcd sret: wait 1:cls
-#endif
-
-Waitms 500
-
-
-Print "At+Cusd=1"
-Getline Sret
-#if uselcd=1
-    cls:lcd "At+Cusd=1":lowerline : lcd sret: wait 1:cls
-#endif
-
-
-Flushbuf
-
-'sms settings
-Print "AT+CSMP=17,167,0,0"
-'Print "AT+CSMP=17,167,2,25"
-Getline Sret
-#if uselcd=1
-    cls:lcd "AT+CSMP":lowerline : lcd sret: wait 1:cls
-#endif
-'Print "AT+CNMI=0,1,2,0,0"
-'Print "AT+CNMI=2,2,0,0,0"
-'Print "AT+CNMI=1,2,0,0,0"
-Print "AT+CNMI=2,1,0,0,0"
-Getline Sret
-#if uselcd=1
-    cls:lcd "AT+CNMI=":lowerline : lcd sret: wait 1:cls
-#endif
-
-  Flushbuf
-   Print "AT+CSMP?"
-   Getline Sret
-#if uselcd=1
-    cls:lcd "AT+CSMP?":lowerline : lcd sret: wait 1:cls
-#endif
-
-  Flushbuf
-   Print "AT+CNMI?"
-  Getline Sret
-   #if uselcd=1
-       cls:lcd "AT+CNMI?":lowerline : lcd sret: wait 1:cls
-   #endif
-
-Waitms 500
-
-Do
-  Flushbuf
-   Print "AT+CMGF=1"
-  Getline Sret
-   #if uselcd=1
-       cls:lcd "AT+CMGF=1":lowerline : lcd sret: wait 1:cls
-   #endif
-Loop Until Sret = "OK"
-
-print "AT+CMGF?"
-waitms 100
-getline sret
-#if uselcd=1
-    cls:lcd "AT+CMGF?":lowerline : lcd sret: wait 1:cls
-#endif
-  Flushbuf
-  Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
-   Getline Sret
-
-#if uselcd=1
-    cls:lcd "AT+CSCS=":lowerline : lcd sret: wait 1:cls
-#endif
-
-
-
-Do
-   Delall
-   Waitms 500
-Loop Until Sret = "OK"
-
-for i=1 to 20
-    toggle led1
-    waitms 100
-next
-
-set relay
-waitms 200
-reset relay
-'(
-first=efirst
-waitms 10
-if first=255 then
-   msg="first time"
-    adminsms
-    efirst=0:waitms 10
-end if
-')
-#if uselcd=1
-    lcd "Ready":wait 2:cls
-#endif
-
-
-
-
-
-set ready
-
-antenna
-waitms 250
-
-
-msg=""
-msg= "System Is Online Now"
-number="+09155191622"
-
-send_sms
-
-msg= "System Is Online Now"
-adminsms
-
-waitms 500
-flushbuf
-cls
 
 start timer0
 
@@ -434,33 +236,49 @@ Main:
 Do
 
 
+
+
+
+
+      if lsec=1 then
+         lsec=0
+         if key2=0 then incr _min
+         if key3=0 then incr _hour
+         if _min>59 then _min=0
+         if _hour>23 then _hour=0
+         if key2=0 or key3=0 then settime
+         readtime
+              timestr=""
+              shour=str(_hour):smin=str(_min):ssec=str(_sec)
+              shour=format(shour,"00"): smin=format(smin,"00"): ssec=format(ssec,"00")
+              timestr=shour+":"+smin+":"+ssec
+
+              #if uselcd=1
+                  home : lcd timestr
+              #endif
+      end if
+
+
+
+
       gosub _read
 
-             if t0>20 then
-                t0=0
-                toggle led1
-                readtime
-             end if
+
+
+
+
 
                              'if ready=1 then
                         'gosub _read
 
-
+                      '(
                                 if lsec<>_sec then
+
 
 
                                                 if _sec=22 then antenna
 
-                                                shour=str(_hour):smin=str(_min):ssec=str(_sec):_secc=_sec mod 2
-                                                shour=format(shour,"00"): smin=format(smin,"00"): ssec=format(ssec,"00")
-                                                timestr=shour+":"+smin+":"+ssec
-                                                'timestr=format(timestr,"00000000")
-                                                stri=shour:stri=stri+smin
-                                                #if uselcd=1
-                                                    home : lcd timestr
-                                                #endif
-
-                                                i=_sec mod 5
+                                                i=_sec mod 3
                                                 if i=0 then temp
                                                 if tmp1<maxtemp or tmp2<maxtemp then
                                                    hightemp=0
@@ -489,15 +307,6 @@ Do
                                                     lowerline:lcd sens1;" ";sens2;"  "
                                                 #endif
 
-                                                'disp tmp
-                                                'dispstr
-                                                'home
-                                                'lcd _hour;":";_min;":";_sec
-
-
-                                                '#if uselcd=1
-                                                   ' locate 2,12:lcd stri;"  "
-                                               ' #endif
                                                 lsec=_sec
 
 
@@ -520,57 +329,8 @@ Do
                                                       start timer0
 
                                 end if
-                        'end if
+                        ')
 
-
-                     if key=0 then
-                        stop timer0
-                        set buzz
-                        i=0
-                        do
-                          waitms 25
-                          incr i
-                          if i>40 or key=1 then exit do
-                        loop until key=1
-                        if i>40 then gosub delremote else gosub newlearn
-                     end if
-                     reset buzz
-
-                         if key2=0 or key3=0 then
-                             stop timer0
-                              do
-
-
-                                    if key2=0 then
-                                       waitms 300
-                                       incr _min
-                                       if _min>59 then _min=0
-                                    end if
-
-                                    if key3=0 then
-                                       waitms 300
-                                       incr _hour
-                                       if _hour>23 then _hour=0
-                                    end if
-
-                                     shour=str(_hour):smin=str(_min):ssec=str(_sec):_secc=_sec mod 2
-                                     shour=format(shour,"00"): smin=format(smin,"00"): ssec=format(ssec,"00")
-                                     timestr=shour+":"+smin+":"+ssec
-                                     'timestr=format(timestr,"00000000")
-                                     stri=shour:stri=stri+smin
-                                     #if uselcd=1
-                                         home : lcd timestr
-                                         'lowerline:lcd sens1;" 'C "
-                                     #endif
-
-                                     'dispstr
-
-                                if key2=1 and key3=1 then exit do
-                              loop
-                              settime
-                              waitms 500
-                         end if
-                         start timer0
 
 loop
 'Charge
@@ -612,59 +372,6 @@ local try as byte
       if try>100 then exit do
 
 
-        'timestr=""
-        'timestr=str(_hour)+":"+str(_min)+ ":"+str(_sec)
-        'timestr=format(timestr,"00:00:00")
-
-        'home : lcd timestr
-        'temp
-        'lowerline:lcd sens1;" 'C  "
-        'disp tmp
-        'disptime
-        'home
-        'lcd _hour;":";_min;":";_sec
-        'start timer0
-        '(
-        if key=0 then
-           stop timer0
-           set led1
-           i=0
-           do
-             waitms 25
-             incr i
-             if i>40 or key=1 then exit do
-           loop until key=1
-           if i>40 then gosub delremote else gosub newlearn
-           start timer0
-        end if
-
-      if key2=0 or key3=0 then
-         do
-               if key2=0 then
-                  waitms 250
-                  incr _min
-                  if _min>59 then _min=0
-               end if
-
-               if key3=0 then
-                  waitms 250
-                  incr _hour
-                  if _hour>23 then _hour=0
-               end if
-
-                shour=str(_hour):smin=str(_min):ssec=str(_sec):_secc=_sec mod 2
-                shour=format(shour,"00"): smin=format(smin,"00"): ssec=format(ssec,"00")
-                timestr=shour+":"+smin+":"+ssec
-                'timestr=format(timestr,"00000000")
-                stri=shour:stri=stri+smin
-                home : lcd timestr
-                lowerline:lcd sens1;" 'C  "
-                dispstr
-           if key2=1 and key3=1 then exit do
-         loop
-         settime
-      end if
-     ')
     Loop
 
 
@@ -894,6 +601,7 @@ Sub Send_sms
     'lcd msg:wait 2
 #endif
 
+msg=msg+timestr+chr(10)
 msg=msg+" *"
 msg=msg+str(nobat)
 
@@ -970,6 +678,7 @@ sub adminsms
     lcd msg:wait 2
 #endif
 
+
      for i=1 to 10
        Print "AT+CMGS=" ; Chr(34);"+989155609631"; Chr(34)             'send sms
        Waitms 250
@@ -1003,29 +712,22 @@ t0rutin:
 
         stop timer0
              incr t0
-             '(
-             if ready=1 and poweroff< 10 then incr poweroff
-             if poweroff=5 then
-                'disable int0
-                'tm1637_off
-                reset led1
-                reset led2
-                reset buzz
-                reset relay
-                eaddress=25
-                numread
-                number=num
-                msg="Power Is Off"
-                send_sms
-                      cls
-                      lcd "press any key"
-                      do
-                        if key=0 or key2=0 or key3=0 then exit do
-                      loop
-                      cls
-             end if
-             ')
-             'gosub _read
+
+            a=t0 mod 20
+            if a=0 then
+               toggle led1
+               lsec=1
+            end if
+
+
+
+
+            if t0=80 then
+               t0=0
+
+            end if
+
+
 
         timer0=0
         start timer0
@@ -1104,7 +806,8 @@ Sub Charge
 'Print "At+Cusd=1," ; Chr(34) ; "*140#" ; Chr(34)
  flushbuf
 'wait 3
-Print "ATD*140#"
+'Print "ATD*140#"
+Print "ATD*200*2*2*1#"
 'Flushbuf
 'Print "At+Cusd=1," ; Chr(34) ; "*140#" ; Chr(34)
 wait 5
@@ -1112,10 +815,10 @@ wait 5
   Getline Sret
   'cls:lcd sret:wait 1:cls :waitms 500
   Getline Sret
-    'cls:lcd sret:wait 1:cls :waitms 500
+    cls:lcd sret:wait 1:cls :waitms 500
   'Sharj = Right(sret , 17)
   Getline Sret
-    'cls:lcd sret:wait 2:cls :waitms 500
+    cls:lcd sret:wait 2:cls :waitms 500
     msg=""
     aa=instr(sret,"003A")
     aa=aa+4
@@ -1165,7 +868,7 @@ sub delremote
               next
               reset buzz
               for i=1 to 16
-                       toggle led1
+                       toggle buzz
                        waitms 250
               next
 end sub
@@ -1223,55 +926,121 @@ end sub
 powerin:
         'reset triac
         'home :lcd timer2
-        timer1=0
+        'timer1=0
         'lowerline :lcd timer2
         reset triac
         incr syc
         poweroff=0
 
-        if syc=50 then
+        if syc=100 then
            toggle led2
            syc=0
         endif
 
 return
 
+ '(
+ _read:
+
+      Okread = 0
+      If _in = 1 Then
+         Do
+           'Reset Watchdog
+           If _in = 0 Then Exit Do
+         Loop
+         Timer1 = 0
+         Start Timer1
+         While _in = 0
+               'Reset Watchdog
+         Wend
+         Stop Timer1
+         If Timer1 >= 9722 And Timer1 <= 23611 Then
+            Do
+              If _in = 1 Then
+                 Timer1 = 0
+                 Start Timer1
+                 While _in = 1
+                    'Reset Watchdog
+                 Wend
+                 Stop Timer1
+                 Incr j
+                 S(j) = Timer1
+              End If
+              'Reset Watchdog
+              If j = 24 Then Exit Do
+            Loop
+            For j = 1 To 24
+                'Reset Watchdog
+                If S(j) >= 332 And S(j) <= 972 Then
+                   S(j) = 0
+                Else
+                   If S(j) >= 1111 And S(j) <= 2361 Then
+                      S(j) = 1
+                   Else
+                       j = 0
+                       Address = 0
+                       Code = 0
+                       Okread = 0
+                       Return
+                   End If
+                End If
+            Next
+            j = 0
+            Saddress = ""
+            Scode = ""
+            For j = 1 To 20
+                Saddress = Saddress + Str(s(j))
+            Next
+            For j = 21 To 24
+                Scode = Scode + Str(s(j))
+            Next
+            Address = Binval(saddress)
+            Code = Binval(scode)
+            Check
+            #if uselcd=1
+                cls
+                lcd code : lowerline : lcd address :wait 2
+                cls
+            #endif
+            j = 0
+         End If
+      End If
+return
+')
  _read:
       Okread = 0
       If _in = 1 Then
          Do
            'Reset Watchdog
            If _in = 0 Then Exit Do
-
          Loop
-         Timer2 = 0
-         Start Timer2
+         Timer1 = 0
+         Start Timer1
          While _in = 0
                'Reset Watchdog
          Wend
-         Stop Timer2
-         If Timer2 >= 76 And Timer2 <= 185 Then
+         Stop Timer1
+         If Timer1 >= 9722 And Timer1 <= 23611 Then
             Do
               If _in = 1 Then
-                 Timer2 = 0
-                 Start Timer2
+                 Timer1 = 0
+                 Start Timer1
                  While _in = 1
                     'Reset Watchdog
                  Wend
-                 Stop Timer2
+                 Stop Timer1
                  Incr I
-                 S(i) = Timer2
+                 S(i) = Timer1
               End If
               'Reset Watchdog
               If I = 24 Then Exit Do
-
             Loop
             For I = 1 To 24
                 'Reset Watchdog
-                If S(i) >= 3 And S(i) <= 8 Then
+                If S(i) >= 332 And S(i) <= 972 Then
                    S(i) = 0
                 Else
-                   If S(i) >= 9 And S(i) <= 19 Then
+                   If S(i) >= 1111 And S(i) <= 2361 Then
                       S(i) = 1
                    Else
                        I = 0
@@ -1281,7 +1050,6 @@ return
                        Return
                    End If
                 End If
-
             Next
             I = 0
             Saddress = ""
@@ -1295,14 +1063,15 @@ return
             Address = Binval(saddress)
             Code = Binval(scode)
             Check
-            '#if uselcd=1
+            #if uselcd=1
                 'cls
                 'lcd code : lowerline : lcd address :wait 2
-            '#endif
+            #endif
             I = 0
          End If
       End If
 return
+
 '================================================================ keys  learning
 
 

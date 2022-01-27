@@ -1,6 +1,6 @@
 Report       : sim800 uart isr 14001014 v1
-Date         : 01-04-2022
-Time         : 17:14:32
+Date         : 01-27-2022
+Time         : 15:25:08
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 36D4 hex  -> Will fit into ROM
-ROMIMAGE     :  14036 dec
-FLASH USED   :  42  %
+ROMIMAGE     : 2D54 hex  -> Will fit into ROM
+ROMIMAGE     :  11604 dec
+FLASH USED   :  35  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 838 hex
 Framesize    : 20 hex
 Framestart   : 808 hex
-Space left   :  1023  dec
+Space left   :  1019  dec
 
 LCD DB7      : PORTA.4
 LCD DB6      : PORTB.4
@@ -118,52 +118,60 @@ MINTEMP                          Integer           0119          281
 HIGHTEMP                         Byte              011B          283 
 TIMESTR                          String * 8        011C          284 
 READY                            Bit [6]           0110          272 
-I                                Byte              0125          293 
-B                                Byte              0126          294 
-SRET                             String * 100      0127          295 
-STEMP                            String * 6        018C          396 
-MSG                              String * 140      0193          403 
-NUMBER                           String * 13       0220          544 
-AA                               Byte              022E          558 
-BB                               Byte              022F          559 
-POS                              Byte              0230          560 
-ORDER                            String * 10       0231          561 
+READKEY                          Bit [5]           0110          272 
+READCLOCK                        Bit [4]           0110          272 
+A                                Byte              0125          293 
+KEYTOUCHED                       Bit [3]           0110          272 
+I                                Byte              0126          294 
+B                                Byte              0127          295 
+J                                Byte              0128          296 
+SRET                             String * 100      0129          297 
+STEMP                            String * 6        018E          398 
+MSG                              String * 140      0195          405 
+NUMBER                           String * 13       0222          546 
+AA                               Byte              0230          560 
+BB                               Byte              0231          561 
+POS                              Byte              0232          562 
+ORDER                            String * 10       0233          563 
 EFIRST                           EEPROM Byte       0000          0 
-FIRST                            Byte              023C          572 
-SHEADER                          String(5) * 30    023D          573 
-NET                              String * 10       02D8          728 
-COUNT                            Byte              02E3          739 
-R                                Byte              034B          843 
-TIMEOUT                          Byte              034C          844 
-T0                               Word              034D          845 
-SYC                              Byte              034F          847 
-POWEROFF                         Byte              0350          848 
-FIRE                             Word              0351          849 
-STEPS                            Byte              0353          851 
-TFIRE                            Word              0354          852 
-S                                Word(24)          0356          854 
-SADDRESS                         String * 20       0386          902 
-SCODE                            String * 4        039B          923 
-ADDRESS                          Long              03A0          928 
-CODE                             Byte              03A4          932 
-RA                               Long              03A5          933 
-RNUMBER                          Byte              03A9          937 
-OKREAD                           Bit [5]           0110          272 
-ERROR                            Bit [4]           0110          272 
-KEYCHECK                         Bit [3]           0110          272 
-T                                Word              03AA          938 
-EADDRESS                         Word              03AC          940 
-DATAREAD                         Byte              03AE          942 
-DATAWRITE                        Byte              03AF          943 
-M                                String * 8        03B0          944 
-M1                               String * 2        03B9          953 
-M2                               String * 2        03BC          956 
-M3                               String * 2        03BF          959 
-NUM                              String * 13       03C2          962 
-NUM1                             String(6) * 8     03D0          976 
-X                                Byte              0406          1030 
-RAW                              Byte              0407          1031 
-NOBAT                            Byte              0408          1032 
+FIRST                            Byte              023E          574 
+SHEADER                          String(5) * 30    023F          575 
+NET                              String * 10       02DA          730 
+COUNT                            Byte              02E5          741 
+R                                Byte              034D          845 
+TIMEOUT                          Byte              034E          846 
+T0                               Word              034F          847 
+SYC                              Byte              0351          849 
+POWEROFF                         Byte              0352          850 
+FIRE                             Word              0353          851 
+STEPS                            Byte              0355          853 
+TFIRE                            Word              0356          854 
+S                                Word(24)          0358          856 
+SADDRESS                         String * 20       0388          904 
+SCODE                            String * 4        039D          925 
+ADDRESS                          Long              03A2          930 
+CODE                             Byte              03A6          934 
+RA                               Long              03A7          935 
+RNUMBER                          Byte              03AB          939 
+OKREAD                           Bit [2]           0110          272 
+ERROR                            Bit [1]           0110          272 
+KEYCHECK                         Bit [0]           0110          272 
+T                                Word              03AC          940 
+EADDRESS                         Word              03AE          942 
+DATAREAD                         Byte              03B0          944 
+DATAWRITE                        Byte              03B1          945 
+M                                String * 8        03B2          946 
+M1                               String * 2        03BB          955 
+M2                               String * 2        03BE          958 
+M3                               String * 2        03C1          961 
+NUM                              String * 13       03C4          964 
+NUM1                             String(6) * 8     03D2          978 
+X                                Byte              0408          1032 
+LEARNEN                          Bit [7]           0409          1033 
+RAW                              Byte              040A          1034 
+NOBAT                            Byte              040B          1035 
+K1P                              Byte              040C          1036 
+KEYPUSHED                        Bit [6]           0409          1033 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -597,17 +605,23 @@ COMPARE1                         not used
 STRSC                            not used
 ACTION                           not used
 TMPREAD                          not used
+HIGHTEMP                         not used
+READY                            not used
+READKEY                          not used
+READCLOCK                        not used
+KEYTOUCHED                       not used
+J                                not used
 TIMEOUT                          not used
 FIRE                             not used
 STEPS                            not used
 TFIRE                            not used
+LEARNEN                          not used
 RAW                              not used
+K1P                              not used
+KEYPUSHED                        not used
 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  454 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  455 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  455 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  556 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  557 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  557 
-Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  696 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1619 
+Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  252 
+Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  253 
+Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  253 
+Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  403 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1388 
