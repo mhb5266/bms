@@ -1,6 +1,6 @@
-Report       : sms module reset bug fix
-Date         : 01-27-2022
-Time         : 16:05:32
+Report       : only sim
+Date         : 01-29-2022
+Time         : 14:02:42
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 3644 hex  -> Will fit into ROM
-ROMIMAGE     :  13892 dec
-FLASH USED   :  42  %
+ROMIMAGE     : AF0 hex  -> Will fit into ROM
+ROMIMAGE     :  2800 dec
+FLASH USED   :  8  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 838 hex
 Framesize    : 20 hex
 Framestart   : 808 hex
-Space left   :  1018  dec
+Space left   :  1835  dec
 
 LCD DB7      : PORTA.4
 LCD DB6      : PORTB.4
@@ -94,86 +94,11 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-ANTEN                            Byte              0060          96 
-SHARJ                            String * 100      0061          97 
-LSEC                             Byte              00C9          201 
-STRI                             String * 4        00CB          203 
-STRSC                            String * 1        00D0          208 
-SMIN                             String * 2        00D2          210 
-SHOUR                            String * 2        00D5          213 
-SSEC                             String * 2        00D8          216 
-DS18B20_ID_1                     Byte(9)           00DB          219 
-DS18B20_ID_2                     Byte(8)           00E4          228 
-ACTION                           Byte              00EC          236 
-TEMPERATURE                      String * 6        00F9          249 
-SENS1                            String * 6        0100          256 
-SENS2                            String * 6        0107          263 
-READSENS                         Integer           010E          270 
-TMPREAD                          Bit [7]           0110          272 
-TMP                              Integer           0111          273 
-TMP1                             Integer           0113          275 
-TMP2                             Integer           0115          277 
-MAXTEMP                          Integer           0117          279 
-MINTEMP                          Integer           0119          281 
-HIGHTEMP                         Byte              011B          283 
-TIMESTR                          String * 8        011C          284 
-READY                            Bit [6]           0110          272 
-READKEY                          Bit [5]           0110          272 
-READCLOCK                        Bit [4]           0110          272 
-A                                Byte              0125          293 
-KEYTOUCHED                       Bit [3]           0110          272 
-TOUCHTIME                        Byte              0126          294 
-READSMS                          Bit [2]           0110          272 
-I                                Byte              0127          295 
-B                                Byte              0128          296 
-J                                Byte              0129          297 
-SRET                             String * 100      012A          298 
-STEMP                            String * 6        018F          399 
-MSG                              String * 140      0196          406 
-NUMBER                           String * 13       0223          547 
-AA                               Byte              0231          561 
-BB                               Byte              0232          562 
-POS                              Byte              0233          563 
-ORDER                            String * 10       0234          564 
-EFIRST                           EEPROM Byte       0000          0 
-FIRST                            Byte              023F          575 
-SHEADER                          String(5) * 30    0240          576 
-NET                              String * 10       02DB          731 
-COUNT                            Byte              02E6          742 
-R                                Byte              034E          846 
-TIMEOUT                          Byte              034F          847 
-T0                               Word              0350          848 
-SYC                              Byte              0352          850 
-POWEROFF                         Byte              0353          851 
-FIRE                             Word              0354          852 
-STEPS                            Byte              0356          854 
-TFIRE                            Word              0357          855 
-S                                Word(24)          0359          857 
-SADDRESS                         String * 20       0389          905 
-SCODE                            String * 4        039E          926 
-ADDRESS                          Long              03A3          931 
-CODE                             Byte              03A7          935 
-RA                               Long              03A8          936 
-RNUMBER                          Byte              03AC          940 
-OKREAD                           Bit [1]           0110          272 
-ERROR                            Bit [0]           0110          272 
-KEYCHECK                         Bit [7]           03AD          941 
-T                                Word              03AE          942 
-EADDRESS                         Word              03B0          944 
-DATAREAD                         Byte              03B2          946 
-DATAWRITE                        Byte              03B3          947 
-M                                String * 8        03B4          948 
-M1                               String * 2        03BD          957 
-M2                               String * 2        03C0          960 
-M3                               String * 2        03C3          963 
-NUM                              String * 13       03C6          966 
-NUM1                             String(6) * 8     03D4          980 
-X                                Byte              040A          1034 
-LEARNEN                          Bit [6]           03AD          941 
-RAW                              Byte              040B          1035 
-NOBAT                            Byte              040C          1036 
-K1P                              Byte              040D          1037 
-KEYPUSHED                        Bit [5]           03AD          941 
+ANSWER                           String * 120      0060          96 
+RX                               Byte              00D9          217 
+TIMEOUT                          Byte              00DA          218 
+T0                               Byte              00DB          219 
+I                                Byte              00DC          220 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -570,17 +495,6 @@ _FRAME_HIGH                      &H0829
 _XMEGA                           0
 _XTINY                           0
 USELCD                           1
-DS1307W                          &HD0
-DS1307R                          &HD1
-_RS232_BUFSIZE0                  100
-_RS232_BUFSIZE_IN0P1             101
-_CHECKCHAR0                      0
-PINCODE                          "AT+CPIN=1234"
-WRITE_ADDRESS                    160
-READ_ADDRESS                     161
-_SDA                             1
-_SCL                             0
-___I2CDELAY                      5
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -604,23 +518,4 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-STRSC                            not used
-ACTION                           not used
-TMPREAD                          not used
-READKEY                          not used
-READCLOCK                        not used
-J                                not used
-TIMEOUT                          not used
-FIRE                             not used
-STEPS                            not used
-TFIRE                            not used
-LEARNEN                          not used
-RAW                              not used
-K1P                              not used
-KEYPUSHED                        not used
 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  427 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  428 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  428 
-Source string could be too big to fit into target string [SHEADER(1)>NUMBER]  in line  622 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1619 
