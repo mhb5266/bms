@@ -1,6 +1,6 @@
 Report       : only sim
 Date         : 01-29-2022
-Time         : 14:02:42
+Time         : 19:43:43
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : AF0 hex  -> Will fit into ROM
-ROMIMAGE     :  2800 dec
-FLASH USED   :  8  %
+ROMIMAGE     : 10AE hex  -> Will fit into ROM
+ROMIMAGE     :  4270 dec
+FLASH USED   :  13  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 838 hex
 Framesize    : 20 hex
 Framestart   : 808 hex
-Space left   :  1835  dec
+Space left   :  1421  dec
 
 LCD DB7      : PORTA.4
 LCD DB6      : PORTB.4
@@ -99,6 +99,13 @@ RX                               Byte              00D9          217
 TIMEOUT                          Byte              00DA          218 
 T0                               Byte              00DB          219 
 I                                Byte              00DC          220 
+A                                Byte              00DD          221 
+J                                Byte              00DE          222 
+NUMBER                           String * 14       00DF          223 
+SMS                              String(10) * 25   00EE          238 
+MSG                              String * 120      01F2          498 
+TEXT                             String * 14       026B          619 
+K                                Byte              027A          634 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -495,6 +502,7 @@ _FRAME_HIGH                      &H0829
 _XMEGA                           0
 _XTINY                           0
 USELCD                           1
+QUT                              ""
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -519,3 +527,5 @@ Warnings:
 ADCD                             not used
 COMPARE1                         not used
 
+Source string could be too big to fit into target string [SMS(9)>TEXT]  in line  178 
+Source string could be too big to fit into target string [SMS(4)>NUMBER]  in line  179 
