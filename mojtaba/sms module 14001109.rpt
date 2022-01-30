@@ -1,6 +1,6 @@
-Report       : clock and remote
+Report       : sms module 14001109
 Date         : 01-30-2022
-Time         : 19:50:23
+Time         : 18:48:24
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 1934 hex  -> Will fit into ROM
-ROMIMAGE     :  6452 dec
-FLASH USED   :  19  %
+ROMIMAGE     : 1114 hex  -> Will fit into ROM
+ROMIMAGE     :  4372 dec
+FLASH USED   :  13  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 838 hex
 Framesize    : 20 hex
 Framestart   : 808 hex
-Space left   :  1743  dec
+Space left   :  1421  dec
 
 LCD DB7      : PORTA.4
 LCD DB6      : PORTB.4
@@ -94,60 +94,18 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-LSEC                             Byte              0063          99 
-STRI                             String * 4        0065          101 
-STRSC                            String * 1        006A          106 
-SMIN                             String * 2        006C          108 
-SHOUR                            String * 2        006F          111 
-SSEC                             String * 2        0072          114 
-DS18B20_ID_1                     Byte(9)           0075          117 
-DS18B20_ID_2                     Byte(8)           007E          126 
-ACTION                           Byte              0086          134 
-TEMPERATURE                      String * 6        0093          147 
-SENS1                            String * 6        009A          154 
-SENS2                            String * 6        00A1          161 
-READSENS                         Integer           00A8          168 
-TMPREAD                          Bit [7]           00AA          170 
-TMP                              Integer           00AB          171 
-TMP1                             Integer           00AD          173 
-TMP2                             Integer           00AF          175 
-MAXTEMP                          Integer           00B1          177 
-MINTEMP                          Integer           00B3          179 
-HIGHTEMP                         Byte              00B5          181 
-TIMESTR                          String * 8        00B6          182 
-READY                            Bit [6]           00AA          170 
-READKEY                          Bit [5]           00AA          170 
-READCLOCK                        Bit [4]           00AA          170 
-A                                Byte              00BF          191 
-KEYTOUCHED                       Bit [3]           00AA          170 
-TOUCHTIME                        Byte              00C0          192 
-READSMS                          Bit [2]           00AA          170 
-I                                Byte              00C1          193 
-TIMEOUT                          Byte              00C2          194 
-T0                               Word              00C3          195 
-SYC                              Byte              00C5          197 
-POWEROFF                         Byte              00C6          198 
-FIRE                             Word              00C7          199 
-STEPS                            Byte              00C9          201 
-TFIRE                            Word              00CA          202 
-S                                Word(24)          00CC          204 
-SADDRESS                         String * 20       00FC          252 
-SCODE                            String * 4        0111          273 
-ADDRESS                          Long              0116          278 
-CODE                             Byte              011A          282 
-RA                               Long              011B          283 
-RNUMBER                          Byte              011F          287 
-OKREAD                           Bit [1]           00AA          170 
-ERROR                            Bit [0]           00AA          170 
-KEYCHECK                         Bit [7]           0120          288 
-T                                Word              0121          289 
-EADDRESS                         Word              0123          291 
-DATAREAD                         Byte              0125          293 
-DATAWRITE                        Byte              0126          294 
-M                                String * 8        0127          295 
-M1                               String * 2        0130          304 
-M2                               String * 2        0133          307 
-M3                               String * 2        0136          310 
+ANSWER                           String * 120      0060          96 
+RX                               Byte              00D9          217 
+TIMEOUT                          Byte              00DA          218 
+T0                               Byte              00DB          219 
+I                                Byte              00DC          220 
+A                                Byte              00DD          221 
+J                                Byte              00DE          222 
+NUMBER                           String * 14       00DF          223 
+SMS                              String(10) * 25   00EE          238 
+MSG                              String * 120      01F2          498 
+TEXT                             String * 14       026B          619 
+K                                Byte              027A          634 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -544,13 +502,7 @@ _FRAME_HIGH                      &H0829
 _XMEGA                           0
 _XTINY                           0
 USELCD                           1
-DS1307W                          &HD0
-DS1307R                          &HD1
-WRITE_ADDRESS                    160
-READ_ADDRESS                     161
-_SDA                             1
-_SCL                             0
-___I2CDELAY                      5
+QUT                              ""
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -574,18 +526,6 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-STRSC                            not used
-ACTION                           not used
-TMPREAD                          not used
-READY                            not used
-READKEY                          not used
-READCLOCK                        not used
-TIMEOUT                          not used
-FIRE                             not used
-STEPS                            not used
-TFIRE                            not used
 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  199 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  200 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  200 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  660 
+Source string could be too big to fit into target string [SMS(9)>TEXT]  in line  178 
+Source string could be too big to fit into target string [SMS(4)>NUMBER]  in line  179 
