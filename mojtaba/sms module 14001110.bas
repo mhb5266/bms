@@ -392,7 +392,10 @@ Do
                                  if text<>"" then
                                     cls:lcd "number":lowerline:lcd number:wait 2:cls:waitms 500
                                     cls:lcd "text":lowerline:lcd text:wait 2:cls:waitms 500
-                                    findorder
+                                    i=instr(number,"+98")
+                                    if i<>0 then
+                                       findorder
+                                    end if
                                  end if
                end if
 

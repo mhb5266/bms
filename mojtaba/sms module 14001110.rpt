@@ -1,6 +1,6 @@
 Report       : sms module 14001110
 Date         : 01-31-2022
-Time         : 13:53:00
+Time         : 14:14:39
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,8 +8,8 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 26DC hex  -> Will fit into ROM
-ROMIMAGE     :  9948 dec
+ROMIMAGE     : 2702 hex  -> Will fit into ROM
+ROMIMAGE     :  9986 dec
 FLASH USED   :  30  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
@@ -599,4 +599,4 @@ Source string could be too big to fit into target string [SMIN>___STRBUF]  in li
 Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  328 
 Source string could be too big to fit into target string [SMS(9)>TEXT]  in line  378 
 Source string could be too big to fit into target string [SMS(4)>NUMBER]  in line  379 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  868 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  871 
