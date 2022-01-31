@@ -354,40 +354,50 @@ Do
                end if
 
                i=0
-               answer=lcase(answer)
-               i=instr(answer,"+cmti")
-               if i>0 then
-                  cls:lcd "new sms"
+               'answer=lcase(answer)
+               'i=instr(answer,"+cmti")
+               'if i>0   then
+                  'cls:lcd "new sms"
+                  'answer=""
+                  'delread
+                  'print "AT+CMGR=1"
+               'end if
+               a=_sec mod 5
+
+               if a=0  then
+                  'delread
+                  waitms 250
                   answer=""
                   print "AT+CMGR=1"
+                                 i=0
+                                 waitms 500
+                                 answer=lcase(answer)
+                                 i=instr(answer,"+cmgr:")
+                                 sms(10)=""
+                                 if i>0 then
+                                    j=split(answer,sms(1),qut)
+                                    text=sms(9)
+                                    number=sms(4)
+                                    a=len(text)
+                                    a=a-2
+                                    text=mid(sms(9),1,a)
+                                    k=0
+                                    for j=1 to 10
+                                       a=j+12
+                                       incr k
+                                       'cls:lcd sms(j):lowerline:lcd j:wait 2:cls:waitms 500
+                                    next
+                                    'readsms
+                                 end if
+                                 if text<>"" then
+                                    cls:lcd "number":lowerline:lcd number:wait 2:cls:waitms 500
+                                    cls:lcd "text":lowerline:lcd text:wait 2:cls:waitms 500
+                                    findorder
+                                 end if
                end if
 
 
-               i=0
-               waitms 500
-               answer=lcase(answer)
-               i=instr(answer,"+cmgr:")
-               sms(10)=""
-               if i>0 then
-                  j=split(answer,sms(1),qut)
-                  text=sms(9)
-                  number=sms(4)
-                  a=len(text)
-                  a=a-2
-                  text=mid(sms(9),1,a)
-                  k=0
-                  for j=1 to 10
-                     a=j+12
-                     incr k
-                     'cls:lcd sms(j):lowerline:lcd j:wait 2:cls:waitms 500
-                  next
-                  'readsms
-               end if
-               if text<>"" then
-                  cls:lcd "number":lowerline:lcd number:wait 2:cls:waitms 500
-                  cls:lcd "text":lowerline:lcd text:wait 2:cls:waitms 500
-                  findorder
-               end if
+
       end if
 
 
@@ -928,8 +938,8 @@ sub delread
    do
       answer=""
       Print  "AT+CMGDA=DEL READ"
-      cls: lcd "DEL READ SMS"
-      lowerline :lcd "answer= ";answer :waitms 500
+      'cls: lcd "DEL READ SMS"
+      'lowerline :lcd "answer= ";answer :waitms 250
    loop until lcase(answer)="ok"
 
 end sub
