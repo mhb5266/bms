@@ -1,6 +1,6 @@
 Report       : sms module 14001110
-Date         : 01-31-2022
-Time         : 14:14:39
+Date         : 02-01-2022
+Time         : 17:07:15
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 2702 hex  -> Will fit into ROM
-ROMIMAGE     :  9986 dec
-FLASH USED   :  30  %
+ROMIMAGE     : 2D80 hex  -> Will fit into ROM
+ROMIMAGE     :  11648 dec
+FLASH USED   :  35  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 838 hex
 Framesize    : 20 hex
 Framestart   : 808 hex
-Space left   :  1208  dec
+Space left   :  1120  dec
 
 LCD DB7      : PORTA.4
 LCD DB6      : PORTB.4
@@ -94,68 +94,74 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-LSEC                             Byte              0063          99 
-STRI                             String * 4        0065          101 
-STRSC                            String * 1        006A          106 
-SMIN                             String * 2        006C          108 
-SHOUR                            String * 2        006F          111 
-SSEC                             String * 2        0072          114 
-DS18B20_ID_1                     Byte(9)           0075          117 
-DS18B20_ID_2                     Byte(8)           007E          126 
-ACTION                           Byte              0086          134 
-TEMPERATURE                      String * 6        0093          147 
-SENS1                            String * 6        009A          154 
-SENS2                            String * 6        00A1          161 
-READSENS                         Integer           00A8          168 
-TMPREAD                          Bit [7]           00AA          170 
-TMP                              Integer           00AB          171 
-TMP1                             Integer           00AD          173 
-TMP2                             Integer           00AF          175 
-MAXTEMP                          Integer           00B1          177 
-MINTEMP                          Integer           00B3          179 
-HIGHTEMP                         Byte              00B5          181 
-TIMESTR                          String * 8        00B6          182 
-READY                            Bit [6]           00AA          170 
-READKEY                          Bit [5]           00AA          170 
-READCLOCK                        Bit [4]           00AA          170 
-A                                Byte              00BF          191 
-KEYTOUCHED                       Bit [3]           00AA          170 
-TOUCHTIME                        Byte              00C0          192 
-I                                Byte              00C1          193 
-TIMEOUT                          Byte              00C2          194 
-T0                               Word              00C3          195 
-SYC                              Byte              00C5          197 
-POWEROFF                         Byte              00C6          198 
-FIRE                             Word              00C7          199 
-STEPS                            Byte              00C9          201 
-TFIRE                            Word              00CA          202 
-S                                Word(24)          00CC          204 
-SADDRESS                         String * 20       00FC          252 
-SCODE                            String * 4        0111          273 
-ADDRESS                          Long              0116          278 
-CODE                             Byte              011A          282 
-RA                               Long              011B          283 
-RNUMBER                          Byte              011F          287 
-OKREAD                           Bit [2]           00AA          170 
-ERROR                            Bit [1]           00AA          170 
-KEYCHECK                         Bit [0]           00AA          170 
-T                                Word              0120          288 
-EADDRESS                         Word              0122          290 
-DATAREAD                         Byte              0124          292 
-DATAWRITE                        Byte              0125          293 
-M                                String * 8        0126          294 
-M1                               String * 2        012F          303 
-M2                               String * 2        0132          306 
-M3                               String * 2        0135          309 
-ANSWER                           String * 120      0138          312 
-RX                               Byte              01B1          433 
-J                                Byte              01B2          434 
-                                 Byte              01B3          435 
-NUMBER                           String * 14       01B4          436 
-SMS                              String(10) * 25   01C3          451 
-MSG                              String * 120      02C7          711 
-TEXT                             String * 14       0340          832 
-K                                Byte              034F          847 
+ANTEN                            Byte              0060          96 
+NET                              String * 10       0061          97 
+PASSWORD                         String * 4        006C          108 
+NUM                              String * 14       0071          113 
+X                                Byte              0080          128 
+NUM1                             String(6) * 8     0081          129 
+LSEC                             Byte              00BA          186 
+STRI                             String * 4        00BC          188 
+STRSC                            String * 1        00C1          193 
+SMIN                             String * 2        00C3          195 
+SHOUR                            String * 2        00C6          198 
+SSEC                             String * 2        00C9          201 
+DS18B20_ID_1                     Byte(9)           00CC          204 
+DS18B20_ID_2                     Byte(8)           00D5          213 
+ACTION                           Byte              00DD          221 
+TEMPERATURE                      String * 6        00EA          234 
+SENS1                            String * 6        00F1          241 
+SENS2                            String * 6        00F8          248 
+READSENS                         Integer           00FF          255 
+TMPREAD                          Bit [7]           0101          257 
+TMP                              Integer           0102          258 
+TMP1                             Integer           0104          260 
+TMP2                             Integer           0106          262 
+MAXTEMP                          Integer           0108          264 
+MINTEMP                          Integer           010A          266 
+HIGHTEMP                         Byte              010C          268 
+TIMESTR                          String * 8        010D          269 
+READY                            Bit [6]           0101          257 
+READKEY                          Bit [5]           0101          257 
+READCLOCK                        Bit [4]           0101          257 
+A                                Byte              0116          278 
+KEYTOUCHED                       Bit [3]           0101          257 
+TOUCHTIME                        Byte              0117          279 
+I                                Byte              0118          280 
+TIMEOUT                          Word              0119          281 
+T0                               Word              011B          283 
+SYC                              Byte              011D          285 
+POWEROFF                         Byte              011E          286 
+FIRE                             Word              011F          287 
+STEPS                            Byte              0121          289 
+TFIRE                            Word              0122          290 
+S                                Word(24)          0124          292 
+SADDRESS                         String * 20       0154          340 
+SCODE                            String * 4        0169          361 
+ADDRESS                          Long              016E          366 
+CODE                             Byte              0172          370 
+RA                               Long              0173          371 
+RNUMBER                          Byte              0177          375 
+OKREAD                           Bit [2]           0101          257 
+ERROR                            Bit [1]           0101          257 
+KEYCHECK                         Bit [0]           0101          257 
+T                                Word              0178          376 
+EADDRESS                         Word              017A          378 
+DATAREAD                         Byte              017C          380 
+DATAWRITE                        Byte              017D          381 
+M                                String * 8        017E          382 
+M1                               String * 2        0187          391 
+M2                               String * 2        018A          394 
+M3                               String * 2        018D          397 
+ANSWER                           String * 120      0190          400 
+RX                               Byte              0209          521 
+J                                Byte              020A          522 
+                                 Byte              020B          523 
+NUMBER                           String * 14       020C          524 
+SMS                              String(10) * 25   021B          539 
+MSG                              String * 120      031F          799 
+TEXT                             String * 14       0398          920 
+K                                Byte              03A7          935 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -594,9 +600,10 @@ STEPS                            not used
 TFIRE                            not used
                                  not used
 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  327 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  328 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  328 
-Source string could be too big to fit into target string [SMS(9)>TEXT]  in line  378 
-Source string could be too big to fit into target string [SMS(4)>NUMBER]  in line  379 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  871 
+Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  343 
+Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  344 
+Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  344 
+Source string could be too big to fit into target string [SMS(9)>TEXT]  in line  409 
+Source string could be too big to fit into target string [SMS(4)>NUMBER]  in line  410 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  884 
+Source string could be too big to fit into target string [NUM1(I)>PASSWORD]  in line  1110 

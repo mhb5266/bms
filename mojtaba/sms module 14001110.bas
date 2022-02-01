@@ -6,9 +6,7 @@ config lcdpin=pin;db7=porta.4;db6=portb.4;db5=portb.3;db4=portb.2;rs=portb.0;en=
 config lcd=16*2
 'cursor off
 const uselcd=1
-#if uselcd=1
-    cls:lcd "hi" :wait 2:cls
-#endif
+
 
 
 config_sim:
@@ -23,7 +21,22 @@ declare sub rnumber_ew
 Declare Sub decode
 declare sub eew
 Declare Sub eer
+declare sub rxin
 
+declare sub numread
+declare sub numsave
+declare sub readpas
+declare sub savepas
+
+declare sub antenna
+dim anten as byte
+Dim Net As String * 10
+dim password as string*4
+
+
+dim num as string*14
+dim x as byte
+dim num1(6) as string*8
 
 declare sub settime
 declare sub readtime
@@ -91,7 +104,7 @@ config porta.2=OUTPUT:relay alias porta.2
 config porta.3=OUTPUT:led2 alias porta.3
 
 
-dim timeout as  byte
+dim timeout as  word
 Config Scl = Portc.0
 Config Sda = Portc.1
 
@@ -194,19 +207,26 @@ simconfig:
 
 
 stop timer0
-
-
+disable urxc
+'start timer0
 Startup:
 
    cls
    reset simrst
    waitms 100
    set simrst
+
+   #if uselcd=1
+       cls:lcd "Em Electronic.ir" :wait 3:cls
+   #endif
+
    for a=1 to 16
-      waitms 500:lcd "*"
+      lcd "*":wait 2
    next
    enable urxc
    cls
+
+   readpas
 
    do
       answer=""
@@ -216,32 +236,25 @@ Startup:
    loop until lcase(answer)="ok"
    cls :lcd answer:wait 1:cls
 
-
+'(
    do
       answer=""
       Print "AT&F"
       cls: lcd "AT&F"
       lowerline :lcd "answer= ";answer :waitms 500
-   loop until lcase(answer)="ok"
+   loop until lcase(answer)<>""
    lowerline
    cls :lcd answer:wait 1:cls
-
-   do
-      answer=""
-      print "ATE0"
-      cls: lcd "ATE0"
-      lowerline :lcd "answer= ";answer :waitms 500
-   loop until lcase(answer)="ok"
-   cls :lcd answer:wait 1:cls
-
+')
    do
       answer=""
       print "AT"
       cls: lcd "AT"
       lowerline :lcd "answer= ";answer :waitms 500
    loop until lcase(answer)="ok"
-   lowerline
    cls :lcd answer:wait 1:cls
+
+
 
    do
       answer=""
@@ -280,7 +293,7 @@ Startup:
    loop until lcase(answer)="ok"
    lowerline
    cls :lcd answer:wait 1:cls
-
+'(
    do
       answer=""
       Print  "AT+CNMI=2,1,0,0,0"
@@ -289,7 +302,7 @@ Startup:
    loop until lcase(answer)="ok"
    lowerline
    cls :lcd answer:wait 1:cls
-
+ ')
    do
       answer=""
       Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
@@ -303,6 +316,9 @@ Startup:
    cls :lcd answer:wait 1:cls
 
    number="+989155609631":msg="system is online":sendsms
+   cls:lcd answer:lowerline:lcd "SMS WAS SENT":wait 3:cls
+
+   number="+989155191622":msg="system is online":sendsms
    cls:lcd answer:lowerline:lcd "SMS WAS SENT":wait 3:cls
    answer=""
 
@@ -345,6 +361,19 @@ Do
 
             endif
 
+         if _sec=5 then
+            do
+               answer=""
+               print "AT"
+               cls: lcd "AT"
+               lowerline :lcd "answer= ";answer :waitms 500
+               answer=lcase(answer)
+               if answer<>"" and answer<>"at" then exit do
+            loop
+            cls :lcd answer:wait 1:cls
+            if answer<>"ok" then gosub startup
+         end if
+
          end if
 
 
@@ -368,6 +397,8 @@ Do
                   'delread
                   waitms 250
                   answer=""
+                  number=""
+                  text=""
                   print "AT+CMGR=1"
                                  i=0
                                  waitms 500
@@ -417,7 +448,10 @@ t0rutin:
 
         stop timer0
              incr t0
-
+            a=t0 mod 10
+            if a=0 then
+               if timeout>0 then decr timeout
+            end if
             a=t0 mod 20
             if a=0 then
                toggle led1
@@ -537,28 +571,7 @@ powerin:
 
 return
 
-rxin:
-   timeout=10
 
-   'disable urxc
-  ' do
-      inputbin rx
-
-      select case rx
-         case 0
-
-         case 10
-           'if answer<>"" then exit do
-         case 13
-            'answer=""
-         case else
-            answer=answer+chr(rx)
-            'answer=lcase(answer)
-      end select
-   'loop
-      'findorder
-   'enable urxc
-return
 
  _read:
       Okread = 0
@@ -617,7 +630,7 @@ return
             Code = Binval(scode)
             Check
             #if uselcd=1
-                'cls
+               ' cls
                 'lcd code : lowerline : lcd address :wait 2
             #endif
             I = 0
@@ -648,10 +661,10 @@ end sub
 sub Command
 
          cls:lcd code:toggle relay
-         wait 3
+         wait 2
          cls
 
-       start timer0
+       'start timer0
 
 end sub
 
@@ -873,21 +886,66 @@ end sub
 
 sub findorder
 
+   antenna
    select case text
       case "on"
+         set relay
          msg="relay is on"
       case "off"
+         reset relay
          msg="relay is off"
       case "new1"
-         msg="Num#1 is Saved"
+         eaddress=25
+         numsave
+         eaddress=25
+         numread
+         msg="Num#1"+chr(10)
+         msg=msg+num+chr(10)
+         msg=msg+"is Saved"
       case "new2"
-         msg="Num#2 is Saved"
+         eaddress=32
+         numsave
+         eaddress=32
+         numread
+         msg="Num#2"+chr(10)
+         msg=msg+num+chr(10)
+         msg=msg+"is Saved"
       case "new3"
-         msg="Num#3 is Saved"
+         eaddress=39
+         numsave
+         eaddress=39
+         numread
+         msg="Num#1"+chr(10)
+         msg=msg+num+chr(10)
+         msg=msg+"is Saved"
       case "del"
          msg="All numbers is deleted"
       case "?"
-         msg="status"
+         msg=" "
+         eaddress=25
+         numread
+         msg=num
+         msg=msg+chr(10)
+         eaddress=32
+         numread
+         msg=msg+num+chr(10)
+         eaddress=39
+         numread
+         msg=msg+num+chr(10)
+         msg=msg+chr(10)
+         msg=msg+"sensor1= "
+         msg=msg+sens1+"  'C"
+         msg=msg+chr(10)
+         msg=msg+"sensor2= "
+         msg=msg+sens2 +"  'C"+chr(10)
+         msg=msg+"NET= "+net+chr(10)
+         'msg=msg+"sharj= "+sharj+" rial"+chr(10)
+
+      case password
+           savepas
+           readpas
+           msg="password="+password
+
       case  else
          msg="wrong sms"
    end select
@@ -899,11 +957,13 @@ sub findorder
 end sub
 
 sub sendsms
+   disable urxc
    answer=""
    Print "AT+CMGS=" ; Chr(34);number; Chr(34)
    waitms 250
    print msg ; Chr(26)
    waitms 250
+   enable urxc
 
    'do
       'i=instr(answer,"ok")
@@ -947,3 +1007,137 @@ sub delread
 
 end sub
 end
+
+sub rxin
+   'timeout=5
+
+   'disable urxc
+   'do
+      inputbin rx
+
+      select case rx
+         case 0
+
+         case 10
+           'if answer<>"" then exit do
+         case 13
+            'answer=""
+         case else
+            answer=answer+chr(rx)
+            'answer=lcase(answer)
+      end select
+      'if timeout>0 then decr timeout
+      'waitus 100
+      'if timeout=0 then exit do
+   'loop
+      'findorder
+   'enable urxc
+end sub
+
+
+sub numsave
+              ' eaddress=25
+    nuM = ""
+    'M = Hex(ra)
+    #if uselcd=1
+        'cls:lcd "save num":lowerline:lcd number:wait 3:cls
+    #endif
+    num=number
+    x=0
+    for i=1 to 6
+        x=i*2
+        num1(i)=mid(num,x,2)
+        datawrite=hexval(num1(i))
+        gosub eew
+        incr eaddress
+        #if uselcd=1
+            'cls:lcd i:lowerline:lcd num1(i):wait 3:cls
+        #endif
+    next
+
+
+end sub
+
+sub numread
+    num="+"
+    'eaddress=25
+    for i=1 to 6
+        gosub eer
+        num1(i)=hex(dataread)
+        #if uselcd=1
+           ' cls:lcd i:lowerline:lcd num1(i):wait 3:cls
+        #endif
+        num=num+num1(i)
+        incr eaddress
+    next
+    #if uselcd=1
+        'cls:lcd "read num":lowerline:lcd num:wait 3:cls
+    #endif
+
+end sub
+
+sub savepas
+              eaddress=47
+    nuM = ""
+    'M = Hex(ra)
+    #if uselcd=1
+        'cls:lcd "save num":lowerline:lcd number:wait 3:cls
+    #endif
+    num=password
+    x=0
+    for i=1 to 2
+        x=i*2
+        num1(i)=mid(num,x,2)
+        datawrite=hexval(num1(i))
+        gosub eew
+        incr eaddress
+        #if uselcd=1
+            'cls:lcd i:lowerline:lcd num1(i):wait 3:cls
+        #endif
+    next
+
+
+end sub
+
+sub readpas
+    password=""
+    eaddress=47
+    for i=1 to 4
+        gosub eer
+        num1(i)=hex(dataread)
+        #if uselcd=1
+           ' cls:lcd i:lowerline:lcd num1(i):wait 3:cls
+        #endif
+        password=password+num1(i)
+        incr eaddress
+    next
+    #if uselcd=1
+        'cls:lcd "read num":lowerline:lcd num:wait 3:cls
+    #endif
+
+end sub
+
+
+Sub Antenna
+   answer=""
+  Print "AT+CSQ"
+  waitms 250
+  j = Split(answer , sms(1) , " ")
+  Anten = Val(sms(2))
+
+  Select Case Anten
+         Case 0
+              Net = "BAD"
+         Case 1
+              Net = "WEAK"
+         Case 2 To 15
+              Net = "Not Bad"
+         Case 16 To 30
+              Net = "GOOD"
+         Case 31
+              Net = "BEST"
+         Case 99
+              Net = "OFFLINE"
+  End Select
+
+End Sub
