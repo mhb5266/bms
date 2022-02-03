@@ -34,7 +34,7 @@ dim anten as byte
 Dim Net As String * 10
 dim password as string*4
 dim rxdata(3) as string*50
-
+dim errs as byte
 dim num as string*14
 dim x as byte
 dim num1(6) as string*8
@@ -203,6 +203,7 @@ simconfig:
    declare sub readsms
    declare sub sendsms
    declare sub delall
+   declare sub delsent
    declare sub delread
 
 
@@ -325,10 +326,10 @@ Startup:
    delall
    cls :lcd answer:wait 1:cls
 
-   'number="+989155609631":msg="system is online":sendsms
+   number="+989155609631":msg="system is online":sendsms
    cls:lcd answer:lowerline:lcd "SMS WAS SENT":wait 3:cls
 
-   'number="+989155191622":msg="system is online":sendsms
+   number="+989155191622":msg="system is online":sendsms
    cls:lcd answer:lowerline:lcd "SMS WAS SENT":wait 3:cls
    answer=""
 
@@ -342,6 +343,10 @@ Main:
 Do
 
   if lsec=1 then
+
+
+
+
          if key=0 then set keytouched
          lsec=0
          if key2=0 then incr _min
@@ -364,7 +369,10 @@ Do
             if hightemp>30 then
 
             endif
-
+         if _hour=7 and _min=0 and _sec=0 then
+            number="+989155609631":msg="system is online":sendsms
+            number="+989155191622":msg="system is online":sendsms
+         end if
          end if
 
          #if uselcd=1
@@ -400,6 +408,10 @@ Do
                   a=instr(number,"+989")
                   if a>0 and text<>"" then
                      findorder
+                  else
+                      number=""
+                      text=""
+                      answer=""
                   end if
                end if
             end if
@@ -408,9 +420,25 @@ Do
 
          end if
 
-
-
-
+        '(
+         if t0=23 and smstime=3 then
+            answer=""
+            flushbuf
+            print "AT"
+            waitms 100
+            inputbin rx
+            if rx=0 then
+               incr errs
+               if errs>10 then
+                  errs=0
+                  reset simrst
+                  waitms 100
+                  set simrst
+               end if
+            end if
+            flushbuf
+         end if
+         ')
 
 
 
@@ -643,7 +671,7 @@ end sub
 sub Command
 
          cls:lcd code:toggle relay
-         waitms 300
+         waitms 150
          cls
 
        'start timer0
@@ -877,25 +905,25 @@ sub findorder
          reset relay
          msg="relay is off"
       case "new1"
-         eaddress=25
+         eaddress=30
          numsave
-         eaddress=25
+         eaddress=30
          numread
          msg="Num#1"+chr(10)
          msg=msg+num+chr(10)
          msg=msg+"is Saved"
       case "new2"
-         eaddress=32
+         eaddress=40
          numsave
-         eaddress=32
+         eaddress=40
          numread
          msg="Num#2"+chr(10)
          msg=msg+num+chr(10)
          msg=msg+"is Saved"
       case "new3"
-         eaddress=39
+         eaddress=50
          numsave
-         eaddress=39
+         eaddress=50
          numread
          msg="Num#1"+chr(10)
          msg=msg+num+chr(10)
@@ -904,14 +932,14 @@ sub findorder
          msg="All numbers is deleted"
       case "?"
          msg=" "
-         eaddress=25
+         eaddress=30
          numread
          msg=num
          msg=msg+chr(10)
-         eaddress=32
+         eaddress=40
          numread
          msg=msg+num+chr(10)
-         eaddress=39
+         eaddress=50
          numread
          msg=msg+num+chr(10)
          msg=msg+chr(10)
@@ -922,6 +950,7 @@ sub findorder
          msg=msg+sens2 +"  'C"+chr(10)
          msg=msg+"NET= "+net+chr(10)
          'msg=msg+"sharj= "+sharj+" rial"+chr(10)
+         msg=msg+timestr+chr(10)
 
       case password
            savepas
@@ -953,7 +982,8 @@ sub sendsms
    'loop
    answer=""
    text=""
-   delall
+   delread
+   delsent
    cls
 end sub
 
@@ -985,8 +1015,19 @@ sub delread
       answer=""
       Print  "AT+CMGDA=DEL READ"
       rxin
-      cls: lcd "DEL READ SMS"
-      lowerline :lcd "answer= ";answer :waitms 500
+      'cls: lcd "DEL READ SMS"
+      'lowerline :lcd "answer= ";answer :waitms 500
+   loop until lcase(answer)="ok"
+
+end sub
+
+sub delsent
+   do
+      answer=""
+      Print  "AT+CMGDA=DEL SENT"
+      rxin
+      'cls: lcd "DEL READ SMS"
+      'lowerline :lcd "answer= ";answer :waitms 500
    loop until lcase(answer)="ok"
 
 end sub
