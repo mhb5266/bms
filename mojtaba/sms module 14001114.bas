@@ -22,7 +22,7 @@ Declare Sub decode
 declare sub eew
 Declare Sub eer
 declare sub rxin
-declare sub cleanbuf
+declare sub flushbuf()
 
 declare sub numread
 declare sub numsave
@@ -230,7 +230,7 @@ Startup:
    'readpas
 
    print "AT&F"
-   'cleanbuf
+   flushbuf
    do
       answer=""
       print "AT"
@@ -311,16 +311,7 @@ Startup:
    loop until lcase(answer)="ok"
    lowerline
    cls :lcd answer:wait 1:cls
-'(
-   do
-      answer=""
-      Print  "AT+CNMI=2,1,0,0,0"
-      cls: lcd "AT+CNMI=2,1,0,0,0"
-      lowerline :lcd "answer= ";answer :waitms 500
-   loop until lcase(answer)="ok"
-   lowerline
-   cls :lcd answer:wait 1:cls
- ')
+
    do
       answer=""
       Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
@@ -377,51 +368,46 @@ Do
          end if
 
          #if uselcd=1
-             cls : lcd timestr
+             home : lcd timestr
              lowerline
              lcd sens1;" C  ";sens2; " C  "
          #endif
 
 
-
+         number=""
+         text=""
+         answer=""
          if smstime=5 then
             smstime=0
-            answer=""
-            number=""
-            text=""
-            CLEANBUF
+            flushbuf
             print "AT+CMGR=1"
             rxin
             rxdata(1)=answer
-            i=0
-            waitms 500
-            answer=lcase(rxdata(1))
-            i=instr(answer,"+cmgr:")
-            if i>0 then
+
+            a=split(answer,sms(1),qut)
+            number=sms(4)
+            a=0
+            a=instr(answer,"+CMGR:")
+            if a>0 then
                rxin
                rxdata(2)=answer
-               text=rxdata(2)
-               j=split(rxdata(1),sms(1),qut)
-               number=sms(4)
-               cls:lcd number:wait 3:cls:waitms 500
-               cls:lcd text:wait 3:cls:waitms 500
-               if text<>"" then
-                  i=0
-                  i=instr(number,"+98")
-                  if i>0 then
-
+               text=lcase(rxdata(2))
+               rxin
+               a=0
+               a=instr(answer,"OK")
+               if a>0 then
+                  a=0
+                  a=instr(number,"+989")
+                  if a>0 and text<>"" then
+                     findorder
                   end if
                end if
             end if
-            rxin
-            rxdata(3)=answer
-            a=instr(rxdata(3),"OK")
-            if a>0 AND NUMBER<>"" AND TEXT<>"" then
-                  findorder
-                  delall
-                  delread
-            end if
+            'delall
+
+
          end if
+
 
 
 
@@ -432,7 +418,7 @@ Do
 
 
 
-      'gosub _read
+      gosub _read
 
 
 
@@ -446,7 +432,7 @@ t0rutin:
              incr t0
             a=t0 mod 10
             if a=0 then
-               if timeout>0 then decr timeout
+               lsec=1
             end if
             a=t0 mod 20
             if a=0 then
@@ -467,7 +453,6 @@ t0rutin:
 
            a=t0 mod 40
            if a=0 then
-              lsec=1
               incr smstime
            end if
 
@@ -658,7 +643,7 @@ end sub
 sub Command
 
          cls:lcd code:toggle relay
-         wait 2
+         waitms 300
          cls
 
        'start timer0
@@ -990,8 +975,8 @@ sub delall
       answer=""
       Print  "AT+CMGDA=DEL ALL"
       rxin
-      home: lcd "DEL ALL SMS"
-      lowerline :lcd "answer= ";answer :waitms 500
+      'home: lcd "DEL ALL SMS"
+      'lowerline :lcd "answer= ";answer :waitms 500
    loop until lcase(answer)="ok"
 end sub
 
@@ -1008,14 +993,14 @@ end sub
 end
 
 sub rxin
-   CLS:LCD "^"
-   timeout=0
+   'LCD "^"
+   'timeout=0
    answer=""
    'disable urxc
    do
       inputbin rx
-      incr timeout
-      if rx>0 then timeout=0
+      'incr timeout
+      'if rx>0 then timeout=0
       select case rx
          case 0
 
@@ -1027,10 +1012,10 @@ sub rxin
             answer=answer+chr(rx)
             'answer=lcase(answer)
       end select
-      waitms 1
-      if timeout=100 then exit do
+      'waitms 1
+      'if timeout=250 then exit do
    loop
-   CLS
+   'CLS
 end sub
 
 
@@ -1142,13 +1127,9 @@ Sub Antenna
 
 End Sub
 
-sub cleanbuf
-
-    do
-      waitms 10
-     inputbin rx
-     lcd rx
-     if rx=0 then exit do
-    loop
-
-end sub
+Sub Flushbuf()
+ Waitms 100 'give some time to get data if it is there
+ Do
+ rx= Inkey() ' flush buffer
+ Loop Until RX = 0
+End Sub
