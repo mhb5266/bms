@@ -370,8 +370,8 @@ Do
 
             endif
          if _hour=7 and _min=0 and _sec=0 then
-            number="+989155609631":msg="system is online":sendsms
-            number="+989155191622":msg="system is online":sendsms
+            number="+989155609631":msg="everything is fine":sendsms
+            number="+989155191622":msg="everything is fine":sendsms
          end if
          end if
 
@@ -461,6 +461,9 @@ t0rutin:
             a=t0 mod 10
             if a=0 then
                lsec=1
+               if timeout>0 then
+                  decr timeout
+               end if
             end if
             a=t0 mod 20
             if a=0 then
@@ -482,6 +485,7 @@ t0rutin:
            a=t0 mod 40
            if a=0 then
               incr smstime
+
            end if
 
 
@@ -982,7 +986,7 @@ sub sendsms
    'loop
    answer=""
    text=""
-   delread
+   delall
    delsent
    cls
 end sub
@@ -1035,7 +1039,7 @@ end
 
 sub rxin
    'LCD "^"
-   'timeout=0
+   timeout=10
    answer=""
    'disable urxc
    do
@@ -1054,7 +1058,7 @@ sub rxin
             'answer=lcase(answer)
       end select
       'waitms 1
-      'if timeout=250 then exit do
+      if timeout=0 then exit do
    loop
    'CLS
 end sub
