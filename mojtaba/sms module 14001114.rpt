@@ -1,6 +1,6 @@
 Report       : sms module 14001114
-Date         : 02-07-2022
-Time         : 19:20:18
+Date         : 02-08-2022
+Time         : 13:48:59
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 2D62 hex  -> Will fit into ROM
-ROMIMAGE     :  11618 dec
-FLASH USED   :  35  %
+ROMIMAGE     : 2E7A hex  -> Will fit into ROM
+ROMIMAGE     :  11898 dec
+FLASH USED   :  36  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 838 hex
 Framesize    : 20 hex
 Framestart   : 808 hex
-Space left   :  965  dec
+Space left   :  964  dec
 
 LCD DB7      : PORTA.4
 LCD DB6      : PORTB.4
@@ -165,6 +165,7 @@ SMS                              String(10) * 25   02B6          694
 MSG                              String * 120      03BA          954 
 TEXT                             String * 14       0433          1075 
 K                                Byte              0442          1090 
+TESTSIM                          Byte              0443          1091 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -605,11 +606,11 @@ TFIRE                            not used
                                  not used
 K                                not used
 
-Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  359 
-Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  360 
-Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  360 
-Source string could be too big to fit into target string [ANSWER>RXDATA(1)]  in line  392 
-Source string could be too big to fit into target string [SMS(4)>NUMBER]  in line  395 
-Source string could be too big to fit into target string [ANSWER>RXDATA(2)]  in line  400 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  898 
-Source string could be too big to fit into target string [NUM1(I)>PASSWORD]  in line  1139 
+Source string could be too big to fit into target string [SHOUR>___STRBUF]  in line  353 
+Source string could be too big to fit into target string [SMIN>___STRBUF]  in line  354 
+Source string could be too big to fit into target string [SSEC>___STRBUF]  in line  354 
+Source string could be too big to fit into target string [ANSWER>RXDATA(1)]  in line  386 
+Source string could be too big to fit into target string [SMS(4)>NUMBER]  in line  389 
+Source string could be too big to fit into target string [ANSWER>RXDATA(2)]  in line  394 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  953 
+Source string could be too big to fit into target string [NUM1(I)>PASSWORD]  in line  1195 

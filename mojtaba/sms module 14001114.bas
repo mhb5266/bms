@@ -131,9 +131,9 @@ on ovf0 t0rutin
 dim t0 as word
 'start timer0
 
-'enable int0
-'config int0=RISING
-'on int0 powerin
+enable int0
+config int0=RISING
+on int0 powerin
 dim syc as byte
 dim poweroff as byte
 
@@ -205,7 +205,7 @@ simconfig:
    declare sub delall
    declare sub delsent
    declare sub delread
-
+   dim testsim as byte
 
 
 stop timer0
@@ -213,42 +213,36 @@ stop timer0
 'start timer0
 Startup:
 
-   cls
-   reset simrst
-   waitms 100
-   set simrst
-
    #if uselcd=1
        cls:lcd "Em Electronic.ir" :wait 3:cls
    #endif
 
-   for a=1 to 16
-      lcd "*":wait 1
-   next
+       cls
+       reset simrst
+       waitms 100
+       set simrst
+
+
+       for a=1 to 16
+           lcd "*":wait 1
+       next
    'enable urxc
-   cls
+       cls
 
    'readpas
 
-   print "AT&F"
-   flushbuf
-   do
-      answer=""
-      print "AT"
-      rxin
-      cls: lcd "AT"
-      lowerline :lcd "answer= ";answer :waitms 500
-   loop until lcase(answer)="at"
-   cls :lcd answer:wait 1:cls
-   do
-      answer=""
-      'cleanbuf
-      print "ATE0"
-      rxin
-      cls:lcd "ATE0"
-      lowerline :lcd "answer= ";answer :wait 1 :cls:waitms 500
-   loop until lcase(answer)="ok"
-   cls :lcd answer:wait 1:cls
+'   print "AT&F"
+'   flushbuf
+
+       do
+         answer=""
+         'cleanbuf
+         print "ATE0"
+         rxin
+         'cls:lcd "ATE0"
+         'lowerline :lcd "answer= ";answer :wait 1 :cls:waitms 500
+       loop until lcase(answer)="ok"
+       cls :lcd answer:wait 1:cls
 
 '(
    do
@@ -441,7 +435,7 @@ Do
          ')
 
 
-
+        testsim=0
   end if
 
 
@@ -452,6 +446,38 @@ Do
 
 loop
 
+test:
+
+
+       cls
+       reset simrst
+       waitms 100
+       set simrst
+
+
+       for a=1 to 16
+           lcd "*":wait 1
+       next
+   'enable urxc
+       cls
+
+   'readpas
+
+'   print "AT&F"
+'   flushbuf
+
+       do
+         answer=""
+         'cleanbuf
+         print "ATE0"
+         rxin
+         'cls:lcd "ATE0"
+         'lowerline :lcd "answer= ";answer :wait 1 :cls:waitms 500
+       loop until lcase(answer)="ok"
+       cls :lcd answer:wait 1:cls
+
+
+return
 
 
 t0rutin:
@@ -492,6 +518,35 @@ t0rutin:
             if t0=80 then
                t0=0
                'set readsms
+               if testsim>10 then
+                      testsim=0
+                      cls
+                      reset simrst
+                      waitms 100
+                      set simrst
+
+
+                      for a=1 to 16
+                          lcd "*":wait 1
+                      next
+                  'enable urxc
+                      cls
+
+                  'readpas
+
+               '   print "AT&F"
+               '   flushbuf
+
+                      do
+                        answer=""
+                        'cleanbuf
+                        print "ATE0"
+                        rxin
+                        'cls:lcd "ATE0"
+                        'lowerline :lcd "answer= ";answer :wait 1 :cls:waitms 500
+                      loop until lcase(answer)="ok"
+                      cls :lcd answer:wait 1:cls
+               end if
             end if
 
 
@@ -964,6 +1019,7 @@ sub findorder
       case  else
          msg="wrong sms"
    end select
+   cls
    answer=""
    text=""
    sendsms
@@ -1178,3 +1234,5 @@ Sub Flushbuf()
  rx= Inkey() ' flush buffer
  Loop Until RX = 0
 End Sub
+
+
