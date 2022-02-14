@@ -1,0 +1,4 @@
+Error : 46    Line :   167   Assignment error, unknown variable (DIM) [STRIN: 0   MID(STRDISP , BCOUNTER , 1): 200]  , in File : C:\Users\moham\OneDrive\Desktop\bms\mojtaba\tm1637.bas
+Error : 31    Line :   174   Invalid data type [[0011] 0[STRIN]]  , in File : C:\Users\moham\OneDrive\Desktop\bms\mojtaba\tm1637.bas
+Error : 7     Line :   174   IF THEN expected [ 174]  , in File : C:\Users\moham\OneDrive\Desktop\bms\mojtaba\tm1637.bas
+Error : 269   Line :   174   END SELECT expected  , in File : C:\Users\moham\OneDrive\Desktop\bms\mojtaba\tm1637.bas

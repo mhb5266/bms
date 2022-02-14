@@ -17,6 +17,10 @@ pg alias portd.6:config portd.6=OUTPUT
 Date$ = "01.09.09"
 Time$ = "14:07:50"
 
+$lib "i2c_twi.lbx"                                          ' we do not use software emulated I2C but the TWI
+'$lib "glcdSSD1306-I2C_V2.lib"                               ' override the default lib with this special one
+
+
 DO
   waitms 50
 

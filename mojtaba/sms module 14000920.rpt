@@ -1,6 +1,11 @@
 Report       : sms module 14000920
+<<<<<<< Updated upstream
 Date         : 12-25-2021
 Time         : 13:55:51
+=======
+Date         : 12-30-2021
+Time         : 00:06:34
+>>>>>>> Stashed changes
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M32
