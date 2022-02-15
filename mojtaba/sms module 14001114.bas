@@ -606,7 +606,70 @@ t0rutin:
                         'cls:lcd "ATE0"
                         'lowerline :lcd "answer= ";answer :wait 1 :cls:waitms 500
                       loop until lcase(answer)="ok"
-                      cls :lcd answer:wait 1:cls
+                      'cls :lcd answer:wait 1:cls
+
+                         do
+                            answer=""
+                            print "AT"
+                            rxin
+                            'cls: lcd "AT"
+                            'lowerline :lcd "answer= ";answer :waitms 500
+                         loop until lcase(answer)="ok"
+                         'cls :lcd answer:wait 1:cls
+
+
+
+                         do
+                            answer=""
+                            Print "AT+cpin?"
+                            rxin
+                            'cls: lcd "AT+cpin?"
+                            'lowerline :lcd "answer= ";answer :waitms 500
+                         loop until lcase(answer)<>""
+                         'lowerline
+                         'cls :lcd answer:wait 1:cls
+
+
+                         do
+                            answer=""
+                            Print "AT+CMGF=1"
+                            rxin
+                            'cls: lcd "AT+CMGF=1"
+                            'lowerline :lcd "answer= ";answer :waitms 500
+                         loop until lcase(answer)="ok"
+                         'lowerline
+                         'cls :lcd answer:wait 1:cls
+
+                         do
+                            answer=""
+                            Print "At+Cusd=1"
+                            rxin
+                            'cls: lcd "At+Cusd=1"
+                            'lowerline :lcd "answer= ";answer :waitms 500
+                         loop until lcase(answer)="ok"
+                         'lowerline
+                         'cls :lcd answer:wait 1:cls
+
+
+                         do
+                            answer=""
+                            Print "AT+CSMP=17,167,0,0"
+                            rxin
+                            'cls: lcd "AT+CSMP=17,167,0,0"
+                            'lowerline :lcd "answer= ";answer :waitms 500
+                         loop until lcase(answer)="ok"
+                         'lowerline
+                         'cls :lcd answer:wait 1:cls
+
+                         do
+                            answer=""
+                            Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
+                            rxin
+                            'cls: lcd "AT+CSCS=GSM"
+                            'lowerline :lcd "answer= ";answer :waitms 500
+                         loop until lcase(answer)="ok"
+                         'lowerline
+                         'cls :lcd answer:wait 1:cls
                end if
             end if
 
@@ -1303,4 +1366,3 @@ Sub Flushbuf()
  rx= Inkey() ' flush buffer
  Loop Until RX = 0
 End Sub
-

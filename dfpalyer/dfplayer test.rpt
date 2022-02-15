@@ -1,6 +1,6 @@
 Report       : dfplayer test
 Date         : 02-15-2022
-Time         : 17:47:40
+Time         : 17:56:32
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,8 +8,8 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 408 hex  -> Will fit into ROM
-ROMIMAGE     :  1032 dec
+ROMIMAGE     : 41A hex  -> Will fit into ROM
+ROMIMAGE     :  1050 dec
 FLASH USED   :  12  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
