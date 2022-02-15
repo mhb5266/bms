@@ -363,7 +363,7 @@ Do
             if hightemp>30 then
 
             endif
-         if _hour=7 and _min=0 and _sec=0 then
+         if _hour=7 and _min=0 and _sec=3 then
             number="+989155609631":msg="everything is fine":sendsms
             number="+989155191622":msg="everything is fine":sendsms
          end if
@@ -474,8 +474,69 @@ test:
          'cls:lcd "ATE0"
          'lowerline :lcd "answer= ";answer :wait 1 :cls:waitms 500
        loop until lcase(answer)="ok"
-       cls :lcd answer:wait 1:cls
+       'cls :lcd answer:wait 1:cls
+   do
+      answer=""
+      print "AT"
+      rxin
+      'cls: lcd "AT"
+      'lowerline :lcd "answer= ";answer :waitms 500
+   loop until lcase(answer)="ok"
+   'cls :lcd answer:wait 1:cls
 
+
+
+   do
+      answer=""
+      Print "AT+cpin?"
+      rxin
+      'cls: lcd "AT+cpin?"
+      'lowerline :lcd "answer= ";answer :waitms 500
+   loop until lcase(answer)<>""
+   'lowerline
+   'cls :lcd answer:wait 1:cls
+
+
+   do
+      answer=""
+      Print "AT+CMGF=1"
+      rxin
+      cls: lcd "AT+CMGF=1"
+      lowerline :lcd "answer= ";answer :waitms 500
+   loop until lcase(answer)="ok"
+   'lowerline
+   'cls :lcd answer:wait 1:cls
+
+   do
+      answer=""
+      Print "At+Cusd=1"
+      rxin
+      'cls: lcd "At+Cusd=1"
+      'lowerline :lcd "answer= ";answer :waitms 500
+   loop until lcase(answer)="ok"
+   'lowerline
+   'cls :lcd answer:wait 1:cls
+
+
+   do
+      answer=""
+      Print "AT+CSMP=17,167,0,0"
+      rxin
+      'cls: lcd "AT+CSMP=17,167,0,0"
+      'lowerline :lcd "answer= ";answer :waitms 500
+   loop until lcase(answer)="ok"
+   'lowerline
+   'cls :lcd answer:wait 1:cls
+
+   do
+      answer=""
+      Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
+      rxin
+      'cls: lcd "AT+CSCS=GSM"
+      'lowerline :lcd "answer= ";answer :waitms 500
+   loop until lcase(answer)="ok"
+   'lowerline
+   'cls :lcd answer:wait 1:cls
 
 return
 
@@ -730,7 +791,7 @@ end sub
 sub Command
 
          cls:lcd code:toggle relay
-         waitms 150
+         waitms 400
          cls
 
        'start timer0
@@ -984,10 +1045,18 @@ sub findorder
          numsave
          eaddress=50
          numread
-         msg="Num#1"+chr(10)
+         msg="Num#3"+chr(10)
          msg=msg+num+chr(10)
          msg=msg+"is Saved"
       case "del"
+         number="+989000000000"
+         eaddress=30
+         numsave
+         eaddress=40
+         numsave
+         eaddress=50
+         numsave
+         number=sms(4)
          msg="All numbers is deleted"
       case "?"
          msg=" "
@@ -1234,5 +1303,4 @@ Sub Flushbuf()
  rx= Inkey() ' flush buffer
  Loop Until RX = 0
 End Sub
-
 
