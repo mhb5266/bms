@@ -36,8 +36,10 @@ dim password as string*4
 dim rxdata(3) as string*50
 dim errs as byte
 dim num as string*14
+dim numbers(3) as string*14
 dim x as byte
 dim num1(6) as string*8
+dim sendok as Boolean
 
 declare sub settime
 declare sub readtime
@@ -131,9 +133,9 @@ on ovf0 t0rutin
 dim t0 as word
 'start timer0
 
-enable int0
-config int0=RISING
-on int0 powerin
+'enable int0
+'config int0=RISING
+'on int0 powerin
 dim syc as byte
 dim poweroff as byte
 
@@ -224,7 +226,7 @@ Startup:
 
 
        for a=1 to 16
-           lcd "*":wait 1
+           lcd "*":wait 2
        next
    'enable urxc
        cls
@@ -363,10 +365,27 @@ Do
             if hightemp>30 then
 
             endif
-         if _hour=7 and _min=0 and _sec=3 then
+         if _hour=6 and _min=30 and sendok=0 then
+            set sendok
             number="+989155609631":msg="everything is fine":sendsms
             number="+989155191622":msg="everything is fine":sendsms
+            eaddress=30
+            numread
+            numbers(1)=num
+            eaddress=40
+            numread
+            numbers(2)=num
+            eaddress=50
+            numread
+            numbers(3)=num
+
+            for a=1 to 3
+                number=numbers(a)
+                text="?"
+                findorder
+            next
          end if
+         if _hour>7 and _min>1 then reset sendok
          end if
 
          #if uselcd=1
@@ -389,6 +408,11 @@ Do
             a=split(answer,sms(1),qut)
             number=sms(4)
             a=0
+            a=instr(answer,"ERR")
+            if a>0 then
+               gosub test
+            end if
+            a=0
             a=instr(answer,"+CMGR:")
             if a>0 then
                rxin
@@ -406,12 +430,18 @@ Do
                       number=""
                       text=""
                       answer=""
+                      gosub test
                   end if
                end if
             end if
             'delall
 
+         end if
 
+         if _sec=13 then
+            print "AT"
+            rxin
+            if answer<>"OK" then gosub test
          end if
 
         '(
@@ -456,7 +486,8 @@ test:
 
 
        for a=1 to 16
-           lcd "*":wait 1
+           'lcd "*":
+           wait 1
        next
    'enable urxc
        cls

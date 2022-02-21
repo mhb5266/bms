@@ -1,6 +1,6 @@
-Report       : RC522-BascomV11
+Report       : RC522-v11-14001130
 Date         : 02-19-2022
-Time         : 12:21:41
+Time         : 13:20:54
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,20 +8,20 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1494 hex  -> Will fit into ROM
-ROMIMAGE     :  5268 dec
-FLASH USED   :  64  %
+ROMIMAGE     : 14EE hex  -> Will fit into ROM
+ROMIMAGE     :  5358 dec
+FLASH USED   :  65  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
 
 Stack start  : 45F hex
-Stack size   : 28 hex
-S-Stacksize  : 10 hex
-S-Stackstart : 438 hex
-Framesize    : 20 hex
-Framestart   : 408 hex
-Space left   :  774  dec
+Stack size   : FA hex
+S-Stacksize  : 96 hex
+S-Stackstart : 366 hex
+Framesize    : C8 hex
+Framestart   : 208 hex
+Space left   :  262  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -453,7 +453,7 @@ TCR2UB                           0
 _RESET                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
-_GSTRBUF                         1032
+_GSTRBUF                         520
 _DECIMALPOINT                    46
 _RTSCTS                          0
 _RTSCTS1                         0
@@ -485,9 +485,9 @@ _INPBIN_EXTENDED                 0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
-_HWSTACK_LOW                     &H0437
-_SWSTACK_LOW                     &H0428
-_FRAME_HIGH                      &H0429
+_HWSTACK_LOW                     &H0365
+_SWSTACK_LOW                     &H02D0
+_FRAME_HIGH                      &H02D1
 _XMEGA                           0
 _XTINY                           0
 READ_WRITE                       1
@@ -529,6 +529,6 @@ ADCD                             not used
 COMPARE1                         not used
 TAG_IDW                          not used
 
-Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  223 
-Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  230 
-Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  273 
+Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  197 
+Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  204 
+Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  247 

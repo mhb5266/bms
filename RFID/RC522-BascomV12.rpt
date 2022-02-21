@@ -1,6 +1,6 @@
-Report       : RC522-BascomV11
-Date         : 02-19-2022
-Time         : 12:21:41
+Report       : RC522-BascomV12
+Date         : 02-21-2022
+Time         : 16:09:55
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,20 +8,20 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1494 hex  -> Will fit into ROM
-ROMIMAGE     :  5268 dec
-FLASH USED   :  64  %
+ROMIMAGE     : FFA hex  -> Will fit into ROM
+ROMIMAGE     :  4090 dec
+FLASH USED   :  49  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
 
 Stack start  : 45F hex
-Stack size   : 28 hex
-S-Stacksize  : 10 hex
-S-Stackstart : 438 hex
-Framesize    : 20 hex
-Framestart   : 408 hex
-Space left   :  774  dec
+Stack size   : 96 hex
+S-Stacksize  : 96 hex
+S-Stackstart : 3CA hex
+Framesize    : C8 hex
+Framestart   : 26C hex
+Space left   :  446  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -92,32 +92,25 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-RC522_BUFFER                     Byte(18)          0060          96 
-RC522_INBUFFER                   Byte(18)          0072          114 
-TAG_TYP                          Word              0084          132 
-TAG_TYPA                         Byte(2)           0084          132 
-TAG_IDW                          Dword             0086          134 
-TAG_ID                           Byte(4)           0086          134 
-TAG_CRC                          Byte              008A          138 
-TEXTBYTE                         Byte(16)          008B          139 
-TEXT                             String * 16       008B          139 
-TAG_FOUNT                        Byte              009B          155 
-STATUS                           Byte              009C          156 
-LASTBITS                         Byte              009D          157 
-BACKLENG                         Byte              009E          158 
-ERROR1                           Byte              009F          159 
-CRC_LOW                          Byte              00A0          160 
-CRC_HIGH                         Byte              00A1          161 
-GEYMA_LONG                       Long              00A2          162 
-GEYMAT_ARR                       Byte(10)          00A6          166 
-S2                               String * 2        00B0          176 
-CRC32_LONG                       Long              00B3          179 
-CRC16_WORD                       Word              00B7          183 
-LONGG                            Long              00B9          185 
-SECTOR_ONE                       String * 16       00BD          189 
-SECTOR_TWO                       String * 16       00CE          206 
-SECTOR_TREE                      String * 16       00DF          223 
-STR_DATA_16                      String * 16       00F0          240 
+TRY                              Word              0060          96 
+RC522_BUFFER                     Byte(18)          0062          98 
+RC522_INBUFFER                   Byte(18)          0074          116 
+TAG_TYP                          Word              0086          134 
+TAG_TYPA                         Byte(2)           0086          134 
+SAK                              Byte              0088          136 
+TAG_ID                           Byte(4)           0089          137 
+TAG_CRC                          Byte              008D          141 
+ID_LENG                          Byte              008E          142 
+TAG_ID7                          Byte(7)           008F          143 
+TEXTBYTE                         Byte(16)          0096          150 
+TEXT                             String * 16       0096          150 
+TAG_FOUNT                        Byte              00A6          166 
+STATUS                           Byte              00A7          167 
+LASTBITS                         Byte              00A8          168 
+BACKLENG                         Byte              00A9          169 
+ERROR1                           Byte              00AA          170 
+CRC_LOW                          Byte              00AB          171 
+CRC_HIGH                         Byte              00AC          172 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -453,7 +446,7 @@ TCR2UB                           0
 _RESET                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
-_GSTRBUF                         1032
+_GSTRBUF                         620
 _DECIMALPOINT                    46
 _RTSCTS                          0
 _RTSCTS1                         0
@@ -485,9 +478,9 @@ _INPBIN_EXTENDED                 0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
-_HWSTACK_LOW                     &H0437
-_SWSTACK_LOW                     &H0428
-_FRAME_HIGH                      &H0429
+_HWSTACK_LOW                     &H03C9
+_SWSTACK_LOW                     &H0334
+_FRAME_HIGH                      &H0335
 _XMEGA                           0
 _XTINY                           0
 READ_WRITE                       1
@@ -504,6 +497,7 @@ FIFODATAREG                      &H09
 COMMANDREG                       &H01
 ERRORREG                         &H06
 PICC_AUTH1A                      &H60
+PICC_AUTH1B                      &H61
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -527,8 +521,5 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-TAG_IDW                          not used
+TEXT                             not used
 
-Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  223 
-Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  230 
-Source string could be too big to fit into target string [TEXT>___STRBUF]  in line  273 
