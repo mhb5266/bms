@@ -1,10 +1,6 @@
 '*******************************************************************************
-' Test Demo RC522 NFC Chip Card RFID Module
-' This is the Radio Frequency Identification (RFID) 13.56 Mhz module
+' Test Demo RC522 NFC Chip
 '
-' Hardware:
-' http://www.amazon.de/SainSmart-Mifare-Module-KeyCard-Arduino/dp/B00G6FK4DQ
-' http://www.ebay.de/itm/RC522-MFRC-522-Radiofrequenz-RFID-IC-Karte-s50-induktive-Modul-mit-fudan-Karte-/370881403775
 ' Spi Mode
 '
 'Date 08.09.2014
@@ -15,22 +11,11 @@
 'BSD license, check license.txt for more information
 'All Text Above , And The Splash Screen Below Must Be Included In Any Redistribution.
 '
-'Version V1.12
+'Version V1.1  Working Version
 '
-'Read and Write Data - only Mifare Classic 1K (s50) tag ID -- 4Byte ID  ISO14443A
+'for read and write only Mifare Classic 1K (S50) Tag ID -- 4Byte ID  ISO14443A
 '
-'Read 7Byte Tag ID  ISO14443A
-'    Mifare Desfire EV1
-'    Mifare Ultralight X
-'    Topaz NFC
-'    Mifare Classic S70
-'
-'Voltage = 3,3V
-'PortB.5 --> SCK RC522
-'PortB.4 --> MISO RC522
-'PortB.3 --> MOSI RC522
-'PortB 2 CS --> SDA RC522
-'PortB.1 --> Rst RC522
+'in working read 7Byte Tag ID
 '*******************************************************************************
 $regfile = "m8def.dat"
 $crystal = 11059200
@@ -41,6 +26,13 @@ $baud = 9600
 
 
 Const Read_write = 1                                        ' 0= only Read TAG ID  1=Read and Write Data to Card
+
+'Voltage = 3,3V
+'PortB.5 --> SCK RC522
+'PortB.4 --> MISO RC522
+'PortB.3 --> MOSI RC522
+'PortB 2 CS --> SDA RC522
+'PortB.1 --> Rst RC522
 
 '*******************************************************************************
 taghere alias portd.7:config taghere=output
@@ -60,14 +52,10 @@ Dim Rc522_inbuffer(18) As Byte                              'in Buffer
 
 Dim Tag_typ As Word                                         'Tag Typ
 Dim Tag_typa(2) As Byte At Tag_typ Overlay
-Dim Sak As Byte
 
-Dim Tag_id(4) As Byte
+Dim Tag_idw As Dword                                        'Tag ID
+Dim Tag_id(4) As Byte At Tag_idw Overlay
 Dim Tag_crc As Byte                                         'Byte5 CRC
-
-Dim Id_leng As Byte
-Dim Tag_id7(7) As Byte
-
 
 Dim Textbyte(16) As Byte
 Dim Text As String * 16 At Textbyte(1) Overlay
@@ -82,8 +70,7 @@ Const Controlreg = &H0C
 Const Fifodatareg = &H09
 Const Commandreg = &H01
 Const Errorreg = &H06
-Const Picc_auth1a = &H60                                    'MadKeyA =FF, FF, FF, FF, FF, FF
-Const Picc_auth1b = &H61                                    'MadKeyA =A0, A1, A2, A3, A4, A5
+Const Picc_auth1a = &H60
 
 Dim Tag_fount As Byte
 Dim Status As Byte
@@ -102,58 +89,34 @@ Declare Sub Clearbitmask(byval Reg As Byte , Byval Mask As Byte)
 Declare Sub Initrc522()
 
 Declare Sub Rc522to_card(byval Command As Byte , Byval Sendlen As Byte)
-
+Declare Sub Rc522_request(byval Reqmode As Byte)
 Declare Sub Is_card()
-Declare Sub Anticoll(byval Selecttag As Byte )
-
+Declare Sub Anticoll()
 Declare Sub Calculate_crc(byval Leng As Byte)
 Declare Sub Rc522_reset()
 Declare Sub Rc522_halt()
 Declare Sub Rc522_selecttag()
-
 Declare Sub Rc522_auth(byval Authmode As Byte , Byval Blockaddr As Byte)
 Declare Sub Rc522_read(byval Block As Byte)
 Declare Sub Rc522_write(byval Block As Byte)
 Declare Sub Rc522_stop()
-Declare Sub Read_chipid()
-
-irq alias pinc.0:config portc.0=INPUT
-
 '*******************************************************************************
 Call Initrc522()
-Call Write522(commienreg , &H8C )
-do
-  if irq=0 then set taghere else reset taghere
-  print read522(errorreg)
-  wait 2
-loop
-
 
 '*******************************************************************************
 '*******************************************************************************
-main:
 Do
-   print "try# ";try
-   incr try
    Call Is_card()
-
-
+   wait 1
    If Tag_fount = 1 Then
       toggle taghere
-      wait 2
-      Call Read_chipid()                                    'Read Tag ID
+      Call Anticoll()                                       'Read Tag ID
       Print "Chip fount"
-      Print "Tag Typ= " ; Hex(tag_typ) ; " SAK= " ; Hex(sak)       'SAK Level1
-
-     If Id_leng = 4 Then
-       Print "Tag ID4= " ; Hex(tag_id(1)) ; " " ; Hex(tag_id(2)) ; " " ; Hex(tag_id(3)) ; " " ; Hex(tag_id(4))
-     Elseif Id_leng = 7 Then
-       Print "Tag ID7= " ; Hex(tag_id7(1)) ; " " ; Hex(tag_id7(2)) ; " " ; Hex(tag_id7(3)) ; " " ; Hex(tag_id7(4)) ; " " ; Hex(tag_id7(5)) ; " " ; Hex(tag_id7(6)) ; " " ; Hex(tag_id7(7))
-     End If
-
+      Print "Tag Typ= " ; Hex(tag_typ)
+      Print "Tag ID= " ; Hex(tag_id(1)) ; " " ; Hex(tag_id(2)) ; " " ; Hex(tag_id(3)) ; " " ; Hex(tag_id(4))
 '*******************************************************************************
-     #if Read_write = 1
-       If Id_leng = 4 Then                                  'only Mifare Classic 1K (s50)
+
+#if Read_write = 1
          Call Rc522_selecttag()
          If Status = 1 Then
             Call Rc522_auth(picc_auth1a , 8)                'Authentication to enable Sector 2  8/4=2 Sector
@@ -169,11 +132,10 @@ Do
             Text = "NFC RC522 Demo  "
             Call Rc522_write(9)                             'write Data Sector 2 +1
             Text = "by Hkipnik      "
-            Call Rc522_write(10)                            'write Data Sector 2 +2
+            Call Rc522_write(10)                             'write Data Sector 2 +2
 ')
          End If
-       End If
-     #endif
+#endif
 '*******************************************************************************
       Call Rc522_stop()                                     'Stop Auth Mode
       Call Rc522_halt()                                     'go to state Wait for new Card
@@ -187,41 +149,20 @@ Do
 Loop
 End
 '*******************************************************************************
-
-
-
 '*******************************************************************************
-' Reed 4Byte UID or 7Byte UID
+' is Chip Card fount Call RC522 Request (Help Sub)
 '*******************************************************************************
-Sub Read_chipid()
-
-     Call Anticoll(&H93)                                    'Level 1 PICC_ANTICOLL_1
-
-     If Tag_id(1) = &H88 Then                               'CT = Cascade Tag fount 7Byte UID
-       Tag_id7(1) = Tag_id(2)                               'Cascade Level 1
-       Tag_id7(2) = Tag_id(3)
-       Tag_id7(3) = Tag_id(4)
-       Call Rc522_selecttag()
-       Call Anticoll(&H95)                                  'Cascade Level 2 PICC_ANTICOLL_2
-       Tag_id7(4) = Tag_id(1)
-       Tag_id7(5) = Tag_id(2)
-       Tag_id7(6) = Tag_id(3)
-       Tag_id7(7) = Tag_id(4)
-       Id_leng = 7                                          '7Byte UID
-     Else
-       Id_leng = 4                                          '4Byte UID
-     End If
-
+Sub Is_card()
+   Call Rc522_request(&H26)                                 'PICC_REQIDL           0x26
 End Sub
-
 '*******************************************************************************
 ' Anti- collision detection , reading selected card serial number card
 ' only MIFARE Classic Chips 4Byte ID
 '*******************************************************************************
-Sub Anticoll(byval Selecttag As Byte)
+Sub Anticoll()
 
    Call Write522(bitframingreg , &H00)                      'BitFramingReg         0x0D
-   Rc522_buffer(1) = Selecttag                              'PICC_ANTICOLL         h93   95
+   Rc522_buffer(1) = &H93                                   'PICC_ANTICOLL         0x93
    Rc522_buffer(2) = &H20
    Call Rc522to_card(pcd_transceive , 2)
 
@@ -233,7 +174,6 @@ Sub Anticoll(byval Selecttag As Byte)
       Tag_crc = Rc522_inbuffer(5)                           'use in Rc522_selecttag
    End If
 End Sub
-
 '*******************************************************************************
 '  Writes a byte to the specified register in the MFRC522 chip
 '*******************************************************************************
@@ -322,12 +262,11 @@ Sub Rc522to_card(byval Command As Byte , Byval Sendlen As Byte)
 
 
    Dum = Irqen Or &H80
-   dum=&H8C
-   Call Write522(commienreg , Dum)                  'CommIEnReg CommIEnReg            0x02
-   Call Clearbitmask(commirqreg , &H80)             'CommIrqReg            0x04
-   Call Setbitmask(fifolevelreg , &H80)             'Fifolevelreg 0x0a
+   Call Write522(commienreg , Dum)                          'CommIEnReg CommIEnReg            0x02
+   Call Clearbitmask(commirqreg , &H80)                     'CommIrqReg            0x04
+   Call Setbitmask(fifolevelreg , &H80)                     '  Fifolevelreg 0x0a
 
-   Call Write522(commandreg , &H00)                 'CommandReg 01, PCD_IDLE 00
+   Call Write522(commandreg , &H00)                         'CommandReg 01, PCD_IDLE 00
 
    For Dum = 1 To Sendlen
 
@@ -340,13 +279,14 @@ Sub Rc522to_card(byval Command As Byte , Byval Sendlen As Byte)
       Call Setbitmask(bitframingreg , &H80)                 'BitFramingReg         0x0D
    End If
 
-   Timeout = 250
+   Timeout = 200
    Do
       Dum = Read522(commirqreg)                             'CommIrqReg            0x04
       Decr Timeout
       If Dum = Waitirq Then Exit Do                         'Waitirq
-
+      ' If Dum = &H44 Then Exit Do
    Loop Until Timeout = 0
+
 
    Call Clearbitmask(bitframingreg , &H80)                  'BitFramingReg         0x0D
 
@@ -392,15 +332,14 @@ End Sub
 '  H0200 = Mifare_one(s70)
 '  H0800 = Mifare_pro(x)
 '  H4403 = Mifare_desfire
-'  H000C = Topaz NFC
 '*******************************************************************************
-Sub Is_card()
+Sub Rc522_request(byval Reqmode As Byte)
 
    Call Write522(bitframingreg , &H07)                      'BitFramingReg  = 0x0D
-   Rc522_buffer(1) = &H26
+   Rc522_buffer(1) = Reqmode
 
    Call Rc522to_card(pcd_transceive , 1)
-   print "backleng= ";backleng
+
    If Backleng = 16 Then
       Tag_fount = 1                                         'Chip fount
       Tag_typa(2) = Rc522_inbuffer(1)                       'Little Endian
@@ -470,8 +409,7 @@ Sub Rc522_selecttag()
 
    If Backleng = &H18 Then                                  '24Bit
       Status = 1
-      Sak = Rc522_inbuffer(1)
-     '  Print "Storage Volume KByte " ; Rc522_inbuffer(1)    'read card storage volume  /8
+      ' Print "Storage Volume KByte " ; Rc522_inbuffer(1)    'read card storage volume  /8
    Else
       Status = 0
    End If
@@ -519,7 +457,7 @@ Sub Rc522_read(byval Block As Byte)
    Call Rc522to_card(pcd_transceive , 4)
 
    If Backleng = 144 Then                                   '144Bit 18Byte
-      Print "Read 16Byte-- " ;                              'Dump 16Byte Buffer
+      Print "Read Daten- " ;                                'Dump 16Byte Buffer
       For Temp2 = 1 To 16
          Print Chr(rc522_inbuffer(temp2)) ;
       Next
@@ -528,12 +466,12 @@ End Sub
 '*******************************************************************************
 ' Write data
 ' Block = Blockaddr or Blockaddr +1 or Blockaddr +2
-' Blockaddr + 3 is Config Data from the - Card Warning: only write sector trailer when you know what you're doing
+' Blockaddr + 3 is Config Data from the - Warning: only write sector trailer when you know what you're doing
 '*******************************************************************************
 Sub Rc522_write(byval Block As Byte)
    Local Zbv As Byte
    Print "Write Data"
-   Rc522_buffer(1) = &HA0                                   ' PICC_WRITE            0xA0   PICC_CMD_UL_WRITE                = 0xA2
+   Rc522_buffer(1) = &HA0                                   ' PICC_WRITE            0xA0
    Rc522_buffer(2) = Block
 
    Call Calculate_crc(2)
@@ -550,7 +488,7 @@ Sub Rc522_write(byval Block As Byte)
    Call Calculate_crc(16)
    Rc522_buffer(17) = Crc_low
    Rc522_buffer(18) = Crc_high
-   Call Rc522to_card(pcd_transceive , 18)                   ' 18
+   Call Rc522to_card(pcd_transceive , 18)
 
 End Sub
 '*******************************************************************************

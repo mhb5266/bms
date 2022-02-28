@@ -1,6 +1,6 @@
 Report       : RC522-BascomV12
-Date         : 02-21-2022
-Time         : 16:09:55
+Date         : 02-27-2022
+Time         : 14:15:16
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : FFA hex  -> Will fit into ROM
-ROMIMAGE     :  4090 dec
-FLASH USED   :  49  %
+ROMIMAGE     : 102A hex  -> Will fit into ROM
+ROMIMAGE     :  4138 dec
+FLASH USED   :  50  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%

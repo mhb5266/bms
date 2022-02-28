@@ -1,6 +1,6 @@
-Report       : toilet
-Date         : 02-28-2022
-Time         : 17:36:55
+Report       : 14001208
+Date         : 02-27-2022
+Time         : 14:43:10
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,20 +8,20 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 222 hex  -> Will fit into ROM
-ROMIMAGE     :  546 dec
-FLASH USED   :  6  %
+ROMIMAGE     : D7C hex  -> Will fit into ROM
+ROMIMAGE     :  3452 dec
+FLASH USED   :  42  %
 BAUD         : 9600 Baud
-XTAL         : 8000000 Hz
-BAUD error   : 0.16%
+XTAL         : 11059200 Hz
+BAUD error   : 0.%
 
 Stack start  : 45F hex
-Stack size   : 28 hex
-S-Stacksize  : 10 hex
-S-Stackstart : 438 hex
-Framesize    : 20 hex
-Framestart   : 408 hex
-Space left   :  929  dec
+Stack size   : 96 hex
+S-Stacksize  : 96 hex
+S-Stackstart : 3CA hex
+Framesize    : C8 hex
+Framestart   : 26C hex
+Space left   :  455  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -92,9 +92,23 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-T1                               Word              0060          96 
-T2                               Word              0062          98 
-T3                               Word              0064          100 
+TRY                              Word              0060          96 
+RC522_BUFFER                     Byte(18)          0062          98 
+RC522_INBUFFER                   Byte(18)          0074          116 
+TAG_TYP                          Word              0086          134 
+TAG_TYPA                         Byte(2)           0086          134 
+TAG_IDW                          Dword             0088          136 
+TAG_ID                           Byte(4)           0088          136 
+TAG_CRC                          Byte              008C          140 
+TEXTBYTE                         Byte(16)          008D          141 
+TEXT                             String * 16       008D          141 
+TAG_FOUNT                        Byte              009D          157 
+STATUS                           Byte              009E          158 
+LASTBITS                         Byte              009F          159 
+BACKLENG                         Byte              00A0          160 
+ERROR1                           Byte              00A1          161 
+CRC_LOW                          Byte              00A2          162 
+CRC_HIGH                         Byte              00A3          163 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -430,7 +444,7 @@ TCR2UB                           0
 _RESET                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
-_GSTRBUF                         1032
+_GSTRBUF                         620
 _DECIMALPOINT                    46
 _RTSCTS                          0
 _RTSCTS1                         0
@@ -445,7 +459,7 @@ _ERAMSIZE                        512
 _SIM                             0
 _HUGE                            0
 _BASE                            1
-_XTAL                            8000000
+_XTAL                            11059200
 _BUILD                           20830
 _COMPILER                        90
 _HWMUL                           1
@@ -462,11 +476,25 @@ _INPBIN_EXTENDED                 0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
-_HWSTACK_LOW                     &H0437
-_SWSTACK_LOW                     &H0428
-_FRAME_HIGH                      &H0429
+_HWSTACK_LOW                     &H03C9
+_SWSTACK_LOW                     &H0334
+_FRAME_HIGH                      &H0335
 _XMEGA                           0
 _XTINY                           0
+READ_WRITE                       1
+_SPI_SS                          &H18
+_SPI_SSP                         2
+PCD_AUTHENT                      &H0E
+PCD_TRANSCEIVE                   &H0C
+BITFRAMINGREG                    &H0D
+COMMIENREG                       &H02
+COMMIRQREG                       &H04
+FIFOLEVELREG                     &H0A
+CONTROLREG                       &H0C
+FIFODATAREG                      &H09
+COMMANDREG                       &H01
+ERRORREG                         &H06
+PICC_AUTH1A                      &H60
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -490,4 +518,7 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
+TRY                              not used
+TAG_IDW                          not used
+TEXT                             not used
 

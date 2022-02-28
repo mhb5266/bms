@@ -99,7 +99,7 @@ wait 1
    Waitms 500
    Call Write522(&H2a , &H8D)
 
-   read522
+   'read522
 
 
 end

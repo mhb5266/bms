@@ -215,6 +215,8 @@ stop timer0
 'start timer0
 Startup:
 
+   rnumber_er
+
    #if uselcd=1
        cls:lcd "Em Electronic.ir" :wait 3:cls
    #endif
@@ -365,6 +367,28 @@ Do
             if hightemp>30 then
 
             endif
+         end if
+
+         if _min=30 and _sec=14 then
+            eaddress=30
+            numread
+            numbers(1)=num
+            eaddress=40
+            numread
+            numbers(2)=num
+            eaddress=50
+            numread
+            numbers(3)=num
+
+            for a=1 to 3
+                number=numbers(a)
+                text="?"
+                findorder
+                waitms 100
+            next
+         end if
+
+         '(
          if _hour=6 and _min=30 and sendok=0 then
             set sendok
             number="+989155609631":msg="everything is fine":sendsms
@@ -385,9 +409,10 @@ Do
                 findorder
             next
          end if
-         if _hour>7 and _min>1 then reset sendok
-         end if
 
+
+         if _hour>7 and _min>1 then reset sendok
+         ')
          #if uselcd=1
              home : lcd timestr
              lowerline
@@ -1207,7 +1232,7 @@ sub sendsms
    text=""
    delall
    delsent
-   cls
+   'cls
 end sub
 
 sub readsms
