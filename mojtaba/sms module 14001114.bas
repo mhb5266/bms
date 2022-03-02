@@ -635,6 +635,7 @@ t0rutin:
             if t0=80 then
                t0=0
                'set readsms
+               '(
                if testsim>10 then
                       testsim=0
                       cls
@@ -727,6 +728,7 @@ t0rutin:
                          'lowerline
                          'cls :lcd answer:wait 1:cls
                end if
+               ')
             end if
 
 
