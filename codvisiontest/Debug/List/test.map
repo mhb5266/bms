@@ -1,0 +1,32 @@
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+strin                                                                             0x0160      10
+_seed                                                                             0x016A       4
+
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+a                                                                                 R5           1
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+timer1_ovf_isr                                                                    0x00052      4
+main                                                                              0x00056     79
+strcpyf                                                                           0x000A5     12
+strlen                                                                            0x000B1     11
+strlenf                                                                           0x000BC     12
+putchar                                                                           0x000C8      7
+puts                                                                              0x000CF     18
+put_buff_G101                                                                     0x000E1     45
+_ftoe_G101                                                                        0x0010E    145
+_print_G101                                                                       0x0019F    462
+sprintf                                                                           0x0036D     42
+ftrunc                                                                            0x00397     48
+floor                                                                             0x003C7     16
+ftoa                                                                              0x003D7    136

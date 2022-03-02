@@ -1,0 +1,10 @@
+VERSION:3 SOURCE_TIMESTAMP:54629945
+NODE:I LEVEL:0 LINE:24 "C:\cvavr\inc\mega8.h"
+NODE:I LEVEL:0 LINE:25 "C:\cvavr\inc\delay.h"
+NODE:I LEVEL:0 LINE:26 "C:\cvavr\inc\string.h"
+NODE:V LEVEL:0 LINE:28 "a -> R5"
+NODE:V LEVEL:0 LINE:29 "strin -> RAM:????"
+NODE:I LEVEL:0 LINE:31 "C:\cvavr\inc\stdio.h"
+NODE:F LEVEL:0 LINE:34 "timer1_ovf_isr(void)"
+NODE:I LEVEL:0 LINE:44 "C:\cvavr\inc\spi.h"
+NODE:F LEVEL:0 LINE:46 "main(void)"

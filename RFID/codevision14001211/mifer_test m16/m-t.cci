@@ -1,0 +1,10 @@
+VERSION:3 SOURCE_TIMESTAMP:54628D5A
+NODE:I LEVEL:0 LINE:5 "C:\cvavr\inc\mega8.h"
+NODE:I LEVEL:0 LINE:6 "C:\cvavr\inc\alcd.h"
+NODE:I LEVEL:0 LINE:7 "C:\cvavr\inc\spi.h"
+NODE:I LEVEL:0 LINE:8 "C:\cvavr\inc\stdio.h"
+NODE:I LEVEL:0 LINE:9 "D:\Bms\RFID\codevision14001211\mifer_test m16\MFRC522.h"
+NODE:V LEVEL:0 LINE:11 "serial -> RAM:????"
+NODE:V LEVEL:0 LINE:11 "d -> RAM:????"
+NODE:V LEVEL:0 LINE:12 "a -> R2.0"
+NODE:F LEVEL:0 LINE:15 "main(void)"
