@@ -1,6 +1,6 @@
 Report       : toilet 14001209
-Date         : 02-28-2022
-Time         : 19:18:40
+Date         : 03-05-2022
+Time         : 15:32:49
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 3C2 hex  -> Will fit into ROM
-ROMIMAGE     :  962 dec
-FLASH USED   :  11  %
+ROMIMAGE     : 3FE hex  -> Will fit into ROM
+ROMIMAGE     :  1022 dec
+FLASH USED   :  12  %
 BAUD         : 9600 Baud
 XTAL         : 8000000 Hz
 BAUD error   : 0.16%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  926  dec
+Space left   :  924  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -98,6 +98,7 @@ T3                               Word              0064          100
 TEST                             Byte              0066          102 
 A                                Byte              0067          103 
 I                                Byte              0068          104 
+TIMEOUT                          Word              0069          105 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -470,7 +471,7 @@ _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
 _XTINY                           0
-TIMEOUT                          600
+TI                               600
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1

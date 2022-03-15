@@ -368,7 +368,7 @@ Do
 
             endif
          end if
-
+         '(
          if _min=30 and _sec=14 then
             eaddress=30
             numread
@@ -387,7 +387,7 @@ Do
                 waitms 100
             next
          end if
-
+         ')
          '(
          if _hour=6 and _min=30 and sendok=0 then
             set sendok
@@ -462,13 +462,13 @@ Do
             'delall
 
          end if
-
+         '(
          if _sec=13 then
             print "AT"
             rxin
             if answer<>"OK" then gosub test
          end if
-
+         ')
         '(
          if t0=23 and smstime=3 then
             answer=""
@@ -1233,7 +1233,7 @@ sub sendsms
    answer=""
    text=""
    delall
-   delsent
+   'delsent
    'cls
 end sub
 

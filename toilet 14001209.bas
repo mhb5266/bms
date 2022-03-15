@@ -10,12 +10,12 @@ dim test as byte
 dim a as byte
 dim i as byte
 
-config portd.0=INPUT
-config portd.1=INPUT
+config portb.1=input
+config portd.6=input
 config portd.5=INPUT
 
-in1 alias pind.0
-in2 alias pind.1
+in1 alias pinb.1
+in2 alias pind.6
 in3 alias pind.5
 
 led3 alias portc.5
@@ -34,7 +34,8 @@ config portc.2=OUTPUT
 config portc.1=OUTPUT
 config portc.0=OUTPUT
 
-const timeout=600
+const ti=600
+dim timeout as word:timeout=20
 
 enable interrupts
 enable timer0
@@ -53,32 +54,32 @@ reset led3
 set led1
 set relay1
 
-wait 2
+wait 1
 
 set led2
 set relay2
 
-wait 2
+wait 1
 
 set led3
 set relay3
 
-wait 2
+wait 1
 
 reset led1
 reset relay1
 
-wait 2
+wait 1
 
 reset led2
 reset relay2
 
-wait 2
+wait 1
 
 reset led3
 reset relay3
 
-wait 2
+wait 1
 start timer0
 main:
 
@@ -146,6 +147,7 @@ t0rutin:
               if t1=0 then
                  reset led1
                  reset relay1
+                 timeout=ti
               end if
            end if
            if t2>0 then
@@ -154,6 +156,7 @@ t0rutin:
               if t2=0 then
                  reset led2
                  reset relay2
+                 timeout=ti
               end if
            end if
            if t3>0 then
@@ -162,6 +165,7 @@ t0rutin:
               if t3=0 then
                  reset led3
                  reset relay3
+                 timeout=ti
               end if
            end if
 

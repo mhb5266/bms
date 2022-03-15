@@ -1,8 +1,8 @@
 RAM Allocation [bytes]
 Variable                                                                          Address   Size
 ------------------------------------------------------------------------------------------------
-strin                                                                             0x0160      10
-_seed                                                                             0x016A       4
+strin                                                                             0x0160       3
+_seed                                                                             0x0163       4
 
 EEPROM Allocation [bytes]
 Variable                                                                          Address   Size
@@ -12,21 +12,32 @@ Register Allocation
 Variable                                                                          Register  Size
 ------------------------------------------------------------------------------------------------
 a                                                                                 R5           1
+test                                                                              R6,R7        2
 
 FLASH Allocation [words]
 Function                                                                          Address   Size
 ------------------------------------------------------------------------------------------------
-timer1_ovf_isr                                                                    0x00052      4
-main                                                                              0x00056     79
-strcpyf                                                                           0x000A5     12
-strlen                                                                            0x000B1     11
-strlenf                                                                           0x000BC     12
-putchar                                                                           0x000C8      7
-puts                                                                              0x000CF     18
-put_buff_G101                                                                     0x000E1     45
-_ftoe_G101                                                                        0x0010E    145
-_print_G101                                                                       0x0019F    462
-sprintf                                                                           0x0036D     42
-ftrunc                                                                            0x00397     48
-floor                                                                             0x003C7     16
-ftoa                                                                              0x003D7    136
+PcdAntennaOn                                                                      0x00053     12
+PcdAnticoll                                                                       0x0005F     68
+PcdHalt                                                                           0x000A3     37
+PcdComMF522                                                                       0x000C8    171
+CalulateCRC                                                                       0x00173     51
+WriteRawRC                                                                        0x001A6     11
+ReadRawRC                                                                         0x001B1     12
+SetBitMask                                                                        0x001BD      4
+ClearBitMask                                                                      0x001C1      5
+timer1_ovf_isr                                                                    0x001C6      4
+main                                                                              0x001CA     88
+strcpyf                                                                           0x00222     12
+strlen                                                                            0x0022E     11
+strlenf                                                                           0x00239     12
+spi                                                                               0x00245      7
+putchar                                                                           0x0024C      7
+puts                                                                              0x00253     18
+put_buff_G102                                                                     0x00265     45
+_ftoe_G102                                                                        0x00292    146
+_print_G102                                                                       0x00324    463
+sprintf                                                                           0x004F3     41
+ftrunc                                                                            0x0051C     48
+floor                                                                             0x0054C     16
+ftoa                                                                              0x0055C    139

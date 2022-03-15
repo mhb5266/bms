@@ -1,0 +1,55 @@
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+serial                                                                            0x0160       4
+d                                                                                 0x0164      16
+_base_y                                                                           0x0174       4
+_seed                                                                             0x0178       4
+
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+a                                                                                 R2.0      1bit
+_lcd_x                                                                            R5           1
+_lcd_y                                                                            R4           1
+_lcd_maxx                                                                         R7           1
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+PcdReset                                                                          0x0005E     28
+PcdAntennaOn                                                                      0x0007A     10
+PcdAntennaOff                                                                     0x00084      3
+PcdRequest                                                                        0x00087     51
+PcdAnticoll                                                                       0x000BA     63
+PcdHalt                                                                           0x000F9     35
+PcdComMF522                                                                       0x0011C    170
+CalulateCRC                                                                       0x001C6     50
+WriteRawRC                                                                        0x001F8     11
+ReadRawRC                                                                         0x00203     12
+SetBitMask                                                                        0x0020F      4
+ClearBitMask                                                                      0x00213      5
+rd_serial                                                                         0x00218     45
+reset_mfrc                                                                        0x00245      8
+main                                                                              0x0024D     79
+_lcd_write_nibble_G100                                                            0x0029C     31
+_lcd_write_data                                                                   0x002BB     12
+lcd_clear                                                                         0x002C7     10
+lcd_init                                                                          0x002D1     42
+spi                                                                               0x002FB      7
+putchar                                                                           0x00302      7
+puts                                                                              0x00309     18
+put_buff_G102                                                                     0x0031B     45
+_ftoe_G102                                                                        0x00348    146
+_print_G102                                                                       0x003DA    463
+sprintf                                                                           0x005A9     41
+strcpyf                                                                           0x005D2     12
+strlen                                                                            0x005DE     11
+strlenf                                                                           0x005E9     12
+ftrunc                                                                            0x005F5     48
+floor                                                                             0x00625     16
+ftoa                                                                              0x00635    139

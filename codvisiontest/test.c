@@ -24,9 +24,11 @@ Data Stack size         : 256
 #include <mega8.h>
 #include <delay.h>
 #include <string.h>
+#include <MFRC522.h>
 // Declare your global variables here
-char a=0;
-char strin[10];
+unsigned char a=0;
+char strin[3];
+char* test ;
 // Standard Input/Output functions
 #include <stdio.h>
 
@@ -158,11 +160,18 @@ TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
 while (1)
       {
       // Place your code here
-        
+        PORTD.5=0;
+        PORTD.6=0;
         delay_ms(1000);     
-        PORTD ^=(1<<7);
-        a++;
-        sprintf(strin,"%1d",a);          
+        PORTD ^=(1<<6);
+        //a++;
+        PcdAntennaOn();
+        //ReadRawRC(a);
+        //ReadRawRC(a);
+        *test=2;
+        a=PcdAnticoll(test);
+        a=PcdHalt();
+        sprintf(strin,"%000d",a);          
         puts(strin);
         }
 }
