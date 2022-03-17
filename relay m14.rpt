@@ -1,6 +1,6 @@
 Report       : relay m14
-Date         : 03-15-2022
-Time         : 18:30:46
+Date         : 03-17-2022
+Time         : 19:15:33
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,8 +8,8 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1BDA hex  -> Will fit into ROM
-ROMIMAGE     :  7130 dec
+ROMIMAGE     : 1BE0 hex  -> Will fit into ROM
+ROMIMAGE     :  7136 dec
 FLASH USED   :  87  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz

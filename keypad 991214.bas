@@ -17,15 +17,16 @@ Configs:
 
          _in Alias Pinc.5 : Config Portc.5 = Input
         Buzz Alias Portc.3 : Config Portc.3 = Output
-        Led4 Alias Portd.6 : Config Portd.6 = Output
-        Led3 Alias Portd.7 : Config Portd.7 = Output
+        Led3 Alias Portd.6 : Config Portd.6 = Output
+        Led2 Alias Portd.7 : Config Portd.7 = Output
         Led1 Alias Portb.0 : Config Portb.0 = Output
-        Led2 Alias Portd.5 : Config Portd.5 = Output
+        Led4 Alias Portd.5 : Config Portd.5 = Output
+
         Led Alias Portb.5 : Config Portb.5 = Output
         'BUZZ Alias Portc.3 : Config Portc.3 = Output
-        Touch2 Alias Pinb.1 : Config Portb.1 = Input
-        Touch4 Alias Pinb.2 : Config Portb.2 = Input
-        Touch3 Alias Pinb.3 : Config Portb.3 = Input
+        Touch4 Alias Pinb.1 : Config Portb.1 = Input
+        Touch3 Alias Pinb.2 : Config Portb.2 = Input
+        Touch2 Alias Pinb.3 : Config Portb.3 = Input
         Touch1 Alias Pinb.4 : Config Portb.4 = Input
 
         Sensor Alias Pinc.4 : Config Portc.4 = Input
@@ -89,7 +90,7 @@ Defines:
 
 
         Dim Tempen As Boolean
-        Dim Tempon As Byte
+        Dim Tempon As word
 
         Dim Typ As Byte
         Dim Id As Byte
@@ -133,6 +134,14 @@ Defines:
         Dim Eevar(2) As Eram Long
 
 
+        'do
+          'if touch1=0 then set led1 else reset led1
+          'if touch2=0 then set led2 else reset led2
+          'if touch3=0 then set led3 else reset led3
+          'if touch4=0 then set led4 else reset led4
+          'waitms 100
+
+        'loop
 
 Startup:
 
@@ -262,7 +271,7 @@ Main:
 
 ')
          Gosub _read
-'         Checkkey
+         Checkkey
        '(
        If Touch1 = 0 Then
 
@@ -397,10 +406,10 @@ If Sensoren = 1 And Keytouched = 0 And Sensor = 1 Then
       Typ = Mytyp : Cmd = 182 : Id = Touchid1 : Direct = Tooutput
       Gosub Tx
       Set Tempen
-      Tempon = 60
+      Tempon = 300
    End If
    If Tempen = 1 And Led2 = 0 And Led3 = 0 Then
-      Tempon = 60
+      Tempon = 300
    End If
 End If
 

@@ -8,7 +8,7 @@ Portconfig:
 
 
 
-        Config Portd.6 = Output : Buz Alias Portd.6
+        'Config Portd.6 = Output : Buz Alias Portd.6
 
 
 
@@ -46,8 +46,8 @@ Portconfig:
 
 
            En Alias Portd.2 : Config Portd.2 = Output
-           Rxtx Alias Portb.4 : Config Portb.4 = Output
-           led alias portb.3:config portb.3=OUTPUT
+           led Alias Portb.4 : Config Portb.4 = Output
+           rxtx alias portb.3:config portb.3=OUTPUT
 
 
 
@@ -287,7 +287,14 @@ End If
 
  loop
   ')
+  '(
+  do
+    toggle led
+    toggle rxtx
+    waitms 500
 
+  loop
+    ')
 
 
 Main:
@@ -321,7 +328,7 @@ Main:
        incr 2sec
        if 2sec=20000 then
           2sec=0
-          toggle buz
+          toggle led
        end if
 
        If Key = 0 Then
@@ -334,13 +341,13 @@ Main:
                Incr M
                If M < 80 Then
                   Tblank = M Mod 10
-                  If Tblank = 0 Then Toggle Rxtx
+                  If Tblank = 0 Then Toggle led
                Else
                   Tblank = M Mod 5
-                  If Tblank = 0 Then Toggle Rxtx
+                  If Tblank = 0 Then Toggle led
                End If
              Loop Until Key = 1
-             Reset Rxtx
+             Reset led
              If M < 80 Then
                 Call Getid
              Else
@@ -357,7 +364,7 @@ Main:
           If Key = 0 Then
              Stop Timer0
              For I = 1 To 8
-                 Toggle Rxtx
+                 Toggle led
                  Waitms 200
              Next I
              Call Getid
@@ -397,9 +404,9 @@ Gosub Main
 Sub Getid
     K = 0
     Reset En
-    Set Rxtx
+    Set led
     Wait 3
-    Reset Rxtx
+    Reset led
     Set Wantid
 
 
@@ -408,7 +415,7 @@ Sub Getid
           Waitus 10
           If P = 10000 Then
              P = 0
-             Toggle Buz
+             Toggle led
           End If
          If  Id > 0 And Id < 100  and cmd >179 and cmd<183 Then
                           Reset Gotid
@@ -491,13 +498,13 @@ Sub Getid
                Incr M
                If M < 80 Then
                   Tblank = M Mod 10
-                  If Tblank = 0 Then Toggle Rxtx
+                  If Tblank = 0 Then Toggle led
                Else
                   Tblank = M Mod 5
-                  If Tblank = 0 Then Toggle Rxtx
+                  If Tblank = 0 Then Toggle led
                End If
              Loop Until Key = 1
-             Reset Rxtx
+             Reset led
              If M < 80 Then
                 Call Turnout
              Else
@@ -509,7 +516,7 @@ Sub Getid
        Loop
 
        For I = 1 To 4
-          Toggle Rxtx
+          Toggle led
           Waitms 500
        Next
 
@@ -583,9 +590,9 @@ Sub Clearids
                         Waitms 4
                         Idgot = 0
                         Waitms 150
-                        Toggle Rxtx
+                        Toggle led
                     Next
-                    Reset Rxtx
+                    Reset led
 
 End Sub
 
@@ -680,7 +687,7 @@ End Sub
 
 Sub Findorder
 
-    Toggle Rxtx
+    Toggle led
         Select Case Cmd
                Case 151
                 If Wantid = 1 Then
@@ -749,9 +756,9 @@ Sub Findorder
                         Waitms 4
                         Idgot = 0
                         Waitms 150
-                        Toggle Rxtx
+                        Toggle led
                     Next
-                    Reset Rxtx
+                    Reset led
                Case 159
                     If Id >= Minid And Id <= Maxid Then
                        For I = 1 To Counterid
@@ -964,6 +971,7 @@ Rx:
         Typ = Din(2)
         If Typ = Keyin Or Typ = Remote Or Typ = Relaymodules Then
            Typ = Din(2) : Cmd = Din(3) : Id = Din(4)
+           toggle rxtx
            Call Findorder
         End If
         F = 0
