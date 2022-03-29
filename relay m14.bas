@@ -669,17 +669,17 @@ Sub Setouts
                Case 8
                     Out8 = Outs.8
                Case 9
-                    Out3 = Outs.9
+                    Out9 = Outs.9
                Case 10
-                    Out4 = Outs.10
+                    Out10 = Outs.10
                Case 11
-                    Out5 = Outs.11
+                    Out11 = Outs.11
                Case 12
-                    Out6 = Outs.12
+                    Out12 = Outs.12
                Case 13
-                    Out7 = Outs.13
+                    Out13 = Outs.13
                Case 14
-                    Out8 = Outs.14
+                    Out14 = Outs.14
         End Select
 
 
