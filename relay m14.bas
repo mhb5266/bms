@@ -296,6 +296,10 @@ End If
   loop
     ')
 
+  '  do
+   '   toggle portd.7
+   '   wait 1
+   ' loop
 
 Main:
 
