@@ -32,24 +32,27 @@
 'PortB 2 CS --> SDA RC522
 'PortB.1 --> Rst RC522
 '*******************************************************************************
-$regfile = "m328pdef.dat"
-$crystal = 16000000
+$regfile = "m8def.dat"
+$crystal = 11059200
 $hwstack = 150
 $swstack = 150
 $framesize = 200
 $baud = 9600
 
 
-Const Read_write = 0                                        ' 0= only Read TAG ID  1=Read and Write Data to Card
+Const Read_write = 1                                        ' 0= only Read TAG ID  1=Read and Write Data to Card
 
 '*******************************************************************************
+taghere alias portd.7:config taghere=output
+dim try as word
+'irq alias pinc.0:config portc.0=INPUT
 Config Portb.1 = Output                                     'Reset Pin
 Rst522 Alias Portb.1
 Set Rst522
 Config Portb.2 = Output                                     'CS Pin
 Cs_pn Alias Portb.2
 Set Cs_pn
-Config Spi = Hard , Interrupt = Off , Data Order = Msb , Master = Yes , Polarity = Low , Phase = 0 , Clockrate = 16 , Noss = 1
+Config Spi = Hard , Interrupt = off , Data Order = Msb , Master = Yes , Polarity = Low , Phase = 0 , Clockrate = 16 , Noss = 1
 Spiinit
 '*******************************************************************************
 Dim Rc522_buffer(18) As Byte                                'out Buffer
@@ -114,15 +117,30 @@ Declare Sub Rc522_write(byval Block As Byte)
 Declare Sub Rc522_stop()
 Declare Sub Read_chipid()
 
+irq alias pinc.0:config portc.0=INPUT
+
 '*******************************************************************************
 Call Initrc522()
+Call Write522(commienreg , &H8C )
+do
+  if irq=0 then set taghere else reset taghere
+  print read522(errorreg)
+  wait 2
+loop
+
+
 '*******************************************************************************
 '*******************************************************************************
+main:
 Do
+   print "try# ";try
+   incr try
    Call Is_card()
 
-   If Tag_fount = 1 Then
 
+   If Tag_fount = 1 Then
+      toggle taghere
+      wait 2
       Call Read_chipid()                                    'Read Tag ID
       Print "Chip fount"
       Print "Tag Typ= " ; Hex(tag_typ) ; " SAK= " ; Hex(sak)       'SAK Level1
@@ -134,7 +152,7 @@ Do
      End If
 
 '*******************************************************************************
-#if Read_write = 1
+     #if Read_write = 1
        If Id_leng = 4 Then                                  'only Mifare Classic 1K (s50)
          Call Rc522_selecttag()
          If Status = 1 Then
@@ -155,7 +173,7 @@ Do
 ')
          End If
        End If
-#endif
+     #endif
 '*******************************************************************************
       Call Rc522_stop()                                     'Stop Auth Mode
       Call Rc522_halt()                                     'go to state Wait for new Card
@@ -304,11 +322,12 @@ Sub Rc522to_card(byval Command As Byte , Byval Sendlen As Byte)
 
 
    Dum = Irqen Or &H80
-   Call Write522(commienreg , Dum)                          'CommIEnReg CommIEnReg            0x02
-   Call Clearbitmask(commirqreg , &H80)                     'CommIrqReg            0x04
-   Call Setbitmask(fifolevelreg , &H80)                     '  Fifolevelreg 0x0a
+   dum=&H8C
+   Call Write522(commienreg , Dum)                  'CommIEnReg CommIEnReg            0x02
+   Call Clearbitmask(commirqreg , &H80)             'CommIrqReg            0x04
+   Call Setbitmask(fifolevelreg , &H80)             'Fifolevelreg 0x0a
 
-   Call Write522(commandreg , &H00)                         'CommandReg 01, PCD_IDLE 00
+   Call Write522(commandreg , &H00)                 'CommandReg 01, PCD_IDLE 00
 
    For Dum = 1 To Sendlen
 
@@ -381,7 +400,7 @@ Sub Is_card()
    Rc522_buffer(1) = &H26
 
    Call Rc522to_card(pcd_transceive , 1)
-
+   print "backleng= ";backleng
    If Backleng = 16 Then
       Tag_fount = 1                                         'Chip fount
       Tag_typa(2) = Rc522_inbuffer(1)                       'Little Endian

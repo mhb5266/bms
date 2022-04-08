@@ -36,8 +36,10 @@ dim password as string*4
 dim rxdata(3) as string*50
 dim errs as byte
 dim num as string*14
+dim numbers(3) as string*14
 dim x as byte
 dim num1(6) as string*8
+dim sendok as Boolean
 
 declare sub settime
 declare sub readtime
@@ -131,9 +133,9 @@ on ovf0 t0rutin
 dim t0 as word
 'start timer0
 
-enable int0
-config int0=RISING
-on int0 powerin
+'enable int0
+'config int0=RISING
+'on int0 powerin
 dim syc as byte
 dim poweroff as byte
 
@@ -213,6 +215,8 @@ stop timer0
 'start timer0
 Startup:
 
+   rnumber_er
+
    #if uselcd=1
        cls:lcd "Em Electronic.ir" :wait 3:cls
    #endif
@@ -224,7 +228,7 @@ Startup:
 
 
        for a=1 to 16
-           lcd "*":wait 1
+           lcd "*":wait 2
        next
    'enable urxc
        cls
@@ -363,12 +367,52 @@ Do
             if hightemp>30 then
 
             endif
-         if _hour=7 and _min=0 and _sec=0 then
+         end if
+         '(
+         if _min=30 and _sec=14 then
+            eaddress=30
+            numread
+            numbers(1)=num
+            eaddress=40
+            numread
+            numbers(2)=num
+            eaddress=50
+            numread
+            numbers(3)=num
+
+            for a=1 to 3
+                number=numbers(a)
+                text="?"
+                findorder
+                waitms 100
+            next
+         end if
+         ')
+         '(
+         if _hour=6 and _min=30 and sendok=0 then
+            set sendok
             number="+989155609631":msg="everything is fine":sendsms
             number="+989155191622":msg="everything is fine":sendsms
-         end if
+            eaddress=30
+            numread
+            numbers(1)=num
+            eaddress=40
+            numread
+            numbers(2)=num
+            eaddress=50
+            numread
+            numbers(3)=num
+
+            for a=1 to 3
+                number=numbers(a)
+                text="?"
+                findorder
+            next
          end if
 
+
+         if _hour>7 and _min>1 then reset sendok
+         ')
          #if uselcd=1
              home : lcd timestr
              lowerline
@@ -389,6 +433,11 @@ Do
             a=split(answer,sms(1),qut)
             number=sms(4)
             a=0
+            a=instr(answer,"ERR")
+            if a>0 then
+               gosub test
+            end if
+            a=0
             a=instr(answer,"+CMGR:")
             if a>0 then
                rxin
@@ -406,14 +455,20 @@ Do
                       number=""
                       text=""
                       answer=""
+                      gosub test
                   end if
                end if
             end if
             'delall
 
-
          end if
-
+         '(
+         if _sec=13 then
+            print "AT"
+            rxin
+            if answer<>"OK" then gosub test
+         end if
+         ')
         '(
          if t0=23 and smstime=3 then
             answer=""
@@ -456,7 +511,8 @@ test:
 
 
        for a=1 to 16
-           lcd "*":wait 1
+           'lcd "*":
+           wait 1
        next
    'enable urxc
        cls
@@ -474,8 +530,69 @@ test:
          'cls:lcd "ATE0"
          'lowerline :lcd "answer= ";answer :wait 1 :cls:waitms 500
        loop until lcase(answer)="ok"
-       cls :lcd answer:wait 1:cls
+       'cls :lcd answer:wait 1:cls
+   do
+      answer=""
+      print "AT"
+      rxin
+      'cls: lcd "AT"
+      'lowerline :lcd "answer= ";answer :waitms 500
+   loop until lcase(answer)="ok"
+   'cls :lcd answer:wait 1:cls
 
+
+
+   do
+      answer=""
+      Print "AT+cpin?"
+      rxin
+      'cls: lcd "AT+cpin?"
+      'lowerline :lcd "answer= ";answer :waitms 500
+   loop until lcase(answer)<>""
+   'lowerline
+   'cls :lcd answer:wait 1:cls
+
+
+   do
+      answer=""
+      Print "AT+CMGF=1"
+      rxin
+      cls: lcd "AT+CMGF=1"
+      lowerline :lcd "answer= ";answer :waitms 500
+   loop until lcase(answer)="ok"
+   'lowerline
+   'cls :lcd answer:wait 1:cls
+
+   do
+      answer=""
+      Print "At+Cusd=1"
+      rxin
+      'cls: lcd "At+Cusd=1"
+      'lowerline :lcd "answer= ";answer :waitms 500
+   loop until lcase(answer)="ok"
+   'lowerline
+   'cls :lcd answer:wait 1:cls
+
+
+   do
+      answer=""
+      Print "AT+CSMP=17,167,0,0"
+      rxin
+      'cls: lcd "AT+CSMP=17,167,0,0"
+      'lowerline :lcd "answer= ";answer :waitms 500
+   loop until lcase(answer)="ok"
+   'lowerline
+   'cls :lcd answer:wait 1:cls
+
+   do
+      answer=""
+      Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
+      rxin
+      'cls: lcd "AT+CSCS=GSM"
+      'lowerline :lcd "answer= ";answer :waitms 500
+   loop until lcase(answer)="ok"
+   'lowerline
+   'cls :lcd answer:wait 1:cls
 
 return
 
@@ -518,6 +635,7 @@ t0rutin:
             if t0=80 then
                t0=0
                'set readsms
+               '(
                if testsim>10 then
                       testsim=0
                       cls
@@ -545,8 +663,72 @@ t0rutin:
                         'cls:lcd "ATE0"
                         'lowerline :lcd "answer= ";answer :wait 1 :cls:waitms 500
                       loop until lcase(answer)="ok"
-                      cls :lcd answer:wait 1:cls
+                      'cls :lcd answer:wait 1:cls
+
+                         do
+                            answer=""
+                            print "AT"
+                            rxin
+                            'cls: lcd "AT"
+                            'lowerline :lcd "answer= ";answer :waitms 500
+                         loop until lcase(answer)="ok"
+                         'cls :lcd answer:wait 1:cls
+
+
+
+                         do
+                            answer=""
+                            Print "AT+cpin?"
+                            rxin
+                            'cls: lcd "AT+cpin?"
+                            'lowerline :lcd "answer= ";answer :waitms 500
+                         loop until lcase(answer)<>""
+                         'lowerline
+                         'cls :lcd answer:wait 1:cls
+
+
+                         do
+                            answer=""
+                            Print "AT+CMGF=1"
+                            rxin
+                            'cls: lcd "AT+CMGF=1"
+                            'lowerline :lcd "answer= ";answer :waitms 500
+                         loop until lcase(answer)="ok"
+                         'lowerline
+                         'cls :lcd answer:wait 1:cls
+
+                         do
+                            answer=""
+                            Print "At+Cusd=1"
+                            rxin
+                            'cls: lcd "At+Cusd=1"
+                            'lowerline :lcd "answer= ";answer :waitms 500
+                         loop until lcase(answer)="ok"
+                         'lowerline
+                         'cls :lcd answer:wait 1:cls
+
+
+                         do
+                            answer=""
+                            Print "AT+CSMP=17,167,0,0"
+                            rxin
+                            'cls: lcd "AT+CSMP=17,167,0,0"
+                            'lowerline :lcd "answer= ";answer :waitms 500
+                         loop until lcase(answer)="ok"
+                         'lowerline
+                         'cls :lcd answer:wait 1:cls
+
+                         do
+                            answer=""
+                            Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
+                            rxin
+                            'cls: lcd "AT+CSCS=GSM"
+                            'lowerline :lcd "answer= ";answer :waitms 500
+                         loop until lcase(answer)="ok"
+                         'lowerline
+                         'cls :lcd answer:wait 1:cls
                end if
+               ')
             end if
 
 
@@ -730,7 +912,7 @@ end sub
 sub Command
 
          cls:lcd code:toggle relay
-         waitms 150
+         waitms 400
          cls
 
        'start timer0
@@ -984,10 +1166,18 @@ sub findorder
          numsave
          eaddress=50
          numread
-         msg="Num#1"+chr(10)
+         msg="Num#3"+chr(10)
          msg=msg+num+chr(10)
          msg=msg+"is Saved"
       case "del"
+         number="+989000000000"
+         eaddress=30
+         numsave
+         eaddress=40
+         numsave
+         eaddress=50
+         numsave
+         number=sms(4)
          msg="All numbers is deleted"
       case "?"
          msg=" "
@@ -1043,8 +1233,8 @@ sub sendsms
    answer=""
    text=""
    delall
-   delsent
-   cls
+   'delsent
+   'cls
 end sub
 
 sub readsms
@@ -1234,5 +1424,3 @@ Sub Flushbuf()
  rx= Inkey() ' flush buffer
  Loop Until RX = 0
 End Sub
-
-

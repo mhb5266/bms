@@ -1,0 +1,4 @@
+Error : 22    Line :   137   Out of SRAM space [_RS232INBUF0]  , in File : D:\Bms\dfpalyer\lib_dfplayermini.bas
+Error : 377   Line :   138   Unexpected non numeric characters found [_RS232INBUF0]  , in File : D:\Bms\dfpalyer\lib_dfplayermini.bas
+Error : 90    Line :   138   Address out of bounds [MP3_SERIALBUFFER]  , in File : D:\Bms\dfpalyer\lib_dfplayermini.bas
+Error : 326   Line :   138   #ENDIF expected  , in File : D:\Bms\dfpalyer\lib_dfplayermini.bas

@@ -24,7 +24,7 @@ $crystal = 11059200
 '$swstack = 150
 '$framesize = 200
 '$baud = 9600
-
+'(
 defines:
 $lib "glcdKS108.lib"
 Config Graphlcd = 128 * 64sed , Dataport = Portd , Controlport = Portc , Ce = 1 , Ce2 = 0 , Cd = 5 , Rd = 4 , Reset = 2 , Enable = 3
@@ -47,7 +47,7 @@ do
   wait 5
 
 loop
-
+')
 configs:
 
 
@@ -67,10 +67,10 @@ Const Read_write = 1               ' 0= only Read TAG ID  1=Read and Write Data 
 'Led_popwer_on Alias Portc.3:Config Pinc.3 = Output :Led_popwer_on = 1
 
 
-Buzeer Alias Portb.0 :Config Pinb.0 = Output
+Buzeer Alias Portd.7 :Config Pind.7 = Output
 
 
-Key Alias Pinb.1:Config Pinb.1 = Input
+Key Alias Pinc.5:Config Pinc.5 = Input
 
 
 'Led_write Alias Portc.5 :Config Pinc.5 = Output
@@ -80,7 +80,7 @@ Rst522 Alias Portb.1 :Config Pinb.1 = Output:Set Rst522                         
 
 
 
-Cs_pn Alias Portb.0 :Config Pinb.0 = Output:Set Cs_pn                                      'CS Pin
+Cs_pn Alias Portb.2 :Config Pinb.2 = Output:Set Cs_pn                                      'CS Pin
 
 
 
@@ -166,7 +166,7 @@ Print "Start"
 'Buzeer = 1 : Waitms 500 : Buzeer = 0
 
 
-
+main:
 
 Do
    'Led_write = Key
@@ -174,7 +174,7 @@ Do
 
 
    Call Is_card()
-   'Print "tag found=" ; Tag_fount ; "       "
+   Print "tag found=" ; Tag_fount ; "       "
 
 
    If Tag_fount = 1 Then

@@ -1,43 +1,46 @@
 
-AVRASM ver. 2.1.30  E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA21 _ LCD\Code8\List\DistanceMeter.asm Thu Aug 30 08:21:16 2012
+AVRASM ver. 2.1.30  D:\Bms\7segment\Code8\List\DistanceMeter.asm Wed Mar 02 17:22:38 2022
 
-E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA21 _ LCD\Code8\List\DistanceMeter.asm(1070): warning: Register r5 already defined by the .DEF directive
-E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA21 _ LCD\Code8\List\DistanceMeter.asm(1071): warning: Register r4 already defined by the .DEF directive
-E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA21 _ LCD\Code8\List\DistanceMeter.asm(1072): warning: Register r7 already defined by the .DEF directive
-E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA21 _ LCD\Code8\List\DistanceMeter.asm(1073): warning: Register r6 already defined by the .DEF directive
-E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA21 _ LCD\Code8\List\DistanceMeter.asm(1074): warning: Register r9 already defined by the .DEF directive
-E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA21 _ LCD\Code8\List\DistanceMeter.asm(1075): warning: Register r8 already defined by the .DEF directive
-E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA21 _ LCD\Code8\List\DistanceMeter.asm(1076): warning: Register r11 already defined by the .DEF directive
-E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA21 _ LCD\Code8\List\DistanceMeter.asm(1077): warning: Register r10 already defined by the .DEF directive
+D:\Bms\7segment\Code8\List\DistanceMeter.asm(1086): warning: Register r5 already defined by the .DEF directive
+D:\Bms\7segment\Code8\List\DistanceMeter.asm(1087): warning: Register r4 already defined by the .DEF directive
+D:\Bms\7segment\Code8\List\DistanceMeter.asm(1088): warning: Register r7 already defined by the .DEF directive
+D:\Bms\7segment\Code8\List\DistanceMeter.asm(1089): warning: Register r6 already defined by the .DEF directive
+D:\Bms\7segment\Code8\List\DistanceMeter.asm(1090): warning: Register r9 already defined by the .DEF directive
+D:\Bms\7segment\Code8\List\DistanceMeter.asm(1091): warning: Register r8 already defined by the .DEF directive
+D:\Bms\7segment\Code8\List\DistanceMeter.asm(1092): warning: Register r11 already defined by the .DEF directive
+D:\Bms\7segment\Code8\List\DistanceMeter.asm(1093): warning: Register r10 already defined by the .DEF directive
                  
                  
-                 ;CodeVisionAVR C Compiler V2.05.3 Standard
-                 ;(C) Copyright 1998-2011 Pavel Haiduc, HP InfoTech s.r.l.
+                 ;CodeVisionAVR C Compiler V3.12 Advanced
+                 ;(C) Copyright 1998-2014 Pavel Haiduc, HP InfoTech s.r.l.
                  ;http://www.hpinfotech.com
                  
-                 ;Chip type                : ATmega8
-                 ;Program type             : Application
-                 ;Clock frequency          : 8.000000 MHz
-                 ;Memory model             : Small
-                 ;Optimize for             : Size
-                 ;(s)printf features       : int, width
-                 ;(s)scanf features        : int, width
-                 ;External RAM size        : 0
-                 ;Data Stack size          : 256 byte(s)
-                 ;Heap size                : 0 byte(s)
-                 ;Promote 'char' to 'int'  : Yes
-                 ;'char' is unsigned       : Yes
-                 ;8 bit enums              : Yes
-                 ;Global 'const' stored in FLASH     : No
+                 ;Build configuration    : Release
+                 ;Chip type              : ATmega8
+                 ;Program type           : Application
+                 ;Clock frequency        : 8.000000 MHz
+                 ;Memory model           : Small
+                 ;Optimize for           : Size
+                 ;(s)printf features     : int, width
+                 ;(s)scanf features      : int, width
+                 ;External RAM size      : 0
+                 ;Data Stack size        : 256 byte(s)
+                 ;Heap size              : 0 byte(s)
+                 ;Promote 'char' to 'int': Yes
+                 ;'char' is unsigned     : Yes
+                 ;8 bit enums            : Yes
+                 ;Global 'const' stored in FLASH: No
                  ;Enhanced function parameter passing: Yes
-                 ;Enhanced core instructions         : On
-                 ;Smart register allocation          : On
-                 ;Automatic register allocation      : On
+                 ;Enhanced core instructions: On
+                 ;Automatic register allocation for global variables: On
+                 ;Smart register allocation: On
+                 
+                 	#define _MODEL_SMALL_
                  
                  	#pragma AVRPART ADMIN PART_NAME ATmega8
                  	#pragma AVRPART MEMORY PROG_FLASH 8192
                  	#pragma AVRPART MEMORY EEPROM 512
-                 	#pragma AVRPART MEMORY INT_SRAM SIZE 1119
+                 	#pragma AVRPART MEMORY INT_SRAM SIZE 1024
                  	#pragma AVRPART MEMORY INT_SRAM START_ADDR 0x60
                  
                  	.LISTMAC
@@ -615,27 +618,40 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
                  	.ENDM
                  
                  	.MACRO __CALL2EN
+                 	PUSH R26
+                 	PUSH R27
                  	LDI  R26,LOW(@0+(@1))
                  	LDI  R27,HIGH(@0+(@1))
                  	RCALL __EEPROMRDW
+                 	POP  R27
+                 	POP  R26
+                 	ICALL
+                 	.ENDM
+                 
+                 	.MACRO __CALL2EX
+                 	SUBI R26,LOW(-@0)
+                 	SBCI R27,HIGH(-@0)
+                 	RCALL __EEPROMRDD
                  	ICALL
                  	.ENDM
                  
                  	.MACRO __GETW1STACK
-                 	IN   R26,SPL
-                 	IN   R27,SPH
-                 	ADIW R26,@0+1
-                 	LD   R30,X+
-                 	LD   R31,X
+                 	IN   R30,SPL
+                 	IN   R31,SPH
+                 	ADIW R30,@0+1
+                 	LD   R0,Z+
+                 	LD   R31,Z
+                 	MOV  R30,R0
                  	.ENDM
                  
                  	.MACRO __GETD1STACK
-                 	IN   R26,SPL
-                 	IN   R27,SPH
-                 	ADIW R26,@0+1
-                 	LD   R30,X+
-                 	LD   R31,X+
-                 	LD   R22,X
+                 	IN   R30,SPL
+                 	IN   R31,SPH
+                 	ADIW R30,@0+1
+                 	LD   R0,Z+
+                 	LD   R1,Z+
+                 	LD   R22,Z
+                 	MOVW R30,R0
                  	.ENDM
                  
                  	.MACRO __NBST
@@ -1130,14 +1146,14 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
 00001c 6e69
 00001d 0067      	.DB  0x69,0x6E,0x67,0x0
                  _0x2000060:
-E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA21 _ LCD\Code8\List\DistanceMeter.asm(1114): warning: .cseg .db misalignment - padding zero byte
+D:\Bms\7segment\Code8\List\DistanceMeter.asm(1130): warning: .cseg .db misalignment - padding zero byte
 00001e 0001      	.DB  0x1
                  _0x2000000:
 00001f 4e2d
 000020 4e41
 000021 4900
 000022 464e      	.DB  0x2D,0x4E,0x41,0x4E,0x0,0x49,0x4E,0x46
-E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA21 _ LCD\Code8\List\DistanceMeter.asm(1117): warning: .cseg .db misalignment - padding zero byte
+D:\Bms\7segment\Code8\List\DistanceMeter.asm(1133): warning: .cseg .db misalignment - padding zero byte
 000023 0000      	.DB  0x0
                  _0x2020003:
 000024 c080      	.DB  0x80,0xC0
@@ -1153,6 +1169,8 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
                  
                  _0xFFFFFFFF:
 00002b 0000      	.DW  0
+                 
+                 #define __GLOBAL_INI_TBL_PRESENT 1
                  
                  __RESET:
 00002c 94f8      	CLI
@@ -1281,6 +1299,7 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
                  
                  	.CSEG
                  _read_adc:
+                 ; .FSTART _read_adc
                  ; 0000 0025 ADMUX=adc_input | (ADC_VREF_TYPE & 0xff);
 00005b 93aa      	ST   -Y,R26
                  ;	adc_input -> Y+0
@@ -1307,14 +1326,16 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
                  ; 0000 002D return ADCW;
 000065 b1e4      	IN   R30,0x4
 000066 b1f5      	IN   R31,0x4+1
-000067 c155      	RJMP _0x20A0001
+000067 c14f      	RJMP _0x20A0001
                  ; 0000 002E }
+                 ; .FEND
                  ;
                  ;// Declare your global variables here
                  ;
                  ;void main(void)
                  ; 0000 0033 {
                  _main:
+                 ; .FSTART _main
                  ; 0000 0034 
                  ; 0000 0035        const ir_distance_sensor GP2Y0A21YK = { 5461, -17, 2 };
                  ; 0000 0036 unsigned int SensorVoltage;
@@ -1402,13 +1423,13 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
                  ; 0000 0067 // Characters/line: 16
                  ; 0000 0068 lcd_init(16);
 000084 e1a0      	LDI  R26,LOW(16)
-000085 d10f      	RCALL _lcd_init
+000085 d109      	RCALL _lcd_init
                  ; 0000 0069 // go on the second LCD line
                  ; 0000 006A lcd_gotoxy(0,1);
 000086 e0e0      	LDI  R30,LOW(0)
 000087 93ea      	ST   -Y,R30
 000088 e0a1      	LDI  R26,LOW(1)
-000089 d0bf      	RCALL _lcd_gotoxy
+000089 d0b9      	RCALL _lcd_gotoxy
                  ; 0000 006B 
                  ; 0000 006C // display the message
                  ; 0000 006D lcd_putsf("Calcluating");
@@ -1416,7 +1437,7 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
 00008a e3a0     +LDI R26 , LOW ( 2 * _0x0 + ( 0 ) )
 00008b e0b0     +LDI R27 , HIGH ( 2 * _0x0 + ( 0 ) )
                  	__POINTW2FN _0x0,0
-00008c d0f6      	RCALL _lcd_putsf
+00008c d0f0      	RCALL _lcd_putsf
                  ; 0000 006E  prevDistance = 0;
                 +
 00008d e040     +LDI R20 , LOW ( 0 )
@@ -1448,7 +1469,7 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
 000098 01fe      	MOVW R30,R28
 000099 9637      	ADIW R30,7
 00009a e0a6      	LDI  R26,6
-00009b d180      	RCALL __PUTPARL
+00009b d17e      	RCALL __PUTPARL
 00009c 01d8      	MOVW R26,R16
 00009d d043      	RCALL _ir_distance_calculate_cm
 00009e 019f      	MOVW R18,R30
@@ -1462,7 +1483,7 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
                  ; 0000 0079            prevDistance = distance;
 0000a2 01a9      	MOVW R20,R18
                  ; 0000 007A            lcd_clear();
-0000a3 d0b2      	RCALL _lcd_clear
+0000a3 d0ac      	RCALL _lcd_clear
                  ; 0000 007B            itoa(distance, sensordata);
 0000a4 933a      	ST   -Y,R19
 0000a5 932a      	ST   -Y,R18
@@ -1471,39 +1492,39 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
 0000a8 d052      	RCALL _itoa
                  ; 0000 007C            lcd_puts(sensordata);
 0000a9 01de      	MOVW R26,R28
-0000aa d0ca      	RCALL _lcd_puts
+0000aa d0c4      	RCALL _lcd_puts
                  ; 0000 007D 
                  ; 0000 007E       a=distance/1000;
 0000ab 01d9      	MOVW R26,R18
 0000ac eee8      	LDI  R30,LOW(1000)
 0000ad e0f3      	LDI  R31,HIGH(1000)
-0000ae d14c      	RCALL __DIVW21
+0000ae d14a      	RCALL __DIVW21
 0000af 2e5e      	MOV  R5,R30
                  ; 0000 007F       b=(distance%1000)/100;
 0000b0 01d9      	MOVW R26,R18
 0000b1 eee8      	LDI  R30,LOW(1000)
 0000b2 e0f3      	LDI  R31,HIGH(1000)
-0000b3 d14c      	RCALL __MODW21
+0000b3 d14a      	RCALL __MODW21
 0000b4 01df      	MOVW R26,R30
 0000b5 e6e4      	LDI  R30,LOW(100)
 0000b6 e0f0      	LDI  R31,HIGH(100)
-0000b7 d143      	RCALL __DIVW21
+0000b7 d141      	RCALL __DIVW21
 0000b8 2e4e      	MOV  R4,R30
                  ; 0000 0080       c=(distance%100)/10;
 0000b9 01d9      	MOVW R26,R18
 0000ba e6e4      	LDI  R30,LOW(100)
 0000bb e0f0      	LDI  R31,HIGH(100)
-0000bc d143      	RCALL __MODW21
+0000bc d141      	RCALL __MODW21
 0000bd 01df      	MOVW R26,R30
 0000be e0ea      	LDI  R30,LOW(10)
 0000bf e0f0      	LDI  R31,HIGH(10)
-0000c0 d13a      	RCALL __DIVW21
+0000c0 d138      	RCALL __DIVW21
 0000c1 2e7e      	MOV  R7,R30
                  ; 0000 0081       d=distance%10;
 0000c2 01d9      	MOVW R26,R18
 0000c3 e0ea      	LDI  R30,LOW(10)
 0000c4 e0f0      	LDI  R31,HIGH(10)
-0000c5 d13a      	RCALL __MODW21
+0000c5 d138      	RCALL __MODW21
 0000c6 2e6e      	MOV  R6,R30
                  ; 0000 0082            }
                  ; 0000 0083 
@@ -1521,7 +1542,7 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
 0000cb bbe5      	OUT  0x15,R30
                  ; 0000 0089       PORTB=sev[d];
 0000cc 2de6      	MOV  R30,R6
-0000cd d0f1      	RCALL SUBOPT_0x0
+0000cd d0eb      	RCALL SUBOPT_0x0
                  ; 0000 008A       delay_ms(2);
                  ; 0000 008B 
                  ; 0000 008C       PORTC=0X04;
@@ -1529,7 +1550,7 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
 0000cf bbe5      	OUT  0x15,R30
                  ; 0000 008D       PORTB=sev[c];
 0000d0 2de7      	MOV  R30,R7
-0000d1 d0ed      	RCALL SUBOPT_0x0
+0000d1 d0e7      	RCALL SUBOPT_0x0
                  ; 0000 008E 
                  ; 0000 008F       delay_ms(2);
                  ; 0000 0090 
@@ -1539,7 +1560,7 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
 0000d3 bbe5      	OUT  0x15,R30
                  ; 0000 0093       PORTB=sev[b];
 0000d4 2de4      	MOV  R30,R4
-0000d5 d0e9      	RCALL SUBOPT_0x0
+0000d5 d0e3      	RCALL SUBOPT_0x0
                  ; 0000 0094 
                  ; 0000 0095       delay_ms(2);
                  ; 0000 0096 
@@ -1548,7 +1569,7 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
 0000d7 bbe5      	OUT  0x15,R30
                  ; 0000 0098       PORTB=sev[a];
 0000d8 2de5      	MOV  R30,R5
-0000d9 d0e5      	RCALL SUBOPT_0x0
+0000d9 d0df      	RCALL SUBOPT_0x0
                  ; 0000 0099       delay_ms(2);
                  ; 0000 009A       PORTC=0X00;
 0000da e0e0      	LDI  R30,LOW(0)
@@ -1566,6 +1587,7 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
                  ; 0000 00A0 }
                  _0xE:
 0000e0 cfff      	RJMP _0xE
+                 ; .FEND
                  ;
                  ;
                  ;#include "GP2Y0A21.h"
@@ -1577,11 +1599,12 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
                  
                  	.CSEG
                  _ir_distance_calculate_cm:
+                 ; .FSTART _ir_distance_calculate_cm
                  ; 0001 0008 	if (adc_value + sensor.b <= 0)
-0000e1 d0e5      	RCALL SUBOPT_0x1
+0000e1 d0df      	RCALL SUBOPT_0x1
                  ;	sensor -> Y+2
                  ;	adc_value -> Y+0
-0000e2 d0e7      	RCALL SUBOPT_0x2
+0000e2 d0e1      	RCALL SUBOPT_0x2
 0000e3 0fae      	ADD  R26,R30
 0000e4 1fbf      	ADC  R27,R31
 0000e5 9710      	SBIW R26,0
@@ -1595,25 +1618,26 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
                  ; 0001 000C 
                  ; 0001 000D 	return 200-(sensor.a / (adc_value + sensor.b) - sensor.k);
                  _0x20003:
-0000ea d0df      	RCALL SUBOPT_0x2
+0000ea d0d9      	RCALL SUBOPT_0x2
 0000eb 0fea      	ADD  R30,R26
 0000ec 1ffb      	ADC  R31,R27
 0000ed 81aa      	LDD  R26,Y+2
 0000ee 81bb      	LDD  R27,Y+2+1
-0000ef d0f8      	RCALL __DIVW21U
+0000ef d0f6      	RCALL __DIVW21U
 0000f0 81ae      	LDD  R26,Y+6
 0000f1 81bf      	LDD  R27,Y+6+1
 0000f2 1bea      	SUB  R30,R26
 0000f3 0bfb      	SBC  R31,R27
 0000f4 eca8      	LDI  R26,LOW(200)
 0000f5 e0b0      	LDI  R27,HIGH(200)
-0000f6 d12d      	RCALL __SWAPW12
+0000f6 d12b      	RCALL __SWAPW12
 0000f7 1bea      	SUB  R30,R26
 0000f8 0bfb      	SBC  R31,R27
                  _0x20A0003:
 0000f9 9628      	ADIW R28,8
 0000fa 9508      	RET
                  ; 0001 000E }
+                 ; .FEND
                  ;
                  ;float calculate_distance(unsigned short adc_value)
                  ; 0001 0011 {
@@ -1634,7 +1658,8 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
                  
                  	.CSEG
                  _itoa:
-0000fb d0cb      	RCALL SUBOPT_0x1
+                 ; .FSTART _itoa
+0000fb d0c5      	RCALL SUBOPT_0x1
 0000fc 91a9          ld   r26,y+
 0000fd 91b9          ld   r27,y+
 0000fe 91e9          ld   r30,y+
@@ -1686,6 +1711,7 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
 000125 5d60          subi r22,-0x30
 000126 936d          st   x+,r22
 000127 9508          ret
+                 ; .FEND
                  
                  	.DSEG
                  
@@ -1697,6 +1723,7 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
                  
                  	.CSEG
                  __lcd_write_nibble_G101:
+                 ; .FSTART __lcd_write_nibble_G101
 000128 93aa      	ST   -Y,R26
 000129 b3e2      	IN   R30,0x12
 00012a 7fe0      	ANDI R30,LOW(0xF0)
@@ -1706,181 +1733,181 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
 00012e 70ef      	ANDI R30,0xF
 00012f 2bea      	OR   R30,R26
 000130 bbe2      	OUT  0x12,R30
-                +
-000131 e085     +LDI R24 , LOW ( 5 )
-                +__DELAY_USB_LOOP :
-000132 958a     +DEC R24
-000133 f7f1     +BRNE __DELAY_USB_LOOP
-                 	__DELAY_USB 5
-000134 9a96      	SBI  0x12,6
-                +
-000135 e08d     +LDI R24 , LOW ( 13 )
-                +__DELAY_USB_LOOP :
-000136 958a     +DEC R24
-000137 f7f1     +BRNE __DELAY_USB_LOOP
-                 	__DELAY_USB 13
-000138 9896      	CBI  0x12,6
-                +
-000139 e08d     +LDI R24 , LOW ( 13 )
-                +__DELAY_USB_LOOP :
-00013a 958a     +DEC R24
-00013b f7f1     +BRNE __DELAY_USB_LOOP
-                 	__DELAY_USB 13
-00013c c080      	RJMP _0x20A0001
+000131 d097      	RCALL SUBOPT_0x3
+000132 9a96      	SBI  0x12,6
+000133 d095      	RCALL SUBOPT_0x3
+000134 9896      	CBI  0x12,6
+000135 d093      	RCALL SUBOPT_0x3
+000136 c080      	RJMP _0x20A0001
+                 ; .FEND
                  __lcd_write_data:
-00013d 93aa      	ST   -Y,R26
-00013e 81a8      	LD   R26,Y
-00013f dfe8      	RCALL __lcd_write_nibble_G101
-000140 81e8          ld    r30,y
-000141 95e2          swap  r30
-000142 83e8          st    y,r30
-000143 81a8      	LD   R26,Y
-000144 dfe3      	RCALL __lcd_write_nibble_G101
+                 ; .FSTART __lcd_write_data
+000137 93aa      	ST   -Y,R26
+000138 81a8      	LD   R26,Y
+000139 dfee      	RCALL __lcd_write_nibble_G101
+00013a 81e8          ld    r30,y
+00013b 95e2          swap  r30
+00013c 83e8          st    y,r30
+00013d 81a8      	LD   R26,Y
+00013e dfe9      	RCALL __lcd_write_nibble_G101
                 +
-000145 e885     +LDI R24 , LOW ( 133 )
+00013f e885     +LDI R24 , LOW ( 133 )
                 +__DELAY_USB_LOOP :
-000146 958a     +DEC R24
-000147 f7f1     +BRNE __DELAY_USB_LOOP
+000140 958a     +DEC R24
+000141 f7f1     +BRNE __DELAY_USB_LOOP
                  	__DELAY_USB 133
-000148 c074      	RJMP _0x20A0001
+000142 c074      	RJMP _0x20A0001
+                 ; .FEND
                  _lcd_gotoxy:
-000149 93aa      	ST   -Y,R26
-00014a 81e8      	LD   R30,Y
-00014b e0f0      	LDI  R31,0
-00014c 59ec      	SUBI R30,LOW(-__base_y_G101)
-00014d 4ffe      	SBCI R31,HIGH(-__base_y_G101)
-00014e 81e0      	LD   R30,Z
-00014f 81a9      	LDD  R26,Y+1
-000150 0fae      	ADD  R26,R30
-000151 dfeb      	RCALL __lcd_write_data
-000152 8089      	LDD  R8,Y+1
-000153 80b8      	LDD  R11,Y+0
-000154 9622      	ADIW R28,2
-000155 9508      	RET
+                 ; .FSTART _lcd_gotoxy
+000143 93aa      	ST   -Y,R26
+000144 81e8      	LD   R30,Y
+000145 e0f0      	LDI  R31,0
+000146 59ec      	SUBI R30,LOW(-__base_y_G101)
+000147 4ffe      	SBCI R31,HIGH(-__base_y_G101)
+000148 81e0      	LD   R30,Z
+000149 81a9      	LDD  R26,Y+1
+00014a 0fae      	ADD  R26,R30
+00014b dfeb      	RCALL __lcd_write_data
+00014c 8089      	LDD  R8,Y+1
+00014d 80b8      	LDD  R11,Y+0
+00014e 9622      	ADIW R28,2
+00014f 9508      	RET
+                 ; .FEND
                  _lcd_clear:
-000156 e0a2      	LDI  R26,LOW(2)
-000157 d077      	RCALL SUBOPT_0x3
-000158 e0ac      	LDI  R26,LOW(12)
-000159 dfe3      	RCALL __lcd_write_data
-00015a e0a1      	LDI  R26,LOW(1)
-00015b d073      	RCALL SUBOPT_0x3
-00015c e0e0      	LDI  R30,LOW(0)
-00015d 2ebe      	MOV  R11,R30
-00015e 2e8e      	MOV  R8,R30
-00015f 9508      	RET
+                 ; .FSTART _lcd_clear
+000150 e0a2      	LDI  R26,LOW(2)
+000151 d07b      	RCALL SUBOPT_0x4
+000152 e0ac      	LDI  R26,LOW(12)
+000153 dfe3      	RCALL __lcd_write_data
+000154 e0a1      	LDI  R26,LOW(1)
+000155 d077      	RCALL SUBOPT_0x4
+000156 e0e0      	LDI  R30,LOW(0)
+000157 2ebe      	MOV  R11,R30
+000158 2e8e      	MOV  R8,R30
+000159 9508      	RET
+                 ; .FEND
                  _lcd_putchar:
-000160 93aa      	ST   -Y,R26
-000161 81a8      	LD   R26,Y
-000162 30aa      	CPI  R26,LOW(0xA)
-000163 f011      	BREQ _0x2020005
-000164 148a      	CP   R8,R10
-000165 f048      	BRLO _0x2020004
+                 ; .FSTART _lcd_putchar
+00015a 93aa      	ST   -Y,R26
+00015b 81a8      	LD   R26,Y
+00015c 30aa      	CPI  R26,LOW(0xA)
+00015d f011      	BREQ _0x2020005
+00015e 148a      	CP   R8,R10
+00015f f048      	BRLO _0x2020004
                  _0x2020005:
-000166 e0e0      	LDI  R30,LOW(0)
-000167 93ea      	ST   -Y,R30
-000168 94b3      	INC  R11
-000169 2dab      	MOV  R26,R11
-00016a dfde      	RCALL _lcd_gotoxy
-00016b 81a8      	LD   R26,Y
-00016c 30aa      	CPI  R26,LOW(0xA)
-00016d f409      	BRNE _0x2020007
-00016e c04e      	RJMP _0x20A0001
+000160 e0e0      	LDI  R30,LOW(0)
+000161 93ea      	ST   -Y,R30
+000162 94b3      	INC  R11
+000163 2dab      	MOV  R26,R11
+000164 dfde      	RCALL _lcd_gotoxy
+000165 81a8      	LD   R26,Y
+000166 30aa      	CPI  R26,LOW(0xA)
+000167 f409      	BRNE _0x2020007
+000168 c04e      	RJMP _0x20A0001
                  _0x2020007:
                  _0x2020004:
-00016f 9483      	INC  R8
-000170 9a94      	SBI  0x12,4
-000171 81a8      	LD   R26,Y
-000172 dfca      	RCALL __lcd_write_data
-000173 9894      	CBI  0x12,4
-000174 c048      	RJMP _0x20A0001
+000169 9483      	INC  R8
+00016a 9a94      	SBI  0x12,4
+00016b 81a8      	LD   R26,Y
+00016c dfca      	RCALL __lcd_write_data
+00016d 9894      	CBI  0x12,4
+00016e c048      	RJMP _0x20A0001
+                 ; .FEND
                  _lcd_puts:
-000175 d051      	RCALL SUBOPT_0x1
-000176 931a      	ST   -Y,R17
+                 ; .FSTART _lcd_puts
+00016f d051      	RCALL SUBOPT_0x1
+000170 931a      	ST   -Y,R17
                  _0x2020008:
-000177 81a9      	LDD  R26,Y+1
-000178 81ba      	LDD  R27,Y+1+1
-000179 91ed      	LD   R30,X+
-00017a 83a9      	STD  Y+1,R26
-00017b 83ba      	STD  Y+1+1,R27
-00017c 2f1e      	MOV  R17,R30
-00017d 30e0      	CPI  R30,0
-00017e f019      	BREQ _0x202000A
-00017f 2fa1      	MOV  R26,R17
-000180 dfdf      	RCALL _lcd_putchar
-000181 cff5      	RJMP _0x2020008
+000171 81a9      	LDD  R26,Y+1
+000172 81ba      	LDD  R27,Y+1+1
+000173 91ed      	LD   R30,X+
+000174 83a9      	STD  Y+1,R26
+000175 83ba      	STD  Y+1+1,R27
+000176 2f1e      	MOV  R17,R30
+000177 30e0      	CPI  R30,0
+000178 f019      	BREQ _0x202000A
+000179 2fa1      	MOV  R26,R17
+00017a dfdf      	RCALL _lcd_putchar
+00017b cff5      	RJMP _0x2020008
                  _0x202000A:
-000182 c00f      	RJMP _0x20A0002
+00017c c00f      	RJMP _0x20A0002
+                 ; .FEND
                  _lcd_putsf:
-000183 d043      	RCALL SUBOPT_0x1
-000184 931a      	ST   -Y,R17
+                 ; .FSTART _lcd_putsf
+00017d d043      	RCALL SUBOPT_0x1
+00017e 931a      	ST   -Y,R17
                  _0x202000B:
-000185 81e9      	LDD  R30,Y+1
-000186 81fa      	LDD  R31,Y+1+1
-000187 9631      	ADIW R30,1
-000188 83e9      	STD  Y+1,R30
-000189 83fa      	STD  Y+1+1,R31
-00018a 9731      	SBIW R30,1
-00018b 91e4      	LPM  R30,Z
-00018c 2f1e      	MOV  R17,R30
-00018d 30e0      	CPI  R30,0
-00018e f019      	BREQ _0x202000D
-00018f 2fa1      	MOV  R26,R17
-000190 dfcf      	RCALL _lcd_putchar
-000191 cff3      	RJMP _0x202000B
+00017f 81e9      	LDD  R30,Y+1
+000180 81fa      	LDD  R31,Y+1+1
+000181 9631      	ADIW R30,1
+000182 83e9      	STD  Y+1,R30
+000183 83fa      	STD  Y+1+1,R31
+000184 9731      	SBIW R30,1
+000185 91e4      	LPM  R30,Z
+000186 2f1e      	MOV  R17,R30
+000187 30e0      	CPI  R30,0
+000188 f019      	BREQ _0x202000D
+000189 2fa1      	MOV  R26,R17
+00018a dfcf      	RCALL _lcd_putchar
+00018b cff3      	RJMP _0x202000B
                  _0x202000D:
                  _0x20A0002:
-000192 8118      	LDD  R17,Y+0
-000193 9623      	ADIW R28,3
-000194 9508      	RET
+00018c 8118      	LDD  R17,Y+0
+00018d 9623      	ADIW R28,3
+00018e 9508      	RET
+                 ; .FEND
                  _lcd_init:
-000195 93aa      	ST   -Y,R26
-000196 b3e1      	IN   R30,0x11
-000197 60ef      	ORI  R30,LOW(0xF)
-000198 bbe1      	OUT  0x11,R30
-000199 9a8e      	SBI  0x11,6
-00019a 9a8c      	SBI  0x11,4
-00019b 9a8d      	SBI  0x11,5
-00019c 9896      	CBI  0x12,6
-00019d 9894      	CBI  0x12,4
-00019e 9895      	CBI  0x12,5
-00019f 80a8      	LDD  R10,Y+0
-0001a0 81e8      	LD   R30,Y
-0001a1 58e0      	SUBI R30,-LOW(128)
+                 ; .FSTART _lcd_init
+00018f 93aa      	ST   -Y,R26
+000190 b3e1      	IN   R30,0x11
+000191 60ef      	ORI  R30,LOW(0xF)
+000192 bbe1      	OUT  0x11,R30
+000193 9a8e      	SBI  0x11,6
+000194 9a8c      	SBI  0x11,4
+000195 9a8d      	SBI  0x11,5
+000196 9896      	CBI  0x12,6
+000197 9894      	CBI  0x12,4
+000198 9895      	CBI  0x12,5
+000199 80a8      	LDD  R10,Y+0
+00019a 81e8      	LD   R30,Y
+00019b 58e0      	SUBI R30,-LOW(128)
                 +
-0001a2 93e0 0166+STS __base_y_G101 + ( 2 ) , R30
+00019c 93e0 0166+STS __base_y_G101 + ( 2 ) , R30
                  	__PUTB1MN __base_y_G101,2
-0001a4 81e8      	LD   R30,Y
-0001a5 54e0      	SUBI R30,-LOW(192)
+00019e 81e8      	LD   R30,Y
+00019f 54e0      	SUBI R30,-LOW(192)
                 +
-0001a6 93e0 0167+STS __base_y_G101 + ( 3 ) , R30
+0001a0 93e0 0167+STS __base_y_G101 + ( 3 ) , R30
                  	__PUTB1MN __base_y_G101,3
-0001a8 e1a4      	LDI  R26,LOW(20)
-0001a9 e0b0      	LDI  R27,0
-0001aa d02f      	RCALL _delay_ms
-0001ab d027      	RCALL SUBOPT_0x4
-0001ac d026      	RCALL SUBOPT_0x4
-0001ad d025      	RCALL SUBOPT_0x4
-0001ae e2a0      	LDI  R26,LOW(32)
-0001af df78      	RCALL __lcd_write_nibble_G101
+0001a2 e1a4      	LDI  R26,LOW(20)
+0001a3 e0b0      	LDI  R27,0
+0001a4 d033      	RCALL _delay_ms
+0001a5 d02b      	RCALL SUBOPT_0x5
+0001a6 d02a      	RCALL SUBOPT_0x5
+0001a7 d029      	RCALL SUBOPT_0x5
+0001a8 e2a0      	LDI  R26,LOW(32)
+0001a9 df7e      	RCALL __lcd_write_nibble_G101
                 +
-0001b0 ec88     +LDI R24 , LOW ( 200 )
-0001b1 e090     +LDI R25 , HIGH ( 200 )
+0001aa ec88     +LDI R24 , LOW ( 200 )
+0001ab e090     +LDI R25 , HIGH ( 200 )
                 +__DELAY_USW_LOOP :
-0001b2 9701     +SBIW R24 , 1
-0001b3 f7f1     +BRNE __DELAY_USW_LOOP
+0001ac 9701     +SBIW R24 , 1
+0001ad f7f1     +BRNE __DELAY_USW_LOOP
                  	__DELAY_USW 200
-0001b4 e2a8      	LDI  R26,LOW(40)
-0001b5 df87      	RCALL __lcd_write_data
-0001b6 e0a4      	LDI  R26,LOW(4)
-0001b7 df85      	RCALL __lcd_write_data
-0001b8 e8a5      	LDI  R26,LOW(133)
-0001b9 df83      	RCALL __lcd_write_data
-0001ba e0a6      	LDI  R26,LOW(6)
-0001bb df81      	RCALL __lcd_write_data
-0001bc df99      	RCALL _lcd_clear
+0001ae e2a8      	LDI  R26,LOW(40)
+0001af df87      	RCALL __lcd_write_data
+0001b0 e0a4      	LDI  R26,LOW(4)
+0001b1 df85      	RCALL __lcd_write_data
+0001b2 e8a5      	LDI  R26,LOW(133)
+0001b3 df83      	RCALL __lcd_write_data
+0001b4 e0a6      	LDI  R26,LOW(6)
+0001b5 df81      	RCALL __lcd_write_data
+0001b6 df99      	RCALL _lcd_clear
                  _0x20A0001:
-0001bd 9621      	ADIW R28,1
-0001be 9508      	RET
+0001b7 9621      	ADIW R28,1
+0001b8 9508      	RET
+                 ; .FEND
                  
                  	.CSEG
                  
@@ -1895,166 +1922,176 @@ E:\elec\electronic\pr0ject of univer\complet project\Distance Sensor Sharp 2YOA2
 000164           	.BYTE 0x4
                  
                  	.CSEG
-                 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:31 WORDS
+                 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:19 WORDS
                  SUBOPT_0x0:
-0001bf e0f0      	LDI  R31,0
-0001c0 5dea      	SUBI R30,LOW(-_sev*2)
-0001c1 4fff      	SBCI R31,HIGH(-_sev*2)
-0001c2 9004      	LPM  R0,Z
-0001c3 ba08      	OUT  0x18,R0
-0001c4 e0a2      	LDI  R26,LOW(2)
-0001c5 e0b0      	LDI  R27,0
-0001c6 c013      	RJMP _delay_ms
+0001b9 e0f0      	LDI  R31,0
+0001ba 5dea      	SUBI R30,LOW(-_sev*2)
+0001bb 4fff      	SBCI R31,HIGH(-_sev*2)
+0001bc 9004      	LPM  R0,Z
+0001bd ba08      	OUT  0x18,R0
+0001be e0a2      	LDI  R26,LOW(2)
+0001bf e0b0      	LDI  R27,0
+0001c0 c017      	RJMP _delay_ms
                  
                  ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:1 WORDS
                  SUBOPT_0x1:
-0001c7 93ba      	ST   -Y,R27
-0001c8 93aa      	ST   -Y,R26
-0001c9 9508      	RET
+0001c1 93ba      	ST   -Y,R27
+0001c2 93aa      	ST   -Y,R26
+0001c3 9508      	RET
                  
                  ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
                  SUBOPT_0x2:
-0001ca 81ec      	LDD  R30,Y+4
-0001cb 81fd      	LDD  R31,Y+4+1
-0001cc 81a8      	LD   R26,Y
-0001cd 81b9      	LDD  R27,Y+1
-0001ce 9508      	RET
+0001c4 81ec      	LDD  R30,Y+4
+0001c5 81fd      	LDD  R31,Y+4+1
+0001c6 81a8      	LD   R26,Y
+0001c7 81b9      	LDD  R27,Y+1
+0001c8 9508      	RET
                  
-                 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
+                 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:2 WORDS
                  SUBOPT_0x3:
-0001cf df6d      	RCALL __lcd_write_data
-0001d0 e0a3      	LDI  R26,LOW(3)
-0001d1 e0b0      	LDI  R27,0
-0001d2 c007      	RJMP _delay_ms
+                +
+0001c9 e08d     +LDI R24 , LOW ( 13 )
+                +__DELAY_USB_LOOP :
+0001ca 958a     +DEC R24
+0001cb f7f1     +BRNE __DELAY_USB_LOOP
+                 	__DELAY_USB 13
+0001cc 9508      	RET
+                 
+                 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+                 SUBOPT_0x4:
+0001cd df69      	RCALL __lcd_write_data
+0001ce e0a3      	LDI  R26,LOW(3)
+0001cf e0b0      	LDI  R27,0
+0001d0 c007      	RJMP _delay_ms
                  
                  ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:8 WORDS
-                 SUBOPT_0x4:
-0001d3 e3a0      	LDI  R26,LOW(48)
-0001d4 df53      	RCALL __lcd_write_nibble_G101
+                 SUBOPT_0x5:
+0001d1 e3a0      	LDI  R26,LOW(48)
+0001d2 df55      	RCALL __lcd_write_nibble_G101
                 +
-0001d5 ec88     +LDI R24 , LOW ( 200 )
-0001d6 e090     +LDI R25 , HIGH ( 200 )
+0001d3 ec88     +LDI R24 , LOW ( 200 )
+0001d4 e090     +LDI R25 , HIGH ( 200 )
                 +__DELAY_USW_LOOP :
-0001d7 9701     +SBIW R24 , 1
-0001d8 f7f1     +BRNE __DELAY_USW_LOOP
+0001d5 9701     +SBIW R24 , 1
+0001d6 f7f1     +BRNE __DELAY_USW_LOOP
                  	__DELAY_USW 200
-0001d9 9508      	RET
+0001d7 9508      	RET
                  
                  
                  	.CSEG
                  _delay_ms:
-0001da 9610      	adiw r26,0
-0001db f039      	breq __delay_ms1
+0001d8 9610      	adiw r26,0
+0001d9 f039      	breq __delay_ms1
                  __delay_ms0:
                 +
-0001dc ed80     +LDI R24 , LOW ( 0x7D0 )
-0001dd e097     +LDI R25 , HIGH ( 0x7D0 )
+0001da ed80     +LDI R24 , LOW ( 0x7D0 )
+0001db e097     +LDI R25 , HIGH ( 0x7D0 )
                 +__DELAY_USW_LOOP :
-0001de 9701     +SBIW R24 , 1
-0001df f7f1     +BRNE __DELAY_USW_LOOP
+0001dc 9701     +SBIW R24 , 1
+0001dd f7f1     +BRNE __DELAY_USW_LOOP
                  	__DELAY_USW 0x7D0
-0001e0 95a8      	wdr
-0001e1 9711      	sbiw r26,1
-0001e2 f7c9      	brne __delay_ms0
+0001de 95a8      	wdr
+0001df 9711      	sbiw r26,1
+0001e0 f7c9      	brne __delay_ms0
                  __delay_ms1:
-0001e3 9508      	ret
+0001e1 9508      	ret
                  
                  __ANEGW1:
-0001e4 95f1      	NEG  R31
-0001e5 95e1      	NEG  R30
-0001e6 40f0      	SBCI R31,0
-0001e7 9508      	RET
+0001e2 95f1      	NEG  R31
+0001e3 95e1      	NEG  R30
+0001e4 40f0      	SBCI R31,0
+0001e5 9508      	RET
                  
                  __DIVW21U:
-0001e8 2400      	CLR  R0
-0001e9 2411      	CLR  R1
-0001ea e190      	LDI  R25,16
+0001e6 2400      	CLR  R0
+0001e7 2411      	CLR  R1
+0001e8 e190      	LDI  R25,16
                  __DIVW21U1:
-0001eb 0faa      	LSL  R26
-0001ec 1fbb      	ROL  R27
-0001ed 1c00      	ROL  R0
-0001ee 1c11      	ROL  R1
-0001ef 1a0e      	SUB  R0,R30
-0001f0 0a1f      	SBC  R1,R31
-0001f1 f418      	BRCC __DIVW21U2
-0001f2 0e0e      	ADD  R0,R30
-0001f3 1e1f      	ADC  R1,R31
-0001f4 c001      	RJMP __DIVW21U3
+0001e9 0faa      	LSL  R26
+0001ea 1fbb      	ROL  R27
+0001eb 1c00      	ROL  R0
+0001ec 1c11      	ROL  R1
+0001ed 1a0e      	SUB  R0,R30
+0001ee 0a1f      	SBC  R1,R31
+0001ef f418      	BRCC __DIVW21U2
+0001f0 0e0e      	ADD  R0,R30
+0001f1 1e1f      	ADC  R1,R31
+0001f2 c001      	RJMP __DIVW21U3
                  __DIVW21U2:
-0001f5 60a1      	SBR  R26,1
+0001f3 60a1      	SBR  R26,1
                  __DIVW21U3:
-0001f6 959a      	DEC  R25
-0001f7 f799      	BRNE __DIVW21U1
-0001f8 01fd      	MOVW R30,R26
-0001f9 01d0      	MOVW R26,R0
-0001fa 9508      	RET
+0001f4 959a      	DEC  R25
+0001f5 f799      	BRNE __DIVW21U1
+0001f6 01fd      	MOVW R30,R26
+0001f7 01d0      	MOVW R26,R0
+0001f8 9508      	RET
                  
                  __DIVW21:
-0001fb d012      	RCALL __CHKSIGNW
-0001fc dfeb      	RCALL __DIVW21U
-0001fd f40e      	BRTC __DIVW211
-0001fe dfe5      	RCALL __ANEGW1
+0001f9 d012      	RCALL __CHKSIGNW
+0001fa dfeb      	RCALL __DIVW21U
+0001fb f40e      	BRTC __DIVW211
+0001fc dfe5      	RCALL __ANEGW1
                  __DIVW211:
-0001ff 9508      	RET
+0001fd 9508      	RET
                  
                  __MODW21:
-000200 94e8      	CLT
-000201 ffb7      	SBRS R27,7
-000202 c004      	RJMP __MODW211
-000203 95a0      	COM  R26
-000204 95b0      	COM  R27
-000205 9611      	ADIW R26,1
-000206 9468      	SET
+0001fe 94e8      	CLT
+0001ff ffb7      	SBRS R27,7
+000200 c004      	RJMP __MODW211
+000201 95a0      	COM  R26
+000202 95b0      	COM  R27
+000203 9611      	ADIW R26,1
+000204 9468      	SET
                  __MODW211:
-000207 fdf7      	SBRC R31,7
-000208 dfdb      	RCALL __ANEGW1
-000209 dfde      	RCALL __DIVW21U
-00020a 01fd      	MOVW R30,R26
-00020b f40e      	BRTC __MODW212
-00020c dfd7      	RCALL __ANEGW1
+000205 fdf7      	SBRC R31,7
+000206 dfdb      	RCALL __ANEGW1
+000207 dfde      	RCALL __DIVW21U
+000208 01fd      	MOVW R30,R26
+000209 f40e      	BRTC __MODW212
+00020a dfd7      	RCALL __ANEGW1
                  __MODW212:
-00020d 9508      	RET
+00020b 9508      	RET
                  
                  __CHKSIGNW:
-00020e 94e8      	CLT
-00020f fff7      	SBRS R31,7
-000210 c002      	RJMP __CHKSW1
-000211 dfd2      	RCALL __ANEGW1
-000212 9468      	SET
+00020c 94e8      	CLT
+00020d fff7      	SBRS R31,7
+00020e c002      	RJMP __CHKSW1
+00020f dfd2      	RCALL __ANEGW1
+000210 9468      	SET
                  __CHKSW1:
-000213 ffb7      	SBRS R27,7
-000214 c006      	RJMP __CHKSW2
-000215 95a0      	COM  R26
-000216 95b0      	COM  R27
-000217 9611      	ADIW R26,1
-000218 f800      	BLD  R0,0
-000219 9403      	INC  R0
-00021a fa00      	BST  R0,0
+000211 ffb7      	SBRS R27,7
+000212 c006      	RJMP __CHKSW2
+000213 95a0      	COM  R26
+000214 95b0      	COM  R27
+000215 9611      	ADIW R26,1
+000216 f800      	BLD  R0,0
+000217 9403      	INC  R0
+000218 fa00      	BST  R0,0
                  __CHKSW2:
-00021b 9508      	RET
+000219 9508      	RET
                  
                  __PUTPARL:
-00021c 27bb      	CLR  R27
+00021a 27bb      	CLR  R27
                  __PUTPAR:
-00021d 0fea      	ADD  R30,R26
-00021e 1ffb      	ADC  R31,R27
+00021b 0fea      	ADD  R30,R26
+00021c 1ffb      	ADC  R31,R27
                  __PUTPAR0:
-00021f 9002      	LD   R0,-Z
-000220 920a      	ST   -Y,R0
-000221 9711      	SBIW R26,1
-000222 f7e1      	BRNE __PUTPAR0
-000223 9508      	RET
+00021d 9002      	LD   R0,-Z
+00021e 920a      	ST   -Y,R0
+00021f 9711      	SBIW R26,1
+000220 f7e1      	BRNE __PUTPAR0
+000221 9508      	RET
                  
                  __SWAPW12:
-000224 2e1b      	MOV  R1,R27
-000225 2fbf      	MOV  R27,R31
-000226 2df1      	MOV  R31,R1
+000222 2e1b      	MOV  R1,R27
+000223 2fbf      	MOV  R27,R31
+000224 2df1      	MOV  R31,R1
                  
                  __SWAPB12:
-000227 2e1a      	MOV  R1,R26
-000228 2fae      	MOV  R26,R30
-000229 2de1      	MOV  R30,R1
-00022a 9508      	RET
+000225 2e1a      	MOV  R1,R26
+000226 2fae      	MOV  R26,R30
+000227 2de1      	MOV  R30,R1
+000228 9508      	RET
                  
                  ;END OF CODE MARKER
                  __END_OF_CODE:
@@ -2078,7 +2115,7 @@ ATmega8 register use summary:
 r0 :  16 r1 :   9 r2 :   0 r3 :   0 r4 :   2 r5 :   2 r6 :   2 r7 :   2 
 r8 :   4 r9 :   3 r10:   2 r11:   4 r12:   0 r13:   0 r14:   0 r15:   0 
 r16:   4 r17:   9 r18:   8 r19:   2 r20:   3 r21:   2 r22:  12 r23:   0 
-r24:  29 r25:  12 r26:  78 r27:  27 r28:   9 r29:   1 r30: 142 r31:  37 
+r24:  25 r25:  12 r26:  78 r27:  27 r28:   9 r29:   1 r30: 142 r31:  37 
 x  :   7 y  :  58 z  :  11 
 Registers used: 28 out of 35 (80.0%)
 
@@ -2087,16 +2124,16 @@ ATmega8 instruction use summary:
 adiw  :  12 and   :   0 andi  :   2 asr   :   0 bclr  :   0 bld   :   1 
 brbc  :   0 brbs  :   0 brcc  :   1 brcs  :   0 break :   0 breq  :   6 
 brge  :   0 brhc  :   0 brhs  :   0 brid  :   0 brie  :   0 brlo  :   3 
-brlt  :   0 brmi  :   0 brne  :  18 brpl  :   1 brsh  :   1 brtc  :   2 
+brlt  :   0 brmi  :   0 brne  :  16 brpl  :   1 brsh  :   1 brtc  :   2 
 brts  :   1 brvc  :   0 brvs  :   0 bset  :   0 bst   :   1 cbi   :   5 
 cbr   :   0 clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   9 
 cls   :   0 clt   :   3 clv   :   0 clz   :   0 com   :   6 cp    :   4 
-cpc   :   3 cpi   :   5 cpse  :   0 dec   :   7 des   :   0 eor   :   0 
+cpc   :   3 cpi   :   5 cpse  :   0 dec   :   5 des   :   0 eor   :   0 
 fmul  :   0 fmuls :   0 fmulsu:   0 icall :   0 ijmp  :   0 in    :   4 
-inc   :   5 ld    :  19 ldd   :  16 ldi   :  98 lds   :   0 lpm   :  11 
+inc   :   5 ld    :  19 ldd   :  16 ldi   :  96 lds   :   0 lpm   :  11 
 lsl   :   1 lsr   :   0 mov   :  23 movw  :  19 mul   :   0 muls  :   0 
 mulsu :   0 neg   :   2 nop   :   0 or    :   1 ori   :   1 out   :  25 
-pop   :   0 push  :   0 rcall :  61 ret   :  19 reti  :   0 rjmp  :  40 
+pop   :   0 push  :   0 rcall :  64 ret   :  20 reti  :   0 rjmp  :  40 
 rol   :   3 ror   :   0 sbc   :   4 sbci  :   3 sbi   :   7 sbic  :   0 
 sbis  :   1 sbiw  :  11 sbr   :   1 sbrc  :   1 sbrs  :   3 sec   :   0 
 seh   :   0 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   3 
@@ -2108,8 +2145,8 @@ Instructions used: 57 out of 114 (50.0%)
 ATmega8 memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000456   1060     50   1110    8192  13.5%
-[.dseg] 0x000060 0x000168      0      8      8    1119   0.7%
+[.cseg] 0x000000 0x000452   1056     50   1106    8192  13.5%
+[.dseg] 0x000060 0x000168      0      8      8    1024   0.8%
 [.eseg] 0x000000 0x000000      0      0      0     512   0.0%
 
 Assembly complete, 0 errors, 10 warnings

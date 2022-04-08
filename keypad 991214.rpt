@@ -1,16 +1,16 @@
 Report       : keypad 991214
-Date         : 06-14-2021
-Time         : 15:09:15
+Date         : 03-17-2022
+Time         : 17:25:17
 
-Compiler     : BASCOM-AVR LIBRARY V 2.0.7.8
+Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
 SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1B06 hex  -> Will fit into ROM
-ROMIMAGE     :  6918 dec
-FLASH USED   :  84  %
+ROMIMAGE     : 1B78 hex  -> Will fit into ROM
+ROMIMAGE     :  7032 dec
+FLASH USED   :  85  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 8 hex
 S-Stackstart : 440 hex
 Framesize    : 18 hex
 Framestart   : 420 hex
-Space left   :  829  dec
+Space left   :  828  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -44,6 +44,8 @@ ADC                              Word              0024          36
 TIMER1                           Word              004C          76 
 COMPARE1A                        Word              004A          74 
 COMPARE1B                        Word              0048          72 
+PWM1A                            Word              004A          74 
+PWM1B                            Word              0048          72 
 CAPTURE1                         Word              0046          70 
 HWSTACK                          Word              005D          93 
 SWSTACK                          Word              001C          28 
@@ -111,32 +113,32 @@ SECC                             Byte              007C          124
 ENDBIT                           Byte              007D          125 
 DIRECT                           Byte              007E          126 
 TEMPEN                           Bit [4]           0061          97 
-TEMPON                           Byte              007F          127 
-TYP                              Byte              0080          128 
-ID                               Byte              0081          129 
-CMD                              Byte              0082          130 
-TOUCHID1                         Byte              0083          131 
-TOUCHID2                         Byte              0084          132 
-TOUCHID3                         Byte              0085          133 
+TEMPON                           Word              007F          127 
+TYP                              Byte              0081          129 
+ID                               Byte              0082          130 
+CMD                              Byte              0083          131 
+TOUCHID1                         Byte              0084          132 
+TOUCHID2                         Byte              0085          133 
+TOUCHID3                         Byte              0086          134 
 EL                               EEPROM Byte(12)   0002          2 
 SENSOREN                         Bit [3]           0061          97 
 BEEPEN                           Bit [2]           0061          97 
-TOUCH                            Byte              0086          134 
-X                                Word              0087          135 
-S                                Word(24)          0089          137 
-I                                Byte              00B9          185 
-SADDRESS                         String * 20       00BA          186 
-SCODE                            String * 4        00CF          207 
-ADDRESS                          Long              00D4          212 
-CODE                             Byte              00D8          216 
-RA                               Long              00D9          217 
-RNUMBER                          Byte              00DD          221 
+TOUCH                            Byte              0087          135 
+X                                Word              0088          136 
+S                                Word(24)          008A          138 
+I                                Byte              00BA          186 
+SADDRESS                         String * 20       00BB          187 
+SCODE                            String * 4        00D0          208 
+ADDRESS                          Long              00D5          213 
+CODE                             Byte              00D9          217 
+RA                               Long              00DA          218 
+RNUMBER                          Byte              00DE          222 
 RNUMBER_E                        EEPROM Byte       000E          14 
 OKREAD                           Bit [1]           0061          97 
 ERROR                            Bit [0]           0061          97 
-KEYCHECK                         Bit [7]           00DE          222 
-T                                Word              00DF          223 
-P                                Byte              00E1          225 
+KEYCHECK                         Bit [7]           00DF          223 
+T                                Word              00E0          224 
+P                                Byte              00E2          226 
 EEVAR                            EEPROM Long(2)    000F          15 
 
 --------------------------------------------------------------------------------
@@ -202,6 +204,7 @@ SPSR                             &H0E
 SPCR                             &H0D
 UDR                              &H0C
 UCSRA                            &H0B
+UCSR0A                           &H0B
 USR                              &H0B
 UCSRB                            &H0A
 UCR                              &H0A
@@ -222,6 +225,8 @@ TWDR                             &H03
 TWAR                             &H02
 TWSR                             &H01
 TWBR                             &H00
+_ROMSIZE                         8192
+_CHIP                            17
 INT1                             7
 INT0                             6
 IVSEL                            1
@@ -286,7 +291,7 @@ CS12                             2
 CS11                             1
 CS10                             0
 FOC2                             7
-PWM2                             6
+PWM2BIT                          6
 WGM20                            6
 COM21                            5
 COM20                            4
@@ -467,6 +472,7 @@ AS2                              3
 TCN2UB                           2
 OCR2UB                           1
 TCR2UB                           0
+_RESET                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
 _GSTRBUF                         1056
@@ -479,17 +485,15 @@ _RTSCTS5                         0
 _RTSCTS6                         0
 _RTSCTS7                         0
 _RTSCTS8                         0
-_CHIP                            17
 _RAMSIZE                         1024
 _ERAMSIZE                        512
 _SIM                             0
 _HUGE                            0
 _BASE                            1
 _XTAL                            11059200
-_BUILD                           20781
+_BUILD                           20830
 _COMPILER                        90
 _HWMUL                           1
-_ROMSIZE                         8192
 _DOSFILEWRITE                    0
 _DOSDIRWRITE                     0
 _1WEXT                           0
@@ -497,8 +501,9 @@ _ADC_REFMODEL                    0
 _UARTS                           1
 _HWSTACKSTART                    1119
 _TIMEOUT                         0
-_PRDWORD                         0
 _PBIN_EXTENDED                   0
+_SPI_EXTENDED                    0
+_INPBIN_EXTENDED                 0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
@@ -506,6 +511,7 @@ _HWSTACK_LOW                     &H043F
 _SWSTACK_LOW                     &H0438
 _FRAME_HIGH                      &H0439
 _XMEGA                           0
+_XTINY                           0
 T1                               20
 T2                               30
 T3                               60
@@ -534,48 +540,8 @@ CEXPDIVOFFSET                    36
 --------------------------------------------------------------------------------
 Warnings:
 --------------------------------------------------------------------------------
-SP                               not used
-TCNT1                            not used
-OCR1A                            not used
-OCR1B                            not used
-ICR1                             not used
-EEAR                             not used
-ADC                              not used
-R0                               not used
-R1                               not used
-R2                               not used
-R3                               not used
-R4                               not used
-R5                               not used
-R6                               not used
-R7                               not used
-R8                               not used
-R9                               not used
-R10                              not used
-R11                              not used
-R12                              not used
-R13                              not used
-R14                              not used
-R15                              not used
-R16                              not used
-R17                              not used
-R18                              not used
-R19                              not used
-R20                              not used
-R21                              not used
-R22                              not used
-R23                              not used
-R24                              not used
-R25                              not used
-R26                              not used
-R27                              not used
-R28                              not used
-R29                              not used
-R30                              not used
-R31                              not used
 ADCD                             not used
 COMPARE1                         not used
-PWM1B                            not used
 PASSWORD                         not used
 Z                                not used
 P                                not used

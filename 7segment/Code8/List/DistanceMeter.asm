@@ -1,31 +1,34 @@
 
-;CodeVisionAVR C Compiler V2.05.3 Standard
-;(C) Copyright 1998-2011 Pavel Haiduc, HP InfoTech s.r.l.
+;CodeVisionAVR C Compiler V3.12 Advanced
+;(C) Copyright 1998-2014 Pavel Haiduc, HP InfoTech s.r.l.
 ;http://www.hpinfotech.com
 
-;Chip type                : ATmega8
-;Program type             : Application
-;Clock frequency          : 8.000000 MHz
-;Memory model             : Small
-;Optimize for             : Size
-;(s)printf features       : int, width
-;(s)scanf features        : int, width
-;External RAM size        : 0
-;Data Stack size          : 256 byte(s)
-;Heap size                : 0 byte(s)
-;Promote 'char' to 'int'  : Yes
-;'char' is unsigned       : Yes
-;8 bit enums              : Yes
-;Global 'const' stored in FLASH     : No
+;Build configuration    : Release
+;Chip type              : ATmega8
+;Program type           : Application
+;Clock frequency        : 8.000000 MHz
+;Memory model           : Small
+;Optimize for           : Size
+;(s)printf features     : int, width
+;(s)scanf features      : int, width
+;External RAM size      : 0
+;Data Stack size        : 256 byte(s)
+;Heap size              : 0 byte(s)
+;Promote 'char' to 'int': Yes
+;'char' is unsigned     : Yes
+;8 bit enums            : Yes
+;Global 'const' stored in FLASH: No
 ;Enhanced function parameter passing: Yes
-;Enhanced core instructions         : On
-;Smart register allocation          : On
-;Automatic register allocation      : On
+;Enhanced core instructions: On
+;Automatic register allocation for global variables: On
+;Smart register allocation: On
+
+	#define _MODEL_SMALL_
 
 	#pragma AVRPART ADMIN PART_NAME ATmega8
 	#pragma AVRPART MEMORY PROG_FLASH 8192
 	#pragma AVRPART MEMORY EEPROM 512
-	#pragma AVRPART MEMORY INT_SRAM SIZE 1119
+	#pragma AVRPART MEMORY INT_SRAM SIZE 1024
 	#pragma AVRPART MEMORY INT_SRAM START_ADDR 0x60
 
 	.LISTMAC
@@ -603,27 +606,40 @@ __DELAY_USW_LOOP:
 	.ENDM
 
 	.MACRO __CALL2EN
+	PUSH R26
+	PUSH R27
 	LDI  R26,LOW(@0+(@1))
 	LDI  R27,HIGH(@0+(@1))
 	RCALL __EEPROMRDW
+	POP  R27
+	POP  R26
+	ICALL
+	.ENDM
+
+	.MACRO __CALL2EX
+	SUBI R26,LOW(-@0)
+	SBCI R27,HIGH(-@0)
+	RCALL __EEPROMRDD
 	ICALL
 	.ENDM
 
 	.MACRO __GETW1STACK
-	IN   R26,SPL
-	IN   R27,SPH
-	ADIW R26,@0+1
-	LD   R30,X+
-	LD   R31,X
+	IN   R30,SPL
+	IN   R31,SPH
+	ADIW R30,@0+1
+	LD   R0,Z+
+	LD   R31,Z
+	MOV  R30,R0
 	.ENDM
 
 	.MACRO __GETD1STACK
-	IN   R26,SPL
-	IN   R27,SPH
-	ADIW R26,@0+1
-	LD   R30,X+
-	LD   R31,X+
-	LD   R22,X
+	IN   R30,SPL
+	IN   R31,SPH
+	ADIW R30,@0+1
+	LD   R0,Z+
+	LD   R1,Z+
+	LD   R22,Z
+	MOVW R30,R0
 	.ENDM
 
 	.MACRO __NBST
@@ -1130,6 +1146,8 @@ __GLOBAL_INI_TBL:
 _0xFFFFFFFF:
 	.DW  0
 
+#define __GLOBAL_INI_TBL_PRESENT 1
+
 __RESET:
 	CLI
 	CLR  R30
@@ -1257,6 +1275,7 @@ __GLOBAL_INI_END:
 
 	.CSEG
 _read_adc:
+; .FSTART _read_adc
 ; 0000 0025 ADMUX=adc_input | (ADC_VREF_TYPE & 0xff);
 	ST   -Y,R26
 ;	adc_input -> Y+0
@@ -1280,12 +1299,14 @@ _0x3:
 	IN   R31,0x4+1
 	RJMP _0x20A0001
 ; 0000 002E }
+; .FEND
 ;
 ;// Declare your global variables here
 ;
 ;void main(void)
 ; 0000 0033 {
 _main:
+; .FSTART _main
 ; 0000 0034 
 ; 0000 0035        const ir_distance_sensor GP2Y0A21YK = { 5461, -17, 2 };
 ; 0000 0036 unsigned int SensorVoltage;
@@ -1521,6 +1542,7 @@ _0xD:
 ; 0000 00A0 }
 _0xE:
 	RJMP _0xE
+; .FEND
 ;
 ;
 ;#include "GP2Y0A21.h"
@@ -1532,6 +1554,7 @@ _0xE:
 
 	.CSEG
 _ir_distance_calculate_cm:
+; .FSTART _ir_distance_calculate_cm
 ; 0001 0008 	if (adc_value + sensor.b <= 0)
 	RCALL SUBOPT_0x1
 ;	sensor -> Y+2
@@ -1569,6 +1592,7 @@ _0x20A0003:
 	ADIW R28,8
 	RET
 ; 0001 000E }
+; .FEND
 ;
 ;float calculate_distance(unsigned short adc_value)
 ; 0001 0011 {
@@ -1589,6 +1613,7 @@ _0x20A0003:
 
 	.CSEG
 _itoa:
+; .FSTART _itoa
 	RCALL SUBOPT_0x1
     ld   r26,y+
     ld   r27,y+
@@ -1641,6 +1666,7 @@ __itoa5:
     subi r22,-0x30
     st   x+,r22
     ret
+; .FEND
 
 	.DSEG
 
@@ -1661,6 +1687,7 @@ __itoa5:
 
 	.CSEG
 __lcd_write_nibble_G101:
+; .FSTART __lcd_write_nibble_G101
 	ST   -Y,R26
 	IN   R30,0x12
 	ANDI R30,LOW(0xF0)
@@ -1670,13 +1697,15 @@ __lcd_write_nibble_G101:
 	ANDI R30,0xF
 	OR   R30,R26
 	OUT  0x12,R30
-	__DELAY_USB 5
+	RCALL SUBOPT_0x3
 	SBI  0x12,6
-	__DELAY_USB 13
+	RCALL SUBOPT_0x3
 	CBI  0x12,6
-	__DELAY_USB 13
+	RCALL SUBOPT_0x3
 	RJMP _0x20A0001
+; .FEND
 __lcd_write_data:
+; .FSTART __lcd_write_data
 	ST   -Y,R26
 	LD   R26,Y
 	RCALL __lcd_write_nibble_G101
@@ -1687,7 +1716,9 @@ __lcd_write_data:
 	RCALL __lcd_write_nibble_G101
 	__DELAY_USB 133
 	RJMP _0x20A0001
+; .FEND
 _lcd_gotoxy:
+; .FSTART _lcd_gotoxy
 	ST   -Y,R26
 	LD   R30,Y
 	LDI  R31,0
@@ -1701,18 +1732,22 @@ _lcd_gotoxy:
 	LDD  R11,Y+0
 	ADIW R28,2
 	RET
+; .FEND
 _lcd_clear:
+; .FSTART _lcd_clear
 	LDI  R26,LOW(2)
-	RCALL SUBOPT_0x3
+	RCALL SUBOPT_0x4
 	LDI  R26,LOW(12)
 	RCALL __lcd_write_data
 	LDI  R26,LOW(1)
-	RCALL SUBOPT_0x3
+	RCALL SUBOPT_0x4
 	LDI  R30,LOW(0)
 	MOV  R11,R30
 	MOV  R8,R30
 	RET
+; .FEND
 _lcd_putchar:
+; .FSTART _lcd_putchar
 	ST   -Y,R26
 	LD   R26,Y
 	CPI  R26,LOW(0xA)
@@ -1737,7 +1772,9 @@ _0x2020004:
 	RCALL __lcd_write_data
 	CBI  0x12,4
 	RJMP _0x20A0001
+; .FEND
 _lcd_puts:
+; .FSTART _lcd_puts
 	RCALL SUBOPT_0x1
 	ST   -Y,R17
 _0x2020008:
@@ -1754,7 +1791,9 @@ _0x2020008:
 	RJMP _0x2020008
 _0x202000A:
 	RJMP _0x20A0002
+; .FEND
 _lcd_putsf:
+; .FSTART _lcd_putsf
 	RCALL SUBOPT_0x1
 	ST   -Y,R17
 _0x202000B:
@@ -1776,7 +1815,9 @@ _0x20A0002:
 	LDD  R17,Y+0
 	ADIW R28,3
 	RET
+; .FEND
 _lcd_init:
+; .FSTART _lcd_init
 	ST   -Y,R26
 	IN   R30,0x11
 	ORI  R30,LOW(0xF)
@@ -1797,9 +1838,9 @@ _lcd_init:
 	LDI  R26,LOW(20)
 	LDI  R27,0
 	RCALL _delay_ms
-	RCALL SUBOPT_0x4
-	RCALL SUBOPT_0x4
-	RCALL SUBOPT_0x4
+	RCALL SUBOPT_0x5
+	RCALL SUBOPT_0x5
+	RCALL SUBOPT_0x5
 	LDI  R26,LOW(32)
 	RCALL __lcd_write_nibble_G101
 	__DELAY_USW 200
@@ -1815,6 +1856,7 @@ _lcd_init:
 _0x20A0001:
 	ADIW R28,1
 	RET
+; .FEND
 
 	.CSEG
 
@@ -1829,7 +1871,7 @@ __base_y_G101:
 	.BYTE 0x4
 
 	.CSEG
-;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:31 WORDS
+;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:19 WORDS
 SUBOPT_0x0:
 	LDI  R31,0
 	SUBI R30,LOW(-_sev*2)
@@ -1854,15 +1896,20 @@ SUBOPT_0x2:
 	LDD  R27,Y+1
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
+;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:2 WORDS
 SUBOPT_0x3:
+	__DELAY_USB 13
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+SUBOPT_0x4:
 	RCALL __lcd_write_data
 	LDI  R26,LOW(3)
 	LDI  R27,0
 	RJMP _delay_ms
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:8 WORDS
-SUBOPT_0x4:
+SUBOPT_0x5:
 	LDI  R26,LOW(48)
 	RCALL __lcd_write_nibble_G101
 	__DELAY_USW 200

@@ -1,0 +1,47 @@
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+serial                                                                            0x0160       4
+d                                                                                 0x0164      16
+_base_y                                                                           0x0174       4
+
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+a                                                                                 R2.0      1bit
+_lcd_x                                                                            R5           1
+_lcd_y                                                                            R4           1
+_lcd_maxx                                                                         R7           1
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+PcdReset                                                                          0x0005B     28
+PcdAntennaOn                                                                      0x00077     10
+PcdAntennaOff                                                                     0x00081      3
+PcdRequest                                                                        0x00084     51
+PcdAnticoll                                                                       0x000B7     63
+PcdHalt                                                                           0x000F6     34
+PcdComMF522                                                                       0x00118    172
+CalulateCRC                                                                       0x001C4     50
+WriteRawRC                                                                        0x001F6     11
+ReadRawRC                                                                         0x00201     12
+SetBitMask                                                                        0x0020D      3
+ClearBitMask                                                                      0x00210     10
+rd_serial                                                                         0x0021A     45
+reset_mfrc                                                                        0x00247      8
+main                                                                              0x0024F     85
+_lcd_write_nibble_G100                                                            0x002A4     31
+_lcd_write_data                                                                   0x002C3     12
+lcd_clear                                                                         0x002CF     10
+lcd_init                                                                          0x002D9     42
+spi                                                                               0x00303      8
+put_buff_G102                                                                     0x0030B     45
+_print_G102                                                                       0x00338    279
+sprintf                                                                           0x0044F     41
+strlen                                                                            0x00478     11
+strlenf                                                                           0x00483     12

@@ -1,21 +1,37 @@
-RAM Allocation
-Variable                                                          Address   Size
---------------------------------------------------------------------------------
-_seed                                                             0x0160       4
-_base_y                                                           0x0164       4
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+_seed                                                                             0x0160       4
+_base_y                                                                           0x0164       4
 
-EEPROM Allocation
-Variable                                                          Address   Size
---------------------------------------------------------------------------------
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
 
 Register Allocation
-Variable                                                          Register  Size
---------------------------------------------------------------------------------
-a                                                                 R5           1
-b                                                                 R4           1
-c                                                                 R7           1
-d                                                                 R6           1
-i                                                                 R9           1
-_lcd_x                                                            R8           1
-_lcd_y                                                            R11          1
-_lcd_maxx                                                         R10          1
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+a                                                                                 R5           1
+b                                                                                 R4           1
+c                                                                                 R7           1
+d                                                                                 R6           1
+i                                                                                 R9           1
+_lcd_x                                                                            R8           1
+_lcd_y                                                                            R11          1
+_lcd_maxx                                                                         R10          1
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+read_adc                                                                          0x0005B     13
+main                                                                              0x00068    121
+ir_distance_calculate_cm                                                          0x000E1     26
+itoa                                                                              0x000FB     45
+_lcd_write_nibble_G101                                                            0x00128     15
+_lcd_write_data                                                                   0x00137     12
+lcd_gotoxy                                                                        0x00143     13
+lcd_clear                                                                         0x00150     10
+lcd_putchar                                                                       0x0015A     21
+lcd_puts                                                                          0x0016F     14
+lcd_putsf                                                                         0x0017D     18
+lcd_init                                                                          0x0018F     42

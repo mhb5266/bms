@@ -1,6 +1,6 @@
 Report       : RC522-BascomV11
-Date         : 11-15-2021
-Time         : 14:50:19
+Date         : 02-19-2022
+Time         : 12:21:41
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 194C hex  -> Will fit into ROM
-ROMIMAGE     :  6476 dec
-FLASH USED   :  79  %
+ROMIMAGE     : 1494 hex  -> Will fit into ROM
+ROMIMAGE     :  5268 dec
+FLASH USED   :  64  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  769  dec
+Space left   :  774  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -92,32 +92,32 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-RC522_BUFFER                     Byte(18)          0065          101 
-RC522_INBUFFER                   Byte(18)          0077          119 
-TAG_TYP                          Word              0089          137 
-TAG_TYPA                         Byte(2)           0089          137 
-TAG_IDW                          Dword             008B          139 
-TAG_ID                           Byte(4)           008B          139 
-TAG_CRC                          Byte              008F          143 
-TEXTBYTE                         Byte(16)          0090          144 
-TEXT                             String * 16       0090          144 
-TAG_FOUNT                        Byte              00A0          160 
-STATUS                           Byte              00A1          161 
-LASTBITS                         Byte              00A2          162 
-BACKLENG                         Byte              00A3          163 
-ERROR1                           Byte              00A4          164 
-CRC_LOW                          Byte              00A5          165 
-CRC_HIGH                         Byte              00A6          166 
-GEYMA_LONG                       Long              00A7          167 
-GEYMAT_ARR                       Byte(10)          00AB          171 
-S2                               String * 2        00B5          181 
-CRC32_LONG                       Long              00B8          184 
-CRC16_WORD                       Word              00BC          188 
-LONGG                            Long              00BE          190 
-SECTOR_ONE                       String * 16       00C2          194 
-SECTOR_TWO                       String * 16       00D3          211 
-SECTOR_TREE                      String * 16       00E4          228 
-STR_DATA_16                      String * 16       00F5          245 
+RC522_BUFFER                     Byte(18)          0060          96 
+RC522_INBUFFER                   Byte(18)          0072          114 
+TAG_TYP                          Word              0084          132 
+TAG_TYPA                         Byte(2)           0084          132 
+TAG_IDW                          Dword             0086          134 
+TAG_ID                           Byte(4)           0086          134 
+TAG_CRC                          Byte              008A          138 
+TEXTBYTE                         Byte(16)          008B          139 
+TEXT                             String * 16       008B          139 
+TAG_FOUNT                        Byte              009B          155 
+STATUS                           Byte              009C          156 
+LASTBITS                         Byte              009D          157 
+BACKLENG                         Byte              009E          158 
+ERROR1                           Byte              009F          159 
+CRC_LOW                          Byte              00A0          160 
+CRC_HIGH                         Byte              00A1          161 
+GEYMA_LONG                       Long              00A2          162 
+GEYMAT_ARR                       Byte(10)          00A6          166 
+S2                               String * 2        00B0          176 
+CRC32_LONG                       Long              00B3          179 
+CRC16_WORD                       Word              00B7          183 
+LONGG                            Long              00B9          185 
+SECTOR_ONE                       String * 16       00BD          189 
+SECTOR_TWO                       String * 16       00CE          206 
+SECTOR_TREE                      String * 16       00DF          223 
+STR_DATA_16                      String * 16       00F0          240 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -490,10 +490,6 @@ _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
 _XTINY                           0
-_GLCD_PORT                       &H12
-_GLCD_PORT_DDR                   &H11
-_GLCD_PORT_IN                    &H10
-_GLCD_PORTM                      &H15
 READ_WRITE                       1
 _SPI_SS                          &H18
 _SPI_SSP                         2
