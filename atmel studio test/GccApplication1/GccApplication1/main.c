@@ -11,7 +11,7 @@
 
 
 //
-//#define led PORTD.6
+//#define led PORTD.6 
 //DDRD=(0<<DDD7) | (1<<DDD6) | (0<<DDD5) | (0<<DDD4) | (0<<DDD3) | (0<<DDD2) | (0<<DDD1) | (0<<DDD0);
 int main(void)
 {
@@ -20,6 +20,8 @@ int main(void)
     {
 		
 		//led=~led;
+		//1<<led;
+		//1<<PORTD.6;
 		//1<<PORTD.6;
 		_delay_ms(1000);	
     }
