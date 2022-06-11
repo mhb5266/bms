@@ -166,7 +166,7 @@ Main:
               Light(i) = Dark
           Next
        End If
-')
+')     reset en
 
        If Wantid = 0 Then
               If Timer1 > Light(1) Then Set Out1 Else Reset Out1
@@ -295,7 +295,7 @@ Return
 Rx:
 
 
-
+      reset en
       Incr F
       Inputbin Maxin
 

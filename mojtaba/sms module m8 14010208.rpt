@@ -1,6 +1,6 @@
-Report       : relay m14
-Date         : 04-28-2022
-Time         : 15:31:06
+Report       : sms module m8 14010208
+Date         : 05-01-2022
+Time         : 18:10:27
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 1BE0 hex  -> Will fit into ROM
-ROMIMAGE     :  7136 dec
-FLASH USED   :  87  %
+ROMIMAGE     : 394 hex  -> Will fit into ROM
+ROMIMAGE     :  916 dec
+FLASH USED   :  11  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,14 +21,14 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  808  dec
+Space left   :  922  dec
 
-LCD DB7      : PORTB.7
-LCD DB6      : PORTB.6
-LCD DB5      : PORTB.5
-LCD DB4      : PORTB.4
-LCD E        : PORTB.3
-LCD RS       : PORTB.2
+LCD DB7      : PORTC.5
+LCD DB6      : PORTC.4
+LCD DB5      : PORTC.3
+LCD DB4      : PORTC.2
+LCD E        : PORTC.0
+LCD RS       : PORTC.1
 LCD mode     :  4  bit
 
 --------------------------------------------------------------------------------
@@ -92,68 +92,10 @@ COMPARE1                         Word              004A          74
 PWM1B                            Word              0048          72 
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
-2SEC                             Word              0060          96 
-F                                Byte              0062          98 
-M                                Byte              0063          99 
-TBLANK                           Byte              0064          100 
-P                                Word              0065          101 
-TEST                             Byte              0067          103 
-WANTID                           Bit [7]           0068          104 
-GOTID                            Bit [6]           0068          104 
-OUTS                             Dword             0069          105 
-EOUTNUM                          EEPROM Byte(14)   0000          0 
-EOUTID1                          EEPROM Byte(14)   000E          14 
-EOUTID2                          EEPROM Byte(14)   001C          28 
-EOUTID3                          EEPROM Byte(14)   002A          42 
-OUTID1                           Byte(14)          006D          109 
-OUTID2                           Byte(14)          007B          123 
-OUTID3                           Byte(14)          0089          137 
-SENARIO1                         EEPROM Byte       0038          56 
-SENARIO2                         EEPROM Byte       0039          57 
-SENARIO3                         EEPROM Byte       003A          58 
-SENARIO4                         EEPROM Byte       003B          59 
-SENARIO                          Byte              0097          151 
-EOUTS                            EEPROM Byte(14)   003C          60 
-IDGOT                            EEPROM Byte       004A          74 
-D                                Byte              0098          152 
-TEMPID                           Byte              0099          153 
-STATUS                           Byte              009A          154 
-EFIRST                           EEPROM Byte       004B          75 
-TOGGLEKEY                        Bit [5]           0068          104 
-IDWASGOT                         Bit [4]           0068          104 
-TYP                              Byte              009B          155 
-CMD                              Byte              009C          156 
-ID                               Byte              009D          157 
-I                                Byte              009E          158 
-J                                Byte              009F          159 
-K                                Byte              00A0          160 
-MAXIN                            Byte              00A1          161 
-A                                Byte              00A2          162 
-REPLY                            Byte              00A3          163 
-KEYIDS                           Byte              00A4          164 
-EKEYIDS                          EEPROM Byte       004C          76 
-COUNTERID                        Byte              00A5          165 
-BASEID                           Byte              00A6          166 
-MINID                            Byte              00A7          167 
-MAXID                            Byte              00A8          168 
-TEMPONID                         Byte(14)          00A9          169 
-TEMPONTIME                       Word(14)          00B7          183 
-TEMPON                           Bit [3]           0068          104 
-WANTNUM                          Bit [2]           0068          104 
-SYCID                            Bit [1]           0068          104 
-SETID                            Byte              00D3          211 
-DIN                              Byte(5)           00D4          212 
-Z                                Byte              00D9          217 
-ONOFF                            Bit [0]           0068          104 
-TIMEOUT                          Bit [7]           00DA          218 
-SENDOK                           Bit [6]           00DA          218 
-INOK                             Bit [5]           00DA          218 
-LIGHT                            Byte              00DB          219 
-LEARNOK                          Bit [4]           00DA          218 
-BLANK                            Bit [3]           00DA          218 
-IDBLANK                          Byte              00DC          220 
-DIRECT                           Byte              00DD          221 
-ENDBIT                           Byte              00DE          222 
+ANSWER                           String * 10       0060          96 
+RX                               Byte              006B          107 
+AA                               Byte              006C          108 
+I                                Byte              006D          109 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -526,36 +468,24 @@ _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
 _XTINY                           0
-STOPALL                          1
-NORMAL                           2
-REFRESHALL                       3
-RESETALL                         4
-ALLID                            99
-RELAYMODULE                      110
-PWMMODULE                        111
-TOMASTER                         252
-TOOUTPUT                         232
-TOINPUT                          242
-READALLINPUT                     1
-READ1INPUT                       2
-LEARNKEY                         3
-ENABLEBUZ                        4
-DISABLEBUZ                       5
-ENABLESENSOR                     6
-DISABLESENSOR                    7
-ENABLEINPUT                      8
-DISABLEINPUT                     9
-READSTEPS                        10
-LEARNSTEPS                       11
-ENABLESTEP                       12
-DISABLESTEP                      13
-READSENARIO                      14
-READREMOTE                       15
-KEYIN                            101
-STEPS                            102
-REMOTE                           104
-RELAYMODULES                     110
-MYTYP                            110
+_LCDDB7                          &H15
+_LCDDB7_PIN                      5
+_LCDDB7DIR                       &H14
+_LCDDB6                          &H15
+_LCDDB6_PIN                      4
+_LCDDB6DIR                       &H14
+_LCDDB5                          &H15
+_LCDDB5_PIN                      3
+_LCDDB5DIR                       &H14
+_LCDDB4                          &H15
+_LCDDB4_PIN                      2
+_LCDDB4DIR                       &H14
+_LCDDBE                          &H15
+_LCDDBE_PIN                      0
+_LCDDBEDIR                       &H14
+_LCDDBRS                         &H15
+_LCDDBRS_PIN                     1
+_LCDDBRSDIR                      &H14
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -579,22 +509,5 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-TEST                             not used
-D                                not used
-TEMPID                           not used
-TOGGLEKEY                        not used
-IDWASGOT                         not used
-A                                not used
-REPLY                            not used
-KEYIDS                           not used
-EKEYIDS                          not used
-WANTNUM                          not used
-SYCID                            not used
-SETID                            not used
-Z                                not used
-ONOFF                            not used
-TIMEOUT                          not used
-SENDOK                           not used
-LIGHT                            not used
-LEARNOK                          not used
+AA                               not used
 

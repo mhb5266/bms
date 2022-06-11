@@ -762,7 +762,7 @@ int main(void)
  434:	e1 f7       	brne	.-8      	; 0x42e <__LOCK_REGION_LENGTH__+0x2e>
  436:	00 c0       	rjmp	.+0      	; 0x438 <__LOCK_REGION_LENGTH__+0x38>
  438:	00 00       	nop
-		   Lcd4_Shift_Left();
+		   //PORTB.0=1;
 	   }
 	   for(i=0;i<15;i++)
 	   {
@@ -770,10 +770,10 @@ int main(void)
 		   Lcd4_Shift_Right();
  43a:	d1 df       	rcall	.-94     	; 0x3de <Lcd4_Shift_Right>
  43c:	21 97       	sbiw	r28, 0x01	; 1
-	   for(i=0;i<15;i++)
 	   {
 		   _delay_ms(500);
 		   Lcd4_Shift_Left();
+		   //PORTB.0=1;
 	   }
 	   for(i=0;i<15;i++)
  43e:	a1 f7       	brne	.-24     	; 0x428 <__LOCK_REGION_LENGTH__+0x28>

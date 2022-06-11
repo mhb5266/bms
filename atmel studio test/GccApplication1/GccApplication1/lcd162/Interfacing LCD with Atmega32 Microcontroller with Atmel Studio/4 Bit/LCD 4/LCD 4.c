@@ -34,6 +34,7 @@ int main(void)
 	   {
 		   _delay_ms(500);
 		   Lcd4_Shift_Left();
+		   //PORTB.0=1;
 	   }
 	   for(i=0;i<15;i++)
 	   {
