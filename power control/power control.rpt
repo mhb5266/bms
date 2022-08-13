@@ -1,6 +1,6 @@
 Report       : power control
-Date         : 05-26-2022
-Time         : 10:04:10
+Date         : 06-15-2022
+Time         : 18:10:27
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 986 hex  -> Will fit into ROM
-ROMIMAGE     :  2438 dec
-FLASH USED   :  29  %
+ROMIMAGE     : 9EA hex  -> Will fit into ROM
+ROMIMAGE     :  2538 dec
+FLASH USED   :  30  %
 BAUD         : 9600 Baud
 XTAL         : 1000000 Hz
 BAUD error   : 0.16%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  886  dec
+Space left   :  822  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -98,12 +98,16 @@ ADCIN                            Dword             0063          99
 VIN                              Single            0067          103 
 IN1                              Single            006B          107 
 IN2                              Single            006F          111 
-BACKUP                           Single            0073          115 
-VOLT                             String * 5        0077          119 
-V                                String(3) * 5     007D          125 
-TEST                             Byte              008F          143 
-MOVE                             Bit [7]           0090          144 
-T                                Byte              0091          145 
+ING                              Single            0073          115 
+MIN1                             Single(5)         0077          119 
+MIN2                             Single(5)         008B          139 
+MING                             Single(5)         009F          159 
+BACKUP                           Single            00B3          179 
+VOLT                             String * 5        00B7          183 
+V                                String(3) * 5     00BD          189 
+TEST                             Byte              00CF          207 
+MOVE                             Bit [7]           00D0          208 
+T                                Byte              00D1          209 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -501,4 +505,6 @@ ADCD                             not used
 COMPARE1                         not used
 B                                not used
 BACKUP                           not used
+TEST                             not used
+T                                not used
 

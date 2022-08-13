@@ -238,7 +238,7 @@ Startup:
 '   print "AT&F"
 '   flushbuf
 
-       do
+       Do
          answer=""
          'cleanbuf
          print "ATE0"

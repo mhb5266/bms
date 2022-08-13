@@ -4,7 +4,7 @@ $crystal=1000000
 configs:
 config lcdpin=pin;db7=portb.7;db6=portb.6;db5=portb.5;db4=portb.4;enable=portb.3;rs=portb.2
 
-CONFIG ADC = single, PRESCALER = AUto
+CONFIG ADC = free, PRESCALER = AUto
 
 config timer1=timer ,prescale=1
 
@@ -17,7 +17,7 @@ config timer1=timer ,prescale=1
 
 pg alias portd.7:config portd.7 =output
 
-startt alias portd.0:config portd.0=OUTPUT
+startt alias portb.0:config portb.0=OUTPUT
 l1k1 alias portd.1:config portd.1=OUTPUT
 l2k2 alias portd.2:config portd.2=OUTPUT
 l1g alias portd.3:config portd.3=OUTPUT
@@ -33,6 +33,12 @@ dim adcin as dword
 dim vin as single
 dim in1 as single
 dim in2 as single
+dim ing as single
+
+dim min1(5) as single
+dim min2(5) as single
+dim ming(5) as single
+
 dim backup as  single
 dim volt as string*5
 dim v(3) as string*5
@@ -55,23 +61,57 @@ start timer1
 main:
 
    do
+         for i=1 to 5
+           adcin=getadc(0)
+           calvolt
+           v(1)=volt
+           min1(i)=vin
 
-      for t=0 to 2
-         adcin=getadc(t)
+           adcin=getadc(1)
+           calvolt
+           v(2)=volt
+           min2(i)=vin
+
+           adcin=getadc(2)
+           calvolt
+           v(3)=volt
+           ming(i) =vin
+           waitms 200
+         next
+
+         'for i=1 to 10
+             in1=max (min1)
+             in2=max (min2)
+             ing=max(ming)
+         'next
+
+         in1=in1/10
+         in2=in2/10
+         ing=ing/10
+'(
+         adcin=getadc(0)
          calvolt
-         v(t+1)=volt
-         if t=0 then in1=vin
-         if t=1 then in2=vin
-      next
+         v(1)=volt
+         in1=vin
 
+         adcin=getadc(1)
+         calvolt
+         v(2)=volt
+         in2=vin
 
-      if in1>200 and in1<230 then
+         adcin=getadc(2)
+         calvolt
+         v(3)=volt
+         ing =vin
+   ')
+
+      if in1>170 and in1<230 then
          set l1k1
       else
          reset l1k1
       end if
 
-      if in2>200 and in2<230 then
+      if in2>170 and in2<230 then
          set l2k2
       else
          reset l2k2
@@ -82,18 +122,18 @@ main:
          set move
       end if
       incr i
-      if i=10 then
+      'if i=20 then
          i=0
          home
-         lcd v(1);" V ":lcd v(2);" V "
+         lcd v(2);" 1 ";v(1);" 2 "
          lowerline
-         lcd v(3);" V "
+         lcd v(3);" 3 "
 
-         incr test
-         if test=10 then
+         'incr test
+         'if test=5 then
             toggle pg
-         end if
-      end if
+         'end if
+      'end if
 
 
 
