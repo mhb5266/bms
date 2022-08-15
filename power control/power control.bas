@@ -1,8 +1,8 @@
-$regfile="m8def.dat"
+$regfile = "m16def.dat"
 $crystal=1000000
 
 configs:
-config lcdpin=pin;db7=portb.7;db6=portb.6;db5=portb.5;db4=portb.4;enable=portb.3;rs=portb.2
+Config Lcdpin = Pin ; Db7 = Portb.5 ; Db6 = Portb.4 ; Db5 = Portb.3 ; Db4 = Portb.2 ; Enable = Portb.1 ; Rs = Portb.0
 
 CONFIG ADC = free, PRESCALER = AUto
 
@@ -17,20 +17,22 @@ config timer1=timer ,prescale=1
 
 pg alias portd.7:config portd.7 =output
 
-startt alias portb.0:config portb.0=OUTPUT
-l1k1 alias portd.1:config portd.1=OUTPUT
-l2k2 alias portd.2:config portd.2=OUTPUT
-l1g alias portd.3:config portd.3=OUTPUT
-l2g alias portd.4:config portd.4=OUTPUT
-sw alias portd.5:config portd.5=OUTPUT
+Startt Alias Portd.5 : Config Portd.5 = Output
+L1k1 Alias Portd.0 : Config Portd.0 = Output
+L2k2 Alias Portd.2 : Config Portd.2 = Output
+L1g Alias Portd.1 : Config Portd.1 = Output
+L2g Alias Portd.3 : Config Portd.3 = Output
+Sw Alias Portd.4 : Config Portd.4 = Output
+
+Buzzer Alias Portd.6 : Config Portd.6 = Output
 
 defines:
 
 
-dim b as byte
+Dim B As Byte
 dim i as word
 dim adcin as dword
-dim vin as single
+Dim Vin As Single
 dim in1 as single
 dim in2 as single
 dim ing as single
@@ -43,10 +45,13 @@ dim backup as  single
 dim volt as string*5
 dim v(3) as string*5
 
-declare sub calvolt
+Declare Sub Calvolt
+Declare Sub Startgen
+Declare Sub Readvolt
+Declare Sub Showvolt
 
 dim test as byte
-dim move as Boolean
+Dim Move As Byte
 dim t as byte
 
    cls
@@ -58,25 +63,37 @@ start ADC
 timer1=0
 start timer1
 
+Set Buzzer
+Waitms 500
+Reset Sw
+Reset Buzzer
+'(
+Portd = 0
+Wait 2
+Set Sw
+Wait 1
+Reset Sw
+Set Startt
+Wait 1
+Reset Startt
+Set L1k1
+Wait 1
+Reset L1k1
+Set L2k2
+Wait 1
+Reset L2k2
+Set L1g
+Wait 1
+Reset L1g
+Set L2g
+Wait 1
+Reset L2g
+  ')
 main:
 
-   do
+   Do
          for i=1 to 5
-           adcin=getadc(0)
-           calvolt
-           v(1)=volt
-           min1(i)=vin
-
-           adcin=getadc(1)
-           calvolt
-           v(2)=volt
-           min2(i)=vin
-
-           adcin=getadc(2)
-           calvolt
-           v(3)=volt
-           ming(i) =vin
-           waitms 200
+             Readvolt
          next
 
          'for i=1 to 10
@@ -85,16 +102,19 @@ main:
              ing=max(ming)
          'next
 
-         in1=in1/10
-         in2=in2/10
-         ing=ing/10
+         'in1=in1/10
+         'in2=in2/10
+         'ing=ing/10
+         In1 = Val(v(1))
+         In2 = Val(v(2))
+         Ing = Val(v(3))
 '(
          adcin=getadc(0)
          calvolt
          v(1)=volt
          in1=vin
 
-         adcin=getadc(1)
+         Adcin = Getadc(1)
          calvolt
          v(2)=volt
          in2=vin
@@ -105,33 +125,44 @@ main:
          ing =vin
    ')
 
-      if in1>170 and in1<230 then
-         set l1k1
-      else
-         reset l1k1
-      end if
+      If In1 > 170 And In1 < 250 Then
+         If L1g = 1 Then
+            Wait 3
+            Reset L1g
+         End If
+         Set L1k1
+      Else
+         Reset L1k1
+      End If
 
-      if in2>170 and in2<230 then
-         set l2k2
-      else
-         reset l2k2
-      end if
+      If In2 > 170 And In2 < 250 Then
+         If L2g = 1 Then
+            Wait 3
+            Reset L2g
+         End If
+         Set L2k2
+      Else
+         Reset L2k2
+      End If
 
-      if l1k1=0 or l2k2=0 then
-         set sw
-         set move
+      If L1k1 = 0 Or L2k2 = 0 Then
+         If Move = 0 Then
+            Move = 1
+            Gosub Startgen
+         End If
+      Else
+          Reset Sw
+          Reset Startt
+          Move = 0
       end if
       incr i
       'if i=20 then
          i=0
-         home
-         lcd v(2);" 1 ";v(1);" 2 "
-         lowerline
-         lcd v(3);" 3 "
+         Showvolt
 
          'incr test
          'if test=5 then
-            toggle pg
+           ' toggle pg
          'end if
       'end if
 
@@ -155,6 +186,64 @@ intisr:
 
 
 
-return
+Return
 
-end
+
+Sub Startgen
+    I = 0
+    Do
+      If Move = 2 Then Exit Do
+      Set Sw
+      Wait 3
+      Set Startt
+      Wait 1
+      Reset Startt
+
+      Wait 2
+
+           Readvolt
+           Showvolt
+
+
+             Ing = Val(v(3))
+
+           If Ing > 170 And Ing < 250 Then
+              Move = 2
+              If L1k1 = 0 Then Set L1g
+              If L2k2 = 0 Then Set L2g
+              Exit Do
+           End If
+
+           Incr I
+    Loop Until I > 5
+
+End Sub
+
+Sub Readvolt
+           adcin=getadc(0)
+           calvolt
+           v(1)=volt
+           min1(i)=vin
+
+           Adcin = Getadc(2)
+           calvolt
+           v(2)=volt
+           min2(i)=vin
+
+           Adcin = Getadc(1)
+           Calvolt
+           V(3) = Volt
+           Ming(i) = Vin
+           Waitms 200
+
+End Sub
+
+Sub Showvolt
+
+         home
+         Lcd V(1) ; " 1 " ; V(2) ; " 2"
+         lowerline
+         Lcd V(3) ; " G "
+
+End Sub
+End
