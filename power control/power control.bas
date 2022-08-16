@@ -34,7 +34,7 @@ dim i as word
 dim adcin as dword
 Dim Vin As Single
 dim in1 as single
-dim in2 as single
+Dim In2 As Single
 dim ing as single
 
 dim min1(5) as single
@@ -130,7 +130,10 @@ main:
             Wait 3
             Reset L1g
          End If
-         Set L1k1
+         If L1k1 = 0 Then
+            Wait 3
+            Set L1k1
+         End If
       Else
          Reset L1k1
       End If
@@ -140,7 +143,10 @@ main:
             Wait 3
             Reset L2g
          End If
-         Set L2k2
+         If L2k2 = 0 Then
+            Wait 3
+            Set L2k2
+         End If
       Else
          Reset L2k2
       End If
@@ -149,6 +155,13 @@ main:
          If Move = 0 Then
             Move = 1
             Gosub Startgen
+         End If
+         If Ing > 170 And Ing < 250 Then
+              If Move = 2 Then
+                 If L1k1 = 0 Then Set L1g
+                 If L2k2 = 0 Then Set L2g
+              End If
+
          End If
       Else
           Reset Sw
@@ -193,10 +206,12 @@ Sub Startgen
     I = 0
     Do
       If Move = 2 Then Exit Do
+      Reset Sw
+      Wait 1
       Set Sw
       Wait 3
       Set Startt
-      Wait 1
+      Wait 3
       Reset Startt
 
       Wait 2
@@ -216,7 +231,13 @@ Sub Startgen
 
            Incr I
     Loop Until I > 5
+    If I > 5 Then
+       Cls
+       Lcd "Genarator ERR"
+       Do
 
+       Loop
+    End If
 End Sub
 
 Sub Readvolt
