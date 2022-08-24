@@ -1,6 +1,6 @@
 Report       : power control
-Date         : 08-16-2022
-Time         : 13:51:44
+Date         : 08-24-2022
+Time         : 17:32:30
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M16
@@ -8,11 +8,11 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : E3A hex  -> Will fit into ROM
-ROMIMAGE     :  3642 dec
-FLASH USED   :  22  %
+ROMIMAGE     : 1C6A hex  -> Will fit into ROM
+ROMIMAGE     :  7274 dec
+FLASH USED   :  44  %
 BAUD         : 9600 Baud
-XTAL         : 1000000 Hz
+XTAL         : 8000000 Hz
 BAUD error   : 0.16%
 
 Stack start  : 45F hex
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  822  dec
+Space left   :  810  dec
 
 LCD DB7      : PORTB.5
 LCD DB6      : PORTB.4
@@ -93,22 +93,33 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-B                                Byte              0060          96 
-I                                Word              0061          97 
-ADCIN                            Dword             0063          99 
-VIN                              Single            0067          103 
-IN1                              Single            006B          107 
-IN2                              Single            006F          111 
-ING                              Single            0073          115 
-MIN1                             Single(5)         0077          119 
-MIN2                             Single(5)         008B          139 
-MING                             Single(5)         009F          159 
-BACKUP                           Single            00B3          179 
-VOLT                             String * 5        00B7          183 
-V                                String(3) * 5     00BD          189 
-TEST                             Byte              00CF          207 
-MOVE                             Byte              00D0          208 
-T                                Byte              00D1          209 
+IN1OK                            Bit [7]           0060          96 
+IN2OK                            Bit [6]           0060          96 
+INGOK                            Bit [5]           0060          96 
+B                                Byte              0061          97 
+X                                Byte              0062          98 
+I                                Word              0063          99 
+ADCIN                            Dword             0065          101 
+VIN                              Single            0069          105 
+IN1                              Word              006D          109 
+IN2                              Word              006F          111 
+ING                              Word              0071          113 
+MIN1                             Single(5)         0073          115 
+MIN2                             Single(5)         0087          135 
+MING                             Single(5)         009B          155 
+BACKUP                           Single            00AF          175 
+VOLT                             String * 5        00B3          179 
+V                                String(3) * 5     00B9          185 
+TIMES                            Byte              00CB          203 
+ETIMES                           EEPROM Byte       0000          0 
+ORDER                            String * 10       00CC          204 
+TURN                             Byte              00D7          215 
+MOVE                             Byte              00D8          216 
+T                                Byte              00D9          217 
+BEEPTIME                         Byte              00DA          218 
+T20MS                            Byte              00DB          219 
+TOUCH                            Byte              00DC          220 
+GEN                              Byte              00DD          221 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -491,7 +502,7 @@ _ERAMSIZE                        512
 _SIM                             0
 _HUGE                            0
 _BASE                            1
-_XTAL                            1000000
+_XTAL                            8000000
 _BUILD                           20830
 _COMPILER                        90
 _HWMUL                           1
@@ -536,8 +547,8 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-B                                not used
 BACKUP                           not used
-TEST                             not used
+TURN                             not used
+MOVE                             not used
 T                                not used
 

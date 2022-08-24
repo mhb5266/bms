@@ -1,21 +1,23 @@
 $regfile = "m16def.dat"
-$crystal=1000000
+$crystal = 8000000
 
 configs:
 Config Lcdpin = Pin ; Db7 = Portb.5 ; Db6 = Portb.4 ; Db5 = Portb.3 ; Db4 = Portb.2 ; Enable = Portb.1 ; Rs = Portb.0
+Cursor Off
+Config Adc = Free , Prescaler = Auto
 
-CONFIG ADC = free, PRESCALER = AUto
+Config Timer1 = Timer , Prescale = 256
 
-config timer1=timer ,prescale=1
-
-'enable interrupts
-'enable int0
-'on int0 intisr
+Enable Interrupts
+Enable Ovf1
+On Ovf1 T1isr
+'Enable Int0
+'On Int0 Intisr
 'config int0=FALLING
 '
 'trig alias pind.2:config portd.2=INPUT
 
-pg alias portd.7:config portd.7 =output
+Pg Alias Portd.7 : Config Portd.7 = Output
 
 Startt Alias Portd.5 : Config Portd.5 = Output
 L1k1 Alias Portd.0 : Config Portd.0 = Output
@@ -24,20 +26,32 @@ L1g Alias Portd.1 : Config Portd.1 = Output
 L2g Alias Portd.3 : Config Portd.3 = Output
 Sw Alias Portd.4 : Config Portd.4 = Output
 
-Buzzer Alias Portd.6 : Config Portd.6 = Output
 
-defines:
+Led1 Alias Portc.3 : Config Portc.3 = Output
+Led2 Alias Portc.2 : Config Portc.0 = Output
+Led3 Alias Portc.1 : Config Portc.1 = Output
+Led4 Alias Portc.0 : Config Portc.2 = Output
 
+key1 Alias Pinc.6 : Config Portc.6 = Input
+key2 Alias Pinc.5 : Config Portc.5 = Input
+Key3 Alias Pinc.4 : Config Portc.4 = Input
+Key4 Alias Pinc.7 : Config Portc.7 = Input
 
+buz Alias Portd.6 : Config Portd.6 = Output
+
+Defines:
+
+Dim In1ok As Bit : Dim In2ok As Bit : Dim Ingok As Bit
 Dim B As Byte
-dim i as word
+Dim X As Byte
+Dim I As Word
 dim adcin as dword
 Dim Vin As Single
-dim in1 as single
-Dim In2 As Single
-dim ing as single
+Dim In1 As Word
+Dim In2 As Word
+Dim Ing As Word
 
-dim min1(5) as single
+Dim Min1(5) As Single
 dim min2(5) as single
 dim ming(5) as single
 
@@ -45,201 +59,314 @@ dim backup as  single
 dim volt as string*5
 dim v(3) as string*5
 
+Dim Times As Byte
+Dim Etimes As Eram Byte
+
 Declare Sub Calvolt
 Declare Sub Startgen
 Declare Sub Readvolt
 Declare Sub Showvolt
+Declare Sub Readkeys
+Declare Sub Beep
+Declare Sub Errorbeep
+Declare Sub Lbeep
+Declare Sub Findorder
+Declare Sub Resetall
 
-dim test as byte
+
+
+Dim Order As String * 10
+Dim Turn As Byte
 Dim Move As Byte
-dim t as byte
+Dim T As Byte
+Dim Beeptime As Byte
+Dim T20ms As Byte
 
+Dim Touch As Byte
+Dim Gen As Byte
+
+
+Startup:
+
+If Etimes > 10 Or Etimes = 0 Then
+   Etimes = 2
+   Times = Etimes
+End If
    cls
-    lcd "hi"
-    wait 1
+    Lcd " Em  Electronic "
+    Wait 3
     cls:waitms 500
-start ADC
+Start Adc
 
-timer1=0
+Timer1 = 64910
 start timer1
 
-Set Buzzer
-Waitms 500
+Set Buz
+Beeptime = 10
 Reset Sw
-Reset Buzzer
-'(
-Portd = 0
-Wait 2
-Set Sw
-Wait 1
-Reset Sw
-Set Startt
-Wait 1
-Reset Startt
-Set L1k1
-Wait 1
-Reset L1k1
-Set L2k2
-Wait 1
-Reset L2k2
-Set L1g
-Wait 1
-Reset L1g
-Set L2g
-Wait 1
-Reset L2g
-  ')
-main:
+
+Do
+  Touch = 0
+  Readkeys
+  If Touch = 0 Then Exit Do
+Loop
+
+Main:
 
    Do
-         for i=1 to 5
-             Readvolt
-         next
 
-         'for i=1 to 10
-             in1=max (min1)
-             in2=max (min2)
-             ing=max(ming)
-         'next
+     Readkeys
+     If Order = "" Then Order = "auto"
+     Findorder
 
-         'in1=in1/10
-         'in2=in2/10
-         'ing=ing/10
-         In1 = Val(v(1))
-         In2 = Val(v(2))
-         Ing = Val(v(3))
-'(
-         adcin=getadc(0)
-         calvolt
-         v(1)=volt
-         in1=vin
+     If Touch > 0 Then
+        'Home : Lcd Touch
+          Select Case Touch
 
-         Adcin = Getadc(1)
-         calvolt
-         v(2)=volt
-         in2=vin
+                 Case 1
+                      'Set Led1 : Reset Led2 : Reset Led3 : Reset Led4
+                      Order = "stop"
+                 Case 2
+                     ' Reset Led1 : Set Led2 : Reset Led3 : Reset Led4
+                      Order = "auto"
+                 Case 3
+                      Order = "run "
+                     ' Reset Led1 : Reset Led2 : Set Led3 : Reset Led4
+                 Case 4
+                      Order = "test"
+                     ' Reset Led1 : Reset Led2 : Reset Led3 : Set Led4
+                 Case 11
 
-         adcin=getadc(2)
-         calvolt
-         v(3)=volt
-         ing =vin
-   ')
+                 Case 22
 
-      If In1 > 170 And In1 < 250 Then
-         If L1g = 1 Then
-            Wait 3
-            Reset L1g
-         End If
-         If L1k1 = 0 Then
-            Wait 3
-            Set L1k1
-         End If
-      Else
-         Reset L1k1
-      End If
+                 Case 33
+                      Order = "starttime"
+                 Case 44
+                      Order = "gomenu"
+          End Select
+          Findorder
 
-      If In2 > 170 And In2 < 250 Then
-         If L2g = 1 Then
-            Wait 3
-            Reset L2g
-         End If
-         If L2k2 = 0 Then
-            Wait 3
-            Set L2k2
-         End If
-      Else
-         Reset L2k2
-      End If
-
-      If L1k1 = 0 Or L2k2 = 0 Then
-         If Move = 0 Then
-            Move = 1
-            Gosub Startgen
-         End If
-         If Ing > 170 And Ing < 250 Then
-              If Move = 2 Then
-                 If L1k1 = 0 Then Set L1g
-                 If L2k2 = 0 Then Set L2g
-              End If
-
-         End If
-      Else
-          Reset Sw
-          Reset Startt
-          Move = 0
-      end if
-      incr i
-      'if i=20 then
-         i=0
-         Showvolt
-
-         'incr test
-         'if test=5 then
-           ' toggle pg
-         'end if
-      'end if
-
-
-
+          Touch = 0
+     End If
+     Cls
    loop
 
+Sub Findorder
+    Readkeys
+    Select Case Order
+           Case "stop"
+                 Set Led1 : Reset Led2 : Reset Led3 : Reset Led4
+                 Resetall
+
+           Case "auto"
+                 Reset Led1 : Set Led2 : Reset Led3 : Reset Led4
+                 Do
+                   Readvolt
+                   Showvolt
+                   If In1ok = 1 Then Set L1k1 Else Reset L1k1
+                   If In2ok = 1 Then Set L2k2 Else Reset L2k2
+                   If In1ok = 1 And In2ok = 1 Then
+                      Reset Sw : Reset Startt
+                   End If
+                   If In1ok = 0 Or In2ok = 0 Then
+                      Startgen
+
+                      If Ingok = 1 And Gen = 1 Then
+                         Order = "rungen"
+                         'Lcd Order : Lowerline : Lcd Gen : Wait 2 : Cls
+                         Exit Do
+                      End If
+                   End If
 
 
 
-sub calvolt
-      vin=adcin
-      vin=vin/0.0033
-      vin=vin*0.633
-      vin=vin/132
-      vin=vin*1.14
-      volt=fusing(vin,"##.#")
-end sub
+                   Readkeys
+                   If Touch > 0 Then Exit Do
+                 Loop
+           Case "run "
+                 Reset Led1 : Reset Led2 : Set Led3 : Reset Led4
+                 'Startgen
+                 Order = "runn"
+           Case "test"
+                 Reset Led1 : Reset Led2 : Reset Led3 : Set Led4
+                 Startgen
+                 Order = "testt"
+           Case "gomenu"
 
-intisr:
+           Case "starttime"
+                 Do
+                   Home
+                   Lcd "Start Time= " ; Times ; " s   "
+                   If Key1 = 0 Then Decr Times
+                   If Key2 = 0 Then Incr Times
+                   If Key1 = 0 Or Key2 = 0 Or Key3 = 0 Or Key4 = 0 Then
+                      Set Buz
+                      Do
+                        Waitms 50
+                        If Key1 = 1 Or Key2 = 1 Or Key3 = 1 Or Key4 = 1 Then Exit Do
+                      Loop
+                   End If
+                   Reset Buz
+                   If Key4 = 0 Then
+                      Etimes = Times : Waitms 50 : Exit Do
+                   End If
+                   If Times = 0 Then Times = 10
+                   If Times = 11 Then Times = 1
+                   Waitms 50
+                 Loop
+
+           Case "rungen"
+                 Do
+                   Readvolt
+                   Showvolt
+                   If In1ok = 0 And Ingok = 1 Then
+                      Reset L1k1
+                      Set L1g
+                   Else
+                      Reset L1g
+                   End If
+                   If In2ok = 0 And Ingok = 1 Then
+                      Reset L2k2
+                      Set L2g
+                   Else
+                      Reset L2g
+                   End If
+                   If In1ok = 1 And In2ok = 1 Then
+
+                      For B = 1 To 10
+                        Readvolt
+                        Cls
+                        Lcd "V1= " ; In1 ; " v    "
+                        Lowerline
+                        Lcd "V2= " ; In2 ; " v   "
+                        Wait 1
+                      Next
+                      If In1ok = 1 And In2ok = 1 Then
+
+                         Reset Sw
+                         Reset Startt
+                         Order = "auto"
+                         Cls : Lcd "Generator = OFF" : Wait 3 : Cls
+                         Exit Do
+                      End If
+                   End If
+                   Readkeys
+                   If Touch > 0 Then Exit Do
+                 Loop
 
 
-
-Return
-
-
-Sub Startgen
-    I = 0
-    Do
-      If Move = 2 Then Exit Do
-      Reset Sw
-      Wait 1
-      Set Sw
-      Wait 3
-      Set Startt
-      Wait 3
-      Reset Startt
-
-      Wait 2
-
-           Readvolt
-           Showvolt
-
-
-             Ing = Val(v(3))
-
-           If Ing > 170 And Ing < 250 Then
-              Move = 2
-              If L1k1 = 0 Then Set L1g
-              If L2k2 = 0 Then Set L2g
-              Exit Do
-           End If
-
-           Incr I
-    Loop Until I > 5
-    If I > 5 Then
-       Cls
-       Lcd "Genarator ERR"
-       Do
-
-       Loop
-    End If
+    End Select
+    'Order = ""
 End Sub
 
+
+Sub Resetall
+    Reset Sw
+    Reset Startt
+    Reset L1k1
+    Reset L2k2
+    Reset L1g
+    Reset L2g
+    Cls : Lcd " Outputs are Off " : Wait 3
+    Order = "stopp"
+End Sub
+
+
+
+Sub Readkeys
+
+    If Key1 = 0 Then
+       Set Buz
+       I = 0
+       Do
+         Incr I
+         Waitms 20
+         If I = 20 Then Exit Do
+       Loop Until Key1 = 1
+       If I < 10 Then
+          Beep
+          Touch = 1
+       End If
+       If I >= 19 Then
+          Lbeep
+          Touch = 11
+       End If
+    End If
+
+    If Key2 = 0 Then
+       Set Buz
+       I = 0
+       Do
+         Incr I
+         Waitms 20
+         If I = 20 Then Exit Do
+       Loop Until Key2 = 1
+       If I < 10 Then
+          Beep
+          Touch = 2
+       End If
+       If I >= 19 Then
+          Lbeep
+          Touch = 22
+       End If
+    End If
+
+    If Key3 = 0 Then
+       Set Buz
+       I = 0
+       Do
+         Incr I
+         Waitms 20
+         If I = 20 Then Exit Do
+       Loop Until Key3 = 1
+       If I < 10 Then
+          Beep
+          Touch = 3
+       End If
+       If I >= 19 Then
+          Lbeep
+          Touch = 33
+       End If
+    End If
+
+    If Key4 = 0 Then
+       Set Buz
+       I = 0
+       Do
+         Incr I
+         Waitms 20
+         If I = 20 Then Exit Do
+       Loop Until Key4 = 1
+       If I < 10 Then
+          Beep
+          Touch = 4
+       End If
+       If I >= 19 Then
+          Lbeep
+          Touch = 44
+       End If
+    End If
+
+
+End Sub
+
+Sub Beep
+    Set Buz
+    Beeptime = 2
+
+End Sub
+
+Sub Lbeep
+    Set Buz
+    Beeptime = 10
+
+End Sub
+
+
+Sub Errorbeep
+    Set Buz
+    Beeptime = 8
+End Sub
 Sub Readvolt
            adcin=getadc(0)
            calvolt
@@ -255,16 +382,178 @@ Sub Readvolt
            Calvolt
            V(3) = Volt
            Ming(i) = Vin
+
+
+           In1 = Val(v(1)):
+           In2 = Val(v(2))
+           Ing = Val(v(3))
+
+
+           If In1 > 170 And In1 < 250 Then In1ok = 1 Else In1ok = 0
+           If In2 > 170 And In2 < 250 Then In2ok = 1 Else In2ok = 0
+           If Ing > 170 And Ing < 250 Then Ingok = 1 Else Ingok = 0
+
+           If In1ok = 1 And In2ok = 1 And Ingok = 0 Then
+              In1 = In1 - 9
+              In2 = In2 - 9
+           End If
+           If In1ok = 0 And In2ok = 1 And Ingok = 1 Then
+              Ing = Ing - 9
+              In2 = In2 - 9
+           End If
+           If In1ok = 1 And In2ok = 0 And Ingok = 1 Then
+              In1 = In1 - 9
+              Ing = Ing - 9
+           End If
+           If In1ok = 1 And In2ok = 0 And Ingok = 0 Then
+              In1 = In1 - 22
+           End If
+           If In1ok = 0 And In2ok = 1 And Ingok = 0 Then
+              In2 = In2 - 22
+           End If
+           If In1ok = 0 And In2ok = 0 And Ingok = 1 Then
+              Ing = Ing - 22
+           End If
            Waitms 200
 
 End Sub
 
-Sub Showvolt
+Sub Calvolt
+      Vin = Adcin
+      vin=vin/0.0033
+      vin=vin*0.633
+      vin=vin/132
+      vin=vin*1.14
+      Volt = Fusing(vin , "##.#")
+End Sub
 
-         home
-         Lcd V(1) ; " 1 " ; V(2) ; " 2"
-         lowerline
-         Lcd V(3) ; " G "
+T1isr:
+      Stop Timer1
+
+           'Touch = 0
+           'Readkeys
+           'If Touch > 0 Then Findorder
+           Incr T20ms
+           If Beeptime > 0 Then
+              Decr Beeptime
+              If Beeptime = 0 Then
+                 Reset Buz
+              End If
+           End If
+           If T20ms = 50 Then
+
+           End If
+
+      Timer1 = 64910
+      Start Timer1
+Return
+
+
+Sub Startgen
+    I = 0
+    Cls : Lcd " Generator Run  " : Lowerline : Lcd Order
+    Do
+      Touch = 0
+      Readkeys
+      If Touch = 0 Then Exit Do
+    Loop
+    Do
+      Incr I
+      Reset Sw
+      Cls : Lcd "switch= reset"
+      For B = 0 To 20
+          Waitms 50
+          Readkeys
+          If Touch > 0 Then
+             Cls : Lcd "Stop Testing"
+                Exit Do
+          End If
+      Next
+      Set Sw
+      Cls : Lcd "switch= set"
+      For B = 0 To 80
+          Waitms 50
+          Readkeys
+          If Touch > 0 Then
+             Cls : Lcd "Stop Testing"
+                Exit Do
+          End If
+      Next
+      Set Startt
+      Cls : Lcd "start= set"
+      Wait Times
+      X = Times
+      X = Times * 20
+      For B = 0 To 20
+          Waitms 50
+          Readkeys
+          If Touch > 0 Then
+             Cls : Lcd "Stop Testing"
+                Exit Do
+          End If
+      Next
+      Reset Startt
+      Cls : Lcd "start= reset" : Lowerline : Lcd "Test Voltage"
+      For B = 0 To 100
+          Waitms 50
+          Readkeys
+          If Touch > 0 Then
+             Cls : Lcd "Stop Testing"
+                Exit Do
+          End If
+      Next
+      For B = 0 To 10
+          Order = "run"
+          Readvolt
+          Showvolt
+          Waitms 500
+      Next
+      If Ingok = 1 Then
+         Cls : Lcd "It Is OK"
+         Gen = 1
+         Exit Do
+      End If
+      If I = 4 Then
+         Cls : Lcd "Generator ERROR"
+         Order = "auto"
+         Gen = 2
+         Exit Do
+      End If
+    Loop
+    Wait 1
+    Cls
+End Sub
+
+
+
+Sub Showvolt
+    If Order = "auto" Or Order = "rungen" Then
+         Home
+         If In1ok = 1 And In2ok = 1 Then
+            Lcd "V1= " ; In1 ; " v    "
+            Lowerline
+            Lcd "V2= " ; In2 ; " v   "
+         End If
+         If In1ok = 0 And In2ok = 1 Then
+            Lcd "V2= " ; In2 ; " v    "
+            Lowerline
+            Lcd "VG= " ; Ing ; " v   "
+         End If
+         If In1ok = 1 And In2ok = 0 Then
+            Lcd "V1= " ; In1 ; " v    "
+            Lowerline
+            Lcd "VG= " ; Ing ; " v   "
+         End If
+         'Lcd V(3) ; " G "
+    End If
+    If Order = "run" Then
+
+         Cls
+         Lcd "Voltage Test"
+         Lowerline
+         Lcd "VG= " ; Ing ; " v    "
+
+    End If
 
 End Sub
 End
