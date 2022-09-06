@@ -181,7 +181,17 @@ Sub Findorder
                       End If
                    End If
 
-
+                   If In1ok = 0 And In2ok = 0 And Ingok = 0 Then
+                      Home : Lcd "Power Is off"
+                      Reset L1k1
+                      Wait 1
+                      Reset L2k2
+                      Wait 1
+                      Reset L1g
+                      Wait 1
+                      Reset L2g
+                      Wait 1
+                   End If
 
                    Readkeys
                    If Touch > 0 Then Exit Do
@@ -224,9 +234,10 @@ Sub Findorder
                    Showvolt
                    If In1ok = 0 And Ingok = 1 Then
                       Reset L1k1
+                      Wait 1
                       Set L1g
                       Wait 1
-                   Else
+                   Elseif L1k1 = 0 Then
                       X = 0
                       For B = 0 To 10
                         Readvolt
@@ -237,13 +248,19 @@ Sub Findorder
                         Wait 1
                         If In1ok = 1 Then Incr X
                       Next
-                      If X > 9 Then Reset L1g
+                      If X > 9 Then
+                         Reset L1g
+                         Wait 1
+                         Set L1k1
+                         Wait 1
+                      End If
                    End If
                    If In2ok = 0 And Ingok = 1 Then
                       Reset L2k2
+                      Wait 1
                       Set L2g
                       wait 1
-                   Else
+                   Elseif L2k2 = 0 Then
                       X = 0
                       For B = 0 To 10
                         Readvolt
@@ -254,7 +271,22 @@ Sub Findorder
                         Wait 1
                         If In2ok = 1 Then Incr X
                       Next
-                      If X > 9 Then Reset L2g
+                      If X > 9 Then
+                         Reset L2g
+                         Wait 1
+                         Set L2k2
+                         Wait 1
+                      End If
+                   End If
+                   If In1ok = 0 And In2ok = 0 And Ingok = 0 Then
+                      Reset L1k1
+                      Wait 1
+                      Reset L2k2
+                      Wait 1
+                      Reset L1g
+                      Wait 1
+                      Reset L2g
+                      Wait 1
                    End If
                    If In1ok = 1 And In2ok = 1 Then
                       X = 0
@@ -559,7 +591,7 @@ T1isr:
            If T20ms = 50 Then
 
            End If
-
+      'Cursor Off
       Timer1 = 64910
       Start Timer1
 Return
@@ -620,6 +652,7 @@ Sub Startgen
       Next
       Reset Startt
       Cls : Lcd "start= OFF" : Lowerline : Lcd "Test Voltage"
+      Wait 5
       For B = 0 To 100
           Waitms 50
           Readkeys
@@ -663,7 +696,7 @@ End Sub
 
 
 Sub Showvolt
-    Cursor Off
+    Waitms 300
     If Order = "auto" Or Order = "rungen" Then
          Home
          If In1ok = 1 And In2ok = 1 Then
