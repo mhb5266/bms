@@ -1,7 +1,7 @@
 $regfile = "m16def.dat"
 $crystal = 1000000
 
-configs:
+Configs:
 Config Lcdpin = Pin ; Db7 = Portb.5 ; Db6 = Portb.4 ; Db5 = Portb.3 ; Db4 = Portb.2 ; Enable = Portb.1 ; Rs = Portb.0
 Cursor Off
 Cls
@@ -33,12 +33,12 @@ Led2 Alias Portc.2 : Config Portc.0 = Output
 Led3 Alias Portc.1 : Config Portc.1 = Output
 Led4 Alias Portc.0 : Config Portc.2 = Output
 
-key1 Alias Pinc.6 : Config Portc.6 = Input
-key2 Alias Pinc.5 : Config Portc.5 = Input
+Key1 Alias Pinc.6 : Config Portc.6 = Input
+Key2 Alias Pinc.5 : Config Portc.5 = Input
 Key3 Alias Pinc.4 : Config Portc.4 = Input
 Key4 Alias Pinc.7 : Config Portc.7 = Input
 
-buz Alias Portd.6 : Config Portd.6 = Output
+Buz Alias Portd.6 : Config Portd.6 = Output
 
 Defines:
 
@@ -46,19 +46,19 @@ Dim In1ok As Bit : Dim In2ok As Bit : Dim Ingok As Bit
 Dim B As Byte
 Dim X As Byte
 Dim I As Word
-dim adcin as dword
+Dim Adcin As Dword
 Dim Vin As Single
 Dim In1 As Word
 Dim In2 As Word
 Dim Ing As Word
 
 Dim Min1(5) As Single
-dim min2(5) as single
-dim ming(5) as single
+Dim Min2(5) As Single
+Dim Ming(5) As Single
 
-dim backup as  single
-dim volt as string*5
-dim v(3) as string*5
+Dim Backup As Single
+Dim Volt As String * 5
+Dim V(3) As String * 5
 
 Dim Times As Byte
 Dim Etimes As Eram Byte
@@ -96,11 +96,11 @@ End If
    Cls
     Lcd " Em  Electronic "
     Wait 3
-    cls:waitms 500
+    Cls : Waitms 500
 Start Adc
 
 Timer1 = 64910
-start timer1
+Start Timer1
 
 Set Buz
 Wait 1
@@ -182,7 +182,7 @@ Sub Findorder
                    End If
 
                    If In1ok = 0 And In2ok = 0 And Ingok = 0 Then
-                      Wait 1   :Home : Lcd "Power Is off"
+                      Wait 1 : Home : Lcd "Power Is off"
                       Reset L1k1
                       'Wait 1
                       Reset L2k2
@@ -287,7 +287,7 @@ Sub Findorder
                       X = 0
                       For B = 1 To 10
                         Readvolt
-                        wait 1
+                        Wait 1
 
                         Cls
                         Lcd "V1= " ; In1 ; " v Test"
@@ -302,10 +302,9 @@ Sub Findorder
                          Reset Sw
                          Reset Startt
                          Order = "auto"
-                         wait 1
+                         Wait 1
                             Cls : Lcd "Generator = OFF"
-                            Wait 3 : Cls
-                         Exit Do
+                            wait 2
                       End If
                    End If
                    For I = 1 To 50
@@ -489,15 +488,15 @@ Sub Errorbeep
     Beeptime = 8
 End Sub
 Sub Readvolt
-           adcin=getadc(0)
-           calvolt
-           v(1)=volt
-           min1(i)=vin
+           Adcin = Getadc(0)
+           Calvolt
+           V(1) = Volt
+           Min1(i) = Vin
 
            Adcin = Getadc(2)
-           calvolt
-           v(2)=volt
-           min2(i)=vin
+           Calvolt
+           V(2) = Volt
+           Min2(i) = Vin
 
            Adcin = Getadc(1)
            Calvolt
@@ -541,10 +540,10 @@ End Sub
 
 Sub Calvolt
       Vin = Adcin
-      vin=vin/0.0033
+      Vin = Vin / 0.0033
       Vin = Vin * 0.633
-      vin=vin/132
-      vin=vin*1.14
+      Vin = Vin / 132
+      Vin = Vin * 1.14
       Volt = Fusing(vin , "##.#")
 End Sub
 
@@ -576,7 +575,19 @@ Sub Startgen
     If Ingok = 1 Then
        Wait 3
        Cls : Lcd "Generator Is ON"
-       Wait 3
+       Wait 1
+       If In1ok = 0 Then
+          Reset L1k1
+          Waitms 500
+          Set L1g
+          Waitms 500
+       End If
+       If In2ok = 0 Then
+          Reset L2k2
+          Waitms 500
+          Set L2g
+          Waitms 500
+       End If
        Cls
        Return
     End If
