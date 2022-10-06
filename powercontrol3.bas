@@ -227,6 +227,7 @@ Sub Findorder
                        Waitms 20
                        Readkeys
                        If Touch > 0 Then
+
                           Exit Do
                        End If
                    Next
@@ -235,7 +236,16 @@ Sub Findorder
            Case "test"
                  Reset Led1 : Reset Led2 : Reset Led3 : Set Led4
                  Startgen
-                 Order = "testt"
+                 Do
+                   Readvolt
+                   Showvolt
+                   For I = 1 To 50
+                       Readkeys
+                       If Touch > 0 Then
+                          Exit Do
+                       End If
+                   Next
+                 Loop
            Case "gomenu"
 
 
@@ -350,6 +360,7 @@ End Sub
 
 
 Sub Resetall
+    Initlcd
     Reset Sw
     Reset Startt
     Reset L1k1
@@ -734,7 +745,7 @@ Sub Showvolt
          End If
          'Lcd V(3) ; " G "
     End If
-    If Order = "run" Then
+    If Order = "run" Or Order = "test" Then
 
          Cls
          Lcd "Voltage Test"
