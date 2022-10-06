@@ -129,7 +129,7 @@ Main:
                  Case 2
                       Order = "auto"
                  Case 3
-                      Order = "run"
+                      Order = "run "
                  Case 4
                       Order = "test"
              End Select
@@ -152,20 +152,20 @@ Sub Findorder
            Case "auto"
                  Reset Led1 : Set Led2 : Reset Led3 : Reset Led4
                  Do
-
+                   If Order = "rungen" Then Exit Do
                    Readvolt
                    Showvolt
                    If In1ok = 1 Then
                       Set L1k1
                    Else
                        Reset L1k1
-                       Wait 2
+                       Wait 1
                    End If
                    If In2ok = 1 Then
                       Set L2k2
                    Else
                        Reset L2k2
-                       Wait 2
+                       Wait 1
                    End If
                    If In1ok = 1 And In2ok = 1 Then
                       Reset Sw : Reset Startt
@@ -184,13 +184,13 @@ Sub Findorder
                    If In1ok = 0 And In2ok = 0 And Ingok = 0 Then
                       Wait 1 : Home : Lcd "Power Is off"
                       Reset L1k1
-                      'Wait 1
+                      Wait 1
                       Reset L2k2
-                      'Wait 1
+                      Wait 1
                       Reset L1g
-                      'Wait 1
+                      Wait 1
                       Reset L2g
-                      'Wait 1
+                      Wait 1
                    End If
                    For I = 1 To 50
                        Waitms 20
@@ -203,7 +203,35 @@ Sub Findorder
            Case "run "
                  Reset Led1 : Reset Led2 : Set Led3 : Reset Led4
                  Startgen
-                 Order = "runn"
+                 Do
+                   Readvolt
+                   Showvolt
+                   If Ingok = 1 Then
+                      Reset L1k1
+                      Wait 1
+                      Set L1g
+                      Wait 1
+                      Reset L2k2
+                      Wait 1
+                      Set L2g
+                      Wait 1
+                   End If
+                   If Ingok = 0 Then
+                      Reset L1g
+                      Wait 1
+                      Reset L2g
+                      Wait 1
+                      Exit Do
+                   End If
+                   For I = 1 To 50
+                       Waitms 20
+                       Readkeys
+                       If Touch > 0 Then
+                          Exit Do
+                       End If
+                   Next
+                 Loop
+
            Case "test"
                  Reset Led1 : Reset Led2 : Reset Led3 : Set Led4
                  Startgen
@@ -219,9 +247,9 @@ Sub Findorder
                    Showvolt
                    If In1ok = 0 And Ingok = 1 Then
                       Reset L1k1
-                      'Wait 3
+                      Wait 1
                       Set L1g
-                      'Wait 3
+                      Wait 1
                    Elseif L1k1 = 0 And In1ok = 1 Then
                       X = 0
                       For B = 0 To 10
@@ -232,7 +260,7 @@ Sub Findorder
                         Cls
                         Lcd "V1= " ; In1 ; " v Test"
                         Lowerline
-                        Lcd "Vg= " ; Ing ; " v   "
+                        Lcd "VG= " ; Ing ; " v   "
 
                         Wait 1
                         If In1ok = 1 Then Incr X
@@ -240,16 +268,16 @@ Sub Findorder
                       Next
                       If X > 9 Then
                          Reset L1g
-                         Wait 3
+                         Wait 1
                          Set L1k1
-                         Wait 3
+                         Wait 1
                       End If
                    End If
                    If In2ok = 0 And Ingok = 1 Then
                       Reset L2k2
-                      'Wait 3
+                      Wait 1
                       Set L2g
-                      'Wait 3
+                      Wait 1
                    Elseif L2k2 = 0 And In2ok = 1 Then
                       X = 0
                       For B = 0 To 10
@@ -260,7 +288,7 @@ Sub Findorder
                         Cls
                         Lcd "V2= " ; In2 ; " v Test"
                         Lowerline
-                        Lcd "Vg= " ; Ing ; " v   "
+                        Lcd "VG= " ; Ing ; " v   "
 
                         Wait 1
                         If In2ok = 1 Then Incr X
@@ -304,7 +332,8 @@ Sub Findorder
                          Order = "auto"
                          Wait 1
                             Cls : Lcd "Generator = OFF"
-                            wait 2
+                            Wait 2
+                            Exit Do
                       End If
                    End If
                    For I = 1 To 50
@@ -329,6 +358,13 @@ Sub Resetall
     Reset L2g
     Wait 1 : Cls : Lcd " Outputs are Off " : Wait 3
     Order = "stopp"
+    Cls
+    Lcd "Press Any Key"
+    Do
+      Readkeys
+      If Touch > 0 Then Exit Do
+    Loop
+    Findorder
 End Sub
 
 
@@ -575,19 +611,8 @@ Sub Startgen
     If Ingok = 1 Then
        Wait 3
        Cls : Lcd "Generator Is ON"
+       Order = "rungen"
        Wait 1
-       If In1ok = 0 Then
-          Reset L1k1
-          Waitms 500
-          Set L1g
-          Waitms 500
-       End If
-       If In2ok = 0 Then
-          Reset L2k2
-          Waitms 500
-          Set L2g
-          Waitms 500
-       End If
        Cls
        Return
     End If
@@ -621,7 +646,7 @@ Sub Startgen
           End If
       Next
       Set Startt
-      Cls : Lcd "start= ON "
+      Cls : Lcd "Start ->ON "
       Lowerline
       'Lcd Times
       Wait Times
@@ -636,7 +661,7 @@ Sub Startgen
           End If
       Next
       Reset Startt
-      Cls : Lcd "start= OFF" : Lowerline : Lcd "Test Voltage"
+      Cls : Lcd "Start ->OFF" : Lowerline : Lcd "Test Voltage"
       Wait 5
       For B = 0 To 100
           Waitms 50

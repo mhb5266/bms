@@ -1,6 +1,6 @@
 Report       : powercontrol3
-Date         : 10-05-2022
-Time         : 02:49:47
+Date         : 10-06-2022
+Time         : 15:05:15
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M16
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : 1E72 hex  -> Will fit into ROM
-ROMIMAGE     :  7794 dec
-FLASH USED   :  47  %
+ROMIMAGE     : 1F72 hex  -> Will fit into ROM
+ROMIMAGE     :  8050 dec
+FLASH USED   :  49  %
 BAUD         : 9600 Baud
 XTAL         : 1000000 Hz
 BAUD error   : 0.16%
