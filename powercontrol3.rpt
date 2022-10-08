@@ -1,6 +1,6 @@
 Report       : powercontrol3
-Date         : 10-06-2022
-Time         : 15:15:46
+Date         : 10-08-2022
+Time         : 20:33:53
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M16
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : 1FDA hex  -> Will fit into ROM
-ROMIMAGE     :  8154 dec
-FLASH USED   :  49  %
+ROMIMAGE     : 2526 hex  -> Will fit into ROM
+ROMIMAGE     :  9510 dec
+FLASH USED   :  58  %
 BAUD         : 9600 Baud
 XTAL         : 1000000 Hz
 BAUD error   : 0.16%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  810  dec
+Space left   :  808  dec
 
 LCD DB7      : PORTB.5
 LCD DB6      : PORTB.4
@@ -110,16 +110,18 @@ MING                             Single(5)         009B          155
 BACKUP                           Single            00AF          175 
 VOLT                             String * 5        00B3          179 
 V                                String(3) * 5     00B9          185 
-TIMES                            Byte              00CB          203 
+TS                               Byte              00CB          203 
+TG                               Byte              00CC          204 
+TIMES                            Byte              00CD          205 
 ETIMES                           EEPROM Byte       0000          0 
-ORDER                            String * 10       00CC          204 
-TURN                             Byte              00D7          215 
-MOVE                             Byte              00D8          216 
-T                                Byte              00D9          217 
-BEEPTIME                         Byte              00DA          218 
-T20MS                            Byte              00DB          219 
-TOUCH                            Byte              00DC          220 
-GEN                              Byte              00DD          221 
+ORDER                            String * 10       00CE          206 
+TURN                             Byte              00D9          217 
+MOVE                             Byte              00DA          218 
+T                                Byte              00DB          219 
+BEEPTIME                         Byte              00DC          220 
+T20MS                            Byte              00DD          221 
+TOUCH                            Byte              00DE          222 
+GEN                              Byte              00DF          223 
 
 --------------------------------------------------------------------------------
 Constant                         Value
