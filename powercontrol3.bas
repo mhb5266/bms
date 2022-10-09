@@ -119,7 +119,7 @@ Initlcd
  Wait 1
  Cls
  Lcd "start time= " : Lcd Ts : Lcd " s   "
- Wait 3
+ Wait 1
 
   Cls
  Lcd "ENTER TEST TIME" : Lowerline : Lcd Tg ; "   "
@@ -141,13 +141,13 @@ Initlcd
  Wait 1
  Cls
  Lcd "Test time= " : Lcd Tg : Lcd " s  "
- Wait 3
+ Wait 1
 
-Times = Etimes : Wait 20
-If Times > 10 Or Times = 0 Then
-   Etimes = 2
-   Times = Etimes
-End If
+'Times = Etimes : Wait 20
+'If Times > 10 Or Times = 0 Then
+ '  Etimes = 2
+ '  Times = Etimes
+'End If
 
 Start Adc
 
