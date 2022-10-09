@@ -93,6 +93,12 @@ Dim Gen As Byte
 Startup:
 Initlcd
  Wait 5
+
+    Cls
+    Lcd " Em  Electronic "
+    Wait 3
+    Cls : Waitms 500
+
  Cls
  Lcd "ENTER start time" : Lowerline : Lcd Ts
  I = 0
@@ -103,7 +109,7 @@ Initlcd
    If Touch = 1 Then Decr Ts
    Waitms 100
    Home
-   Lcd "ENTER start time" : Lowerline : Lcd Ts
+   Lcd "ENTER start time" : Lowerline : Lcd Ts ; "   "
    If Ts > 9 Then Ts = 1
    If Ts = 0 Then Ts = 9
    If Touch = 2 Then Exit Do
@@ -112,11 +118,11 @@ Initlcd
  Loop
  Wait 1
  Cls
- Lcd "start time= " : Lcd Ts : Lcd " s"
+ Lcd "start time= " : Lcd Ts : Lcd " s   "
  Wait 3
 
   Cls
- Lcd "ENTER TEST TIME" : Lowerline : Lcd Tg
+ Lcd "ENTER TEST TIME" : Lowerline : Lcd Tg ; "   "
  I = 0
  Do
    Readkeys
@@ -125,7 +131,7 @@ Initlcd
    If Touch = 1 Then Decr Tg
    Waitms 100
    Home
-   Lcd "ENTER Test time" : Lowerline : Lcd Tg
+   Lcd "ENTER Test time" : Lowerline : Lcd Tg ; "   "
    If Tg > 30 Then Ts = 1
    If Tg = 0 Then Ts = 30
    If Touch = 2 Then Exit Do
@@ -134,7 +140,7 @@ Initlcd
  Loop
  Wait 1
  Cls
- Lcd "Test time= " : Lcd Ts : Lcd " s  "
+ Lcd "Test time= " : Lcd Tg : Lcd " s  "
  Wait 3
 
 Times = Etimes : Wait 20
@@ -142,10 +148,7 @@ If Times > 10 Or Times = 0 Then
    Etimes = 2
    Times = Etimes
 End If
-   Cls
-    Lcd " Em  Electronic "
-    Wait 3
-    Cls : Waitms 500
+
 Start Adc
 
 Timer1 = 64910
@@ -380,9 +383,9 @@ Sub Findorder
                       Next
                       If X > 9 Then
                          Reset L1g
-                         Wait 1
+                         Wait 3
                          Set L1k1
-                         Wait 1
+                         Wait 3
                       End If
                    End If
                    If In2ok = 0 And Ingok = 1 Then
@@ -792,26 +795,25 @@ Sub Startgen
           End If
       Next
       Reset Startt
-      Cls : Lcd "Start ->OFF" : Lowerline : Lcd "Test Voltage"
+      Cls : Lcd "Start ->OFF" : Lowerline : Lcd "Test Voltage" : Wait 1
 
-      For B = 0 To 100
-          Waitms 50
+
+      X = 0
+      If Tg > 30 Then Tg = 30
+      Times = Tg
+      Do
+        Cls
+        Lcd Times
+        Decr Times
+        Wait 1
           Readkeys
           If Touch > 0 Then
              Cls : Lcd "Stop Running"
                 Exit Do
           End If
-      Next
-      X = 0
-      If Tg > 30 Then Tg = 30
-      Times = Tg
-      Do
-      Cls
-      Lcd Times
-      Decr Times
-      Wait 1
-      If Times = 0 Then Exit Do
+        If Times = 0 Then Exit Do
       Loop
+
       For B = 0 To 10
           Order = "run"
           Readvolt
