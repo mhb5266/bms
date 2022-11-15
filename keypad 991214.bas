@@ -17,17 +17,17 @@ Configs:
 
          _in Alias Pinc.5 : Config Portc.5 = Input
         Buzz Alias Portc.3 : Config Portc.3 = Output
-        Led3 Alias Portd.6 : Config Portd.6 = Output
+        Led1 Alias Portd.6 : Config Portd.6 = Output
         Led2 Alias Portd.7 : Config Portd.7 = Output
-        Led1 Alias Portb.0 : Config Portb.0 = Output
-        Led4 Alias Portd.5 : Config Portd.5 = Output
+        Led4 Alias Portb.0 : Config Portb.0 = Output
+        Led3 Alias Portd.5 : Config Portd.5 = Output
 
         Led Alias Portb.5 : Config Portb.5 = Output
         'BUZZ Alias Portc.3 : Config Portc.3 = Output
-        Touch4 Alias Pinb.1 : Config Portb.1 = Input
-        Touch3 Alias Pinb.2 : Config Portb.2 = Input
+        Touch3 Alias Pinb.1 : Config Portb.1 = Input
+        Touch1 Alias Pinb.2 : Config Portb.2 = Input
         Touch2 Alias Pinb.3 : Config Portb.3 = Input
-        Touch1 Alias Pinb.4 : Config Portb.4 = Input
+        Touch4 Alias Pinb.4 : Config Portb.4 = Input
 
         Sensor Alias Pinc.4 : Config Portc.4 = Input
 
@@ -90,13 +90,13 @@ Defines:
 
 
         Dim Tempen As Boolean
-        Dim Tempon As word
+        Dim Tempon As Word
 
         Dim Typ As Byte
         Dim Id As Byte
         Dim Cmd As Byte
         Const Mytyp = 101
-        const relaymodule=110
+        Const Relaymodule = 110
         Dim Touchid1 As Byte
         Dim Touchid2 As Byte
         Dim Touchid3 As Byte
@@ -287,7 +287,7 @@ Main:
 Sectic:
        'Toggle Pg
 Return
-  ')
+')
 Refresh:
 
         Touch = 0
@@ -335,7 +335,7 @@ Refresh:
              If X = 750 Then
                 Toggle Beepen
                 Beeppro
-                if beepen=1 then beeppro
+                If Beepen = 1 Then Beeppro
              End If
              If X = 1000 Then Exit Do
            Loop Until Touch2 = 1
@@ -360,8 +360,8 @@ Refresh:
              Incr X
              If X = 750 Then
              Beeppro
-             if sensoren=1 then beeppro
-             endif
+             If Sensoren = 1 Then Beeppro
+             End If
              If X = 1000 Then Exit Do
            Loop Until Touch3 = 1
            If X >= 0 And X < 700 Then
@@ -652,10 +652,10 @@ End Sub
            Toggle Led1
            Rnumber = 0
            Rnumber_e = Rnumber
-           waitms 50
-           eevar(i)=0
            Waitms 50
-           waitms 400
+           Eevar(i) = 0
+           Waitms 50
+           Waitms 400
        Next
 End Sub
 
@@ -681,8 +681,8 @@ Keyorder:
 
          If Touch = 3 Then
             Id = Touchid3
-            cmd=180
-            gosub tx
+            Cmd = 180
+            Gosub Tx
             If Light > 4 Then Light = 1
             If Light = 1 Then Cmd = 161
             If Light = 2 Then Cmd = 162
@@ -735,7 +735,7 @@ Return
 Tx:
     If Direct = Tooutput Then Endbit = 210
     If Direct = Tomaster Then Endbit = 230
-    typ=relaymodule
+    Typ = Relaymodule
     Set En
     Waitms 10
     Printbin Direct ; Typ ; Cmd ; Id ; Endbit
