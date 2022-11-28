@@ -46,7 +46,7 @@ Config Portd = Output
 
            Declare Sub Setouts
            Declare Sub Keyorder
-           declare sub readouts
+           Declare Sub Readouts
 
 
            Config Portc = Output
@@ -95,15 +95,15 @@ Dim Gotid As Boolean
 Dim Outs As Dword
 Dim Eoutnum(28) As Eram Byte
 
-Dim Eoutid1 As Eram Byte
-Dim Eoutid2 As Eram Byte
-Dim Eoutid3 As Eram Byte
-Dim Eoutid4 As Eram Byte
+Dim Eoutid1(28) As Eram Byte
+Dim Eoutid2(28) As Eram Byte
+Dim Eoutid3(28) As Eram Byte
+'Dim Eoutid4 As Eram Byte
 
-Dim Outid1 As Byte
-Dim Outid2 As Byte
-Dim Outid3 As Byte
-Dim Outid4 As Byte
+Dim Outid1(28) As Byte
+Dim Outid2(28) As Byte
+Dim Outid3(28) As Byte
+'Dim Outid4 As Byte
 
 Dim Eouts(28) As Eram Byte
 Dim Idgot As Eram Byte
@@ -212,13 +212,22 @@ Const Mytyp = 110
 Startup:
 Reset Inok
 Reset En
-If Efirst > 0 Then
-   Efirst = 0
-   For I = 1 To 28
-       Eouts(i) = 0
-   Next
-End If
+'If Efirst > 0 Then
+ '  Efirst = 0
+ '  For I = 1 To 28
+  '     Eouts(i) = 0
+  ' Next
+'End If
+J = 0
+Wait 3
+For I = 1 To 28
+    Incr J
+    If Eouts(j) > 1 Then Eouts(j) = 0
+    If Eouts(j) = 1 Then Outs.j = 1 Else Outs.j = 0
+    Call Setouts
+    Waitms 500
 
+Next
 
 
 
@@ -249,7 +258,7 @@ Main:
               End If
           Next
        End If
-  ')
+')
 
 
        If Key = 1 Then
@@ -678,36 +687,36 @@ Sub Turnout
                                 End Select
 End Sub
 
-sub readouts
-    outs.1=out1
-    outs.2=out2
-    outs.3=out3
-    outs.4=out4
-    outs.5=out5
-    outs.6=out6
-    outs.7=out7
-    outs.8=out8
-    outs.9=out9
-    outs.10=out10
-    outs.11=out11
-    outs.12=out12
-    outs.13=out13
-    outs.14=out14
-    outs.15=out15
-    outs.16=out16
-    outs.17=out17
-    outs.18=out18
-    outs.19=out19
-    outs.20=out20
-    outs.21=out21
-    outs.22=out22
-    outs.23=out23
-    outs.24=out24
-    outs.25=out25
-    outs.26=out26
-    outs.27=out27
-    outs.28=out28
-end sub
+Sub Readouts
+    Outs.1 = Out1
+    Outs.2 = Out2
+    Outs.3 = Out3
+    Outs.4 = Out4
+    Outs.5 = Out5
+    Outs.6 = Out6
+    Outs.7 = Out7
+    Outs.8 = Out8
+    Outs.9 = Out9
+    Outs.10 = Out10
+    Outs.11 = Out11
+    Outs.12 = Out12
+    Outs.13 = Out13
+    Outs.14 = Out14
+    Outs.15 = Out15
+    Outs.16 = Out16
+    Outs.17 = Out17
+    Outs.18 = Out18
+    Outs.19 = Out19
+    Outs.20 = Out20
+    Outs.21 = Out21
+    Outs.22 = Out22
+    Outs.23 = Out23
+    Outs.24 = Out24
+    Outs.25 = Out25
+    Outs.26 = Out26
+    Outs.27 = Out27
+    Outs.28 = Out28
+End Sub
 
 Sub Findorder
 
@@ -780,25 +789,25 @@ Sub Findorder
                        Set Blank
                        Idblank = Id
 
-               case 200
+               Case 200
 
-                    if id=1 then
-                       readouts
-                       for i= 0 to 28
+                    If Id = 1 Then
+                       Readouts
+                       For I = 0 To 28
 
-                       next
-                    end if
-                    if id=2 then
+                       Next
+                    End If
+                    If Id = 2 Then
 
-                    end if
-                    if id=3 then
+                    End If
+                    If Id = 3 Then
 
-                    end if
-                    if id=4 then
+                    End If
+                    If Id = 4 Then
 
-                    end if
+                    End If
 
-               case 201
+               Case 201
 
 
         End Select
@@ -808,22 +817,23 @@ End Sub
 
 Rx:
 
-      Disable Urxc
-      Do
-      Incr f
-        Inputbin Maxin
-        If Maxin = 232 Then f = 1
-        If Maxin = 210 Then f = 5
-        Din(f) = Maxin
-        waitms 1
-      Loop Until Ischarwaiting() = 0
-      If f = 5 Then
-         typ=din(2):cmd=din(3):id=din(4)
-         if typ=relaymodule then
-            findorder
-         end if
+
+      Incr F
+      Inputbin Maxin
+      If F = 5 And Maxin = 210 Then Set Inok
+      If Maxin = 232 Then F = 1
+      Din(f) = Maxin
+      If Inok = 1 Then
+        Typ = Din(2)
+        If Typ = Keyin Or Typ = Remote Or Typ = Relaymodules Then
+           Typ = Din(2) : Cmd = Din(3) : Id = Din(4)
+           Toggle Rxtx
+           Call Findorder
+        End If
+        F = 0
+        Reset Inok
       End If
-      Enable Urxc
+
 Return
 
 '(
