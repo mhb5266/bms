@@ -1,49 +1,55 @@
-$regfile="m16def.dat"
-$crystal=11059200
+$regfile = "m16def.dat"
+$crystal = 11059200
 
-$baud=1200
-
-
-
-configs:
-
-     config porta=OUTPUT
-defines:
-
-
-   dim cmd as byte
-   dim i as byte
-
-
-   declare sub tx
-startup:
+$baud = 1200
 
 
 
+Configs:
 
-main:
-
-   do
-      wait 5
-      incr cmd
-      if cmd=7 then cmd=0
-      porta=cmd
-      for i=0 to 50
-      tx
-      next
-
-   loop
+     Config Porta = Output
+     Txpin Alias Portd.0 : Config Portd.0 = Output
+Defines:
 
 
-end
+   Dim Cmd As Byte
+   Dim I As Byte
 
 
-sub Tx
+   Declare Sub Tx
+Startup:
+
+
+
+
+Main:
+
+   Do
+      Set Txpin
+
+      Incr Cmd
+      If Cmd = 10 Then Cmd = 1
+      Porta = Cmd
+      Reset Txpin
+      For I = 0 To 100
+          Tx
+          Waitms 10
+      Next
+
+
+   Loop
+
+
+End
+
+
+Sub Tx
 
 
     Waitms 10
-    Printbin cmd
+    'Printbin 230 ; 110 ; Cmd ; 53 ; 210
+    Printbin Cmd
     Waitms 50
 
 
-end sub
+End Sub
