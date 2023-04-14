@@ -1,0 +1,8 @@
+Change Component Footprint: Designator=Q? Old Footprint=SOT23_N New Footprint=c945
+Change Component Designator: OldDesignator=Q? NewDesignator=Q1
+Change Component Designator: OldDesignator=Q? NewDesignator=Q2
+Change Net Name : Old Net Name=NetQ?_1 New Net Name=NetQ2_1
+Added Pin To Net: NetName=NetQ1_1 Pin=Q1-1
+Added Pin To Net: NetName=NetQ1_1 Pin=R4-1
+Added Net: Name=NetQ1_1
+Added Member To Class: ClassName=Sheet2 Member=Component Q1 C945

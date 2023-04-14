@@ -1,75 +1,27 @@
 
 
-'slave
-
-
-$regfile="m8def.dat"
-$CRYSTAL=11059200
+$REGFILE="m8def.dat"
+$crystal=11059200
 $baud=9600
 
 
-enable urxc
-enable interrupts
-
-
-on urxc rxin
-
 dim b as byte
-dim c as byte
-dim id as byte
-dim i as byte
-
-
-key alias pinc.0:config pinc.0=input
-config portb=OUTPUT
-
-do
-   toggle portb.0
-   waitms 500
-loop until key=1
-
-portb=0
-for i=1 to 8
-   toggle portb.4
-   waitms 250
-next
-do
-   incr i
-   portb=id
-   waitms 40
-   if key=1 then
-      incr id
-      do
-      loop until key=0
-   end if
-loop until i=255
-portb=0
 
 main:
-   do
 
-      if key=1 then
-         incr b
-         portb=b
-      end if
-      waitms 250
+do
 
-   loop
 
-rxin:
-   c=inkey()
-   if c=10 then
-      c=waitkey()
-      if c=id then
-         gosub tx
-      end if
+
+   if ischarwaiting()<>0 then
+      input b
+      wait 5
+      if b>0 then print b
    end if
 
-return
 
-tx:
+loop
 
-   printbin b
-return
+
 
 end

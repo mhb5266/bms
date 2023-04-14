@@ -5,7 +5,8 @@ $baud = 9600
 Configs:
         'Config Timer1 = Pwm , Pwm = 10 , Compare_A_Pwm = Clear_Up , Compare_B_Pwm = Clear_Down , Prescale = 1
         Config Timer1 = Timer , Prescale = 8
-        Config Timer0 = Timer , Prescale = 1024
+        START TIMER1
+        'Config Timer0 = Timer , Prescale = 1024
         Enable Interrupts
         'Enable Timer1
         'on Timer1 T1rutin
@@ -74,8 +75,8 @@ Maxconfig:
 
           Const Maxlight = 0
           Const Dark = 65535
-          Const Midlight = 6500
-          Const Minlight = 8800
+          Const Midlight = 3500
+          Const Minlight = 6500
           Const Relaymodule = 110
           Const Triacmodule = 111
           Const Remote = 104
@@ -167,8 +168,9 @@ Main:
           Next
        End If
 ')     reset en
-
+'(
        If Wantid = 0 Then
+
               If Timer1 > Light(1) Then Set Out1 Else Reset Out1
               If Timer1 > Light(2) Then Set Out2 Else Reset Out2
               If Timer1 > Light(3) Then Set Out3 Else Reset Out3
@@ -186,6 +188,30 @@ Main:
                          End If
                      Next
                      If Heat > 2 Then Set Fan Else Reset Fan
+       End If
+
+')
+       If Wantid = 0 Then
+             ' INCR TON
+
+              If Timer1 > Light(1) Then Set Out1 Else Reset Out1
+              If Timer1 > Light(2) Then Set Out2 Else Reset Out2
+              If Timer1 > Light(3) Then Set Out3 Else Reset Out3
+              If Timer1 > Light(4) Then Set Out4 Else Reset Out4
+              If Timer1 > Light(5) Then Set Out5 Else Reset Out5
+              If Timer1 > Light(6) Then Set Out6 Else Reset Out6
+              If Timer1 > Light(7) Then Set Out7 Else Reset Out7
+              If Timer1 > Light(8) Then Set Out8 Else Reset Out8
+
+              '(
+                     Heat = 0
+                     For I = 1 To 8
+                         If Light(i) < Dark Then
+                            Incr Heat
+                         End If
+                     Next
+                     If Heat > 2 Then Set Fan Else Reset Fan
+                     ')
        End If
 
 

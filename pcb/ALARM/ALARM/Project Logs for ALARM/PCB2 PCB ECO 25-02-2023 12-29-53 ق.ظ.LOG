@@ -1,0 +1,43 @@
+Removed Pin From Net: NetName=NetRELAY1_3 Pin=T1-2
+Removed Pin From Net: NetName=NetRELAY2_3 Pin=T2-2
+Added Component: Designator=D?(MBF)
+Added Component: Designator=R?(RES-(1/1))
+Add component (AddParameter): Name = "Designer"; Value = "Ali Hafizi"; VariantName = "[No Variations]"
+Added Component: Designator=R?(RES-(1/1))
+Add component (AddParameter): Name = "Designer"; Value = "Ali Hafizi"; VariantName = "[No Variations]"
+Added Component: Designator=U?(Opto Transistor)
+Added Pin To Net: NetName=VCC Pin=R?-1
+Added Pin To Net: NetName=+12 Pin=RELAY1-1
+Added Pin To Net: NetName=NetRELAY1_3 Pin=T1-1
+Added Pin To Net: NetName=GND Pin=T1-2
+Added Pin To Net: NetName=NetRELAY2_3 Pin=T2-1
+Added Pin To Net: NetName=GND Pin=U?-4
+Added Pin To Net: NetName=LOCKIN Pin=R?-2
+Added Pin To Net: NetName=LOCKIN Pin=U?-3
+Added Net: Name=LOCKIN
+Added Pin To Net: NetName=NetACIN_1 Pin=ACIN-1
+Added Pin To Net: NetName=NetACIN_1 Pin=T2-2
+Added Net: Name=NetACIN_1
+Added Pin To Net: NetName=NetD?_1 Pin=D?-1
+Added Pin To Net: NetName=NetD?_1 Pin=U?-2
+Added Net: Name=NetD?_1
+Added Pin To Net: NetName=NetD?_2 Pin=D?-2
+Added Pin To Net: NetName=NetD?_2 Pin=R?-2
+Added Net: Name=NetD?_2
+Added Pin To Net: NetName=NetD?_3 Pin=D?-3
+Added Pin To Net: NetName=NetD?_3 Pin=LOCKIN-1
+Added Net: Name=NetD?_3
+Added Pin To Net: NetName=NetD?_4 Pin=D?-4
+Added Pin To Net: NetName=NetD?_4 Pin=LOCKIN-2
+Added Net: Name=NetD?_4
+Added Pin To Net: NetName=NetR?_1 Pin=R?-1
+Added Pin To Net: NetName=NetR?_1 Pin=U?-1
+Added Net: Name=NetR?_1
+Added Pin To Net: NetName=PHASE Pin=ACIN-2
+Added Pin To Net: NetName=PHASE Pin=RELAY2-1
+Added Net: Name=PHASE
+Added Member To Class: ClassName=Sheet2 Member=Component D? 1N5408
+Added Member To Class: ClassName=Sheet2 Member=Component R? 1K
+Added Member To Class: ClassName=Sheet2 Member=Component R? 1K
+Added Member To Class: ClassName=Sheet2 Member=Component U? ULN2003A
+Added Room: Name=Sheet2

@@ -27,12 +27,12 @@
 '
 'Voltage = 3,3V
 'PortB.5 --> SCK RC522
-'PortB.4 --> MISO RC522
+'PortB.4 --> MISO RC522                                              7
 'PortB.3 --> MOSI RC522
 'PortB 2 CS --> SDA RC522
 'PortB.1 --> Rst RC522
 '*******************************************************************************
-$regfile = "m8def.dat"
+$regfile = "m32def.dat"
 $crystal = 11059200
 $hwstack = 150
 $swstack = 150
@@ -40,10 +40,11 @@ $framesize = 200
 $baud = 9600
 
 
-Const Read_write = 1                                        ' 0= only Read TAG ID  1=Read and Write Data to Card
+Const Read_write =0                                       ' 0= only Read TAG ID  1=Read and Write Data to Card
 
 '*******************************************************************************
-taghere alias portd.7:config taghere=output
+taghere alias porta.0:config taghere=output
+good alias porta.1:config good=output
 dim try as word
 'irq alias pinc.0:config portc.0=INPUT
 Config Portb.1 = Output                                     'Reset Pin
@@ -120,6 +121,8 @@ Declare Sub Read_chipid()
 irq alias pinc.0:config portc.0=INPUT
 
 '*******************************************************************************
+print "strting"
+
 Call Initrc522()
 Call Write522(commienreg , &H8C )
 do
@@ -132,15 +135,19 @@ loop
 '*******************************************************************************
 '*******************************************************************************
 main:
+do
+   print "hi "
+loop
+
 Do
-   print "try# ";try
+   print try
    incr try
    Call Is_card()
-
+   toggle good
 
    If Tag_fount = 1 Then
       toggle taghere
-      wait 2
+      waitms 500
       Call Read_chipid()                                    'Read Tag ID
       Print "Chip fount"
       Print "Tag Typ= " ; Hex(tag_typ) ; " SAK= " ; Hex(sak)       'SAK Level1
@@ -183,7 +190,7 @@ Do
    End If
 
    ' Call Rc522_halt()
-   Wait 1
+   Waitms 500
 Loop
 End
 '*******************************************************************************
@@ -398,7 +405,7 @@ Sub Is_card()
 
    Call Write522(bitframingreg , &H07)                      'BitFramingReg  = 0x0D
    Rc522_buffer(1) = &H26
-
+   backleng=0
    Call Rc522to_card(pcd_transceive , 1)
    print "backleng= ";backleng
    If Backleng = 16 Then

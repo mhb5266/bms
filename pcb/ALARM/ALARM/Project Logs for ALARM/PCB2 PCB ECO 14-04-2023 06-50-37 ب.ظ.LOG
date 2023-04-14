@@ -1,0 +1,8 @@
+Change Component Footprint: Designator=Q? Old Footprint=SOT23_N New Footprint=c945
+Added Member To Class: ClassName=Sheet2 Member=Component Q? C945
+Added Member To Class: ClassName=Sheet2 Member=Component R4 Res1
+Added Member To Class: ClassName=Sheet2 Member=Component R5 Res1
+Added Member To Class: ClassName=Sheet2 Member=Component R6 Res1
+Added Member To Class: ClassName=Sheet2 Member=Component R7 1K
+Added Member To Class: ClassName=Sheet2 Member=Component U4 MAX485
+Added Room: Name=Sheet2

@@ -1,0 +1,17 @@
+Added Component: Designator=BD?(Diode Bridge rectifier)
+Added Pin To Net: NetName=NetBD?_1 Pin=BD?-1
+Added Pin To Net: NetName=NetBD?_1 Pin=U?-2
+Added Net: Name=NetBD?_1
+Added Pin To Net: NetName=NetBD?_2 Pin=BD?-2
+Added Pin To Net: NetName=NetBD?_2 Pin=LOCKIN-2
+Added Net: Name=NetBD?_2
+Added Pin To Net: NetName=NetBD?_3 Pin=BD?-3
+Added Pin To Net: NetName=NetBD?_3 Pin=LOCKIN-1
+Added Net: Name=NetBD?_3
+Added Pin To Net: NetName=NetBD?_4 Pin=BD?-4
+Added Pin To Net: NetName=NetBD?_4 Pin=R?-2
+Added Net: Name=NetBD?_4
+Added Member To Class: ClassName=Sheet2 Member=Component BD? Bridge Diode
+Added Member To Class: ClassName=Sheet2 Member=Component R? 1K
+Added Member To Class: ClassName=Sheet2 Member=Component U? ULN2003A
+Added Room: Name=Sheet2

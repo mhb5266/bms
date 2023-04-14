@@ -1,0 +1,5 @@
+Removed Pin From Net: NetName=NetBRIDGE_4 Pin=LOCKIN-2
+Added Pin To Net: NetName=NetBRIDGE_4 Pin=LOCKIN-1
+Added Member To Class: ClassName=Sheet2 Member=Component D1 1N4007RLG
+Added Member To Class: ClassName=Sheet2 Member=Component U? ULN2003A
+Added Room: Name=Sheet2

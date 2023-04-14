@@ -83,11 +83,11 @@ Tm1637_din Alias Pinb.4
 ')
 
 
-Config Portc.3= Output                                     ' for TM1637 clock
-Config Portc.4 = Output                                     ' for TM1637 data
-clk Alias Portc.3
-dout Alias Portc.4
-din Alias Pinc.4
+Config Portc.0= Output                                     ' for TM1637 clock
+Config Portc.1 = Output                                     ' for TM1637 data
+clk Alias Portc.0
+dout Alias Portc.1
+din Alias Pinc.1
 
 Declare Sub convert(byval Bdispdata As integer)            'The display can only show numbers
 Declare Sub wrbyte(byval Bdata As Byte)

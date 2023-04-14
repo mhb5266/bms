@@ -1,0 +1,6 @@
+Change Component Designator: OldDesignator=J? NewDesignator=IN
+Change Component Designator: OldDesignator=J? NewDesignator=OUT
+Change Component Designator: OldDesignator=U? NewDesignator=U1
+Added Member To Class: ClassName=Sheet1 Member=Component OUT 691102710002
+Added Member To Class: ClassName=Sheet1 Member=Component U1 LM2576HVT-ADJ/NOPB
+Added Room: Name=Sheet1

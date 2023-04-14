@@ -1,0 +1,174 @@
+$REGFILE="M8DEF.DAT"
+$CRYSTAL=11059200
+
+CONFIGS:
+
+LED6 ALIAS PORTB.2:CONFIG PORTB.2=OUTPUT
+LED5 ALIAS PORTB.3:CONFIG PORTB.3=OUTPUT
+LED4 ALIAS PORTB.4:CONFIG PORTB.4=OUTPUT
+LED3 ALIAS PORTC.2:CONFIG PORTC.2=OUTPUT
+LED2 ALIAS PORTC.3:CONFIG PORTC.3=OUTPUT
+LED1 ALIAS PORTD.0:CONFIG PORTD.0=OUTPUT
+
+DATAOUT ALIAS PORTD.3:CONFIG PORTD.3=INPUT
+DATAIN ALIAS PIND.3
+CLK ALIAS PORTD.2:CONFIG PORTD.2=OUTPUT
+
+B4 ALIAS PORTD.5 :CONFIG PORTD.5=OUTPUT
+B3 ALIAS PORTD.6 :CONFIG PORTD.6=OUTPUT
+B2 ALIAS PORTD.7 :CONFIG PORTD.7=OUTPUT
+B1 ALIAS PORTB.0 :CONFIG PORTB.0=OUTPUT
+
+BUZ ALIAS PORTB.1:CONFIG PORTB.1=OUTPUT
+
+DEFINES:
+
+DECLARE SUB READTOUCH
+DECLARE SUB FIND
+
+DIM I AS BYTE
+
+DIM DATAA AS WORD
+DIM TOUCH AS BYTE
+DIM FINISH AS BYTE
+DIM CSUM AS BYTE
+DIM NUM AS BYTE
+DIM OK AS BIT
+
+
+reset b1:reset b2:reset b3:reset b4
+FOR I=1 TO 10
+
+      SET LED1:RESET LED2:RESET LED3:RESET LED4:RESET LED5:RESET LED6
+      WAITMS 150
+      RESET LED1:SET LED2:RESET LED3:RESET LED4:RESET LED5:RESET LED6
+      WAITMS 150
+      RESET LED1:RESET LED2:SET LED3:RESET LED4:RESET LED5:RESET LED6
+      WAITMS 150
+      RESET LED1:RESET LED2:RESET LED3:SET LED4:RESET LED5:RESET LED6
+      WAITMS 150
+      RESET LED1:RESET LED2:RESET LED3:RESET LED4:SET LED5:RESET LED6
+      WAITMS 150
+      RESET LED1:RESET LED2:RESET LED3:RESET LED4:RESET LED5:SET LED6
+      WAITMS 150
+
+
+NEXT
+RESET LED1:RESET LED2:RESET LED3:RESET LED4:RESET LED5:RESET LED6
+
+
+DO
+   READTOUCH
+   WAITMS 500
+   TOGGLE LED1
+   IF NUM=0 THEN EXIT DO
+LOOP
+RESET LED1
+
+'(
+do
+
+set b1:set b2:set b3:set b4
+toggle led1
+wait 1
+reset b1:reset b2:reset b3:reset b4
+toggle led1
+wait 1
+loop
+
+')
+MAIN:
+
+
+DO
+ 'IF DATAIN=0 THEN  TOGGLE LED1
+
+IF DATAIN=0 THEN READTOUCH
+'FOR I=0 TO NUM
+   'TOGGLE LED6
+   'WAITMS 500
+'NEXT
+
+
+ if led2=1 then b1=1 else b1=0
+ if led3=1 then b2=1 else b2=0
+ if led4=1 then b3=1 else b3=0
+ if led5=1 then b4=1 else b4=0
+ waitms 100
+LOOP
+
+
+END
+
+SUB READTOUCH
+
+WAITMS 1
+   FOR I=0 TO 15
+      RESET CLK
+      WAITUS 20
+      SET CLK
+      WAITUS 10
+      DATAA.I=DATAIN
+      WAITUS 10
+   NEXT
+
+   FIND
+
+END SUB
+
+SUB FIND
+   NUM=0
+   FOR I=0 TO 7
+      TOUCH.I=DATAA.I
+      IF DATAA.I=0 THEN INCR NUM
+   NEXT
+   FOR I=8 TO 11
+      CSUM.I=DATAA.I
+   NEXT
+   FOR I=12 TO 15
+      FINISH.I=DATAA.I
+   NEXT
+   RESET OK
+   'IF CSUM=NUM THEN SET OK
+   'IF OK=1 THEN
+      IF TOUCH.0=0 THEN
+         set led1 : set led2 :set led3:set led4:set led5:reset led6
+         b4=1:b3=1:b2=1:b1=1
+      ENDIF
+
+      IF TOUCH.1=0 THEN
+         reset led1
+         reset led6
+         toggle  LED2
+         if led2=1 then b1=1 else b1=0
+      ENDIF
+
+      IF TOUCH.2=0 THEN
+         reset led1
+         reset led6
+         toggle  LED3
+         if led3=1 then b2=1 else b2=0
+      ENDIF
+
+      IF TOUCH.3=0 THEN
+         reset led1
+         reset led6
+         toggle  LED4
+         if led4=1 then b3=1 else b3=0
+      ENDIF
+
+      IF TOUCH.4=0 THEN
+         reset led1
+         reset led6
+         toggle led5
+         if led5=1 then b4=1 else b4=0
+
+      ENDIF
+
+      IF TOUCH.5=0 THEN
+         reset led1 :reset led2 :reset led3:reset led4:reset led5:set led6
+         b4=0:b3=0:b2=0:b1=0
+      ENDIF
+      'WAIT 1
+   'END IF
+END SUB

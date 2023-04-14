@@ -1,0 +1,12 @@
+Change Component Designator: OldDesignator=D? NewDesignator=D1
+Change Component Designator: OldDesignator=D? NewDesignator=D2
+Change Component Designator: OldDesignator=D? NewDesignator=D3
+Change Component Designator: OldDesignator=D? NewDesignator=D4
+Change Component Designator: OldDesignator=D? NewDesignator=D5
+Change Net Name : Old Net Name=NetD?_1 New Net Name=NetD2_1
+Change Net Name : Old Net Name=NetD?_2 New Net Name=NetD1_2
+Added Member To Class: ClassName=Sheet2 Member=Component D2 1N4007RLG
+Added Member To Class: ClassName=Sheet2 Member=Component D3 1N4007RLG
+Added Member To Class: ClassName=Sheet2 Member=Component D4 1N4007RLG
+Added Member To Class: ClassName=Sheet2 Member=Component D5 1N4007RLG
+Added Member To Class: ClassName=Sheet2 Member=Component U? ULN2003A

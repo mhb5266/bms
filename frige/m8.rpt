@@ -1,6 +1,6 @@
 Report       : m8
-Date         : 09-26-2021
-Time         : 12:33:10
+Date         : 02-17-2023
+Time         : 11:08:32
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,8 +8,8 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : BD2 hex  -> Will fit into ROM
-ROMIMAGE     :  3026 dec
+ROMIMAGE     : BD6 hex  -> Will fit into ROM
+ROMIMAGE     :  3030 dec
 FLASH USED   :  36  %
 BAUD         : 9600 Baud
 XTAL         : 1000000 Hz
@@ -509,5 +509,5 @@ ACTION                           not used
 SENS2                            not used
 TMPREAD                          not used
 
-Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  229 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  302 
+Source string could be too big to fit into target string [STRDISP>___STRBUF]  in line  237 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  310 

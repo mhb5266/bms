@@ -1,0 +1,4 @@
+Removed Pin From Net: NetName=DATAIN Pin=U2-34
+Added Pin To Net: NetName=DATAIN Pin=U2-30
+Added Pin To Net: NetName=ALARMOUT Pin=U2-34
+Added Member To Class: ClassName=Sheet2 Member=Component U? ULN2003A

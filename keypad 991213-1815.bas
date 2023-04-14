@@ -9,10 +9,10 @@ $baud = 9600
 Configs:
          _in Alias Pinb.0 : Config Portb.0 = Input
         Buzz Alias Portc.5 : Config Portc.5 = Output
-        Led1 Alias Portd.3 : Config Portd.3 = Output
-        Led2 Alias Portd.4 : Config Portd.4 = Output
-        Led3 Alias Portd.6 : Config Portd.6 = Output
-        Led4 Alias Portd.7 : Config Portd.7 = Output
+        Led1 Alias Portc.5 : Config Portc.5 = Output
+        Led2 Alias Portc.4 : Config Portc.4 = Output
+        Led3 Alias Portc.3 : Config Portc.3 = Output
+        Led4 Alias Portc.2 : Config Portc.2 = Output
         Ledout Alias Portc.4 : Config Portc.4 = Output
         Touch1 Alias Pinb.1 : Config Portb.1 = Input
         Touch2 Alias Pinb.2 : Config Portb.2 = Input
@@ -393,6 +393,8 @@ Return
 '========================================================================= CHECK
 Check:
       Okread = 1
+      toggle led1
+      waitms 200
       If Keycheck = 0 Then                                  'agar keycheck=1 bashad yani be ledeha farman nade
          For I = 1 To Rnumber
              Ra = Eevar(i)

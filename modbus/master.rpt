@@ -1,6 +1,6 @@
 Report       : master
-Date         : 03-21-2022
-Time         : 20:04:59
+Date         : 01-09-2023
+Time         : 22:15:30
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M8
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 2000 hex
 
-ROMIMAGE     : 3B6 hex  -> Will fit into ROM
-ROMIMAGE     :  950 dec
-FLASH USED   :  11  %
+ROMIMAGE     : 1D4 hex  -> Will fit into ROM
+ROMIMAGE     :  468 dec
+FLASH USED   :  5  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  931  dec
+Space left   :  935  dec
 
 LCD DB7      : PORTC.5
 LCD DB6      : PORTC.4
@@ -93,9 +93,6 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 ERR                              Bit [2]           0006          6 
 B                                Byte              0060          96 
-ID                               Byte              0061          97 
-I                                Byte              0062          98 
-TEST                             Word              0063          99 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -491,5 +488,4 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
-TEST                             not used
 

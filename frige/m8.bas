@@ -72,11 +72,11 @@ Tm1637_din Alias Pinb.4
 ')
 
 
-Config Portc.3= Output                                     ' for TM1637 clock
-Config Portc.4 = Output                                     ' for TM1637 data
-Tm1637_clk Alias Portc.3
-Tm1637_dout Alias Portc.4
-Tm1637_din Alias Pinc.4
+Config Portc.0= Output                                     ' for TM1637 clock
+Config Portc.1 = Output                                     ' for TM1637 data
+Tm1637_clk Alias Portc.0
+Tm1637_dout Alias Portc.1
+Tm1637_din Alias Pinc.1
 
 Declare Sub disp(byval Bdispdata As integer)            'The display can only show numbers
 Declare Sub wrbyte(byval Bdata As Byte)
@@ -108,6 +108,16 @@ next
 dispon
 
 main:
+
+
+do
+   dispon
+   wrbyte(i)
+   wait 1
+   
+
+
+loop
 
 Do
 
@@ -173,7 +183,7 @@ Sub _ack()
    Waitus 2
    Reset Tm1637_clk
    Set Tm1637_dout
-   
+
 End Sub
 
 

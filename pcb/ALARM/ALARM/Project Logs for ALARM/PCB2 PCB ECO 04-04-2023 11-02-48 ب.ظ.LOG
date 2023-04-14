@@ -1,0 +1,9 @@
+Added Component: Designator=BRIDGE(MBF)
+Added Pin To Net: NetName=NetBRIDGE_1 Pin=BRIDGE-1
+Added Pin To Net: NetName=NetBRIDGE_2 Pin=BRIDGE-2
+Added Pin To Net: NetName=NetBRIDGE_3 Pin=BRIDGE-3
+Added Pin To Net: NetName=NetBRIDGE_4 Pin=BRIDGE-4
+Added Pin To Net: NetName=NetBRIDGE_4 Pin=LOCKIN-1
+Added Pin To Net: NetName=NetBRIDGE_3 Pin=LOCKIN-2
+Added Member To Class: ClassName=Sheet2 Member=Component BRIDGE Diode Bridge
+Added Member To Class: ClassName=Sheet2 Member=Component U? ULN2003A

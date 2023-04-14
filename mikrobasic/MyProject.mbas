@@ -1,0 +1,18 @@
+program MyProject
+
+' Declarations section 
+ dim man as byte
+ 
+
+sub procedure int0_rutin() iv IVT_ADDR_INT0 ics ICS_OFF
+end sub
+
+ 
+main:
+
+'   Main program 
+end.
+
+
+
+

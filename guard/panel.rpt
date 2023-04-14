@@ -1,6 +1,6 @@
 Report       : panel
-Date         : 11-18-2022
-Time         : 01:06:46
+Date         : 04-13-2023
+Time         : 00:16:49
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M16
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : 170 hex  -> Will fit into ROM
-ROMIMAGE     :  368 dec
-FLASH USED   :  2  %
+ROMIMAGE     : 12CC hex  -> Will fit into ROM
+ROMIMAGE     :  4812 dec
+FLASH USED   :  29  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  935  dec
+Space left   :  234  dec
 
 LCD DB7      : PORTA.7
 LCD DB6      : PORTA.6
@@ -93,7 +93,27 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-KEY                              Byte              0060          96 
+KEY                              Byte              00AC          172 
+B                                Byte              00AD          173 
+ERRORT                           Byte              00AE          174 
+K                                Byte              00AF          175 
+SS                               String * 100      00B0          176 
+TT                               Word              0115          277 
+TIMEE                            Byte              0117          279 
+LTIME                            Byte              0118          280 
+I                                Byte              0119          281 
+SIMOK                            Bit [7]           011A          282 
+X                                Byte              011B          283 
+AR                               String(10) * 25   011C          284 
+J                                Byte              0220          544 
+SENDOK                           Bit [6]           011A          282 
+N                                String * 2        0221          545 
+INNUMBER                         String * 15       0224          548 
+SMS                              String * 100      0234          564 
+SMSOK                            Bit [5]           011A          282 
+OUTBOX                           String * 100      0299          665 
+ORDER                            String * 10       02FE          766 
+TEXT                             String * 20       0309          777 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -498,6 +518,10 @@ _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
 _XMEGA                           0
 _XTINY                           0
+_RS232_BUFSIZE0                  50
+_RS232_BUFSIZE_IN0P1             51
+_CHECKCHAR0                      0
+_RS232_BUFSIZE_OUT0              20
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -521,4 +545,11 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
+KEY                              not used
+K                                not used
+J                                not used
+SMSOK                            not used
 
+Source string could be too big to fit into target string [AR(2)>N]  in line  165 
+Source string could be too big to fit into target string [AR(4)>INNUMBER]  in line  325 
+Source string could be too big to fit into target string [OUTBOX>TEXT]  in line  421 

@@ -1,0 +1,6 @@
+Change Component Designator: OldDesignator=C1 NewDesignator=C3
+Change Component Designator: OldDesignator=C2 NewDesignator=C4
+Added Member To Class: ClassName=Sheet2 Member=Component C3 33PF
+Added Member To Class: ClassName=Sheet2 Member=Component C4 33PF
+Added Member To Class: ClassName=Sheet2 Member=Component U? LM2576HVT-ADJ/NOPB
+Added Room: Name=Sheet2

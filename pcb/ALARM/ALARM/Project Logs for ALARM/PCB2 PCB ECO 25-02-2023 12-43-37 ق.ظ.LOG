@@ -1,0 +1,17 @@
+Change Component Designator: OldDesignator=D? NewDesignator=BRIDGE
+Added Pin To Net: NetName=NetBRIDGE_1 Pin=BRIDGE-1
+Added Pin To Net: NetName=NetBRIDGE_1 Pin=Q?-1
+Added Net: Name=NetBRIDGE_1
+Added Pin To Net: NetName=NetBRIDGE_2 Pin=BRIDGE-2
+Added Pin To Net: NetName=NetBRIDGE_2 Pin=R?-2
+Added Net: Name=NetBRIDGE_2
+Added Pin To Net: NetName=NetBRIDGE_3 Pin=BRIDGE-3
+Added Pin To Net: NetName=NetBRIDGE_3 Pin=LOCKIN-1
+Added Net: Name=NetBRIDGE_3
+Added Pin To Net: NetName=NetBRIDGE_4 Pin=BRIDGE-4
+Added Pin To Net: NetName=NetBRIDGE_4 Pin=LOCKIN-2
+Added Net: Name=NetBRIDGE_4
+Added Member To Class: ClassName=Sheet2 Member=Component BRIDGE Diode Bridge
+Added Member To Class: ClassName=Sheet2 Member=Component R? 1K
+Added Member To Class: ClassName=Sheet2 Member=Component U? ULN2003A
+Added Room: Name=Sheet2

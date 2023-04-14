@@ -1,0 +1,23 @@
+Removed Member From Class: ClassName=Sheet2 Member=R?
+Change Component Designator: OldDesignator=BATTERY NewDesignator=BATTERY1
+Change Component Designator: OldDesignator=Q1 NewDesignator=Q3
+Change Component Designator: OldDesignator=R4 NewDesignator=R6
+Change Component Designator: OldDesignator=R5 NewDesignator=R7
+Change Component Designator: OldDesignator=R6 NewDesignator=R8
+Change Component Designator: OldDesignator=R7 NewDesignator=R9
+Change Component Designator: OldDesignator=R8 NewDesignator=R10
+Change Component Designator: OldDesignator=R? NewDesignator=R4
+Change Component Designator: OldDesignator=R? NewDesignator=R5
+Change Component Designator: OldDesignator=U5 NewDesignator=U4
+Change Net Name : Old Net Name=NetQ1_2 New Net Name=NetQ3_2
+Change Net Name : Old Net Name=NetR7_1 New Net Name=NetR9_1
+Change Net Name : Old Net Name=NetR7_2 New Net Name=NetR9_2
+Change Net Name : Old Net Name=NetR8_1 New Net Name=NetR10_1
+Change Net Name : Old Net Name=NetR8_2 New Net Name=NetR10_2
+Added Pin To Net: NetName=NetQ1_B Pin=R4-1
+Added Net: Name=NetQ1_B
+Added Pin To Net: NetName=NetQ2_B Pin=R5-1
+Added Net: Name=NetQ2_B
+Added Member To Class: ClassName=Sheet2 Member=Component Q3 CNY17-3
+Added Member To Class: ClassName=Sheet2 Member=Component R9 Resistor SMD
+Added Member To Class: ClassName=Sheet2 Member=Component R10 Resistor SMD

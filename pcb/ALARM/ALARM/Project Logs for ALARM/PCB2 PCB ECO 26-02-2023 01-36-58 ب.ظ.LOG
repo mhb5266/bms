@@ -1,0 +1,18 @@
+Change Component Designator: OldDesignator=R? NewDesignator=R5
+Change Component Designator: OldDesignator=R? NewDesignator=R6
+Change Component Designator: OldDesignator=R? NewDesignator=R7
+Added Pin To Net: NetName=rx2 Pin=U2-21
+Added Pin To Net: NetName=tx2 Pin=U2-22
+Change Net Name : Old Net Name=NetR?_1 New Net Name=NetR7_1
+Change Net Name : Old Net Name=NetR?_2 New Net Name=NetR6_2
+Added Pin To Net: NetName=NetR6_1 Pin=R6-1
+Added Pin To Net: NetName=NetR6_1 Pin=U?-7
+Added Net: Name=NetR6_1
+Added Pin To Net: NetName=NetR7_2 Pin=R7-2
+Added Pin To Net: NetName=NetR7_2 Pin=rs485-2
+Added Net: Name=NetR7_2
+Added Member To Class: ClassName=Sheet2 Member=Component R5 1K
+Added Member To Class: ClassName=Sheet2 Member=Component R6 Resistor SMD
+Added Member To Class: ClassName=Sheet2 Member=Component R7 Resistor SMD
+Added Member To Class: ClassName=Sheet2 Member=Component U? ULN2003A
+Added Room: Name=Sheet2
