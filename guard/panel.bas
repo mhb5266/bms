@@ -30,6 +30,7 @@ defines:
 dim key as byte
 DIM B AS BYTE
 DIM ERRORT AS BYTE
+dim status as byte
 DIM K AS BYTE
 DIM SS AS STRING*100
 DIM TT AS WORD
@@ -79,34 +80,57 @@ startup:
       IF TT=0 THEN EXIT DO
    LOOP
    RESET LED2
-
+   status=0
+   tt=10
    DO
       flushbuf
       TEXT= "ATE0"
       TX
-      'WAITMS 500
       RXIN
       X=INSTR(SS,"OK")
-      IF X> 0 THEN EXIT DO
+      IF X> 0 THEN
+         set status.0
+         EXIT DO
+      else
+         reset status.0
+      end if
+      if tt=0 then exit do
    LOOP
-
+   '(
+   TT=3
    DO
       flushbuf
       TEXT= "AT"
       TX
-      'WAITMS 500
       RXIN
       X=INSTR(SS,"OK")
-      IF X> 0 THEN EXIT DO
+      IF X> 0 THEN
+         set status.1
+         EXIT DO
+      else
+         reset status.1
+      end if
+      if tt=0 then exit do
    LOOP
 
-
-   'DO
+   TT=3
+   DO
       flushbuf
-      'PRINT "AT"
-      'WAIT 3
-   'LOOP
+      TEXT= "AT+CPIN?"
+      TX
+      RXIN
+      X=INSTR(SS,"+CPIN: READY")
+      IF X> 0 THEN
+         set status.2
+         EXIT DO
+      else
+         reset status.2
+      end if
+      if tt=0 then exit do
+   LOOP
+')
 
+ '(
    DO
       flushbuf
       TEXT= "AT+CPIN?"
@@ -117,10 +141,19 @@ startup:
         ' X=INSTR(SS,"OK")
       IF X> 0 THEN EXIT DO
    LOOP
-
+    ')
 SIMCHECK
 
-SMSCONFIG
+'SMSCONFIG
+
+               PRINT #1,STR(STATUS)
+               IF STATUS=127 THEN
+                  PRINT #1,"SIM IS OK"
+
+               ELSE
+                  PRINT #1,"SIM IS RESTARTING"
+                  SIMRESET
+               END IF
 
 
 SET LED1
@@ -139,7 +172,11 @@ main:
 
 
          if ltime<> timee then
+            toggle led2
+            IF ORDER="BLINK" THEN
+               toggle led1
 
+            END IF
             ltime=timee
             '(
             FLUSHBUF
@@ -180,14 +217,24 @@ main:
             END IF
 
 
-            'IF TIMEE=30 THEN SIMCHECK
-            IF ERRORT>9 THEN
+            IF TIMEE=80 THEN
+               SIMCHECK
+               PRINT #1,STR(STATUS)
+               IF STATUS=127 THEN
+                  PRINT #1,"SIM IS OK"
+
+               ELSE
+                  PRINT #1,"SIM IS RESTARTING"
+                  SIMRESET
+               END IF
+            ENDIF
+            '(IF ERRORT>9 THEN
                ERRORT=0
                PRINT #1, "NO ANSWER"
                PRINT #1, "SIM IS RESTARTING"
                SIMRESET
             END IF
-
+            ')
          endif
 
 
@@ -210,75 +257,123 @@ RETURN
 t1rutin:
    stop timer1
       timer1=54735
-      toggle led2
-      incr timee
-         IF ORDER="BLINK" THEN
-            toggle led1
 
-         END IF
+      incr timee
       if tt>0 then decr tt
    start timer1
+   '(
+      IF TIMEE=250 THEN
+         FLUSHBUF
+         PRINT "AT"
+         K=5
+         DO
+            WAIT 1
+            DECR K
+            RXIN
+            IF SS="OK" THEN
+               ERRORT=0
+               EXIT DO
+            END IF
+            IF K=0 THEN
+               IF SS="" OR SS<>"OK" THEN ERRORT=10
+               EXIT DO
+            END IF
+         LOOP
+         K=0
+      ENDIF
+      ')
 return
 
 
 SUB SIMRESET
-   RESET SIMON
-   SET LED1
-   TT=5
-   DO
-      WAITMS 200
-      TOGGLE LED1
-      IF TT=0 THEN EXIT DO
-   LOOP
-   SET SIMON
-   RESET LED1
-   SET LED2
-   RESET SIMRST
-   TT=2
-   DO
-      IF TT=0 THEN EXIT DO
-   LOOP
-   SET SIMRST
-   TT=10
-   DO
-      IF TT=0 THEN EXIT DO
-   LOOP
-   RESET LED2
+DO
+      RESET SIMON
+      SET LED1
+      TT=5
+      DO
+         IF TT=0 THEN EXIT DO
+      LOOP
+      SET SIMON
+      RESET LED1
+      SET LED2
+      RESET SIMRST
+      TT=2
+      DO
+         IF TT=0 THEN EXIT DO
+      LOOP
+      SET SIMRST
+      TT=10
+      DO
+         IF TT=0 THEN EXIT DO
+      LOOP
+      RESET LED2
+      status=0
+      tt=10
+      DO
+         flushbuf
+         TEXT= "ATE0"
+         TX
+         RXIN
+         X=INSTR(SS,"OK")
+         IF X> 0 THEN
+            set status.0
+            EXIT DO
+         else
+            reset status.0
+         end if
+         if tt=0 then exit do
+      LOOP
+      TT=3
+      DO
+         flushbuf
+         TEXT= "AT"
+         TX
+         RXIN
+         X=INSTR(SS,"OK")
+         IF X> 0 THEN
+            set status.1
+            EXIT DO
+         else
+            reset status.1
+         end if
+         if tt=0 then exit do
+      LOOP
 
-   TEXT= "ATE0"
-   TX
-
-   DO
-      flushbuf
-      TEXT= "AT"
-      TX
-      'WAITMS 500
-      RXIN
-      X=INSTR(SS,"OK")
-      IF X> 0 THEN EXIT DO
-   LOOP
-
-   'DO
-      flushbuf
-      'PRINT "AT"
-      'WAIT 3
-   'LOOP
-
-   DO
-      flushbuf
-      TEXT= "AT+CPIN?"
-      TX
-      'WAITMS 500
-      RXIN
-      X=INSTR(SS,"+CPIN: READY")
-        ' X=INSTR(SS,"OK")
-      IF X> 0 THEN EXIT DO
-   LOOP
+      TT=3
+      DO
+         flushbuf
+         TEXT= "AT+CPIN?"
+         TX
+         RXIN
+         X=INSTR(SS,"+CPIN: READY")
+         IF X> 0 THEN
+            set status.2
+            EXIT DO
+         else
+            reset status.2
+         end if
+         if tt=0 then exit do
+      LOOP
 
 
-SMSCONFIG
+    '(
+      DO
+         flushbuf
+         TEXT= "AT+CPIN?"
+         TX
+         'WAITMS 500
+         RXIN
+         X=INSTR(SS,"+CPIN: READY")
+           ' X=INSTR(SS,"OK")
+         IF X> 0 THEN EXIT DO
+      LOOP
+       ')
+   SIMCHECK
 
-
+   'SMSCONFIG
+   PRINT #1,STR(STATUS)
+   IF STATUS=127 THEN EXIT DO
+LOOP
 END SUB
 
 SUB RXIN:
@@ -288,7 +383,7 @@ SUB RXIN:
    TT=5
    SS=""
    DO
-      INPUTBIN B
+      B=INKEY()
       'IF B>0 THEN TT=5
       SELECT CASE B
          CASE 0
@@ -434,14 +529,80 @@ SUB SENDSMS
 END SUB
 
 
-SUB SMSCONFIG
+SUB SIMCHECK
+PRINT #1,"SIM CHECK PROCESS"
+   RESET SIMOK
+   ERRORT=0
+   TT=5
+   DO
+      flushbuf
+      TEXT= "ATE0"
+      TX
+      RXIN
+      X=INSTR(SS,"OK")
+      IF X> 0 THEN
+         set status.0
+         EXIT DO
+      else
+         reset status.0
+      end if
+      if tt=0 then exit do
+   LOOP
+   TT=3
+   DO
+      flushbuf
+      TEXT= "AT"
+      TX
+      RXIN
+      X=INSTR(SS,"OK")
+      IF X> 0 THEN
+         set status.1
+         EXIT DO
+      else
+         reset status.1
+      end if
+      if tt=0 then exit do
+   LOOP
+
+   TT=3
+   DO
+      flushbuf
+      TEXT= "AT+CPIN?"
+      TX
+      RXIN
+      X=INSTR(SS,"+CPIN: READY")
+      IF X> 0 THEN
+         set status.2
+         EXIT DO
+      else
+         reset status.2
+      end if
+      if tt=0 then exit do
+   LOOP
+ '(
    DO
       PRINT "AT"
       RXIN
       X=INSTR(SS,"OK")
       IF X> 0 THEN EXIT DO
    LOOP
-
+    ')
+   TT=3
+   DO
+      flushbuf
+      TEXT= "AT+CMGF=1"
+      TX
+      RXIN
+      X=INSTR(SS,"OK")
+      IF X> 0 THEN
+         set status.3
+         EXIT DO
+      else
+         reset status.3
+      end if
+      if tt=0 then exit do
+   LOOP
+   '(
    DO
       TEXT= "AT+CMGF=1"
       TX
@@ -449,9 +610,24 @@ SUB SMSCONFIG
       X=INSTR(SS,"OK")
       IF X> 0 THEN EXIT DO
    LOOP
+  ')
 
-
-
+   TT=3
+   DO
+      flushbuf
+      TEXT= "AT+CSCS="+CHR(34)+"GSM"+CHR(34)
+      TX
+      RXIN
+      X=INSTR(SS,"OK")
+      IF X> 0 THEN
+         set status.4
+         EXIT DO
+      else
+         reset status.4
+      end if
+      if tt=0 then exit do
+   LOOP
+'(
    DO
       TEXT= "AT+CSCS="+CHR(34)+"GSM"+CHR(34)
       TX
@@ -459,9 +635,24 @@ SUB SMSCONFIG
       X=INSTR(SS,"OK")
       IF X> 0 THEN EXIT DO
    LOOP
+   ')
 
-
-
+   TT=3
+   DO
+      flushbuf
+      TEXT= "AT+CNMI=1,1,0,0,0"
+      TX
+      RXIN
+      X=INSTR(SS,"OK")
+      IF X> 0 THEN
+         set status.5
+         EXIT DO
+      else
+         reset status.5
+      end if
+      if tt=0 then exit do
+   LOOP
+'(
    DO
       TEXT= "AT+CNMI=1,1,0,0,0"
       TX
@@ -469,9 +660,23 @@ SUB SMSCONFIG
       X=INSTR(SS,"OK")
       IF X> 0 THEN EXIT DO
    LOOP
-
-
-
+ ')
+   TT=3
+   DO
+      flushbuf
+      TEXT= "AT+CSMP=17,167,2,25"
+      TX
+      RXIN
+      X=INSTR(SS,"OK")
+      IF X> 0 THEN
+         set status.6
+         EXIT DO
+      else
+         reset status.6
+      end if
+      if tt=0 then exit do
+   LOOP
+'(
    DO
       TEXT= "AT+CSMP=17,167,2,25"
       TX
@@ -479,45 +684,8 @@ SUB SMSCONFIG
       X=INSTR(SS,"OK")
       IF X> 0 THEN EXIT DO
    LOOP
+ ')
 
-   'PRINT "AT+CNMI?"
-   'WAIT 1
-   'PRINT "AT+CSCS?"
-   'WAIT 1
-   'PRINT "AT+CMGF?"
-   'WAIT 1
-   'PRINT "AT+CSMP?"
-   'WAIT 1
-END SUB
-
-SUB SIMCHECK
-   RESET SIMOK
-   ERRORT=0
-   DO
-      flushbuf
-      TEXT= "AT"
-      TX
-      PRINT #1,"TEST"
-      'WAITMS 500
-      'TOGGLE LED1
-      RXIN
-      X=INSTR(SS,"OK")
-      IF X>0 THEN ERRORT=0
-      IF X> 0 THEN EXIT DO ELSE INCR ERRORT
-      IF ERRORT=10 THEN EXIT DO
-   LOOP
-
-DO
-   IF ERRORT=10 THEN EXIT DO
-   flushbuf
-   TEXT= "AT+CPIN?"
-   TX
-   'WAITMS 500
-   RXIN
-   X=INSTR(SS,"+CPIN: READY")
-   IF X> 0 THEN EXIT DO
-LOOP
-   SET SIMOK
 END SUB
 
 

@@ -1,6 +1,6 @@
 Report       : panel
-Date         : 04-13-2023
-Time         : 00:16:49
+Date         : 04-16-2023
+Time         : 23:16:35
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M16
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : 12CC hex  -> Will fit into ROM
-ROMIMAGE     :  4812 dec
-FLASH USED   :  29  %
+ROMIMAGE     : 1620 hex  -> Will fit into ROM
+ROMIMAGE     :  5664 dec
+FLASH USED   :  34  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  234  dec
+Space left   :  233  dec
 
 LCD DB7      : PORTA.7
 LCD DB6      : PORTA.6
@@ -96,24 +96,25 @@ ERR                              Bit [2]           0006          6
 KEY                              Byte              00AC          172 
 B                                Byte              00AD          173 
 ERRORT                           Byte              00AE          174 
-K                                Byte              00AF          175 
-SS                               String * 100      00B0          176 
-TT                               Word              0115          277 
-TIMEE                            Byte              0117          279 
-LTIME                            Byte              0118          280 
-I                                Byte              0119          281 
-SIMOK                            Bit [7]           011A          282 
-X                                Byte              011B          283 
-AR                               String(10) * 25   011C          284 
-J                                Byte              0220          544 
-SENDOK                           Bit [6]           011A          282 
-N                                String * 2        0221          545 
-INNUMBER                         String * 15       0224          548 
-SMS                              String * 100      0234          564 
-SMSOK                            Bit [5]           011A          282 
-OUTBOX                           String * 100      0299          665 
-ORDER                            String * 10       02FE          766 
-TEXT                             String * 20       0309          777 
+STATUS                           Byte              00AF          175 
+K                                Byte              00B0          176 
+SS                               String * 100      00B1          177 
+TT                               Word              0116          278 
+TIMEE                            Byte              0118          280 
+LTIME                            Byte              0119          281 
+I                                Byte              011A          282 
+SIMOK                            Bit [7]           011B          283 
+X                                Byte              011C          284 
+AR                               String(10) * 25   011D          285 
+J                                Byte              0221          545 
+SENDOK                           Bit [6]           011B          283 
+N                                String * 2        0222          546 
+INNUMBER                         String * 15       0225          549 
+SMS                              String * 100      0235          565 
+SMSOK                            Bit [5]           011B          283 
+OUTBOX                           String * 100      029A          666 
+ORDER                            String * 10       02FF          767 
+TEXT                             String * 20       030A          778 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -550,6 +551,6 @@ K                                not used
 J                                not used
 SMSOK                            not used
 
-Source string could be too big to fit into target string [AR(2)>N]  in line  165 
-Source string could be too big to fit into target string [AR(4)>INNUMBER]  in line  325 
-Source string could be too big to fit into target string [OUTBOX>TEXT]  in line  421 
+Source string could be too big to fit into target string [AR(2)>N]  in line  202 
+Source string could be too big to fit into target string [AR(4)>INNUMBER]  in line  420 
+Source string could be too big to fit into target string [OUTBOX>TEXT]  in line  516 
