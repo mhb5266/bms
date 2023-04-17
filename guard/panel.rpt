@@ -1,6 +1,6 @@
 Report       : panel
-Date         : 04-16-2023
-Time         : 23:16:35
+Date         : 04-17-2023
+Time         : 00:38:16
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M16
@@ -8,8 +8,8 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : 1620 hex  -> Will fit into ROM
-ROMIMAGE     :  5664 dec
+ROMIMAGE     : 1630 hex  -> Will fit into ROM
+ROMIMAGE     :  5680 dec
 FLASH USED   :  34  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
@@ -551,6 +551,6 @@ K                                not used
 J                                not used
 SMSOK                            not used
 
-Source string could be too big to fit into target string [AR(2)>N]  in line  202 
-Source string could be too big to fit into target string [AR(4)>INNUMBER]  in line  420 
-Source string could be too big to fit into target string [OUTBOX>TEXT]  in line  516 
+Source string could be too big to fit into target string [AR(2)>N]  in line  203 
+Source string could be too big to fit into target string [AR(4)>INNUMBER]  in line  422 
+Source string could be too big to fit into target string [OUTBOX>TEXT]  in line  519 
