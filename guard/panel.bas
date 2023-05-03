@@ -26,6 +26,10 @@ SIMON ALIAS PORTD.5:CONFIG PORTD.5=OUTPUT
 LED1 ALIAS PORTA.2:CONFIG PORTA.0 =OUTPUT
 LED2 ALIAS PORTA.1:CONFIG PORTA.1=OUTPUT
 LED3 ALIAS PORTA.0:CONFIG PORTA.2=OUTPUT
+LED4 ALIAS PORTc.1:CONFIG PORTc.1=OUTPUT
+pir alias pinc.0:config portc.0=INPUT
+
+
 
 defines:
 dim key as byte
@@ -49,7 +53,12 @@ DIM SMS AS STRING*100
 DIM SMSOK AS BIT
 DIM OUTBOX AS STRING*100
 DIM ORDER AS STRING*10
-DIM TEXT AS STRING*20
+DIM TEXT AS STRING*40
+dim timeout as byte
+dim _hour as byte
+dim _min as byte
+dim _sec as byte
+dim intime as string*25
 
 DECLARE SUB TX
 DECLARE SUB RXIN
@@ -61,6 +70,11 @@ declare sub flushbuf
 DECLARE SUB SIMRESET
 
 startup:
+
+   'do
+    '  if pir=0 then set led4 else reset led4
+
+   'loop
    RESET SIMON
    SET LED1
    TT=5
@@ -82,7 +96,13 @@ startup:
    LOOP
    RESET LED2
    status=0
-   tt=10
+   K=0
+   TEXT="AT&F"
+   TX
+   TT=5
+   DO
+      IF TT=0 THEN EXIT DO
+   LOOP
    DO
       flushbuf
       TEXT= "ATE0"
@@ -95,7 +115,8 @@ startup:
       else
          reset status.0
       end if
-      if tt=0 then exit do
+      INCR K
+      IF K=5 THEN GOSUB STARTUP
    LOOP
    '(
    TT=3
@@ -156,7 +177,9 @@ SIMCHECK
                   SIMRESET
                END IF
 
-
+   innumber="+989376921503"
+   outbox="powerup"
+   sendsms
 SET LED1
 RESET LED2
 FOR I=1 TO 10
@@ -218,7 +241,7 @@ main:
             END IF
 
 
-            IF TIMEE=80 THEN
+            IF TIMEE=123 THEN
                SIMCHECK
                PRINT #1,STR(STATUS)
                IF STATUS=127 THEN
@@ -236,9 +259,30 @@ main:
                SIMRESET
             END IF
             ')
+
          endif
 
+            if pir=0 then set led4 else reset led4
+            if pir=0 and timeout=0 then
+               waitms 200
+               if pir=0 then
 
+                  timeout=50
+                  outbox="alarm"
+                  innumber="+989155609631"
+                  sendsms
+                  innumber="+989376921503"
+                  sendsms
+                  innumber="+989158530390"
+                  sendsms
+               endif
+               do
+                  if pir=1 then exit do
+                  waitms 250
+                  toggle led2
+               loop
+               if pir=0 then set led4 else reset led4
+            end if
 
 
 
@@ -258,11 +302,30 @@ RETURN
 t1rutin:
    stop timer1
       timer1=54735
-
+      incr _sec
+      if _sec>59 then
+         _sec=0
+         incr _min
+         if _min>59 then
+            incr _hour
+            _min=0
+            if _hour>23 then
+               _hour=0
+            end if
+         end if
+      end if
       incr timee
       TOGGLE LED3
       if tt>0 then decr tt
    start timer1
+
+   if pir=0 then set led4 else reset led4
+
+   if timeout>0 then
+
+       decr timeout
+       if timeout=0 then reset led4
+   end if
    '(
       IF TIMEE=250 THEN
          FLUSHBUF
@@ -310,7 +373,13 @@ DO
       LOOP
       RESET LED2
       status=0
-      tt=10
+      K=0
+      TEXT="AT&F"
+      TX
+      TT=5
+      DO
+         IF TT=0 THEN EXIT DO
+      LOOP
       DO
          flushbuf
          TEXT= "ATE0"
@@ -323,7 +392,8 @@ DO
          else
             reset status.0
          end if
-         if tt=0 then exit do
+         INCR K
+         IF K=5 THEN GOSUB STARTUP
       LOOP
       TT=3
       DO
@@ -374,7 +444,11 @@ DO
 
    'SMSCONFIG
    PRINT #1,STR(STATUS)
+   innumber="+989376921503"
+   outbox="sim is restarted"
+   sendsms
    IF STATUS=127 THEN EXIT DO
+
 LOOP
 END SUB
 
@@ -421,6 +495,12 @@ SUB READSMS
    RXIN
    X=SPLIT(SS,AR(1),CHR(34))
    INNUMBER=AR(4)
+   'intime =ar(8)
+   'X=SPLIT(ar(8),AR(9),",")
+   'ar(8)=ar(9)
+   'X=SPLIT(ar(8),AR(9),":")
+   'hour=val(ar(8))
+   'minn=val(ar(9))
    'PRINT INNUMBER
    'PRINT AR(9)
    RXIN
@@ -510,6 +590,7 @@ SUB SENDSMS
    'PRINT "AT"
    'RXIN
    FLUSHBUF
+
    'IF SS="OK" THEN
       TEXT= "AT+CMGS="+CHR(34)+INNUMBER+CHR(34)
       TX
@@ -517,16 +598,33 @@ SUB SENDSMS
          inputbin b
          if b=62 then exit do
       loop
-      TEXT= OUTBOX+CHR(26)
+      TEXT=outbox+" -> "
+      TEXT=TEXT+str(_hour)
+      TEXT=TEXT+":"
+      TEXT=TEXT+str(_min)
+      TEXT= TEXT+CHR(26)
       TX
+      FLUSHBUF
       'TT=60
+      k=0
       DO
          RXIN
          X=INSTR(SS,"+CMGS")
          IF X>0 THEN EXIT DO
+         incr k
+         if k= 3 then exit do
          'IF TT=0 THEN EXIT DO
       LOOP
-
+      k=0
+      DO
+         RXIN
+         X=INSTR(SS,"OK")
+         IF X>0 THEN EXIT DO
+         incr k
+         if k= 3 then exit do
+         'IF TT=0 THEN EXIT DO
+      LOOP
+      if x=0 then simreset
   ' END IF
 
 END SUB
@@ -688,7 +786,20 @@ PRINT #1,"SIM CHECK PROCESS"
       IF X> 0 THEN EXIT DO
    LOOP
  ')
-
+   FLUSHBUF
+   ERRORT=0
+   DO
+      TEXT= "AT+CMGDA=DEL ALL"
+      TX
+      TT=5
+      DO
+         IF TT=0 THEN EXIT DO
+      LOOP
+      RXIN
+      IF SS="OK" THEN EXIT DO
+      IF SS<>"" AND SS<>"OK" THEN INCR ERRORT
+      IF ERRORT=9 THEN EXIT DO
+   LOOP
 END SUB
 
 
