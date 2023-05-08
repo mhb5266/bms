@@ -1,0 +1,5 @@
+Removed Pin From Net: NetName=SIMRST1 Pin=U2-13
+Removed Pin From Net: NetName=SIMRST Pin=U2-19
+Added Pin To Net: NetName=SIMRST Pin=U2-13
+Added Pin To Net: NetName=SIMRST1 Pin=U2-19
+Added Room: Name=Sheet2

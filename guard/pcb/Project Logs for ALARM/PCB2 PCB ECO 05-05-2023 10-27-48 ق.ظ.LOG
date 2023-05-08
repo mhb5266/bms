@@ -1,0 +1,73 @@
+Added Component: Designator=pir(MSTB 2,5/3-G-5,08)
+Add component (AddParameter): Name = "Category"; Value = "Connector"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Code_IPC"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Company"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "Header, Nominal current: 12 A Rated voltage (III/2): 320 V Number of positions: 3 Pitch: 5.08 mm Color: green Contact surface: Tin Assembly: Soldering  DESIGNER:ABBAS BASEREH"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2Description"; Value = "Reference"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2URL"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Connector type"; Value = "PCB Terminal Block"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "DatasheetVersion"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "designer"; Value = "ABBAS BASEREH"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "HelpURL"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "PHOENIX CONTACT"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Max Current"; Value = "12 A"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mounting Technology"; Value = "Through-Hole"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Note"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PART.NO"; Value = "PHOENIX"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Pin Count"; Value = "3"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Positions"; Value = "3"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Revision 1"; Value = "2017-3-1"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Status"; Value = "Unreleased"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Update"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "VALUE"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Voltage"; Value = "320 V"; VariantName = "[No Variations]"
+Added Component: Designator=Q?(c945)
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "Manufacturer Link"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "http://www.taitroncomponents.com/"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2Description"; Value = "Datasheet"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2URL"; Value = "http://www.taitroncomponents.com/"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "DatasheetVersion"; Value = "2017"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "2017"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "IPC-7351 Footprint Added."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "3-Pin SOT-23 Package 0.95 mm Pitch, 2.3 mm Lead Span"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "SOT23"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageVersion"; Value = "2017-2-8"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "2017-2-8"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Abbas Basereh"; VariantName = "[No Variations]"
+Added Component: Designator=R?(AXIAL-0.3)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "Axial Device, Thru-Hole; 2 Leads; 0.3 in Pin Spacing"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "AXIAL-0.3"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "330"; VariantName = "[No Variations]"
+Added Component: Designator=R?(AXIAL-0.3)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "Axial Device, Thru-Hole; 2 Leads; 0.3 in Pin Spacing"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "AXIAL-0.3"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "330"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=+12 Pin=pir-1
+Added Pin To Net: NetName=GND Pin=pir-3
+Added Pin To Net: NetName=GND Pin=Q?-2
+Added Pin To Net: NetName=VCC Pin=R?-1
+Added Pin To Net: NetName=pirin Pin=pir-2
+Added Pin To Net: NetName=pirin Pin=R?-2
+Added Net: Name=pirin
+Added Pin To Net: NetName=pir Pin=Q?-3
+Added Pin To Net: NetName=pir Pin=R?-2
+Added Pin To Net: NetName=pir Pin=U3-24
+Added Net: Name=pir
+Added Member To Class: ClassName=Sheet2 Member=Component pir PHOENIX
+Added Member To Class: ClassName=Sheet2 Member=Component Q? C945
+Added Member To Class: ClassName=Sheet2 Member=Component R? Res1
+Added Member To Class: ClassName=Sheet2 Member=Component R? Res1
+Added Member To Class: ClassName=Sheet2 Member=Component R? Resistor SMD
+Added Member To Class: ClassName=Sheet2 Member=Component R? Res1
+Added Room: Name=Sheet2

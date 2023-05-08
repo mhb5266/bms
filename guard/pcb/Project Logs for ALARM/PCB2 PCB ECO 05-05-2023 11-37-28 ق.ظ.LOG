@@ -1,0 +1,12 @@
+Added Pin To Net: NetName=CS Pin=U3-41
+Added Pin To Net: NetName=RC522RST Pin=U3-43
+Added Member To Class: ClassName=Sheet2 Member=Component C6 33PF
+Added Member To Class: ClassName=Sheet2 Member=Component Q2 C945
+Added Member To Class: ClassName=Sheet2 Member=Component Q5 C945
+Added Member To Class: ClassName=Sheet2 Member=Component R4 Res1
+Added Member To Class: ClassName=Sheet2 Member=Component R6 Resistor SMD
+Added Member To Class: ClassName=Sheet2 Member=Component R7 Resistor SMD
+Added Member To Class: ClassName=Sheet2 Member=Component R8 Res1
+Added Member To Class: ClassName=Sheet2 Member=Component R9 Res1
+Added Member To Class: ClassName=Sheet2 Member=Component R12 Res1
+Added Room: Name=Sheet2

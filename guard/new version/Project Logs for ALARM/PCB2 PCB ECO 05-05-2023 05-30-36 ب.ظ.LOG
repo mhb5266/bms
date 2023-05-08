@@ -1,0 +1,7 @@
+Added Pin To Net: NetName=+12 Pin=pir1-1
+Added Member To Class: ClassName=Sheet2 Member=Component Q3 C945
+Added Member To Class: ClassName=Sheet2 Member=Component R4 Res1
+Added Member To Class: ClassName=Sheet2 Member=Component R6 Resistor SMD
+Added Member To Class: ClassName=Sheet2 Member=Component R9 Res1
+Added Member To Class: ClassName=Sheet2 Member=Component R10 Res1
+Added Room: Name=Sheet2

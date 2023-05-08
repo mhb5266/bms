@@ -1,0 +1,51 @@
+Removed Pin From Net: NetName=+12 Pin=BATTERY1-1
+Added Component: Designator=D?(ONSC-AXIAL_LEAD-2-59-10_P)
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "Manufacturer URL"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "http://www.onsemi.com/"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2Description"; Value = "Datasheet"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2URL"; Value = "http://www.onsemi.com/pub_link/Collateral/1N4001-D.PDF"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink3Description"; Value = "Package Specification"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink3URL"; Value = "http://www.onsemi.cn/pub_link/Collateral/59-10.PDF"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "DatasheetVersion"; Value = "Rev. 13"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "IFSM Max (A)"; Value = "30"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "IO(rec) Max (A)"; Value = "1"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "On Semiconductor"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mounting Technology"; Value = "Through Hole"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "2-Pin, Axial Lead, Diameter 2.35 mm"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "AXIAL_LEAD-2-59-10"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageVersion"; Value = "Rev. U, 02/2005"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Packing"; Value = "Tape and Reel"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PartNumber"; Value = "1N4007RLG"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "RoHS"; Value = "TRUE"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Type"; Value = "Standard Recovery"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "VRRM Max (V)"; Value = "1000"; VariantName = "[No Variations]"
+Added Component: Designator=pg(LED3mm_GRN)
+Add component (AddParameter): Name = "Designer"; Value = "Ali Hafizi"; VariantName = "[No Variations]"
+Added Component: Designator=R?(1206 Resistor)
+Added Component: Designator=R?(1206 Resistor)
+Added Component: Designator=status(LED3mm_GRN)
+Add component (AddParameter): Name = "Designer"; Value = "Ali Hafizi"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=+12 Pin=D?-1
+Added Pin To Net: NetName=GND Pin=pg-2
+Added Pin To Net: NetName=GND Pin=status-2
+Added Pin To Net: NetName=NetBATTERY1_1 Pin=BATTERY1-1
+Added Pin To Net: NetName=NetBATTERY1_1 Pin=D?-2
+Added Net: Name=NetBATTERY1_1
+Added Pin To Net: NetName=Netpg_1 Pin=pg-1
+Added Pin To Net: NetName=Netpg_1 Pin=R?-1
+Added Net: Name=Netpg_1
+Added Pin To Net: NetName=NetR?_1 Pin=R?-1
+Added Pin To Net: NetName=NetR?_1 Pin=status-1
+Added Net: Name=NetR?_1
+Added Pin To Net: NetName=pg Pin=R?-2
+Added Pin To Net: NetName=pg Pin=U3-37
+Added Net: Name=pg
+Added Pin To Net: NetName=status Pin=R?-2
+Added Pin To Net: NetName=status Pin=U3-36
+Added Net: Name=status
+Added Member To Class: ClassName=Sheet2 Member=Component D? 1N4007RLG
+Added Member To Class: ClassName=Sheet2 Member=Component pg LED3MM
+Added Member To Class: ClassName=Sheet2 Member=Component R? Res1
+Added Member To Class: ClassName=Sheet2 Member=Component R? Resistor SMD
+Added Member To Class: ClassName=Sheet2 Member=Component status LED3MM
+Added Room: Name=Sheet2

@@ -269,12 +269,22 @@ main:
 
                   timeout=50
                   outbox="alarm"
-                  innumber="+989155609631"
-                  sendsms
-                  innumber="+989376921503"
-                  sendsms
-                  innumber="+989158530390"
-                  sendsms
+                  do
+                     innumber="+989155609631"
+                     sendsms
+                     if sendok=1 then exit do
+                  loop
+                  do
+                     innumber="+989376921503"
+                     sendsms
+                     if sendok=1 then exit do
+                  loop
+                  do
+                     innumber="+989158530390"
+                     sendsms
+                     if sendok=1 then exit do
+                  loop
+
                endif
                do
                   if pir=1 then exit do
@@ -447,6 +457,7 @@ DO
    innumber="+989376921503"
    outbox="sim is restarted"
    sendsms
+   outbox="empty"
    IF STATUS=127 THEN EXIT DO
 
 LOOP
@@ -590,6 +601,7 @@ SUB SENDSMS
    'PRINT "AT"
    'RXIN
    FLUSHBUF
+   reset sendok
 
    'IF SS="OK" THEN
       TEXT= "AT+CMGS="+CHR(34)+INNUMBER+CHR(34)
@@ -621,10 +633,11 @@ SUB SENDSMS
          X=INSTR(SS,"OK")
          IF X>0 THEN EXIT DO
          incr k
-         if k= 3 then exit do
+         if k= 10 then exit do
          'IF TT=0 THEN EXIT DO
       LOOP
       if x=0 then simreset
+      if x>0 then set sendok
   ' END IF
 
 END SUB
