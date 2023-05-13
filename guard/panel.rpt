@@ -1,6 +1,6 @@
 Report       : panel
-Date         : 05-07-2023
-Time         : 18:49:50
+Date         : 05-12-2023
+Time         : 21:10:20
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
 Processor    : M16
@@ -8,9 +8,9 @@ SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : 1A58 hex  -> Will fit into ROM
-ROMIMAGE     :  6744 dec
-FLASH USED   :  41  %
+ROMIMAGE     : 1D02 hex  -> Will fit into ROM
+ROMIMAGE     :  7426 dec
+FLASH USED   :  45  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  183  dec
+Space left   :  181  dec
 
 LCD DB7      : PORTA.7
 LCD DB6      : PORTA.6
@@ -117,6 +117,9 @@ ORDER                            String * 10       02FF          767
 TEXT                             String * 40       030A          778 
 TIMEOUT                          Byte              0333          819 
 INTIME                           String * 25       0337          823 
+ELOCK                            EEPROM Byte       0000          0 
+LOCK                             Byte              0351          849 
+LEDS                             Byte              0352          850 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -553,6 +556,6 @@ J                                not used
 SMSOK                            not used
 INTIME                           not used
 
-Source string could be too big to fit into target string [AR(2)>N]  in line  226 
-Source string could be too big to fit into target string [AR(4)>INNUMBER]  in line  507 
-Source string could be too big to fit into target string [OUTBOX>TEXT]  in line  612 
+Source string could be too big to fit into target string [AR(2)>N]  in line  233 
+Source string could be too big to fit into target string [AR(4)>INNUMBER]  in line  502 
+Source string could be too big to fit into target string [OUTBOX>TEXT]  in line  627 

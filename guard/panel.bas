@@ -59,6 +59,9 @@ dim _hour as byte
 dim _min as byte
 dim _sec as byte
 dim intime as string*25
+dim elock as eram byte
+dim lock as byte
+dim leds as byte
 
 DECLARE SUB TX
 DECLARE SUB RXIN
@@ -70,14 +73,19 @@ declare sub flushbuf
 DECLARE SUB SIMRESET
 
 startup:
-
+   lock=elock
+   if lock>2 and lock<>0 then
+      lock=0
+      elock=lock
+      waitms 10
+   end if
    'do
     '  if pir=0 then set led4 else reset led4
 
    'loop
    RESET SIMON
    SET LED1
-   TT=5
+   TT=10
    DO
       IF TT=0 THEN EXIT DO
    LOOP
@@ -116,7 +124,7 @@ startup:
          reset status.0
       end if
       INCR K
-      IF K=5 THEN GOSUB STARTUP
+      IF K=3 THEN GOSUB STARTUP
    LOOP
    '(
    TT=3
@@ -197,10 +205,9 @@ main:
 
          if ltime<> timee then
             toggle led2
-            IF ORDER="BLINK" THEN
-               toggle led1
-
-            END IF
+            if leds=0 then reset led1
+            if leds=1 then set led1
+            if leds=2 then toggle led1
             ltime=timee
             '(
             FLUSHBUF
@@ -242,57 +249,62 @@ main:
 
 
             IF TIMEE=123 THEN
-               SIMCHECK
+               do
+                  SIMCHECK
+                  IF STATUS=127 THEN
+                     PRINT #1,"SIM IS OK"
+                     exit do
+                  end if
+                  if status<64 then
+                     PRINT #1,"SIM IS RESTARTING"
+                     SIMRESET
+                  end if
+               loop
                PRINT #1,STR(STATUS)
-               IF STATUS=127 THEN
-                  PRINT #1,"SIM IS OK"
 
-               ELSE
-                  PRINT #1,"SIM IS RESTARTING"
-                  SIMRESET
-               END IF
+
+
+
             ENDIF
-            '(IF ERRORT>9 THEN
-               ERRORT=0
-               PRINT #1, "NO ANSWER"
-               PRINT #1, "SIM IS RESTARTING"
-               SIMRESET
-            END IF
-            ')
+
 
          endif
-
-            if pir=0 then set led4 else reset led4
-            if pir=0 and timeout=0 then
-               waitms 200
-               if pir=0 then
-
-                  timeout=50
-                  outbox="alarm"
-                  do
-                     innumber="+989155609631"
-                     sendsms
-                     if sendok=1 then exit do
-                  loop
-                  do
-                     innumber="+989376921503"
-                     sendsms
-                     if sendok=1 then exit do
-                  loop
-                  do
-                     innumber="+989158530390"
-                     sendsms
-                     if sendok=1 then exit do
-                  loop
-
-               endif
-               do
-                  if pir=1 then exit do
-                  waitms 250
-                  toggle led2
-               loop
+            IF LOCK=1 THEN
                if pir=0 then set led4 else reset led4
-            end if
+               if pir=0 and timeout=0 then
+                  waitms 200
+                  if pir=0 then
+
+                     timeout=50
+                     outbox="alarm"
+                     do
+                        innumber="+989155609631"
+                        sendsms
+                        if sendok=1 then exit do
+                     loop
+                     do
+                        innumber="+989376921503"
+                        sendsms
+                        if sendok=1 then exit do
+                     loop
+                     do
+                        innumber="+989158530390"
+                        sendsms
+                        if sendok=1 then exit do
+                     loop
+
+                  endif
+                  K=0
+                  do
+                     if pir=1 then exit do
+                     waitms 250
+                     toggle led2
+                     INCR K
+                     IF K=40 THEN EXIT DO
+                  loop
+                  if pir=0 then set led4 else reset led4
+               end if
+            END IF
 
 
 
@@ -327,36 +339,19 @@ t1rutin:
       incr timee
       TOGGLE LED3
       if tt>0 then decr tt
-   start timer1
 
-   if pir=0 then set led4 else reset led4
+
+   if pir=0 AND LOCK=1 then set led4
+   IF PIR=1  THEN RESET LED4
+   IF PIR=0 AND LOCK=0 THEN TOGGLE LED4
 
    if timeout>0 then
 
        decr timeout
        if timeout=0 then reset led4
    end if
-   '(
-      IF TIMEE=250 THEN
-         FLUSHBUF
-         PRINT "AT"
-         K=5
-         DO
-            WAIT 1
-            DECR K
-            RXIN
-            IF SS="OK" THEN
-               ERRORT=0
-               EXIT DO
-            END IF
-            IF K=0 THEN
-               IF SS="" OR SS<>"OK" THEN ERRORT=10
-               EXIT DO
-            END IF
-         LOOP
-         K=0
-      ENDIF
-      ')
+   start timer1
+
 return
 
 
@@ -364,7 +359,7 @@ SUB SIMRESET
 DO
       RESET SIMON
       SET LED1
-      TT=5
+      TT=10
       DO
          IF TT=0 THEN EXIT DO
       LOOP
@@ -372,7 +367,7 @@ DO
       RESET LED1
       SET LED2
       RESET SIMRST
-      TT=2
+      TT=5
       DO
          IF TT=0 THEN EXIT DO
       LOOP
@@ -467,7 +462,7 @@ SUB RXIN:
    timer1=54735
    'STOP TIMER1
    B=0
-   TT=5
+   TT=3
    SS=""
    DO
       B=INKEY()
@@ -523,6 +518,11 @@ SUB READSMS
    X=INSTR(SMS,"TEMP")
    IF X>0 THEN ORDER="TEMP"
 
+   X=INSTR(SMS,"LOCK")
+   IF X>0 THEN ORDER="LOCK"
+
+   X=INSTR(SMS,"UNLOCK")
+   IF X>0 THEN ORDER="UNLOCK"
 
    X=0
    X=INSTR(SMS,"STATUS")
@@ -554,17 +554,28 @@ SUB READSMS
       CASE "TEMP"
         OUTBOX="TEMP=24 C"
       CASE "STATUS"
-         OUTBOX="SMS WAS RECIEVED"
+         IF LOCK=1 THEN OUTBOX="SYSTEM IS LOCKED"
+         IF LOCK=0 THEN OUTBOX="SYSTEM IS UNLOCKED"
       CASE "ANTEN"
          OUTBOX="GOOD"
       CASE "ON"
+         leds=1
          OUTBOX="LED IS ON"
-         SET LED1
+      CASE "LOCK"
+         LOCK=1
+         ELOCK=LOCK
+         WAITMS 10
+         OUTBOX="SYSTEM IS LOCKED"
+      CASE "UNLOCK"
+         LOCK=0
+         ELOCK=LOCK
+         WAITMS 10
+         OUTBOX="SYSTEM IS UNLOCKED"
       CASE "OFF"
-         RESET LED1
+         leds=0
          OUTBOX="LED IS OFF"
       CASE "BLINK"
-         RESET LED1
+         leds=2
          OUTBOX="LED IS BLINKING"
       CASE "?"
          OUTBOX="ITS OK"
@@ -606,9 +617,13 @@ SUB SENDSMS
    'IF SS="OK" THEN
       TEXT= "AT+CMGS="+CHR(34)+INNUMBER+CHR(34)
       TX
+      k=0
       do
          inputbin b
+         waitms 100
          if b=62 then exit do
+         incr k
+         if k=20 then exit do
       loop
       TEXT=outbox+" -> "
       TEXT=TEXT+str(_hour)
@@ -644,7 +659,8 @@ END SUB
 
 
 SUB SIMCHECK
-PRINT #1,"SIM CHECK PROCESS"
+
+   PRINT #1,"SIM CHECK PROCESS"
    RESET SIMOK
    ERRORT=0
    TT=5
@@ -804,14 +820,19 @@ PRINT #1,"SIM CHECK PROCESS"
    DO
       TEXT= "AT+CMGDA=DEL ALL"
       TX
-      TT=5
+      TT=3
       DO
+          RXIN
+         IF SS="OK" THEN EXIT DO
          IF TT=0 THEN EXIT DO
       LOOP
-      RXIN
+      'RXIN
       IF SS="OK" THEN EXIT DO
       IF SS<>"" AND SS<>"OK" THEN INCR ERRORT
-      IF ERRORT=9 THEN EXIT DO
+      IF ERRORT=3 THEN
+         errort=9
+         EXIT DO
+      end if
    LOOP
 END SUB
 
