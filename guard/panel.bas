@@ -224,51 +224,75 @@ main:
             RXIN
             IF SS<>"OK" THEN READSMS
             ')
-            X=ISCHARWAITING()
+            k=timee mod 3
+            if k=0 then
+               X=ISCHARWAITING()
 
-            IF X>0 THEN
-               RXIN
-               X=INSTR(SS,"+CMT")
                IF X>0 THEN
-                  X=SPLIT(SS,AR(1),",")
-                  N=AR(2)
-                  READSMS
+                  RXIN
+                  X=INSTR(SS,"+CMT")
+                  IF X>0 THEN
+                     X=SPLIT(SS,AR(1),",")
+                     N=AR(2)
+                     READSMS
+                  END IF
+
+               ELSE
+                  X=TIMEE MOD 6
+                  IF X=0 THEN
+                     TEXT="AT+CMGR=1"
+                     TX
+                     RXIN
+                     X=INSTR(SS,"OK")
+                     IF X=0 THEN READSMS
+                  END IF
+
                END IF
-               '(
-            ELSE
-               X=TIMEE MOD 10
-               IF X=0 THEN
-                  TEXT="AT+CMGR=1"
+            end if
+
+            'IF TIMEE=123 THEN
+            k=timee mod 30
+            if k=0 then
+               TT=5
+               DO
+                  flushbuf
+                  TEXT= "AT"
                   TX
                   RXIN
                   X=INSTR(SS,"OK")
-                  IF X=0 THEN READSMS
-               END IF
-               ')
-            END IF
-
-
-            IF TIMEE=123 THEN
-               do
-                  SIMCHECK
-                  IF STATUS=127 THEN
-                     PRINT #1,"SIM IS OK"
-                     exit do
+                  IF X> 0 THEN
+                     set status.0
+                     EXIT DO
+                  else
+                     reset status.0
                   end if
-                  if status<64 then
-                     PRINT #1,"SIM IS RESTARTING"
-                     SIMRESET
+                  if tt=0 then exit do
+               LOOP
+                  X=INSTR(SS,"OK")
+                  IF X> 0 THEN
+                     set status.0
+
+                  else
+                      k=0
+                      do
+
+                        SIMCHECK
+                        IF STATUS=127 THEN
+                           PRINT #1,"SIM IS OK"
+                           exit do
+                        end if
+                        if status<64 then
+                           PRINT #1,"SIM IS RESTARTING"
+                           SIMRESET
+                        end if
+                        PRINT #1,STR(STATUS)
+                        if k=3 then exit do
+                     loop
                   end if
-               loop
-               PRINT #1,STR(STATUS)
+            end if
 
 
-
-
-            ENDIF
-
-
-         endif
+          endif
             IF LOCK=1 THEN
                if pir=0 then set led4 else reset led4
                if pir=0 and timeout=0 then
@@ -598,7 +622,7 @@ SUB READSMS
       RXIN
       IF SS="OK" THEN EXIT DO
       IF SS<>"" AND SS<>"OK" THEN INCR ERRORT
-      IF ERRORT=9 THEN EXIT DO
+      IF ERRORT=3 THEN EXIT DO
    LOOP
    FLUSHBUF
    TEXT= "AT"
