@@ -1,0 +1,2 @@
+Removed Pin From Net: NetName=+12 Pin=RELAY1-1
+Added Pin To Net: NetName=vdc in Pin=RELAY1-1

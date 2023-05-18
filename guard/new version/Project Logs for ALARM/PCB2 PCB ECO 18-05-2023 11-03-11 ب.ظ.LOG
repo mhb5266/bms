@@ -1,0 +1,8 @@
+Removed Pin From Net: NetName=vdc in Pin=D4-1
+Removed Pin From Net: NetName=vdc in Pin=pir1-1
+Removed Pin From Net: NetName=vdc in Pin=RELAY1-1
+Removed Pin From Net: NetName=vdc in Pin=RELAY1-4
+Added Pin To Net: NetName=+12 Pin=D4-1
+Added Pin To Net: NetName=+12 Pin=pir1-1
+Added Pin To Net: NetName=+12 Pin=RELAY1-1
+Added Pin To Net: NetName=+12 Pin=RELAY1-4

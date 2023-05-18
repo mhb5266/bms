@@ -238,6 +238,7 @@ main:
                   END IF
 
                ELSE
+               '(
                   X=TIMEE MOD 6
                   IF X=0 THEN
                      TEXT="AT+CMGR=1"
@@ -246,7 +247,7 @@ main:
                      X=INSTR(SS,"OK")
                      IF X=0 THEN READSMS
                   END IF
-
+                ')
                END IF
             end if
 
@@ -424,6 +425,7 @@ DO
          INCR K
          IF K=5 THEN GOSUB STARTUP
       LOOP
+      '(
       TT=3
       DO
          flushbuf
@@ -455,7 +457,7 @@ DO
          end if
          if tt=0 then exit do
       LOOP
-
+      ')
 
     '(
       DO
@@ -474,9 +476,9 @@ DO
    'SMSCONFIG
    PRINT #1,STR(STATUS)
    innumber="+989376921503"
-   outbox="sim is restarted"
-   sendsms
-   outbox="empty"
+   'outbox="sim is restarted"
+   'sendsms
+   'outbox="empty"
    IF STATUS=127 THEN EXIT DO
 
 LOOP
@@ -521,7 +523,10 @@ SUB READSMS
    'TEXT= "AT+CMGR="+N
    PRINT "AT+CMGR=1"
    'TX
-
+   'tt=5
+   'do
+     ' if tt=0 then exit do
+   'loop
    RXIN
    X=SPLIT(SS,AR(1),CHR(34))
    INNUMBER=AR(4)
