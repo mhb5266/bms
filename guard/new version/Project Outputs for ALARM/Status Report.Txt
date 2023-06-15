@@ -1,0 +1,13 @@
+Output: Gerber Files
+Type  : Gerber
+From  : Variant [[No Variations]] of Project [ALARM.PrjPcb]
+   Generated File[PCB2.GBL]
+   Generated File[PCB2.RUL]
+   Generated File[PCB2.EXTREP]
+   Generated File[PCB2.REP]
+
+
+Files Generated   : 4
+Documents Printed : 0
+
+Finished Output Generation At 01:34:43 ب.ظ On 02/06/2023

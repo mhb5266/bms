@@ -1,0 +1,16 @@
+Change Component Designator: OldDesignator=Anten NewDesignator=CN1
+Change Component Designator: OldDesignator=LED NewDesignator=led1
+Change Component Designator: OldDesignator=output NewDesignator=T1
+Change Component Designator: OldDesignator=PG NewDesignator=pg1
+Change Component Designator: OldDesignator=pir NewDesignator=pir1
+Change Component Designator: OldDesignator=Programmer NewDesignator=J2
+Change Component Designator: OldDesignator=RELAY NewDesignator=RELAY1
+Change Component Designator: OldDesignator=REMOTE NewDesignator=REMOTE1
+Change Component Designator: OldDesignator=Reset NewDesignator=reset1
+Change Component Designator: OldDesignator=RS485 NewDesignator=rs1
+Change Component Designator: OldDesignator=Sim800 NewDesignator=*1
+Change Component Designator: OldDesignator=XTAL NewDesignator=XTAL1
+Added Member To Class: ClassName=Sheet2 Member=Component L1 100UH
+Added Member To Class: ClassName=Sheet2 Member=Component R5 Resistor SMD
+Added Member To Class: ClassName=Sheet2 Member=Component R7 Res1
+Added Member To Class: ClassName=Sheet2 Member=Component R10 Resistor SMD

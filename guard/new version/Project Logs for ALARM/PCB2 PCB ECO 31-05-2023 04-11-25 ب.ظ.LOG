@@ -1,0 +1,4 @@
+Added Pin To Net: NetName=led4 Pin=U2-40
+Added Net: Name=led4
+Added Net: Name=Netled4_1
+Added Room: Name=Sheet2

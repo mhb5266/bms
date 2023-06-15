@@ -1,0 +1,10 @@
+Added Component: Designator=led4(LED3mm_GRN)
+Add component (AddParameter): Name = "Designer"; Value = "Ali Hafizi"; VariantName = "[No Variations]"
+Added Component: Designator=R22(RESC4817X04N)
+Add component (AddParameter): Name = "Data"; Value = "16-12-2016"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Desc."; Value = "RES SMD 1206"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Designer"; Value = "Abbas Basereh"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=led4-2
+Added Net: Name=Netled4_1
+Added Member To Class: ClassName=Sheet2 Member=Component led4 LED3MM
+Added Member To Class: ClassName=Sheet2 Member=Component R22 1K

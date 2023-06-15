@@ -1,16 +1,16 @@
 Report       : panel
-Date         : 05-17-2023
-Time         : 00:34:45
+Date         : 06-10-2023
+Time         : 20:26:05
 
-Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
+Compiler     : BASCOM-AVR LIBRARY V 2.0.8.5
 Processor    : M16
 SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : 1CE6 hex  -> Will fit into ROM
-ROMIMAGE     :  7398 dec
-FLASH USED   :  45  %
+ROMIMAGE     : 2B54 hex  -> Will fit into ROM
+ROMIMAGE     :  11092 dec
+FLASH USED   :  67  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  181  dec
+Space left   :  118  dec
 
 LCD DB7      : PORTA.7
 LCD DB6      : PORTA.6
@@ -93,33 +93,48 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
-KEY                              Byte              00AC          172 
-B                                Byte              00AD          173 
-ERRORT                           Byte              00AE          174 
-STATUS                           Byte              00AF          175 
-K                                Byte              00B0          176 
-SS                               String * 100      00B1          177 
-TT                               Word              0116          278 
-TIMEE                            Byte              0118          280 
-LTIME                            Byte              0119          281 
-I                                Byte              011A          282 
-SIMOK                            Bit [7]           011B          283 
-X                                Byte              011C          284 
-AR                               String(10) * 25   011D          285 
-J                                Byte              0221          545 
-SENDOK                           Bit [6]           011B          283 
-N                                String * 2        0222          546 
-INNUMBER                         String * 15       0225          549 
-SMS                              String * 100      0235          565 
-SMSOK                            Bit [5]           011B          283 
-OUTBOX                           String * 100      029A          666 
-ORDER                            String * 10       02FF          767 
-TEXT                             String * 40       030A          778 
-TIMEOUT                          Byte              0333          819 
-INTIME                           String * 25       0337          823 
-ELOCK                            EEPROM Byte       0000          0 
-LOCK                             Byte              0351          849 
-LEDS                             Byte              0352          850 
+STATE                            Byte              00AC          172 
+W                                Byte              00AD          173 
+KEY                              Byte              00AE          174 
+B                                Byte              00AF          175 
+ERRORT                           Byte              00B0          176 
+STATUS                           Byte              00B1          177 
+K                                Byte              00B2          178 
+SS                               String * 100      00B3          179 
+TT                               Word              0118          280 
+TIMEE                            Byte              011A          282 
+LTIME                            Byte              011B          283 
+I                                Byte              011C          284 
+SIMOK                            Bit [7]           011D          285 
+X                                Byte              011E          286 
+AR                               String(10) * 25   011F          287 
+J                                Byte              0223          547 
+SENDOK                           Bit [6]           011D          285 
+N                                String * 2        0224          548 
+INNUMBER                         String * 15       0227          551 
+OWNER1                           EEPROM String     0000          0 
+OWN1                             String * 15       0237          567 
+OWNER2                           EEPROM String     0010          16 
+OWN2                             String * 15       0247          583 
+PASSWORD                         EEPROM String     0020          32 
+PASS                             String * 4        0257          599 
+PASSEN                           EEPROM Byte       0025          37 
+ID                               String * 15       025C          604 
+SMS                              String * 100      026C          620 
+SMSOK                            Bit [5]           011D          285 
+OUTBOX                           String * 100      02D1          721 
+ORDER                            String * 10       0336          822 
+TEXT                             String * 40       0341          833 
+TIMEOUT                          Byte              036A          874 
+SHH                              String * 2        036B          875 
+SMIN                             String * 2        036E          878 
+INTIME                           String * 25       0374          884 
+ELOCK                            EEPROM Byte       0026          38 
+LOCK                             Byte              038E          910 
+LEDS                             Byte              038F          911 
+ETYP                             EEPROM Byte       0027          39 
+TYP                              Byte              0390          912 
+TTT                              Byte              0391          913 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -503,7 +518,7 @@ _SIM                             0
 _HUGE                            0
 _BASE                            1
 _XTAL                            11059200
-_BUILD                           20830
+_BUILD                           20850
 _COMPILER                        90
 _HWMUL                           1
 _DOSFILEWRITE                    0
@@ -522,12 +537,16 @@ _FPROTECT                        0
 _HWSTACK_LOW                     &H0437
 _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
+_HAVEMOVW                        1
 _XMEGA                           0
 _XTINY                           0
 _RS232_BUFSIZE0                  50
 _RS232_BUFSIZE_IN0P1             51
 _CHECKCHAR0                      0
 _RS232_BUFSIZE_OUT0              20
+ADMIN                            "+989376921503"
+APASS                            "5266"
+DPASS                            "1234"
 CBITINFINITY                     0
 CMBITINFINITY                    1
 CBITZERO                         1
@@ -553,9 +572,13 @@ ADCD                             not used
 COMPARE1                         not used
 KEY                              not used
 J                                not used
+PASSWORD                         not used
+PASS                             not used
+PASSEN                           not used
 SMSOK                            not used
 INTIME                           not used
 
-Source string could be too big to fit into target string [AR(2)>N]  in line  235 
-Source string could be too big to fit into target string [AR(4)>INNUMBER]  in line  531 
-Source string could be too big to fit into target string [OUTBOX>TEXT]  in line  656 
+Source string could be too big to fit into target string [AR(2)>N]  in line  224 
+Source string could be too big to fit into target string [AR(4)>INNUMBER]  in line  572 
+Source string could be too big to fit into target string [OUTBOX>TEXT]  in line  748 
+Source string could be too big to fit into target string [SS>ID]  in line  918 

@@ -1,0 +1,2 @@
+Change Component Designator: OldDesignator=led4 NewDesignator=led22
+Added Net: Name=Netled22_1
