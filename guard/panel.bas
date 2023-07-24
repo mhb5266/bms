@@ -8,7 +8,7 @@ config kbd = PORTa
 Config Serialin = Buffered , Size = 50
 CONFIG SERIALOUT = BUFFERED , SIZE = 20
 Open "comd.7:9600,8,n,1" For Output As #1
-
+config WATCHDOG=2048
 ENABLE INTERRUPTS
 'ENABLE URXC
 'ON URXC RXIN
@@ -32,6 +32,7 @@ pir alias pinc.0 : config portc.0 = INPUT
 
 
 defines:
+dim rwd as word
 dim state as byte
 dim w as byte
 dim key as byte
@@ -197,9 +198,11 @@ FOR I = 1 TO 10
    TOGGLE LED1
    TOGGLE LED2
    WAITMS 250
+
 NEXT
 RESET LED1
 RESET LED2
+'start WATCHDOG
 main:
 
    do
@@ -207,6 +210,8 @@ main:
 
           state=4
           if ltime <> timee then
+            reset watchdog
+            rwd=0
             toggle led2
             if leds = 0 then reset led1
             if leds = 1 then set led1
@@ -266,6 +271,10 @@ main:
                            PRINT #1 , "SIM IS RESTARTING"
                            PRINT "AT+CFUN=1,1"
                            TT=15
+                           do
+                              if tt=0 then exit do
+                           loop
+                           tt=20
                            DO
                               RXIN
                               X=INSTR(SS,"OK")
@@ -275,10 +284,12 @@ main:
                                  SIMRESET
                                  EXIT DO
                               END IF
+                              if tt=0 then exit do
                            LOOP
 
                         end if
                         PRINT #1 , STR(STATUS)
+                        incr k
                         if k = 3 then exit do
                       loop
                   end if
@@ -383,7 +394,10 @@ t1rutin:
       timer1=62835
       incr w
       if w=4 then
-
+            incr rwd
+            if rwd<1800 then
+               reset watchdog
+            end if
             w=0
             incr _sec
             if _sec > 59 then
@@ -422,6 +436,7 @@ return
 
 SUB SIMRESET
 DO
+      reset watchdog
       state=5
       RESET SIMON
       SET LED1
@@ -532,6 +547,7 @@ SUB RXIN:
    TTT = 3
    SS = ""
    DO
+      reset watchdog
       B = INKEY()
       'IF B>0 THEN TT=5
       SELECT CASE B
@@ -735,52 +751,59 @@ SUB SENDSMS
    reset sendok
 
    'IF SS="OK" THEN
-      TEXT = "AT+CMGS=" + CHR(34) + INNUMBER + CHR(34)
-      TX
-      tt = 70
-      do
-         inputbin b
-         waitms 100
-         if b = 62 then exit do
-         'incr k
-         if tt = 0 then exit do
-      loop
-      IF INNUMBER=OWN1 OR INNUMBER=OWN2  OR INNUMBER=ADMIN THEN
-         TEXT = outbox + " -> "
-         TEXT = TEXT + shh
-         TEXT = TEXT + ":"
-         TEXT = TEXT + smin
-         TEXT = TEXT + CHR(10)
-         TEXT=TEXT+"ID= "
-         TEXT=TEXT+ID
-         TEXT=TEXT+CHR(26)
-      ELSE
-         TEXT="Access Denied"+CHR(26)
-      END IF
-      TX
-      FLUSHBUF
-      TT=70
-      k = 0
-      DO
-         RXIN
-         X = INSTR(SS , "+CMGS")
-         IF X > 0 THEN EXIT DO
-         'incr k
-         'if k = 3 then exit do
-         IF TT=0 THEN EXIT DO
-      LOOP
-      'k = 0
-      tt=70
-      DO
-         RXIN
-         X = INSTR(SS , "OK")
-         IF X > 0 THEN EXIT DO
-         'incr k
-         'if k = 10 then exit do
-         IF TT=0 THEN EXIT DO
-      LOOP
-      if x = 0 then simreset
-      if x > 0 then set sendok
+      x=instr(innumber,"+98")
+      if x>0 then
+
+         TEXT = "AT+CMGS=" + CHR(34) + INNUMBER + CHR(34)
+         TX
+         tt = 70
+         do
+            inputbin b
+            waitms 100
+            if b = 62 then exit do
+            'incr k
+            if tt = 0 then exit do
+            reset watchdog
+         loop
+         IF INNUMBER=OWN1 OR INNUMBER=OWN2  OR INNUMBER=ADMIN THEN
+            TEXT = outbox + " -> "
+            TEXT = TEXT + shh
+            TEXT = TEXT + ":"
+            TEXT = TEXT + smin
+            TEXT = TEXT + CHR(10)
+            TEXT=TEXT+"ID= "
+            TEXT=TEXT+ID
+            TEXT=TEXT+CHR(26)
+         ELSE
+            TEXT="Access Denied"+CHR(26)
+         END IF
+         TX
+         FLUSHBUF
+         TT=70
+         k = 0
+         DO
+            RXIN
+            X = INSTR(SS , "+CMGS")
+            IF X > 0 THEN EXIT DO
+            'incr k
+            'if k = 3 then exit do
+            IF TT=0 THEN EXIT DO
+         LOOP
+         'k = 0
+         tt=70
+         DO
+            RXIN
+            X = INSTR(SS , "OK")
+            IF X > 0 THEN EXIT DO
+            'incr k
+            'if k = 10 then exit do
+            IF TT=0 THEN EXIT DO
+         LOOP
+         if x = 0 then simreset
+         if x > 0 then set sendok
+      else
+         print#1,"number is invalid"
+      end if
 
 
 END SUB
