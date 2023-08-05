@@ -39,6 +39,7 @@ Key4 Alias Pinc.7 : Config Portc.7 = Input
 
 buz Alias Portd.6 : Config Portd.6 = Output
 
+
 Defines:
 
 Dim In1ok As Bit : Dim In2ok As Bit : Dim Ingok As Bit
@@ -110,6 +111,8 @@ Do
   Readkeys
   If Touch = 0 Then Exit Do
 Loop
+
+
 
 Main:
 
@@ -683,7 +686,7 @@ Sub Startgen
               Readkeys
               If Touch > 0 Then Exit Do
               readvolt
-              if
+              if in1ok=1 or in2ok=1 then exit do
             Loop
          End If
          Order = "auto"

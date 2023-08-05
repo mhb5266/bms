@@ -601,8 +601,8 @@ Sub Checkanswer
                         If Outid1(i) = Id Or Outid2(i) = Id Or Outid3(i) = Id Then
                          'IF ID=3 THEN
                            If Light(i) = Dark Then
-                              Light(i) = Minlight
-                           Elseif Light(i) = Minlight Then
+                              'Light(i) = Minlight
+                           'Elseif Light(i) = Minlight Then
                               'Light(2) = Midlight
                            'Elseif Light(2) = Midlight Then
                               Light(i) = Maxlight
