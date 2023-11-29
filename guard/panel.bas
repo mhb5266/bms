@@ -4,30 +4,38 @@ $baud = 9600
 
 configs:
 
-config kbd = PORTa
-Config Serialin = Buffered , Size = 50
-CONFIG SERIALOUT = BUFFERED , SIZE = 20
-Open "comd.7:9600,8,n,1" For Output As #1
-config WATCHDOG=2048
-ENABLE INTERRUPTS
-'ENABLE URXC
-'ON URXC RXIN
+''config kbd = PORTa
+'Config Serialin = Bufferout , Size = 50
+'CONFIG SERIALOUT = BUFFErout , SIZE = 20
+Open "COMC.2:9600,8,n,1" For Output As #1
+Open "COMC.3:9600,8,n,1" For input As #2
 
-ENABLE UTXC
-ON UTXC TXRUTIN
+'config WATCHDOG=2048
+ENABLE INTERRUPTS
+ENABLE URXC
+ON URXC RXIN
+
+'ENABLE UTXC
+'ON UTXC TXRUTIN
 
 config timer1 = timer , prescale = 1024
 enable timer1
 on timer1 t1rutin
 start timer1
 
-SIMRST ALIAS PORTD.6 : CONFIG PORTD.6 = OUTPUT
+SIMRST ALIAS PORTd.4 : CONFIG PORTd.4 = OUTPUT
 SIMON ALIAS PORTD.5 : CONFIG PORTD.5 = OUTPUT
-LED1 ALIAS PORTA.2 : CONFIG PORTA.0 = OUTPUT
-LED2 ALIAS PORTA.1 : CONFIG PORTA.1 = OUTPUT
-LED3 ALIAS PORTA.0 : CONFIG PORTA.2 = OUTPUT
-LED4 ALIAS PORTc.1 : CONFIG PORTc.1 = OUTPUT
-pir alias pinc.0 : config portc.0 = INPUT
+
+relay alias porta.3:config porta.3=OUTPUT
+rout ALIAS PORTb.0 : CONFIG PORTb.0 = OUTPUT
+bstatus ALIAS PORTA.1 : CONFIG PORTA.1 = OUTPUT
+gpg ALIAS PORTA.0 : CONFIG PORTA.0 = OUTPUT
+'rout ALIAS PORTc.1 : CONFIG PORTc.1 = OUTPUT
+pir alias pinc.5 : config portc.5 = INPUT
+en485 alias portc.4:config portc.4=OUTPUT
+set en485
+set simrst
+
 
 
 
@@ -93,6 +101,15 @@ declare sub makeacall
 DECLARE SUB SIMCONFIG
 
 startup:
+'(
+   do
+     print #1,"Hi"
+
+     wait 2
+     toggle relay
+     wait 2
+  loop
+  ')
    state=0
    OWN1=OWNER1
    WAITMS 30
@@ -127,36 +144,47 @@ startup:
       waitms 10
    end if
    'do
-    '  if pir=0 then set led4 else reset led4
+    '  if pir=0 then set rout else reset rout
 
    'loop
    RESET SIMON
-   SET LED1
-   PRINT#1,"SIM IS POWERDOWN"
-   TT = 30
-   DO
-      IF TT = 0 THEN EXIT DO
-   LOOP
-   PRINT#1,"SIM IS POWERUP"
-   SET SIMON
-   RESET LED1
-   SET LED2
-   RESET SIMRST
-   PRINT#1,"SIM IS RESETING"
-   TT = 2
-   DO
-      IF TT = 0 THEN EXIT DO
-   LOOP
-   SET SIMRST
+   SET rout
+   print #1,"SIM IS POWERDOWN"
    TT = 5
    DO
       IF TT = 0 THEN EXIT DO
    LOOP
-   RESET LED2
+   print #1,"SIM IS POWERUP"
+   SET SIMON
+   RESET rout
+   SET bstatus
+   RESET SIMRST
+   print #1,"SIM IS RESETING"
+   TT = 5
+   DO
+      IF TT = 0 THEN EXIT DO
+   LOOP
+   SET SIMRST
+   TT = 25
+   DO
+      IF TT = 0 THEN EXIT DO
+   LOOP
+   RESET bstatus
    status = 0
+
    K = 0
+   print "ATE0"
+   'print "AT"
    'TEXT="AT&F"
+
    'TX
+
+  ' print #1,"Wait until normal"
+
+
+
+
+
    TT = 5
    DO
       IF TT = 0 THEN EXIT DO
@@ -180,28 +208,28 @@ startup:
    SIMCHECK
 
    state=3
-   PRINT #1 , STR(STATUS)
+   print #1 , STR(STATUS)
    IF STATUS = 127 THEN
-      PRINT #1 , "SIM IS OK"
+      print #1 , "SIM IS OK"
 
    ELSE
-      PRINT #1 , "SIM IS RESTARTING"
+      print #1 , "SIM IS RESTARTING"
       SIMRESET
    END IF
 
    innumber = "+989376921503"
    outbox = "Power Up"
    sendsms
-SET LED1
-RESET LED2
+SET rout
+RESET bstatus
 FOR I = 1 TO 10
-   TOGGLE LED1
-   TOGGLE LED2
+   TOGGLE rout
+   TOGGLE bstatus
    WAITMS 250
 
 NEXT
-RESET LED1
-RESET LED2
+RESET rout
+RESET bstatus
 'start WATCHDOG
 main:
 
@@ -212,10 +240,10 @@ main:
           if ltime <> timee then
             reset watchdog
             rwd=0
-            toggle led2
-            if leds = 0 then reset led1
-            if leds = 1 then set led1
-            if leds = 2 then toggle led1
+            toggle bstatus
+            if leds = 0 then reset rout
+            if leds = 1 then set rout
+            if leds = 2 then toggle rout
             ltime = timee
 
             k = timee mod 3
@@ -264,11 +292,11 @@ main:
 
                         SIMCHECK
                         IF STATUS = 127 THEN
-                           PRINT #1 , "SIM IS OK"
+                           print #1 , "SIM IS OK"
                            exit do
                         end if
                         if status < 64 then
-                           PRINT #1 , "SIM IS RESTARTING"
+                           print #1 , "SIM IS RESTARTING"
                            PRINT "AT+CFUN=1,1"
                            TT=15
                            do
@@ -288,16 +316,17 @@ main:
                            LOOP
 
                         end if
-                        PRINT #1 , STR(STATUS)
+                        print #1 , STR(STATUS)
                         incr k
                         if k = 3 then exit do
                       loop
                   end if
             end if
           endif
+            '(
             IF LOCK = 1 THEN
 
-               if pir = 0 then set led4 else reset led4
+               if pir = 0 then set rout else reset rout
                if pir = 0 and timeout = 0 then
                   if pir = 0 then
                   timeout = 50
@@ -365,16 +394,16 @@ main:
                   do
                      if pir = 1 then exit do
                      waitms 250
-                     toggle led2
+                     toggle bstatus
                      INCR K
                      IF K = 40 THEN EXIT DO
                   loop
-                  if pir = 0 then set led4 else reset led4
+                  if pir = 0 then set rout else reset rout
                end if
             END IF
 
 
-
+            ')
 
 
    loop
@@ -414,20 +443,20 @@ t1rutin:
             shh =str(_hour)
             smin=str(_min)
             incr timee
-            TOGGLE LED3
+            TOGGLE gpg
             if tt > 0 then decr tt
             IF TTT > 0 THEN DECR TTT
 
-         if pir = 0 AND LOCK = 1 then set led4
-         IF PIR = 1 THEN RESET LED4
-         IF PIR = 0 AND LOCK = 0 THEN TOGGLE LED4
+         if pir = 0 AND LOCK = 1 then set rout
+         IF PIR = 1 THEN RESET rout
+         IF PIR = 0 AND LOCK = 0 THEN TOGGLE rout
 
          if timeout > 0 then
 
              decr timeout
-             if timeout = 0 then reset led4
+             if timeout = 0 then reset rout
          end if
-         'print#1,shh;":";smin;":";str(_sec)
+         'print #1,shh;":";smin;":";str(_sec)
       end if
    start timer1
 
@@ -439,14 +468,14 @@ DO
       reset watchdog
       state=5
       RESET SIMON
-      SET LED1
+      SET rout
       TT = 5
       DO
          IF TT = 0 THEN EXIT DO
       LOOP
       SET SIMON
-      RESET LED1
-      SET LED2
+      RESET rout
+      SET bstatus
       RESET SIMRST
       TT = 2
       DO
@@ -457,7 +486,7 @@ DO
       DO
          IF TT = 0 THEN EXIT DO
       LOOP
-      RESET LED2
+      RESET bstatus
       status = 0
       K = 0
       'TEXT="AT&F"
@@ -530,7 +559,7 @@ DO
    SIMCHECK
 
    'SMSCONFIG
-   PRINT #1 , STR(STATUS)
+   print #1 , STR(STATUS)
    innumber = "+989376921503"
    'outbox="sim is restarted"
    'sendsms
@@ -566,7 +595,7 @@ SUB RXIN:
 
    LOOP
    SS = UCASE(SS)
-   PRINT #1 , SS
+   print #1 , SS
    'START TIMER1
    TT = 1
    DO
@@ -802,7 +831,7 @@ SUB SENDSMS
          if x = 0 then simreset
          if x > 0 then set sendok
       else
-         print#1,"number is invalid"
+         print #1,"number is invalid"
       end if
 
 
@@ -811,7 +840,7 @@ END SUB
 
 SUB SIMCHECK
 
-   PRINT #1 , "SIM CHECK PROCESS"
+   print #1 , "SIM CHECK PROCESS"
    RESET SIMOK
    ERRORT = 0
    TT = 5
@@ -829,7 +858,7 @@ SUB SIMCHECK
       end if
       if tt = 0 then exit do
    LOOP
-   PRINT #1 , STATUS.0
+   print #1 , STATUS.0
    TT = 3
    DO
       flushbuf
@@ -845,7 +874,7 @@ SUB SIMCHECK
       end if
       if tt = 0 then exit do
    LOOP
-   PRINT #1 , STATUS.1
+   print #1 , STATUS.1
    K = 0
    DO
       flushbuf
@@ -868,7 +897,7 @@ SUB SIMCHECK
       INCR K
       if K = 5 then exit do
    LOOP
-   PRINT #1 , STATUS.2
+   print #1 , STATUS.2
    TT = 3
    DO
       flushbuf
@@ -884,7 +913,7 @@ SUB SIMCHECK
       end if
       if tt = 0 then exit do
    LOOP
-   PRINT #1 , STATUS.3
+   print #1 , STATUS.3
    TT = 3
    DO
       flushbuf
@@ -900,7 +929,7 @@ SUB SIMCHECK
       end if
       if tt = 0 then exit do
    LOOP
-   PRINT #1 , STATUS.4
+   print #1 , STATUS.4
 
    TT = 3
    DO
@@ -917,7 +946,7 @@ SUB SIMCHECK
       end if
       if tt = 0 then exit do
    LOOP
-   PRINT #1 , STATUS.5
+   print #1 , STATUS.5
    TT = 3
    DO
       flushbuf
@@ -934,13 +963,13 @@ SUB SIMCHECK
       end if
       if tt = 0 then exit do
    LOOP
-   PRINT #1 , STATUS.6
+   print #1 , STATUS.6
    flushbuf
    text= "AT+GSN"
    tx
    RXIN
    ID=SS
-   PRINT#1, SS
+   print #1, SS
    RXIN
    FLUSHBUF
    ERRORT = 0
@@ -961,7 +990,7 @@ SUB SIMCHECK
          EXIT DO
       end if
    LOOP
-   PRINT #1 , STATUS
+   print #1 , STATUS
    IF STATUS < 100 THEN SIMCONFIG
 END SUB
 
@@ -989,14 +1018,14 @@ SUB TX
 
    LOOP
    timer1 = 54735
-   PRINT #1 , TEXT
+   print #1 , TEXT
 
 END SUB
 
 
 SUB SIMCONFIG
 
-   PRINT #1 , "SIM CONFIG PROCESS"
+   print #1 , "SIM CONFIG PROCESS"
    RESET SIMOK
    ERRORT = 0
    TT = 5

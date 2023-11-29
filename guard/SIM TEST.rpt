@@ -1,16 +1,16 @@
 Report       : SIM TEST
-Date         : 03-30-2023
-Time         : 20:29:14
+Date         : 10-25-2023
+Time         : 19:39:21
 
-Compiler     : BASCOM-AVR LIBRARY V 2.0.8.3
+Compiler     : BASCOM-AVR LIBRARY V 2.0.8.5
 Processor    : M16
 SRAM         : 400 hex
 EEPROM       : 200 hex
 ROMSIZE      : 4000 hex
 
-ROMIMAGE     : 116 hex  -> Will fit into ROM
-ROMIMAGE     :  278 dec
-FLASH USED   :  1  %
+ROMIMAGE     : 246 hex  -> Will fit into ROM
+ROMIMAGE     :  582 dec
+FLASH USED   :  3  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 438 hex
 Framesize    : 20 hex
 Framestart   : 408 hex
-Space left   :  935  dec
+Space left   :  922  dec
 
 LCD DB7      : PORTB.7
 LCD DB6      : PORTB.6
@@ -93,6 +93,9 @@ PWM1B                            Word              0048          72
 COMPARE1B                        Word              0048          72 
 PWM0                             Byte              005C          92 
 ERR                              Bit [2]           0006          6 
+A                                Byte              0060          96 
+B                                Byte              0061          97 
+X                                String * 10       0062          98 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -476,7 +479,7 @@ _SIM                             0
 _HUGE                            0
 _BASE                            1
 _XTAL                            11059200
-_BUILD                           20830
+_BUILD                           20850
 _COMPILER                        90
 _HWMUL                           1
 _DOSFILEWRITE                    0
@@ -495,6 +498,7 @@ _FPROTECT                        0
 _HWSTACK_LOW                     &H0437
 _SWSTACK_LOW                     &H0428
 _FRAME_HIGH                      &H0429
+_HAVEMOVW                        1
 _XMEGA                           0
 _XTINY                           0
 CBITINFINITY                     0

@@ -1,0 +1,11 @@
+Change Component Designator: OldDesignator=BAT NewDesignator=BATTERY1
+Change Component Designator: OldDesignator=led NewDesignator=led1
+Change Component Designator: OldDesignator=PG NewDesignator=pg1
+Change Component Designator: OldDesignator=pir NewDesignator=pir1
+Change Component Designator: OldDesignator=Remote NewDesignator=REMOTE1
+Change Component Designator: OldDesignator=Reset NewDesignator=reset1
+Change Component Designator: OldDesignator=RS485 NewDesignator=rs1
+Change Component Designator: OldDesignator=sim800 NewDesignator=*1
+Change Component Designator: OldDesignator=status NewDesignator=status1
+Change Component Designator: OldDesignator=Xtal NewDesignator=XTAL1
+Added Room: Name=Sheet2

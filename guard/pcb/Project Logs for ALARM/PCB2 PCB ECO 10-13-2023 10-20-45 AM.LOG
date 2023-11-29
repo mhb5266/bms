@@ -1,0 +1,24 @@
+Removed Pin From Net: NetName=GND Pin=Q2-2
+Removed Pin From Net: NetName=ALARM Pin=Q2-3
+Removed Pin From Net: NetName=GND Pin=Q3-2
+Removed Pin From Net: NetName=pir Pin=Q3-3
+Change Component Designator: OldDesignator=ANT NewDesignator=CN1
+Change Component Designator: OldDesignator=BATT NewDesignator=BATTERY1
+Change Component Designator: OldDesignator=LED NewDesignator=led1
+Change Component Designator: OldDesignator=Lm2569 NewDesignator=U1
+Change Component Designator: OldDesignator=PG NewDesignator=pg1
+Change Component Designator: OldDesignator=PIR NewDesignator=pir1
+Change Component Designator: OldDesignator=Power NewDesignator=J1
+Change Component Designator: OldDesignator=PROG NewDesignator=J2
+Change Component Designator: OldDesignator=RELAY NewDesignator=RELAY1
+Change Component Designator: OldDesignator=Remote NewDesignator=REMOTE1
+Change Component Designator: OldDesignator=Reset NewDesignator=reset1
+Change Component Designator: OldDesignator=Rs485 NewDesignator=rs1
+Change Component Designator: OldDesignator=sim800 NewDesignator=*1
+Change Component Designator: OldDesignator=status NewDesignator=status1
+Change Component Designator: OldDesignator=Tout NewDesignator=T1
+Added Pin To Net: NetName=ALARM Pin=Q2-2
+Added Pin To Net: NetName=GND Pin=Q2-3
+Added Pin To Net: NetName=pir Pin=Q3-2
+Added Pin To Net: NetName=GND Pin=Q3-3
+Added Room: Name=Sheet2

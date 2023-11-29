@@ -1,0 +1,6 @@
+Removed Pin From Net: NetName=GND Pin=Q3-2
+Removed Pin From Net: NetName=pir Pin=Q3-3
+Added Component: Designator=reset1(FP-EVQ-PAE09K-MFG)
+Added Pin To Net: NetName=pir Pin=Q3-2
+Added Pin To Net: NetName=GND Pin=Q3-3
+Added Room: Name=Sheet2
