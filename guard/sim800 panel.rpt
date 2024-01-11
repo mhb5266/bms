@@ -1,6 +1,6 @@
-Report       : SIM TEST
+Report       : sim800 panel
 Date         : 12-26-2023
-Time         : 21:55:18
+Time         : 21:57:35
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.5
 Processor    : M32

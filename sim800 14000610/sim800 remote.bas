@@ -1,6 +1,6 @@
 
 
-$regfile = "m8def.dat"
+$regfile = "m32def.dat"
 $crystal = 11059200
 $baud = 9600
 
@@ -33,7 +33,7 @@ Dim Scount As Byte
 Dim Length As Byte
 Dim Anten As Word
 Simrst Alias Portd.7 : Config Simrst = Output
-
+relay alias porta.3:config porta.3=OUTPUT 
 Config Serialin = Buffered , Size = 50                     ' buffer is small a bigger chip would allow a bigger buffer
 
 'enable the interrupts because the serial input buffer works interrupts driven
@@ -139,7 +139,7 @@ for i=1 to 20
     waitms 100
 next
 
-set relay
+Set Relay
 waitms 500
 reset relay
 

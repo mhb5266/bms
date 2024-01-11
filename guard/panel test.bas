@@ -1,261 +1,631 @@
-$regfile="m16def.dat"
-$crystal=11059200
-$baud=9600
-
-configs:
-
-'config kbd=PORTa
-
-Open "comd.7:9600,8,n,1" For Output As #1
-
-ENABLE INTERRUPTS
-'ENABLE URXC
-'ON URXC RXIN
-ENABLE UTXC
-ON UTXC TXRUTIN
-
-config timer1=timer,prescale=1024
-enable timer1
-on timer1 t1rutin
-start timer1
-
-SIMRST ALIAS PORTD.6:CONFIG PORTD.6=OUTPUT
-SIMON ALIAS PORTD.5:CONFIG PORTD.5=OUTPUT
-LED1 ALIAS PORTA.0:CONFIG PORTA.0 =OUTPUT
-LED2 ALIAS PORTA.1:CONFIG PORTA.1=OUTPUT
-
-defines:
-dim key as byte
-DIM B AS BYTE
-DIM SENDOK AS BIT
-DIM ERRORT AS BYTE
-DIM K AS BYTE
-DIM SS AS STRING*100
-DIM TT AS WORD
-dim timee as byte
-dim ltime as byte
-DIM I AS BYTE
-DIM SIMOK AS BIT
-DIM X AS BYTE
-DIM AR(10) AS STRING*25
-DIM J AS BYTE
-DIM N AS String*2
-DIM INNUMBER AS STRING*15 :INNUMBER="+989376921503"
-DIM SMS AS STRING*100
-DIM SMSOK AS BIT
-DIM OUTBOX AS STRING*100
-DIM ORDER AS STRING*10
-DIM TEXT AS STRING*20
-
-DECLARE SUB TX
-DECLARE SUB RXIN
-DECLARE SUB SIMCHECK
-DECLARE SUB SMSCONFIG
-DECLARE SUB READSMS
-DECLARE SUB SENDSMS
-declare sub flushbuf
-DECLARE SUB SIMRESET
-
-startup:
-
-   RESET SIMON
-   SET LED1
-   TT=5
-   DO
-      IF TT=0 THEN EXIT DO
-   LOOP
-   SET SIMON
-   RESET LED1
-   SET LED2
-   RESET SIMRST
-   TT=2
-   DO
-      IF TT=0 THEN EXIT DO
-   LOOP
-   SET SIMRST
-   TT=10
-   DO
-      IF TT=0 THEN EXIT DO
-   LOOP
-   RESET LED2
-
-   PRINT "ATE0"
-
-
-   DO
-      flushbuf
-      PRINT "AT"
-
-      'WAITMS 500
-      RXIN
-      X=INSTR(SS,"OK")
-      IF X> 0 THEN EXIT DO
-   LOOP
 
-
-
-   DO
-      flushbuf
-      PRINT "AT+CPIN?"
-
-      'WAITMS 500
-      RXIN
-      X=INSTR(SS,"+CPIN: READY")
-        ' X=INSTR(SS,"OK")
-      IF X> 0 THEN EXIT DO
-   LOOP
-   DO
-      PRINT "AT"
-      RXIN
-      X=INSTR(SS,"OK")
-      IF X> 0 THEN EXIT DO
-   LOOP
-
-   DO
-      PRINT "AT+CMGF=1"
-
-      RXIN
-      X=INSTR(SS,"OK")
-      IF X> 0 THEN EXIT DO
-   LOOP
-
-
-
-   DO
-      PRINT "AT+CSCS="+CHR(34)+"GSM"+CHR(34)
-
-      RXIN
-      X=INSTR(SS,"OK")
-      IF X> 0 THEN EXIT DO
-   LOOP
-
-
-
-   DO
-      PRINT "AT+CNMI=2,2,0,0,0"
-
-      RXIN
-      X=INSTR(SS,"OK")
-      IF X> 0 THEN EXIT DO
-   LOOP
-
-
-
-
-
-
-SET LED1
-RESET LED2
-FOR I=1 TO 10
-   TOGGLE LED1
-   TOGGLE LED2
-   WAITMS 250
-NEXT
-RESET LED1
-RESET LED2
-main:
-
-   do
-
-
-
-         if ltime<> timee then
-            IF TIMEE=255 THEN
-               INCR K
-               IF K=255 THEN
-                  INCR J
-               END IF
-            END IF
-            ltime=timee
-            FLUSHBUF
-            RESET SENDOK
-            print "AT"
-
-            TT=5
-            DO
-
-               IF SENDOK=1 THEN EXIT DO
-               IF TT=0 THEN EXIT DO
-            LOOP
-            RESET SENDOK
-
-            RXIN
-            PRINT #1,"AT";" #";J ;" #";K ;" #";TIMEE 
-         endif
-
-
-
-
-
-
-
-   loop
-
-
-
-end
-
-t1rutin:
-   stop timer1
-      timer1=54735
-      toggle led2
-      incr timee
-         IF ORDER="BLINK" THEN
-            toggle led1
-
-         END IF
-      if tt>0 then decr tt
-   start timer1
-return
-
-TXRUTIN:
-   SET   SENDOK
-
-RETURN
-
-SUB RXIN:
-   timer1=54735
-   'STOP TIMER1
-   B=0
-   TT=5
-   SS=""
-   DO
-      INPUTBIN B
-      'IF B>0 THEN TT=5
-      SELECT CASE B
-         CASE 0
-
-         CASE 10
-            IF SS<>"" THEN EXIT DO
-         CASE 13
-
-         CASE ELSE
-            SS=SS+CHR(B)
-
-
-      END SELECT
-      if tt=0 then exit do
-
-   LOOP
-   SS=UCASE(SS)
-   PRINT #1,SS
-   'START TIMER1
-
-END SUB
-
-
-
-
-
-sub flushbuf
-i=0
-b=0
- do
-
-   b=inkey()
-   if b=0 then incr i
-   if i=50 then exit do
- loop
-
-end sub
-
+$regfile = "m32def.dat"
+$crystal = 11059200
+Open "COMC.2:9600,8,n,1" For Output As #1
+$baud = 9600
+
+Subs:
+
+Declare Sub Getline(s As String)
+Declare Sub Flushbuf()
+Declare Sub Showsms(s As String )
+Declare Sub Sendsms
+Declare Sub Dial
+Declare Sub Resetsim
+Declare Sub Checksim
+Declare Sub Money
+Declare Sub Temp
+Declare Sub Antenna
+Declare Sub Charge
+Declare Sub Delall
+Declare Sub Delread
+Declare Sub Sendtx(s As String)
+Declare Sub Simcheck
+Declare Sub Findorder
+Declare Sub Readremote
+
+
+Defines:
+
+
+'used variables
+Dim I As Byte , B As Byte
+Dim Sret As String * 160 , Stemp As String * 6
+Dim U As Byte
+Dim Lim As Byte
+Dim Msg As String * 100
+Dim Num As String * 13 : Num = "+989376921503"
+Dim Sharj As String * 100
+Dim Sheader(5) As String * 30
+Dim Sbody(5) As String * 30
+Dim Net As String * 10
+Dim Order As String * 10
+Dim Count As Word
+Dim Scount As Byte
+Dim Length As Byte
+Dim Anten As Word
+Dim Status As Byte
+Dim _sec As Byte
+Dim Lsec As Byte
+Dim Tt As Byte
+Dim Errors As Byte
+Dim A As Byte
+Dim Sendok As Bit
+Dim Ttt As Byte
+Dim Hh As Byte
+Dim Mm As Byte
+Dim Ss As Byte
+Dim Timeout As Byte : Timeout = 60
+Dim Eadmin As Eram String * 13
+Dim Euser(5) As Eram String * 13
+Dim Admin As String * 13 : Admin = "+989376921503"
+Dim User(5) As String * 13
+Dim Epassword As Eram String * 4
+Dim Password As String * 4 : Password = "1234"
+Dim Lock As Bit
+Dim Id As String * 20
+
+Dim Decode As Dword
+
+Dim Lpulse As Byte
+Dim Hpulse As Byte
+Dim Pulse As Byte
+
+Configs:
+
+
+Datain Alias Pina.7 : Config Porta.7 = Input
+Simrst Alias Portd.4 : Config Portd.4 = Output
+Relay Alias Porta.3 : Config Porta.3 = Output
+Red Alias Portb.0 : Config Portb.0 = Output
+Blue Alias Porta.1 : Config Porta.1 = Output
+Green Alias Porta.0 : Config Porta.0 = Output
+'red ALIAS PORTc.1 : CONFIG PORTc.1 = OUTPUT
+pir alias pinc.5 : config portc.5 = INPUT
+En485 Alias Portc.4 : Config Portc.4 = Output
+Config Serialin = Buffered , Size = 50                      ' buffer is small a bigger chip would allow a bigger buffer
+'enable the interrupts because the serial input buffer works interrupts driven
+Enable Interrupts
+Enable Timer0
+Config Timer0 = Timer , Prescale = 1024
+On Timer0 T0rutin
+
+Config Timer1 = Timer , Prescale = 1024
+'define a constant to enable LCD feedback
+Const Uselcd = 1
+Const Senddemo = 1                                          ' 1= send an sms
+Const Pincode = "AT+CPIN=1234"                              ' pincode change it into yours!
+Const Phonenumber = "AT+CMGS=09376921503"                   ' phonenumber to send sms to
+
+
+
+Startup:
+Password = Epassword
+
+        Print#1 , "system is restarting"
+        Print#1 , "password= " ; Password
+        Resetsim
+
+        Set Relay
+        Waitms 2
+        Reset Relay
+        Count = 0
+        Msg = "Module Is Restarted Now"
+        'Sendsms
+
+Main:
+
+
+Do
+         If _sec <> Lsec Then
+            Lsec = _sec
+            Select Case Count
+                  Case 1
+                       Simcheck
+
+            End Select
+
+            Getline Sret
+            A = Instr(sret , "+CMT")
+            If A > 0 Then
+                        'Sret = "AT+CMGR=1"
+                        'Sendtx Sret
+
+                        Count = Split(sret , Sheader(1) , Chr(34))
+                        Getline Sret
+                        Scount = Split(sret , Sbody(1) , " ")
+                                Num = Sheader(2)
+                                Order = Sbody(1)
+                                Print#1 , Num
+                                Print#1 , Order
+                                Findorder
+                                Sendsms
+                                Delall
+                        Getline Sret
+
+            End If
+         End If
+         If Pir = 0 Then
+            Set Blue
+            If Timeout = 0 And Lock = 1 Then
+               Timeout = 60
+               Msg = "alarm"
+               Num = Admin
+               Sendsms
+            End If
+         Else
+             Reset Blue
+         End If
+         'If Datain = 1 Then Set Red Else Reset Red
+         'readremote
+Loop
+
+
+'get line of data from buffer
+Sub Getline(s As String)
+    S = ""
+    Tt = 3
+    Do
+      B = Inkey()
+      Select Case B
+             Case 0                                         'nothing
+             Case 13                                        ' we do not need this one
+             Case 10
+                  If S <> "" Then Exit Do                   ' if we have received something
+             Case Else
+                  S = S + Chr(b)                            ' build string
+      End Select
+      If Tt = 0 Then Exit Do
+    Loop
+    Sret = S
+    Sret = Ucase(sret)
+    If Sret <> "" Then
+       Print #1 , Sret
+       Print #1 , Str(hh) ; ":" ; Str(mm) ; ":" ; Str(ss)
+    End If
+End Sub
+'flush input buffer
+Sub Flushbuf()
+    Waitms 100                                              'give some time to get data if it is there
+    Do
+     B = Inkey()                                            ' flush buffer
+    Loop Until B = 0
+End Sub
+
+
+Sub Sendsms
+
+
+    Sret = "AT+CSCS=" + Chr(34) + "GSM" + Chr(34)
+    Sendtx Sret
+    Getline Sret
+    Sret = "AT+CMGS=" + Chr(34) + Num + Chr(34)
+    Sendtx Sret
+     Ttt = 2
+     Do
+       Getline Sret
+       If Sret = ">" Or Ttt = 0 Then Exit Do
+     Loop
+     Msg = Msg + Chr(10)
+     msg=msg+str(hh)+":"+str(mm)+":"+str(ss)
+     Sret = Msg + Chr(26)
+    Sendtx Sret
+     Ttt = 15
+     Do
+       Getline Sret
+       A = Instr(sret , "+CMGS")
+       If A > 0 Or Ttt = 0 Then
+          If A > 1 Then Set Sendok
+          Exit Do
+       End If
+
+     Loop
+
+End Sub
+Sub Dial
+    Print "Atd" ; 09376921503 ; ";"
+    Wait 20
+    Print "Ath"
+End Sub
+Sub Checksim
+      Flushbuf
+      Print "AT"
+      Getline Sret
+      Lcd Sret
+      If Sret <> "OK" Then
+         Incr Lim
+         If Lim = 5 Then
+            Lim = 0
+            Resetsim
+            Cls
+            Lcd "sim was reset"
+            Wait 2
+            Cls
+         End If
+      Else
+         Lim = 0
+      End If
+End Sub
+Sub Resetsim
+_sec = 0
+Do
+  If _sec <> Lsec Then
+     Lsec = _sec
+     Select Case _sec
+           Case 0
+                Reset Simrst
+           Case 2
+                Set Simrst
+           Case 3 To 30
+                Flushbuf
+                Sret = "AT"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "AT" Then
+                   _sec = 31
+                End If
+           Case 31 To 33
+                Flushbuf
+                Sret = "ATE0"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then
+                   Status.0 = 1
+                   _sec = 36
+                End If
+           Case 37 To 40
+                Flushbuf
+                Sret = "AT"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then
+                   Status.1 = 1
+                   _sec = 41
+                End If
+           Case 41 To 43
+                Flushbuf
+                Sret = "AT+CMGF=1"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then
+                   Status.2 = 1
+                   _sec = 44
+                End If
+           Case 44 To 46
+                Flushbuf
+                Sret = "At+Cusd=1"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then
+                   Status.3 = 1
+                   _sec = 47
+                End If
+           Case 47 To 50
+                Flushbuf
+                Sret = "AT+CSMP=17,167,2,25"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then
+                   Status.4 = 1
+                   _sec = 51
+                End If
+           Case 51 To 53
+                Flushbuf
+                Sret = "AT+CNMI=2,2,0,0,0"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then
+                   Status.5 = 1
+                   _sec = 54
+                End If
+           Case 54 To 57
+                Flushbuf
+                Sret = "AT+CSCS=" + Chr(34) + "GSM" + Chr(34)
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then
+                   Status.6 = 1
+                   _sec = 58
+                End If
+           Case 58 To 90
+                Flushbuf
+                Sret = "AT+CMGDA=DEL ALL"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then
+                   Status.7 = 1
+                   _sec = 91
+                End If
+           Case 92
+                Flushbuf
+                Sret = "AT+GSN"
+                Sendtx Sret
+                Getline Sret
+                Id = Sret
+           Case 94
+                If Status < 255 Then _sec = 0
+                Exit Do
+     End Select
+  End If
+Loop
+End Sub
+Sub Money
+Print "ATD*140#"
+Getline Sret
+Getline Sret
+Sharj = Left(sret , 33)
+Sharj = Right(sharj , 6)
+Sharj = Ltrim(sharj)
+End Sub
+Sub Antenna
+  Flushbuf
+  Print "AT+CSQ"
+  Getline Sret
+  Count = Split(sret , Sbody(1) , " ")
+  Anten = Val(sbody(2))
+'  Cls : Lcd "ANTEN= " : Lcd Anten : Lowerline : Lcd Sret : Wait 5 : Cls : Waitms 500
+  Select Case Anten
+         Case 0
+              Net = "BAD"
+         Case 1
+              Net = "WEAK"
+         Case 2 To 15
+              Net = "MID"
+         Case 16 To 30
+              Net = "GOOD"
+         Case 31
+              Net = "BEST"
+         Case 99
+              Net = "OFFLINE"
+  End Select
+End Sub
+Sub Charge
+'Print "ATD*140#"
+Flushbuf
+Print "At+Cusd=1," ; Chr(34) ; "*140#" ; Chr(34)
+'Print "At+Cusd=1," ; Chr(34) ; "*555*1*2#" ; Chr(34)
+  Getline Sret
+  Getline Sret
+  Sharj = Right(sret , 17)
+  Getline Sret
+End Sub
+Sub Delall
+     Flushbuf
+     Print "AT+CMGDA=DEL ALL"
+     A = 0
+     Do
+       Incr A
+       Getline Sret
+       If Sret = "OK" Or A = 10 Then Exit Do
+     Loop
+End Sub
+Sub Delread
+     Flushbuf
+     Print "AT+CMGDA=DEL READ"
+     A = 0
+     Do
+       Incr A
+       Getline Sret
+       If Sret = "OK" Or A = 10 Then Exit Do
+     Loop
+End Sub
+
+Sub Sendtx(sret As String)
+    Print Sret
+    Print #1 , Sret
+    Print #1 , bin(status)
+    Print #1 , Str(hh) ; ":" ; Str(mm) ; ":" ; Str(ss)
+End Sub
+
+Sub Simcheck
+_sec = 0
+Do
+  If _sec <> Lsec Then
+     Lsec = _sec
+
+
+     Select Case _sec
+           Case 1
+                Flushbuf
+                Sret = "ATE0"
+                Sendtx Sret
+                Getline Sret
+
+
+           Case 3
+                Flushbuf
+                Sret = "AT"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then Status.1 = 1
+
+           Case 5
+                Flushbuf
+                Sret = "AT+CMGF=1"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then Status.2 = 1
+
+           Case 7
+                Flushbuf
+                Sret = "At+Cusd=1"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then Status.3 = 1
+
+           Case 9
+                Flushbuf
+                Sret = "AT+CSMP=17,167,2,25"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then Status.4 = 1
+
+           Case 11
+                Flushbuf
+                Sret = "AT+CNMI=2,2,0,0,0"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then Status.5 = 1
+
+           Case 13
+                Flushbuf
+                Sret = "AT+CSCS=" + Chr(34) + "GSM" + Chr(34)
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then Status.6 = 1
+
+           Case 15
+                Flushbuf
+                Sret = "AT+CMGDA=DEL ALL"
+                Sendtx Sret
+                Getline Sret
+                If Sret = "OK" Then Status.7 = 1
+
+           Case 17
+                If Status < 255 Then Incr Errors Else Errors = 0
+                If Errors = 5 Then Resetsim
+                Exit Do
+     End Select
+  End If
+Loop
+End Sub
+
+Sub Findorder
+    Select Case Order
+           Case "ON"
+                 Set Red
+                 Msg = "Led Is On"
+           Case "OFF"
+                 Reset Red
+                 Msg = "Led Is Off"
+           Case "LOCK"
+                 Set Lock
+                 Msg = "System is Locked"
+           Case "UNLOCK"
+                 Reset Lock
+                 Msg = "System is Unlocked"
+
+    End Select
+    Order = ""
+End Sub
+
+Sub Readremote
+    Do
+      If Datain = 1 Then
+         Timer1 = 0
+         Start Timer1
+         Do
+            If Datain = 0 Then
+               Stop Timer1
+               Hpulse = Timer1
+               Pulse = Timer1
+               Exit Do
+            End If
+         Loop
+      End If
+      Timer1 = 0
+      Start Timer1
+      Do
+        If Datain = 1 Then
+           Stop timer1
+           Lpulse = timer1
+           Exit Do
+        End If
+      Loop
+      If Lpulse > Hpulse Then
+         A = Lpulse / Hpulse
+         If A > 28 And A < 34 Then
+            Toggle Red
+            Do
+              For I = 0 To 23
+                    If Datain = 1 Then
+                       timer1 = 0
+                       Start timer1
+                       Do
+                          If Datain = 0 Then
+                             Stop timer1
+                             Hpulse = timer1
+                             Exit Do
+                          End If
+                       Loop
+                    End If
+                    timer1 = 0
+                    Start timer1
+                    Do
+                      If Datain = 1 Then
+                         Stop timer1
+                         Lpulse = Timer1
+                         Exit Do
+                      End If
+                    Loop
+                    If Hpulse > Lpulse Then
+                       A = Hpulse / Lpulse
+                       If A = 3 Then
+                          Set Decode.i
+                       Else
+                           Exit Do
+                       End If
+                    Else
+                       A = Lpulse / Hpulse
+                       If A = 3 Then
+                          Reset Decode.i
+                       Else
+                           Exit Do
+                       End If
+                    End If
+
+              Next
+              Print#1 , Bin(decode)
+            Loop
+         End If
+      Else
+          Exit Do
+      End If
+    Loop
+End Sub
+
+T0rutin:
+        Stop Timer0
+        Incr U
+        If U = 42 Then
+        U = 0
+                Toggle Green
+
+                Incr Ss
+                If Ss > 59 Then
+                   Ss = 0
+                   Incr Mm
+                   If Mm > 59 Then
+                      Mm = 0
+                      Incr Hh
+                      If Hh > 23 Then
+                         Hh = 0
+                      End If
+                   End If
+                End If
+                Incr _sec
+                Incr Count
+
+                If Tt > 0 Then Decr Tt
+                If Ttt > 0 Then Decr Ttt
+                If Timeout > 0 Then Decr Timeout
+         End If
+
+       '(
+         If Pir = 0 Then
+            Set Blue
+            If Timeout = 60 Then
+               Msg = "alarm"
+               Num = Admin
+               Sendsms
+            End If
+         Else
+             Reset Blue
+         End If
+')
+        'If Datain = 1 Then Set Red Else Reset Red
+
+
+        Start Timer0
+        ' = 54735
+Return

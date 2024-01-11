@@ -1,7 +1,7 @@
 
 $regfile = "m32def.dat"
 $crystal = 11059200
-Open "COMC.2:9600,8,n,1" For Output As #1 
+Open "COMC.2:9600,8,n,1" For Output As #1
 $baud = 9600
 Declare Sub Getline(s As String)
 Declare Sub Flushbuf()

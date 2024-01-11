@@ -1,0 +1,17 @@
+Added Component: Designator=RC522(HDR1X8)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=RC522-3
+Added Pin To Net: NetName=MISO Pin=RC522-5
+Added Pin To Net: NetName=MOSI Pin=RC522-6
+Added Pin To Net: NetName=SCK Pin=RC522-7
+Added Pin To Net: NetName=3/3 Pin=RC522-1
+Added Net: Name=3/3
+Added Pin To Net: NetName=IRQ Pin=RC522-4
+Added Net: Name=IRQ
+Added Pin To Net: NetName=rst Pin=RC522-2
+Added Net: Name=rst
+Added Pin To Net: NetName=sda Pin=RC522-8
+Added Net: Name=sda
+Added Member To Class: ClassName=Sheet2 Member=Component RC522 Header 8
