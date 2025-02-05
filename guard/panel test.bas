@@ -67,10 +67,16 @@ Dim Id As String * 20
 
 Dim Decode As Dword
 
-Dim Lpulse As Byte
-Dim Hpulse As Byte
-Dim Pulse As Byte
+Dim Lpulse As Word
+Dim Hpulse As Word
+Dim Pulse As Word
 
+Dim Saddress As String * 20
+Dim Scode As String * 4
+Dim S(25)as Word
+Dim Address As Long
+Dim Code As Byte
+Dim Okread As Bit
 Configs:
 
 
@@ -86,11 +92,11 @@ En485 Alias Portc.4 : Config Portc.4 = Output
 Config Serialin = Buffered , Size = 50                      ' buffer is small a bigger chip would allow a bigger buffer
 'enable the interrupts because the serial input buffer works interrupts driven
 Enable Interrupts
-Enable Timer0
-Config Timer0 = Timer , Prescale = 1024
-On Timer0 T0rutin
+'Enable Timer0
+'Config Timer0 = Timer , Prescale = 1024
+'On Timer0 T0rutin
 
-Config Timer1 = Timer , Prescale = 1024
+Config Timer1 = Timer , Prescale = 8
 'define a constant to enable LCD feedback
 Const Uselcd = 1
 Const Senddemo = 1                                          ' 1= send an sms
@@ -100,23 +106,27 @@ Const Phonenumber = "AT+CMGS=09376921503"                   ' phonenumber to sen
 
 
 Startup:
-Password = Epassword
+'Password = Epassword
 
         Print#1 , "system is restarting"
         Print#1 , "password= " ; Password
-        Resetsim
+        'Resetsim
 
         Set Relay
-        Waitms 2
+        Wait 2
         Reset Relay
         Count = 0
         Msg = "Module Is Restarted Now"
         'Sendsms
-
+       Do
+         Print#1 , "HI"
+         wait 1
+       Loop
 Main:
 
 
 Do
+         '(
          If _sec <> Lsec Then
             Lsec = _sec
             Select Case Count
@@ -156,8 +166,10 @@ Do
          Else
              Reset Blue
          End If
-         'If Datain = 1 Then Set Red Else Reset Red
-         'readremote
+')
+         'If Datain = 0 Then Set Red Else Reset Red
+         Readremote
+         'Waitms 200
 Loop
 
 
@@ -510,78 +522,152 @@ Sub Findorder
 End Sub
 
 Sub Readremote
-    Do
-      If Datain = 1 Then
+
+  '(
+      Okread = 0
+      If datain = 1 Then
+         Do
+           'Reset Watchdog
+           If datain = 0 Then Exit Do
+         Loop
          Timer1 = 0
          Start Timer1
-         Do
-            If Datain = 0 Then
-               Stop Timer1
-               Hpulse = Timer1
-               Pulse = Timer1
-               Exit Do
-            End If
-         Loop
-      End If
-      Timer1 = 0
-      Start Timer1
-      Do
-        If Datain = 1 Then
-           Stop timer1
-           Lpulse = timer1
-           Exit Do
-        End If
-      Loop
-      If Lpulse > Hpulse Then
-         A = Lpulse / Hpulse
-         If A > 28 And A < 34 Then
-            Toggle Red
+         While datain = 0
+               'Reset Watchdog
+         Wend
+         Stop Timer1
+         If Timer1 >= 9722 And Timer1 <= 23611 Then
+                   'Toggle Red
+               'Waitms 500
             Do
-              For I = 0 To 23
-                    If Datain = 1 Then
-                       timer1 = 0
-                       Start timer1
-                       Do
-                          If Datain = 0 Then
-                             Stop timer1
-                             Hpulse = timer1
-                             Exit Do
-                          End If
-                       Loop
-                    End If
-                    timer1 = 0
-                    Start timer1
-                    Do
-                      If Datain = 1 Then
-                         Stop timer1
-                         Lpulse = Timer1
-                         Exit Do
-                      End If
-                    Loop
-                    If Hpulse > Lpulse Then
-                       A = Hpulse / Lpulse
-                       If A = 3 Then
-                          Set Decode.i
-                       Else
-                           Exit Do
-                       End If
-                    Else
-                       A = Lpulse / Hpulse
-                       If A = 3 Then
-                          Reset Decode.i
-                       Else
-                           Exit Do
-                       End If
-                    End If
+              If datain = 1 Then
+                 Timer1 = 0
+                 Start Timer1
+                 While Datain = 1
+                    'Reset Watchdog
+                 Wend
+                 Stop Timer1
+                 Incr I
+                 S(i) = Timer1
+              End If
+              'Reset Watchdog
+              If I = 24 Then Exit Do
+            Loop
+            For I = 1 To 24
+                'Reset Watchdog
+                If S(i) >= 332 And S(i) <= 972 Then
+                   S(i) = 0
+                Else
+                   If S(i) >= 1111 And S(i) <= 2361 Then
+                      S(i) = 1
+                   Else
+                       I = 0
+                       Address = 0
+                       Code = 0
+                       Okread = 0
+                       Exit For
+                   End If
+                End If
+            Next
+            I = 0
+            Saddress = ""
+            Scode = ""
+            For I = 1 To 20
+                Saddress = Saddress + Str(s(i))
+            Next
+            For I = 21 To 24
+                Scode = Scode + Str(s(i))
+            Next
+            Address = Binval(saddress)
+            Code = Binval(scode)
+            'Gosub Check
+            Print #1 , "address" ; Address ; Chr(10)
+            Print #1 , "code" ; Code ; Chr(10)
+
+            I = 0
+         End If
+      End If
+   ')
+
+    Saddress = ""
+    Scode = ""
+    Do
+      Timer1 = 0
+      If Datain = 1 Then
+         Start Timer1
+         Do
+           'Reset Watchdog
+           If datain = 0 Then Exit Do
+         Loop
+         Pulse = Timer1
+         Hpulse = Pulse
+         Timer1 = 0
+         Start Timer1
+         While datain = 0
+               'Reset Watchdog
+         Wend
+         Lpulse = Timer1
+         Stop Timer1
+      End If
+      If Lpulse > Hpulse Then
+         A = 0
+         A = Lpulse / Hpulse
+
+         If A = 31 Then
+             Print#1 , "hpulse--> " ; Hpulse
+             Print#1 , "lpulse--> " ; Lpulse
+             Print#1 , A
+            Do
+              If datain = 1 Then
+                 Timer1 = 0
+                 Start Timer1
+                 While Datain = 1
+                    'Reset Watchdog
+                 Wend
+                 Stop Timer1
+                 Incr I
+                 S(i) = Timer1
+              End If
+              'Reset Watchdog
+              If I = 24 Then Exit Do
+            Loop
+              For I = 1 To 24
+                A = S(i) / Pulse
+                Print#1 , I ; " --> " ; A
+
+                If A = 1 Then
+                   S(i) = 0
+                Elseif A = 3 Then
+                   S(i) = 1
+                Else
+                     ' Return
+                End If
+
 
               Next
-              Print#1 , Bin(decode)
-            Loop
+            For I = 1 To 20
+                Saddress = Saddress + Str(s(i))
+            Next
+            For I = 21 To 24
+                Scode = Scode + Str(s(i))
+            Next
+
+              Print#1 , Binval(saddress)
+              Print#1 , Binval(scode)
+
+              If Binval(scode) > 0 And Binval(scode) < 16 Then
+                 Print#1 , Saddress
+                 Print#1 , Scode
+                 Toggle Red
+                 Print#1 , "led is on"
+                 'Waitms 500
+              End If
          End If
       Else
-          Exit Do
+          'Exit Do
       End If
     Loop
+
 End Sub
 
 T0rutin:
@@ -590,7 +676,7 @@ T0rutin:
         If U = 42 Then
         U = 0
                 Toggle Green
-
+                'Toggle Relay
                 Incr Ss
                 If Ss > 59 Then
                    Ss = 0
@@ -610,7 +696,8 @@ T0rutin:
                 If Ttt > 0 Then Decr Ttt
                 If Timeout > 0 Then Decr Timeout
          End If
-
+             'red=datain
+         'If Datain = 1 Then Set Red Else Reset Red
        '(
          If Pir = 0 Then
             Set Blue

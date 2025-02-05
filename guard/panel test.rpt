@@ -1,6 +1,6 @@
 Report       : panel test
-Date         : 01-11-2024
-Time         : 13:17:07
+Date         : 01-16-2024
+Time         : 22:13:49
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.5
 Processor    : M32
@@ -8,8 +8,8 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 1CDE hex  -> Will fit into ROM
-ROMIMAGE     :  7390 dec
+ROMIMAGE     : 1C9A hex  -> Will fit into ROM
+ROMIMAGE     :  7322 dec
 FLASH USED   :  22  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
@@ -21,7 +21,7 @@ S-Stacksize  : 10 hex
 S-Stackstart : 838 hex
 Framesize    : 20 hex
 Framestart   : 808 hex
-Space left   :  1052  dec
+Space left   :  968  dec
 
 LCD DB7      : PORTA.7
 LCD DB6      : PORTA.6
@@ -131,9 +131,15 @@ PASSWORD                         String * 4        0396          918
 LOCK                             Bit [6]           033C          828 
 ID                               String * 20       039B          923 
 DECODE                           Dword             03B0          944 
-LPULSE                           Byte              03B4          948 
-HPULSE                           Byte              03B5          949 
-PULSE                            Byte              03B6          950 
+LPULSE                           Word              03B4          948 
+HPULSE                           Word              03B6          950 
+PULSE                            Word              03B8          952 
+SADDRESS                         String * 20       03BA          954 
+SCODE                            String * 4        03CF          975 
+S                                Word(25)          03D4          980 
+ADDRESS                          Long              0406          1030 
+CODE                             Byte              040A          1034 
+OKREAD                           Bit [5]           033C          828 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -561,11 +567,16 @@ Warnings:
 ADCD                             not used
 COMPARE1                         not used
 STEMP                            not used
+SHEADER                          not used
+SCOUNT                           not used
 LENGTH                           not used
 EADMIN                           not used
 EUSER                            not used
 USER                             not used
+EPASSWORD                        not used
+DECODE                           not used
+ADDRESS                          not used
+CODE                             not used
+OKREAD                           not used
 
-Source string could be too big to fit into target string [SHEADER(2)>NUM]  in line  136 
-Source string could be too big to fit into target string [SBODY(1)>ORDER]  in line  137 
-Source string could be too big to fit into target string [SRET>ID]  in line  343 
+Source string could be too big to fit into target string [SRET>ID]  in line  355 
