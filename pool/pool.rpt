@@ -1,6 +1,6 @@
 Report       : pool
-Date         : 02-05-2025
-Time         : 00:29:28
+Date         : 02-07-2025
+Time         : 00:17:55
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.5
 Processor    : M328
@@ -8,9 +8,9 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 320E hex  -> Will fit into ROM
-ROMIMAGE     :  12814 dec
-FLASH USED   :  39  %
+ROMIMAGE     : 338A hex  -> Will fit into ROM
+ROMIMAGE     :  13194 dec
+FLASH USED   :  40  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
@@ -21,7 +21,7 @@ S-Stacksize  : 64 hex
 S-Stackstart : 8C0 hex
 Framesize    : 64 hex
 Framestart   : 7F8 hex
-Space left   :  989  dec
+Space left   :  985  dec
 
 LCD DB7      : PORTB.5
 LCD DB6      : PORTD.4
@@ -106,48 +106,53 @@ SENS1                            String * 6        011F          287
 SENS2                            String * 6        0126          294 
 READSENS                         Integer           012D          301 
 DIFT                             Integer           012F          303 
-D                                Byte(71)          0131          305 
-SMS                              String * 70       0131          305 
-PHONE_NUMBER                     String * 13       0178          376 
-ENUMBERS                         EEPROM String(3)  0000          0 
-NUMBERS                          String(3) * 13    0186          390 
-AUTH                             Bit [7]           01B0          432 
-POS                              Byte              01B1          433 
-HUMIDITY                         String * 5        01B2          434 
-TEMP                             Single            01B8          440 
-HUM                              Single            01BC          444 
-GTEMP                            Single            01C0          448 
-GHUM                             Single            01C4          452 
-HTEMP                            Single            01C8          456 
-HHUM                             Single            01CC          460 
+TSENSOR                          Single            0131          305 
+D                                Byte(71)          0135          309 
+SMS                              String * 70       0135          309 
+PHONE_NUMBER                     String * 13       017C          380 
+ENUMBERS1                        EEPROM String     0000          0 
+ENUMBERS2                        EEPROM String     000E          14 
+ENUMBERS3                        EEPROM String     001C          28 
+NUMBERS1                         String * 13       018A          394 
+NUMBERS2                         String * 13       0198          408 
+NUMBERS3                         String * 13       01A6          422 
+AUTH                             Bit [7]           01B4          436 
+POS                              Byte              01B5          437 
+HUMIDITY                         String * 5        01B6          438 
+TEMP                             Single            01BC          444 
+HUM                              Single            01C0          448 
+GTEMP                            Single            01C4          452 
+GHUM                             Single            01C8          456 
+HTEMP                            Single            01CC          460 
+HHUM                             Single            01D0          464 
 EGTEMP                           EEPROM Single     002A          42 
 EGHUM                            EEPROM Single     002E          46 
-LSEC                             Byte              01D1          465 
-BYTEE                            Byte              01D2          466 
-CHECKSUMM                        Byte              01D3          467 
-Z                                Byte              01D4          468 
-T                                Byte              01D5          469 
-FIRSTT                           Bit [6]           01B0          432 
-I                                Byte              01D6          470 
-SS                               Bit [5]           01B0          432 
-S                                Word(24)          01D7          471 
-SADDRESS                         String * 20       0207          519 
-SCODE                            String * 4        021C          540 
-ADDRESS                          Long              0221          545 
-CODE                             Byte              0225          549 
-RA                               Long              0226          550 
-RNUMBER                          Byte              022A          554 
+LSEC                             Byte              01D5          469 
+BYTEE                            Byte              01D6          470 
+CHECKSUMM                        Byte              01D7          471 
+Z                                Byte              01D8          472 
+T                                Byte              01D9          473 
+FIRSTT                           Bit [6]           01B4          436 
+I                                Byte              01DA          474 
+SS                               Bit [5]           01B4          436 
+S                                Word(24)          01DB          475 
+SADDRESS                         String * 20       020B          523 
+SCODE                            String * 4        0220          544 
+ADDRESS                          Long              0225          549 
+CODE                             Byte              0229          553 
+RA                               Long              022A          554 
+RNUMBER                          Byte              022E          558 
 RNUMBER_E                        EEPROM Byte       0032          50 
-OKREAD                           Bit [4]           01B0          432 
-ERROR                            Bit [3]           01B0          432 
-KEYCHECK                         Bit [2]           01B0          432 
-RAW                              Byte              022B          555 
+OKREAD                           Bit [4]           01B4          436 
+ERROR                            Bit [3]           01B4          436 
+KEYCHECK                         Bit [2]           01B4          436 
+RAW                              Byte              022F          559 
 EEVAR                            EEPROM Long(50)   0033          51 
-RECIVE                           String * 1        022C          556 
-PACK                             String * 300      022E          558 
-F                                String(6) * 20    035B          859 
-MSG                              String * 50       03D9          985 
-NUM                              String * 14       040C          1036 
+RECIVE                           String * 1        0230          560 
+PACK                             String * 300      0232          562 
+F                                String(6) * 20    035F          863 
+MSG                              String * 50       03DD          989 
+NUM                              String * 14       0410          1040 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -295,8 +300,8 @@ FE0                              4
 DOR0                             3
 PE0                              2
 U2X0                             1
-U2X                              1
 MPCM0                            0
+U2X                              1
 TWAM6                            7
 TWAM5                            6
 TWAM4                            5
@@ -701,14 +706,15 @@ Warnings:
 --------------------------------------------------------------------------------
 ADCD                             not used
 COMPARE1                         not used
+TMP1                             not used
 SENS2                            not used
 DIFT                             not used
 PHONE_NUMBER                     not used
 RAW                              not used
 
-Without $BIGSTRINGS string routines only work correct with a maximum length of 255  in line  155 
-Source string could be too big to fit into target string [F(4)>NUM]  in line  376 
-Source string could be too big to fit into target string [NUM>NUMBERS(1)]  in line  435 
-Source string could be too big to fit into target string [NUM>NUMBERS(2)]  in line  437 
-Source string could be too big to fit into target string [NUM>NUMBERS(3)]  in line  439 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  788 
+Without $BIGSTRINGS string routines only work correct with a maximum length of 255  in line  156 
+Source string could be too big to fit into target string [F(4)>NUM]  in line  397 
+Source string could be too big to fit into target string [NUM>NUMBERS1]  in line  452 
+Source string could be too big to fit into target string [NUM>NUMBERS2]  in line  457 
+Source string could be too big to fit into target string [NUM>NUMBERS3]  in line  462 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  810 

@@ -1,4 +1,4 @@
-$regfile = "m328pdef.dat"
+$regfile = "m328def.dat"
 $crystal = 11059200
 
 $hwstack = 64
@@ -50,7 +50,7 @@ Dim Sens2 As String * 6
 'Dim Refreshtemp As Byte
 Dim Readsens As Integer
 Dim Dift As Integer
-
+Dim Tsensor As Single
 
 'Dim St1(10) As Integer
 'Dim St2(10) As Integer
@@ -59,7 +59,7 @@ Dim Dift As Integer
 
 'Dim Ashar1 As Integer
 
-
+        Ind Alias Portc.3 : Config Portc.3 = Output
         Pg Alias Portc.1 : Config Portc.1 = Output
         Buz Alias Portd.5 : Config Portd.5 = Output
         Pump Alias Portd.6 : Config Portd.6 = Output
@@ -75,8 +75,12 @@ Declare Sub Send_unicode(phone As String , Text As String)
 Dim D(71) As Byte
 Dim Sms As String * 70 At D Overlay
 Dim Phone_number As String * 13
-Dim Enumbers(3) As Eram String * 13
-Dim Numbers(3) As String * 13
+Dim Enumbers1 As Eram String * 13
+Dim Enumbers2 As Eram String * 13
+Dim Enumbers3 As Eram String * 13
+Dim Numbers1 As String * 13
+Dim Numbers2 As String * 13
+Dim Numbers3 As String * 13
 Dim Auth As Bit
 Const Admin = "+989376921503"
 Defines:
@@ -97,10 +101,7 @@ Dim Gtemp As Single , Ghum As Single
 Dim Htemp As Single , Hhum As Single
 Dim Egtemp As Eram Single , Eghum As Eram Single
 
-Gtemp = Egtemp : Waitms 20
-Ghum = Eghum : Waitms 20
-Htemp = Gtemp - 2
-Hhum = Ghum - 2
+
 
 
 Dim _sec As Byte , Lsec As Byte                             ', _min As Byte , _hour As Byte
@@ -161,10 +162,29 @@ Dim Bytee As Byte , Checksumm As Byte
    Dim Num As String * 14
 Startup:
 
-        For I = 1 To 3
-            Numbers(i) = Enumbers(i)
+
+            Numbers1 = Enumbers1
             Waitms 20
-        Next
+            I = Instr(numbers1 , "+98")
+            If I = 0 Then Numbers1 = ""
+            Numbers2 = Enumbers2
+            Waitms 20
+            I = Instr(numbers2 , "+98")
+            If I = 0 Then Numbers2 = ""
+            Numbers3 = Enumbers3
+            Waitms 20
+            I = Instr(numbers3 , "+98")
+            If I = 0 Then Numbers3 = ""
+Gtemp = Egtemp : Waitms 20
+Ghum = Eghum : Waitms 20
+If Gtemp > 45 Then Gtemp = 45
+If Gtemp < 17 Then Gtemp = 17
+Egtemp = Gtemp : Waitms 20
+If Ghum > 60 Then Ghum = 60
+If Ghum < 20 Then Ghum = 20
+Eghum = Ghum : Waitms 20
+Htemp = Gtemp - 2
+Hhum = Ghum - 2
         'Cls
        'Lcdat 1 , 1 , "hi"
        ' Wait 2
@@ -227,11 +247,11 @@ Startup:
    Waitms 800
 ')
    Sms = "ÈÑÞ æÕá ÔÏ"
-   I = Instr(numbers(1) , "+98")
+   I = Instr(numbers1 , "+98")
    If I = 0 Then
       Num = Admin
    Else
-       Num = Numbers(1)
+       Num = Numbers1
    End If
 
    Call Send_unicode(num , Sms)
@@ -268,7 +288,8 @@ Main:
             End If
 
             If Firstt = 1 Then
-               If Temp > Gtemp Then
+               'If Temp > Gtemp Then
+               If Tsensor > Gtemp Then
                   Reset Firstt
                   Sms = "ÓíÓÊã ÂãÇÏå ÇÓÊ"
                End If
@@ -276,11 +297,11 @@ Main:
             If Ss = 1 Then
                Set Pump
                If Hum > Ghum Then Set Fan
-               If Temp > Gtemp Then
+               If Hum < Hhum Then Reset Fan
+               If Tsensor > Gtemp Then
                   Reset Heater
                End If
-               Htemp = Gtemp - 2
-               If Temp < Htemp Then Set Heater
+               If Tsensor < Htemp Then Set Heater
             Else
                Reset Heater
                Reset Pump
@@ -290,7 +311,7 @@ Main:
             If Temp < 3 Then
                Sms = "ÏãÇí ÆÇííä" + Chr(10)
                Sms = Msg + "ÎØÑ ÊÑ˜íÏí ÏÑ ÕæÑÊ ÇäÌãÇÏ! "
-               Num = Numbers(1)
+               Num = Numbers1
                Call Send_unicode(num , Sms)
             End If
 
@@ -381,7 +402,7 @@ Main:
                               'Wait 2
                               'Cls
 
-                                 If F(4) = Admin Or F(4) = Numbers(1) Or F(4) = Numbers(2) Or F(4) = Numbers(3) Then
+                                 If Num = Admin Or Num = Numbers1 Or Num = Numbers2 Or Num = Numbers3 Then
                                     Set Auth
                                  Else
                                     Reset Auth
@@ -392,21 +413,19 @@ Main:
                                  F(6) = ""
                                  For I = 0 To 100
                                      F(6) = Mid(pack , I , 2)
-                                     If F(6) = "#@" Or F(6) = "T=" Or F(6) = "H=" Then
+                                     If F(6) = "#@" Or F(6) = "TH" Then
                                         Exit For
                                      End If
                                  Next
                                  F(5) = Mid(pack , I , 4)
-                                 If F(6) = "T=" Then
+                                 If F(6) = "TH" Then
                                     I = I + 2
                                     F(6) = Mid(pack , I , 2)
                                     Gtemp = Val(f(6))
-                                    F(5) = "T="
-                                 Elseif F(6) = "H=" Then
                                     I = I + 2
                                     F(6) = Mid(pack , I , 2)
                                     Ghum = Val(f(6))
-                                    F(5) = "H="
+                                    F(5) = "TH"
                                  End If
                                  Print "AT+CMGDA=DEL ALL"
                                  Wait 5
@@ -430,56 +449,58 @@ Main:
                                            Else
                                               Msg = "ÔãÇÑå äÇãÚÊÈÑ ÇÓÊ!"
                                            End If
-                                     Case "#@$&"
-
-                                          If Numbers(1) = "" Then
-                                             Numbers(1) = Num
-                                          Elseif Numbers(2) = "" Then
-                                               Numbers(2) = Num
-                                          Elseif Numbers(3) = "" Then
-                                                 Numbers(3) = Num
-                                          End If
-                                          Enumbers(1) = Numbers(1) : Waitms 20
-                                          Enumbers(2) = Numbers(2) : Waitms 20
-                                          Enumbers(3) = Numbers(3) : Waitms 20
-                                          Msg = "ÔãÇÑå ÐÎíÑå ÔÏ"
-                                     Case "#@??"
+                                     Case "#@#1"
+                                          Numbers1 = Num
+                                          Msg = Num + Chr(10)
+                                          Enumbers1 = Numbers1 : Waitms 20
+                                          Msg = Msg + "ÔãÇÑå ÐÎíÑå ÔÏ"
+                                     Case "#@#2"
+                                          Numbers2 = Num
+                                          Msg = Num + Chr(10)
+                                          Enumbers2 = Numbers2 : Waitms 20
+                                          Msg = Msg + "ÔãÇÑå ÐÎíÑå ÔÏ"
+                                     Case "#@#3"
+                                          Numbers3 = Num
+                                          Msg = Num + Chr(10)
+                                          Enumbers3 = Numbers3 : Waitms 20
+                                          Msg = Msg + "ÔãÇÑå ÐÎíÑå ÔÏ"
+                                     Case "#@S?"
                                            If Auth = 1 Then
-                                              Msg = "ÏãÇí ÇÓÊÎÑ" + Chr(10)
-                                              Msg = Msg + Sens1 + Chr(10)
-                                              'Msg = Msg + Chr(10)
-                                              Msg = Msg + "ÏãÇí ÓÇáä" + Chr(10)
+                                              Msg = "ÏãÇí ÇÓÊÎÑ "
+                                              Msg = Msg + Sens1 + Chr(10)       'Str(tsensor)
+                                              Msg = Msg + Chr(10)
+                                              Msg = Msg + "ÏãÇí ÓÇáä "
                                               Msg = Msg + Temperature + Chr(10)
-                                              'Msg = Msg + Chr(10)
-                                              Msg = Msg + "ÑØæÈÊ" + Chr(10)
+                                              Msg = Msg + Chr(10)
+                                              Msg = Msg + "ÑØæÈÊ "
                                               Msg = Msg + Humidity + Chr(10)
-                                              'Msg = Msg + Chr(10)
                                            Else
                                               Msg = "ÔãÇÑå äÇãÚÊÈÑ ÇÓÊ!"
                                            End If
                                      Case "#@De"
 
-                                          Enumbers(1) = "" : Waitms 20
-                                          Enumbers(2) = "" : Waitms 20
-                                          Enumbers(3) = "" : Waitms 20
-                                          Numbers(1) = "" : Waitms 20
-                                          Numbers(2) = "" : Waitms 20
-                                          Numbers(3) = "" : Waitms 20
+                                          Enumbers1 = "" : Waitms 20
+                                          Enumbers2 = "" : Waitms 20
+                                          Enumbers3 = "" : Waitms 20
+                                          Numbers1 = ""
+                                          Numbers2 = ""
+                                          Numbers3 = ""
                                           Msg = "ÔãÇÑå åÇ Ç˜ ÔÏ"
                                      Case "#@ST"
-                                           Msg = "ÏãÇí åÏÝ" + Chr(10)
+                                           Msg = "ÊäÙíãÇÊ ÏãÇ æ ÑØæÈÊ" + Chr(10)
                                            Msg = Msg + Str(gtemp) + Chr(10)
-                                           Msg = Msg + "ÑØæÈÊ åÏÝ" + Chr(10)
+                                           'Msg = Msg + "ÑØæÈÊ åÏÝ" + Chr(10)
                                            Msg = Msg + Str(ghum) + Chr(10)
-                                     Case "T="
-                                           Msg = "ÏãÇ ËÈÊ ÔÏ" + Chr(10)
-                                           Msg = Msg + Str(gtemp) + Chr(10)
+                                     Case "#@NU"
+                                           Msg = Msg + Numbers1 + Chr(10)
+                                           Msg = Msg + Numbers2 + Chr(10)
+                                           Msg = Msg + Numbers3 + Chr(10)
+                                     Case "TH"
+                                           Msg = "ËÈÊ ÏãÇ æ ÑØæÈÊ" + Chr(10)
+                                           Msg = Msg + Str(gtemp) + " C" + Chr(10)
                                            Egtemp = Gtemp
                                            Waitms 20
-
-                                     Case "H="
-                                           Msg = "ÑØæÈÊ ËÈÊ ÔÏ" + Chr(10)
-                                           Msg = Msg + Str(ghum) + Chr(10)
+                                           Msg = Msg + Str(ghum) + " %" + Chr(10)
                                            Eghum = Ghum
                                            Waitms 20
                                      Case Else
@@ -519,7 +540,7 @@ T0rutin:
            Incr _sec
            If _sec = 60 Then _sec = 0
            T = 0
-           'Toggle Pg
+           Toggle Pg
 
         End If
 Return
@@ -728,6 +749,7 @@ Command:
 
         If Code = 1 Then
            Set Ss
+           Set Firstt
            Sms = "ÓíÓÊã ÈÇ ÑíãæÊ ÝÚÇá ÔÏ"
         Elseif Code = 2 Then
            Reset Ss
@@ -768,8 +790,8 @@ Sub Ds18b20
 
       Gosub Conversion
       Sens1 = Temperature
-      Tmp1 = Val(sens1)
-
+      'Tmp1 = Val(sens1)
+      Tsensor = Val(sens1)
 
          'If Readsens < 0 Then Readsens = Readsens * -1
          'Sahih1 = 0
@@ -884,7 +906,7 @@ Function Dht_read(dht_hum As Single , Dht_temp As Single) As Byte
 End Function
 
 Rxin:
-     Toggle Pg
+     Toggle Ind
      Recive = Inkey()
      Pack = Pack + Recive
      Recive = ""
@@ -900,7 +922,7 @@ Sub Send_unicode(phone As String , Text As String)
     Print "AT+CSMP=49,167,0,8"
     Waitms 200
     Print "AT+CMGS=" ; Chr(34) ; Phone ; Chr(34)
-    Waitms 200
+    Waitms 500
     For I = 1 To Str_len
         If D(i) > 127 Then
            Index = Lookdown(d(i) , Ascii , 37)
@@ -919,13 +941,21 @@ Sub Send_unicode(phone As String , Text As String)
             Print "00" ; Hex(d(i));
         End If
     Next
+    Waitms 200
     Print Chr(26)
     Wait 5
     Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
+    Waitms 500
+    Print "AT+CSMP=17,167,0,16"
+    'Print "AT+CSMP=17,167,2,25"
     Waitms 200
-    'Print "AT+CSMP=17,167,0,16"
-    Print "AT+CSMP=17,167,2,25"
-    Waitms 200
+    Set Buz
+    Waitms 50
+    Reset Buz
+    Waitms 50
+    Set Buz
+    Waitms 100
+    Reset Buz
     Pack = ""
 End Sub
 
