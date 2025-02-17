@@ -1,0 +1,4 @@
+Error : 1     Line :   255   Unknown statement [DS18B20]  , in File : D:\Electronic\Bms\pool\remote.bas
+Error : 35    Line :   264   3 parameters expected  , in File : D:\Electronic\Bms\pool\remote.bas
+Error : 7     Line :   264   IF THEN expected [ 264]  , in File : D:\Electronic\Bms\pool\remote.bas
+Error : 123   Line :   264   END IF expected  , in File : D:\Electronic\Bms\pool\remote.bas

@@ -1,66 +1,53 @@
 $regfile = "m328def.dat"
 $crystal = 11059200
-
-$hwstack = 128
-$swstack = 200
-$framesize = 200
+$hwstack = 64
+$swstack = 100
+$framesize = 100
 $baud = 9600
 
 
-
-
 Configs:
-
-        Enable Interrupts
-        Enable Timer0
-        Enable Urxc
 
         Config Timer0 = Timer , Prescale = 1024
         Start Timer0
         Config Timer1 = Timer , Prescale = 8
         'Start Timer1
-
-        On Urxc Rxin
+        Enable Interrupts
+        Enable Timer0
         On Timer0 T0rutin
-
-
+        ''Enable Urxc
+        ''On Urxc Rxin
 'Config Graphlcd = 128x64sed , Rst = Portd.2 , Cs1 = Portd.3 , _
 'A0 = Portd.4 , Si = Portc.5 , Sclk = Portc.4
-
 '$include "FONT/farsi_func.bas"
 '$lib "glcd-Nokia5110.lib"
 
-
   ' Setfont Font5x5
  'Initlcd
-        Config 1wire = Portc.2
-        Declare Sub Ds18b20
-        Dim P As Byte
+        ''Config 1wire = Portc.2
+        ''Declare Sub Ds18b20
+        ''Dim P As Byte
 'Dim Tempok As Bit
 'Dim Tmpread As Boolean
-Dim Tmp1 As Integer
+''Dim Tmp1 As Integer
 'Dim Tmp2 As Integer
-Dim Ds18b20_id_1(9) As Byte
+''Dim Ds18b20_id_1(9) As Byte
 'Dim Ds18b20_id_2(8) As Byte
 'Dim Action As Byte
-Ds18b20_id_1(1) = 1wsearchfirst()
+''Ds18b20_id_1(1) = 1wsearchfirst()
 'Ds18b20_id_2(1) = 1wsearchnext()
-Dim Temperature As String * 6
-Dim Sens1 As String * 6
-Dim Sens2 As String * 6
-
+''Dim Temperature As String * 6
+''Dim Sens1 As String * 6
+''Dim Sens2 As String * 6
 'Dim Refreshtemp As Byte
-Dim Readsens As Integer
-Dim Dift As Integer
-Dim Tsensor As Single
-
+''Dim Readsens As Integer
+''Dim Dift As Integer
+''Dim Tsensor As Single
 'Dim St1(10) As Integer
 'Dim St2(10) As Integer
 'Dim Alarmtemp As Byte
 'Dim Sahih1 As Integer
-
 'Dim Ashar1 As Integer
-
         Ind Alias Portc.3 : Config Portc.3 = Output
         Pg Alias Portc.1 : Config Portc.1 = Output
         Buz Alias Portd.5 : Config Portd.5 = Output
@@ -71,23 +58,20 @@ Dim Tsensor As Single
         Learn Alias Pinc.4 : Config Portc.4 = Input
         Green Alias Portb.1 : Config Portb.1 = Output
 
-
-
-Declare Sub Send_unicode(phone As String , Text As String)
-Dim D(71) As Byte
-Dim Sms As String * 70 At D Overlay
+''Declare Sub Send_unicode(phone As String , Text As String)
+''Dim D(71) As Byte
+''Dim Sms As String * 70 At D Overlay
 'Dim Phone_number As String * 13
-Dim Euser1 As Eram String * 13
-Dim Euser2 As Eram String * 13
-Dim Euser3 As Eram String * 13
-Dim User1 As String * 13
-Dim User2 As String * 13
-Dim User3 As String * 13
+''Dim Euser1 As Eram String * 13
+''Dim Euser2 As Eram String * 13
+''Dim Euser3 As Eram String * 13
+''Dim User1 As String * 13
+''Dim User2 As String * 13
+''Dim User3 As String * 13
 Dim Auth As Bit
 Const Admin1 = "+989376921503"
 Const Admin2 = "+989155191622"
 Defines:
-
 
 Declare Function Dht_read(dht_hum As Single , Dht_temp As Single) As Byte
 'Dht_put Alias Portc.3                                       'Sensor pins test
@@ -103,8 +87,6 @@ Dim Temp As Single , Hum As Single                          ', B As Byte
 Dim Gtemp As Single , Ghum As Single
 Dim Htemp As Single , Hhum As Single
 Dim Egtemp As Eram Single , Eghum As Eram Single
-
-
 
 
 Dim _sec As Byte , Lsec As Byte                             ', _min As Byte , _hour As Byte
@@ -123,7 +105,6 @@ Dim Bytee As Byte , Checksumm As Byte
         Dim Ss As Bit
         Dim Error As Byte
         Dim S(24)as Word
-
         I = 0
         Dim Saddress As String * 20
         Dim Scode As String * 4
@@ -149,7 +130,6 @@ Dim Bytee As Byte , Checksumm As Byte
         Okread = 0
         T = 0
         Keycheck = 0
-
         'Dim M As String * 8
         'Dim M1 As String * 2
         'Dim M2 As String * 2
@@ -158,7 +138,6 @@ Dim Bytee As Byte , Checksumm As Byte
        ' Dim E_read As Byte
        ' Dim E_write As Byte
         Dim Eevar(50) As Eram Long
-
         Declare Sub _read
         Declare Sub Keylearn
         Declare Sub Simcheck
@@ -172,7 +151,7 @@ Dim Bytee As Byte , Checksumm As Byte
    'Dim P As Byte
    Dim Num As String * 14
 Startup:
-
+'(
 
             User1 = Euser1
             Waitms 20
@@ -200,7 +179,6 @@ Hhum = Ghum - 2
        'Lcdat 1 , 1 , "hi"
        ' Wait 2
        ' Cls
-
    Wait 10
    Print "ATE0"
    Wait 1
@@ -251,12 +229,10 @@ Hhum = Ghum - 2
    'Initlcd
    'Lcdat 1 , 1 , Pack
    'Wait 1
-
    'Print "AT+CMGS=" ; Chr(34) ; "09376921503" ; Chr(34)
   ' Waitms 250
   ' Print "Startup" ; Chr(26)
    'Waitms 800
-
 
    Sms = "»—ﬁ Ê’· ‘œ"
    I = Instr(user1 , "+98")
@@ -265,25 +241,18 @@ Hhum = Ghum - 2
    Else
        Num = User1
    End If
-
    Call Send_unicode(num , Sms)
    Set Buz
    Waitms 250
    Reset Buz
-
+   ')
 Main:
-
      Do
-
-
-
        Wt = 0
         If _sec <> Lsec Then
            Toggle Green
            Lsec = _sec
            Ds18b20
-
-
 
 
           Z = Dht_read(hum , Temp)
@@ -293,9 +262,7 @@ Main:
             Else
               Humidity = Fusing(hum , "#.#") + "%"
               Temperature = Fusing(temp , "#.#") + "C"      'Chr(248) '"C"
-
             End If
-
             If Firstt = 1 Then
                'If Temp > Gtemp Then
                If Tsensor > Gtemp Then
@@ -307,9 +274,7 @@ Main:
                   Else
                       Num = User1
                   End If
-
                      Call Send_unicode(num , Sms)
-
                End If
             End If
             If Ss = 1 Then
@@ -335,17 +300,13 @@ Main:
                Reset Heater
                Reset Pump
                Reset Fan
-
             End If
-
             'If Temp < 3 Then
                'Sms = "œ„«Ì ∆«ÌÌ‰" + Chr(10)
               ' Sms = Msg + "Œÿ—  —òÌœêÌ œ— ’Ê—  «‰Ã„«œ! "
               ' Num = User1
               ' Call Send_unicode(num , Sms)
             'End If
-
-
 
             If Pack <> "" Then
                            'Initlcd
@@ -367,7 +328,6 @@ Main:
                         I = I + 5
                         F(2) = Mid(pack , I , 5)
                         F(3) = F(1) + F(2)
-
                         'Initlcd
                         'Cls
                         'Lcdat 1 , 1 , F(3)
@@ -540,7 +500,6 @@ Main:
                                            Msg = Str(gtemp) + " "       '+ Chr(10)
                                            'Msg = Msg + "—ÿÊ»  Âœ›" + Chr(10)
                                            Msg = Msg + Str(ghum) + Chr(10)
-
                                            If User1 <> "" Or User2 <> "" Or User3 <> "" Then
                                               'Msg2 = "ò«—»—Â«" + Chr(10)
                                            End If
@@ -674,9 +633,7 @@ Main:
                         Pack = ""
             End If
 
-
         End If
-
             If Learn = 0 Then
                Waitms 50
                If Learn = 0 Then
@@ -708,18 +665,13 @@ Main:
                   End If
                End If
             End If
-
            'If _in = 1 Then Set Pg Else Reset Pg
           '_read
-
      Loop
 
-
 T0rutin:
-        Disable Interrupts
         Incr T
         'If _in = 1 Then Set Pg Else Reset Pg
-
         If T = 42 Then
            Incr _sec
            Incr Wt
@@ -731,22 +683,18 @@ T0rutin:
               Incr _min
               If _min = 60 Then
                  Incr _hour
-                If _hour = 24 Then
+                 If _hour = 24 Then
                     _hour = 0
-               End If
+                 End If
               End If
            End If
            T = 0
            Toggle Pg
-
         End If
-
-        'If Wt = 60 Then Gosub Main
+        If Wt = 60 Then Gosub Main
         'Stcheck
         'If Error <> 0 Then Gosub Main                       ' Popall
-        Enable Interrupts
 Return
-
 Sub _read
  '(
      If _in = 1 Then
@@ -806,7 +754,7 @@ Sub _read
                End If
      End If
 ')
-
+    '(
            Okread = 0
           ' X = 10
       If _in = 1 Then
@@ -826,12 +774,10 @@ Sub _read
            W = 0
            Wt = 0
             Do
-
               If _in = 1 Then
                  Timer1 = 0
                  Start Timer1
                  While _in = 1
-
                  Wend
                  Stop Timer1
                  Incr W
@@ -841,13 +787,10 @@ Sub _read
                     Exit Do
                  End If
               End If
-
               If W = 24 Then Exit Do
               'If X = 0 Then Exit Do
             Loop
-
             For W = 1 To 24
-
                 If S(w) >= 332 And S(w) <= 972 Then
                    S(w) = 0
                 Else
@@ -866,11 +809,9 @@ Sub _read
             Saddress = ""
             Scode = ""
             For W = 1 To 20
-
                 Saddress = Saddress + Str(s(w))
             Next
             For W = 21 To 24
-
                 Scode = Scode + Str(s(w))
             Next
             Address = Binval(saddress)
@@ -879,14 +820,11 @@ Sub _read
             'Set Buz
             'Waitms 250
             'Reset Buz
-
             W = 0
          End If
-
       End If
-
+')
 End Sub
-
 Sub Keylearn
    ' X = 10
 Do
@@ -934,28 +872,23 @@ Do
   'If X = 0 Then Exit Do
 Loop
 Okread = 0
-
 End Sub
 '========================================================================= CHECK
 Check:
-
 Okread = 1
 If Keycheck = 0 Then                                        'agar keycheck=1 bashad yani be releha farman nade
    For W = 1 To Rnumber
       Ra = Eevar(i)
       If Ra = Address Then                                  'code
             Gosub Command
-
             Exit For
       End If
    Next
 End If
 Keycheck = 0
-
 Return
 '-------------------------------- Relay command
 Command:
-
 
         If Code = 1 Then
            Set Ss
@@ -978,12 +911,9 @@ Command:
         Num = Admin1
         Call Send_unicode(num , Sms)
 
-
 Return
 
-
 Sub Ds18b20
-
    Incr P
    If P > 12 Then P = 1
    'reset watchdog
@@ -997,12 +927,10 @@ Sub Ds18b20
    1wwrite &HBE
    Readsens = 1wread(2)
 
-
       Gosub Conversion
       Sens1 = Temperature
       'Tmp1 = Val(sens1)
       Tsensor = Val(sens1)
-
          'If Readsens < 0 Then Readsens = Readsens * -1
          'Sahih1 = 0
          'If Readsens > 9 Then
@@ -1010,19 +938,12 @@ Sub Ds18b20
            ' Ashar1 = Readsens Mod 10
         ' End If
 
-
-
 End Sub
-
 Conversion:
-
    Readsens = Readsens * 10 : Readsens = Readsens \ 16
    Temperature = Str(readsens) : Temperature = Format(temperature , "0.0")
-
 Return
-
 Function Dht_read(dht_hum As Single , Dht_temp As Single) As Byte
-
 
          Local Number_dht As Byte , Byte_dht As Byte
          Local Hum_msb As Byte , Hum_lsb As Byte , Temp_msb As Byte , Temp_lsb As Byte , Check_sum As Byte
@@ -1112,21 +1033,15 @@ Function Dht_read(dht_hum As Single , Dht_temp As Single) As Byte
          Else
              Dht_read = 0                                   'CRC errors!!!
          End If
-
 End Function
-
 Rxin:
-     Disable Interrupts
      Toggle Ind
      Recive = Inkey()
      Pack = Pack + Recive
      Pack = Ucase(pack)
      Recive = ""
-     Enable Interrupts
 Return
-
 Sub Send_unicode(phone As String , Text As String)
-    Disable Interrupts
     Local Str_len As Byte , Index As Byte , I As Byte
     Str_len = Len(text)
     Print "AT+CMGF=1"
@@ -1160,8 +1075,8 @@ Sub Send_unicode(phone As String , Text As String)
     Wait 1
     Print "AT+CMGDA=DEL ALL"
     Wait 5
-    'Print "AT+CMGDA=DEL SENT"
-    'Wait 5
+    Print "AT+CMGDA=DEL SENT"
+    Wait 5
     Print "AT+CSCS=" ; Chr(34) ; "GSM" ; Chr(34)
     Waitms 500
     Print "AT+CSMP=17,167,0,16"
@@ -1172,12 +1087,10 @@ Sub Send_unicode(phone As String , Text As String)
     Reset Buz
     Waitms 50
     Set Buz
-    Waitms 50
+    Waitms 100
     Reset Buz
     Pack = ""
-    Enable Interrupts
 End Sub
-
 Sub Simcheck
     Print "ATE0"
    Wait 1
@@ -1225,13 +1138,10 @@ Sub Simcheck
    Print "AT"
    Wait 1
 End Sub
-
 End
-
 '$lib "glcd-Nokia5110.lib"
 '$include "FONT/farsi_map.bas"
  ' $include "FONT/font5x5.font"
-
   Ascii:
 'data "«" , "»" , "Å" , " " , "À" , "Ã" , "ç" , "Õ" , "Œ" , "œ" , "–" , "—" , "“" , "é" , "”" , "‘" , "’" , "÷" , "ÿ" , "Ÿ" , "⁄" , "€" , "›" , "ﬁ" , "ò" , "ò" , "ê" , "·" , "„" , "‰" , "Â" , "Ê" , "Ì" , "¬" , "°" , "Ì" , "∞"
 Data 199 , 200 , 129 , 202 , 203 , 204 , 141 , 205 , 206 , 207 , 208 , 209 , 210 , 142 , 211 , 212 , 213 , 214 , 216 , 217 , 218 , 219 , 221 , 222 , 152 , 223 , 144 , 225 , 227 , 228 , 229 , 230 , 237 , 194 , 161 , 236 , 176
