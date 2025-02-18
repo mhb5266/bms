@@ -1,6 +1,6 @@
 Report       : pool
 Date         : 02-18-2025
-Time         : 01:07:46
+Time         : 23:38:55
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.5
 Processor    : M328
@@ -8,8 +8,8 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 3A80 hex  -> Will fit into ROM
-ROMIMAGE     :  14976 dec
+ROMIMAGE     : 3A8A hex  -> Will fit into ROM
+ROMIMAGE     :  14986 dec
 FLASH USED   :  45  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
@@ -21,7 +21,7 @@ S-Stacksize  : C8 hex
 S-Stackstart : 880 hex
 Framesize    : C8 hex
 Framestart   : 6F0 hex
-Space left   :  617  dec
+Space left   :  623  dec
 
 LCD DB7      : PORTB.5
 LCD DB6      : PORTD.4
@@ -132,36 +132,33 @@ BYTEE                            Byte              01CE          462
 CHECKSUMM                        Byte              01CF          463 
 Z                                Byte              01D0          464 
 T                                Byte              01D1          465 
-T1                               Word              01D2          466 
-T2                               Word              01D4          468 
-TT                               Word              01D6          470 
 FIRSTT                           Bit [6]           01A6          422 
-WT                               Byte              01D8          472 
-I                                Byte              01D9          473 
-W                                Byte              01DA          474 
+WT                               Byte              01D2          466 
+I                                Byte              01D3          467 
+W                                Byte              01D4          468 
 SS                               Bit [5]           01A6          422 
-ERROR                            Byte              01DB          475 
-S                                Word(24)          01DC          476 
-SADDRESS                         String * 20       020C          524 
-SCODE                            String * 4        0221          545 
-ADDRESS                          Long              0226          550 
-CODE                             Byte              022A          554 
-RA                               Long              022B          555 
-RNUMBER                          Byte              022F          559 
+ERROR                            Byte              01D5          469 
+S                                Word(24)          01D6          470 
+SADDRESS                         String * 20       0206          518 
+SCODE                            String * 4        021B          539 
+ADDRESS                          Long              0220          544 
+CODE                             Byte              0224          548 
+RA                               Long              0225          549 
+RNUMBER                          Byte              0229          553 
 RNUMBER_E                        EEPROM Byte       0032          50 
 OKREAD                           Bit [4]           01A6          422 
 ERRORS                           Bit [3]           01A6          422 
 KEYCHECK                         Bit [2]           01A6          422 
-X                                Byte              0230          560 
-RAW                              Byte              0231          561 
+X                                Byte              022A          554 
+RAW                              Byte              022B          555 
 EEVAR                            EEPROM Long(50)   0033          51 
-RECIVE                           String * 1        0232          562 
-PACK                             String * 300      0234          564 
-F                                String(6) * 20    0361          865 
-MSG                              String * 50       03DF          991 
-MSG2                             String * 50       0412          1042 
-MSG3                             String * 50       0445          1093 
-NUM                              String * 14       0478          1144 
+RECIVE                           String * 1        022C          556 
+PACK                             String * 300      022E          558 
+F                                String(6) * 20    035B          859 
+MSG                              String * 50       03D9          985 
+MSG2                             String * 50       040C          1036 
+MSG3                             String * 50       043F          1087 
+NUM                              String * 14       0472          1138 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -719,15 +716,12 @@ COMPARE1                         not used
 TMP1                             not used
 SENS2                            not used
 DIFT                             not used
-T1                               not used
-T2                               not used
-TT                               not used
 ERROR                            not used
 RAW                              not used
 
 Without $BIGSTRINGS string routines only work correct with a maximum length of 255  in line  165 
-Source string could be too big to fit into target string [F(4)>NUM]  in line  411 
-Source string could be too big to fit into target string [F(6)>USER1]  in line  481 
-Source string could be too big to fit into target string [F(6)>USER2]  in line  484 
-Source string could be too big to fit into target string [F(6)>USER3]  in line  487 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1020 
+Source string could be too big to fit into target string [F(4)>NUM]  in line  412 
+Source string could be too big to fit into target string [F(6)>USER1]  in line  483 
+Source string could be too big to fit into target string [F(6)>USER2]  in line  486 
+Source string could be too big to fit into target string [F(6)>USER3]  in line  489 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1022 

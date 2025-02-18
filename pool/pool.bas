@@ -18,7 +18,7 @@ Configs:
         Config Timer0 = Timer , Prescale = 1024
         Start Timer0
         Config Timer1 = Timer , Prescale = 8
-        'Start Timer1
+        Start Timer1
 
         On Urxc Rxin
         On Timer0 T0rutin
@@ -113,9 +113,9 @@ Dim Ontime As Dword
 Dim Bytee As Byte , Checksumm As Byte
         Dim Z As Byte
         Dim T As Byte
-        Dim T1 As Word
-        Dim T2 As Word
-        Dim Tt As Word
+        'Dim T1 As Word
+        'Dim T2 As Word
+        'Dim Tt As Word
         Dim Firstt As Bit
         Dim Wt As Byte
         Dim I As Byte
@@ -133,7 +133,7 @@ Dim Bytee As Byte , Checksumm As Byte
         Dim Ra As Long                                      'fp address
         Dim Rnumber As Byte                                 'remote know
         Dim Rnumber_e As Eram Byte
-  '      Rnumber = Rnumber_e : Waitms 20
+        Rnumber = Rnumber_e : Waitms 20
         Dim Okread As Bit
         Dim Errors As Bit
         Dim Keycheck As Bit
@@ -316,7 +316,8 @@ Main:
                If Ontime > 0 Then
                   Decr Ontime
                   If Ontime = 0 Then
-                     Ontime = 86400
+                     'Ontime = 86400
+                     Ontime = 43200
                      Msg = "—Ê‘‰"
                      Num = User1
                      Call Send_unicode(num , Sms)
@@ -454,7 +455,8 @@ Main:
                                      Case "*#11"
                                            If Auth = 1 Then
                                               Set Ss
-                                              Ontime = 86400
+                                              'Ontime = 86400
+                                              Ontime = 43200
                                               Set Firstt
                                               Msg = "—Ê‘‰" + Chr(10)
                                               Msg = Msg + "«” Œ—"
@@ -681,13 +683,14 @@ Main:
                Waitms 50
                If Learn = 0 Then
                   Set Buz
-                  X = 10
+                  'X = 10
+                  I = 0
                   Do
                     Waitms 500
                     Reset Buz
                     Incr I
                     If I = 4 Then Exit Do
-                    If X = 0 Then Exit Do
+                    'If X = 0 Then Exit Do
                   Loop Until Learn = 1
                   Reset Buz
                   Waitms 500
@@ -709,8 +712,8 @@ Main:
                End If
             End If
 
-           'If _in = 1 Then Set Pg Else Reset Pg
-          '_read
+           If _in = 1 Then Set Pg Else Reset Pg
+          _read
 
      Loop
 
@@ -718,11 +721,11 @@ Main:
 T0rutin:
         Disable Interrupts
         Incr T
-        'If _in = 1 Then Set Pg Else Reset Pg
+        If _in = 1 Then Set Pg Else Reset Pg
 
         If T = 42 Then
            Incr _sec
-           Incr Wt
+           'Incr Wt
            If X > 0 Then
               Decr X
            End If
@@ -737,7 +740,7 @@ T0rutin:
               End If
            End If
            T = 0
-           Toggle Pg
+           'Toggle Pg
 
         End If
 
@@ -806,7 +809,7 @@ Sub _read
                End If
      End If
 ')
-
+ 'Disable Interrupts
            Okread = 0
           ' X = 10
       If _in = 1 Then
@@ -824,7 +827,7 @@ Sub _read
          If Timer1 >= 9722 And Timer1 <= 23611 Then
            ' X = 10
            W = 0
-           Wt = 0
+           'Wt = 0
             Do
 
               If _in = 1 Then
@@ -836,10 +839,10 @@ Sub _read
                  Stop Timer1
                  Incr W
                  S(w) = Timer1
-                 If Wt = 20 Then
-                    Wt = 0
-                    Exit Do
-                 End If
+                 'If Wt = 20 Then
+                    'Wt = 0
+                    'Exit Do
+                 'End If
               End If
 
               If W = 24 Then Exit Do
@@ -875,6 +878,7 @@ Sub _read
             Next
             Address = Binval(saddress)
             Code = Binval(scode)
+            Set Okread
             Gosub Check
             'Set Buz
             'Waitms 250
@@ -884,7 +888,7 @@ Sub _read
          End If
 
       End If
-
+ ' Enable Interrupts
 End Sub
 
 Sub Keylearn
@@ -905,9 +909,7 @@ Do
           For W = 1 To Rnumber
               Ra = Eevar(w)
               If Ra = Address Then                          'agar address remote tekrari bod yani ghablan learn shode
-                 'Set Buz
-                 Wait 1
-                 Reset Buz
+
                  Errors = 1
                  Exit For
               Else
@@ -918,9 +920,7 @@ Do
              Incr Rnumber                                   'be meghdare rnumber ke index tedade remote haye learn shode ast yek vahed ezafe kon
              If Rnumber > 100 Then                          'agar bishtar az 100 remote learn shavad
                 Rnumber = 100
-                'Set Buz
-                Wait 2
-                Reset Buz
+
              Else                                           'agar kamtar az 100 remote bod
                 Rnumber_e = Rnumber                         'meghdare rnumber ra dar eeprom zakhore mikonad
                 Ra = Address
@@ -942,7 +942,7 @@ Check:
 Okread = 1
 If Keycheck = 0 Then                                        'agar keycheck=1 bashad yani be releha farman nade
    For W = 1 To Rnumber
-      Ra = Eevar(i)
+      Ra = Eevar(w)
       If Ra = Address Then                                  'code
             Gosub Command
 
@@ -959,6 +959,8 @@ Command:
 
         If Code = 1 Then
            Set Ss
+           'Ontime = 86400
+           Ontime = 43200
            Set Firstt
            Sms = "”Ì” „ »« —Ì„Ê  ›⁄«· ‘œ"
         Elseif Code = 2 Then
