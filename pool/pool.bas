@@ -38,7 +38,8 @@ Configs:
         Dim P As Byte
 'Dim Tempok As Bit
 'Dim Tmpread As Boolean
-Dim Tmp1 As Integer
+Dim Tmp1 As Single , Ltsensor As Single
+
 'Dim Tmp2 As Integer
 Dim Ds18b20_id_1(9) As Byte
 'Dim Ds18b20_id_2(8) As Byte
@@ -120,7 +121,15 @@ Dim Bytee As Byte , Checksumm As Byte
         Dim Wt As Byte
         Dim I As Byte
         Dim W As Byte
-        Dim Ss As Bit
+        Dim Ss As Byte
+        Dim Ess As Eram Byte
+        Ss = Ess
+        Waitms 20
+        If Ss = 255 Then
+           Ss = 0
+           Ess = 0
+           Waitms 20
+        End If
         Dim Error As Byte
         Dim S(24)as Word
 
@@ -138,6 +147,7 @@ Dim Bytee As Byte , Checksumm As Byte
         Dim Errors As Bit
         Dim Keycheck As Bit
         Dim X As Byte
+        Dim Flag As Bit
                                            'check for pushing lean key time
         'errors = 0
         'Okread = 0
@@ -166,8 +176,8 @@ Dim Bytee As Byte , Checksumm As Byte
    Dim Pack As String * 300
    Dim F(6) As String * 20
    Dim Msg As String * 50
-   Dim Msg2 As String * 50
-   Dim Msg3 As String * 50
+   'Dim Msg2 As String * 50
+   'Dim Msg3 As String * 50
    'Dim Turn As Byte
    'Dim P As Byte
    Dim Num As String * 14
@@ -317,9 +327,15 @@ Main:
                   Decr Ontime
                   If Ontime = 0 Then
                      'Ontime = 86400
-                     Ontime = 43200
-                     Msg = "—Ê‘‰"
-                     Num = User1
+                     'Ontime = 43200
+                     Ontime = 21600
+                     Sms = "—Ê‘‰" + Chr(10)
+                  I = Instr(user1 , "+98")
+                  If I = 0 Then
+                     Num = Admin1
+                  Else
+                      Num = User1
+                  End If
                      Call Send_unicode(num , Sms)
                   End If
                End If
@@ -416,6 +432,8 @@ Main:
                               'Lcdat 1 , 1 , Num
                               'Wait 2
                               'Cls
+                              Print "AT+CMGDA=DEL ALL"
+                                 Wait 5
                                  If Num = Admin1 Or Num = Admin2 Or Num = User1 Or Num = User2 Or Num = User3 Then
                                     Set Auth
                                  Else
@@ -447,16 +465,19 @@ Main:
                                     Ghum = Val(f(6))
                                     F(5) = "TH"
                                  End If
-                                 Print "AT+CMGDA=DEL ALL"
+
                                  'Pack = ""
                                  'Msg = ""
                                  'Msg = "œ—Ì«›  ‘œ"
                                  Select Case F(5)
                                      Case "*#11"
                                            If Auth = 1 Then
-                                              Set Ss
+                                               Ss = 1
+                                              Ess = 1
+                                              Waitms 25
                                               'Ontime = 86400
-                                              Ontime = 43200
+                                              'Ontime = 43200
+                                              Ontime = 21600
                                               Set Firstt
                                               Msg = "—Ê‘‰" + Chr(10)
                                               Msg = Msg + "«” Œ—"
@@ -467,35 +488,51 @@ Main:
                                               'Msg = Msg + Chr(10)
                                               Msg = Msg + "—ÿÊ» "
                                               Msg = Msg + Humidity       '+ Chr(10)
-                                              Msg2 = ""
-                                              Msg3 = ""
+                                              'Msg2 = ""
+                                              'Msg3 = ""
                                            Else
-                                              Msg = "‘„«—Â ‰«„⁄ »—!"
+                                              Msg = "⁄œ„ œ” —”Ì „Ã«“"
                                            End If
                                      Case "*#00"
                                            If Auth = 1 Then
-                                              Reset Ss
+                                               Ss = 0
+                                               Ess = 0
+                                              Waitms 25
                                               Msg = "Œ«„Ê‘ ‘œ"
                                            Else
-                                              Msg = "‘„«—Â ‰«„⁄ »—!"
+                                              Msg = "⁄œ„ œ” —”Ì „Ã«“"
                                            End If
                                      Case "*#+9"
-                                           If User1 = "" And User2 <> F(6) And User3 <> F(6) Then
-                                              User1 = F(6)
+                                           If Auth = 1 Then
+                                              I = Instr(f(6) , "+98")
+                                              X = Len(f(6))
+                                              If I > 0 And X = 13 Then
+                                                 If User1 = "" And User2 <> F(6) And User3 <> F(6) Then
+                                                    User1 = F(6)
+                                                 Else
+                                                     If User2 = "" And User1 <> F(6) And User3 <> F(6) Then
+                                                        User2 = F(6)
+                                                     Else
+                                                         If User1 <> F(6) And User2 <> F(6) Then
+                                                            User3 = F(6)
+                                                         End If
+                                                     End If
+                                                 End If
+                                                  Euser1 = User1 : Waitms 20
+                                                  Euser2 = User2 : Waitms 20
+                                                  Euser3 = User3 : Waitms 20
+                                                  Msg = F(6) + Chr(10)
+                                                  Msg = Msg + "–ŒÌ—Â ‘œ"
+                                                  Set Flag
+                                              Else
+                                                  Msg = F(6) + Chr(10)
+                                                  Msg = Msg + "‘„«—Â ‰«„⁄ »—"
+                                                  Reset Flag
+                                              End If
                                            Else
-                                               If User2 = "" And User1 <> F(6) And User3 <> F(6) Then
-                                                  User2 = F(6)
-                                               Else
-                                                   If User1 <> F(6) And User2 <> F(6) Then
-                                                      User3 = F(6)
-                                                   End If
-                                               End If
+                                              Msg = "⁄œ„ œ” —”Ì „Ã«“"
                                            End If
-                                           Euser1 = User1 : Waitms 20
-                                           Euser2 = User2 : Waitms 20
-                                           Euser3 = User3 : Waitms 20
-                                           Msg = F(6) + Chr(10)
-                                           Msg = Msg + "–ŒÌ—Â ‘œ"
+
                                      Case "*#??"
                                            If Auth = 1 Then
                                               If Ss = 1 Then
@@ -511,60 +548,74 @@ Main:
                                               'Msg = Msg + Chr(10)
                                               Msg = Msg + "—ÿÊ» "
                                               Msg = Msg + Humidity + Chr(10)
-                                              Msg2 = ""
-                                              Msg3 = ""
+                                              'Msg2 = ""
+                                              'Msg3 = ""
                                            Else
-                                              Msg = "‘„«—Â ‰«„⁄ »—!"
+                                              Msg = "⁄œ„ œ” —”Ì „Ã«“"
                                            End If
                                      Case "*#D1"
+                                           If Auth = 1 Then
                                           Msg = "Õ–› ‘œ" + Chr(10)
                                           Msg = Msg + User1
                                           Euser1 = "" : Waitms 20
                                           User1 = ""
-                                              Msg2 = ""
-                                              Msg3 = ""
+                                              'Msg2 = ""
+                                              'Msg3 = ""
+                                           Else
+                                              Msg = "⁄œ„ œ” —”Ì „Ã«“"
+                                           End If
+
                                      Case "*#D2"
+                                           If Auth = 1 Then
                                           Msg = "Õ–› ‘œ" + Chr(10)
                                           Msg = Msg + User2
                                           Euser2 = "" : Waitms 20
                                           User2 = ""
-                                              Msg2 = ""
-                                              Msg3 = ""
+                                              'Msg2 = ""
+                                              'Msg3 = ""
+                                           Else
+                                              Msg = "⁄œ„ œ” —”Ì „Ã«“"
+                                           End If
+
                                      Case "*#D3"
+                                           If Auth = 1 Then
                                           Msg = "Õ–› ‘œ" + Chr(10)
                                           Msg = Msg + User3
                                           Euser3 = "" : Waitms 20
                                           User3 = ""
-                                              Msg2 = ""
-                                              Msg3 = ""
-                                     Case "*#ST"
-                                           'Msg = " ‰ŸÌ„« " + Chr(10)
-                                           Msg = Str(gtemp) + " "       '+ Chr(10)
-                                           'Msg = Msg + "—ÿÊ»  Âœ›" + Chr(10)
-                                           Msg = Msg + Str(ghum) + Chr(10)
+                                              'Msg2 = ""
+                                              'Msg3 = ""
+                                           Else
+                                              Msg = "⁄œ„ œ” —”Ì „Ã«“"
+                                           End If
 
-                                           If User1 <> "" Or User2 <> "" Or User3 <> "" Then
-                                              'Msg2 = "ò«—»—Â«" + Chr(10)
+                                     Case "*#ST"
+
+                                           If Auth = 1 Then
+
+                                              Msg = Str(gtemp) + " "
+
+                                              Msg = Msg + Str(ghum) + Chr(10)
+
+                                              If User1 <> "" Then
+                                                 Msg = Msg + User1 + Chr(10)
+                                              End If
+                                              If User2 <> "" Then
+                                                 Msg = Msg + User2 + Chr(10)
+                                              End If
+                                              If User3 <> "" Then
+                                                 Msg = Msg + User3
+                                              End If
+                                              'Msg2 = ""
+                                              'Msg3 = ""
+                                           Else
+                                              Msg = "⁄œ„ œ” —”Ì „Ã«“"
                                            End If
-                                           If User1 <> "" Then
-                                           Msg = Msg + User1 + Chr(10)
-                                           End If
-                                           If User2 <> "" Then
-                                           Msg = Msg + User2 + Chr(10)
-                                           End If
-                                           If User3 <> "" Then
-                                           Msg = Msg + User3
-                                           End If
-                                           Msg2 = ""
-                                              Msg3 = ""
-                                    ' Case "*#NU"
-                                           'Msg = "·Ì”  ò«—»—Â«" + Chr(10)
-                                          ' Msg = Msg + user1 + Chr(10)
-                                           'Msg = Msg + user2 + Chr(10)
-                                           'Msg = Msg + User3 + Chr(10)
-                                            '  Msg2 = ""
-                                             ' Msg3 = ""
+
+
+
                                      Case "TH"
+                                           If Auth = 1 Then
                                            Msg = "À»   ‰ŸÌ„« " + Chr(10)
                                            If Gtemp > 45 Then
                                               Gtemp = 35
@@ -592,8 +643,13 @@ Main:
                                            Msg = Msg + Str(ghum) + " %" + Chr(10)
                                            Eghum = Ghum
                                            Waitms 20
-                                              Msg2 = ""
-                                              Msg3 = ""
+                                              'Msg2 = ""
+                                              'Msg3 = ""
+                                           Else
+                                              Msg = "⁄œ„ œ” —”Ì „Ã«“"
+                                           End If
+
+
                                      Case Else
                                            If Auth = 1 Then
                                               Msg = ""
@@ -609,29 +665,35 @@ Main:
                                               'Msg3 = Msg3 + "„‘«ÂœÂ  ‰ŸÌ„« " + Chr(10)
                                               Msg = Msg + "TH1234" + Chr(10)
                                               'Msg3 = Msg3 + " ‰ŸÌ„« " + Chr(10)
-                                              Msg2 = ""
-                                              Msg3 = ""
+                                              'Msg2 = ""
+                                              'Msg3 = ""
                                            Else
                                               Msg = "‘„«—Â ‰«„⁄ »—!"
                                            End If
                                  End Select
                                  If Msg <> "" Then
-                                        Wait 3
+                                        Wait 1
                                         'Msg = "œ—Ì«›  ‘œ"
                                         Sms = Msg
                                         Call Send_unicode(num , Sms)
                                                               'End If
-                                        If Msg2 <> "" Then
-                                           Sms = Msg2
-                                           Call Send_unicode(num , Sms)
-                                           Msg2 = ""
-                                        End If
-                                        If Msg3 <> "" Then
-                                           Sms = Msg3
-                                           Call Send_unicode(num , Sms)
-                                           Msg3 = ""
-                                        End If
-                                        If F(5) = "*#+9" Then
+                                        'If Msg2 <> "" Then
+                                           'Sms = Msg2
+                                          ' Sms = Sms + "*"
+                                          ' Call Send_unicode(num , Sms)
+                                           'Msg2 = ""
+
+                                        'End If
+                                        'If Msg3 <> "" Then
+                                          ' Sms = Msg3
+                                          ' Sms = Sms + "**"
+                                          ' Call Send_unicode(num , Sms)
+                                          ' Msg3 = ""
+                                        'End If
+                                        I = Instr(f(6) , "+98")
+                                        X = Len(f(6))
+                                        If F(5) = "*#+9" And Flag = 1 And I > 0 And X = 13 Then
+                                           Reset Flag
                                               Msg = ""
                                               Msg = Msg + "*#11" + Chr(10)
                                               'Msg = Msg + "" + Chr(10)
@@ -645,8 +707,8 @@ Main:
                                               'Msg3 = Msg3 + "„‘«ÂœÂ  ‰ŸÌ„« " + Chr(10)
                                               Msg = Msg + "TH1234" + Chr(10)
                                               'Msg3 = Msg3 + " ‰ŸÌ„« " + Chr(10)
-                                              Msg2 = ""
-                                              Msg3 = ""
+                                              'Msg2 = ""
+                                              'Msg3 = ""
                                               Sms = Msg
                                            Call Send_unicode(f(6) , Sms)
                                               'Sms = Msg2
@@ -654,16 +716,20 @@ Main:
                                               'Sms = Msg3
                                            'Call Send_unicode(f(6) , Sms)
                                            Msg = ""
-                                           Msg2 = ""
-                                           Msg3 = ""
+                                           'Msg2 = ""
+                                           'Msg3 = ""
                                         End If
-                                        Wait 2
+                                        Wait 1
                                         F(5) = ""
                                         Pack = ""
                                         Recive = ""
                                  Else
-                                            Pack = ""
+                                       Pack = ""
                                  End If
+                                 Msg = ""
+
+                                 'Msg2 = ""
+                                 'Msg3 = ""
                            End If
                            '(
                         Else
@@ -960,7 +1026,8 @@ Command:
         If Code = 1 Then
            Set Ss
            'Ontime = 86400
-           Ontime = 43200
+           'Ontime = 43200
+           Ontime = 21600
            Set Firstt
            Sms = "”Ì” „ »« —Ì„Ê  ›⁄«· ‘œ"
         Elseif Code = 2 Then
@@ -973,11 +1040,18 @@ Command:
            Set Fan
            Sms = "›‰ Œ«„Ê‘ ‘œ"
         End If
+        Ess = Ss
+        Waitms 25
         Set Buz
         Waitms 100
         Reset Buz
         Waitms 100
-        Num = Admin1
+        I = Instr(user1 , "+98")
+        If I > 0 Then
+           Num = User1
+        Else
+            Num = Admin1
+        End If
         Call Send_unicode(num , Sms)
 
 
