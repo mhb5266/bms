@@ -1,6 +1,6 @@
-Report       : pool
-Date         : 02-26-2025
-Time         : 22:30:28
+Report       : pool14031206
+Date         : 02-24-2025
+Time         : 19:29:57
 
 Compiler     : BASCOM-AVR LIBRARY V 2.0.8.5
 Processor    : M328
@@ -8,20 +8,20 @@ SRAM         : 800 hex
 EEPROM       : 400 hex
 ROMSIZE      : 8000 hex
 
-ROMIMAGE     : 3EDC hex  -> Will fit into ROM
-ROMIMAGE     :  16092 dec
-FLASH USED   :  49  %
+ROMIMAGE     : 3C3A hex  -> Will fit into ROM
+ROMIMAGE     :  15418 dec
+FLASH USED   :  47  %
 BAUD         : 9600 Baud
 XTAL         : 11059200 Hz
 BAUD error   : 0.%
 
 Stack start  : 8FF hex
-Stack size   : 80 hex
-S-Stacksize  : 100 hex
-S-Stackstart : 880 hex
-Framesize    : 80 hex
-Framestart   : 700 hex
-Space left   :  711  dec
+Stack size   : 100 hex
+S-Stacksize  : 200 hex
+S-Stackstart : 800 hex
+Framesize    : 12C hex
+Framestart   : 4D4 hex
+Space left   :  178  dec
 
 LCD DB7      : PORTB.5
 LCD DB6      : PORTD.4
@@ -116,54 +116,50 @@ EUSER3                           EEPROM String     001C          28
 USER1                            String * 13       0182          386 
 USER2                            String * 13       0190          400 
 USER3                            String * 13       019E          414 
-IMEI                             String * 20       01AC          428 
-AUTH                             Bit [7]           01C1          449 
-POS                              Byte              01C2          450 
-HUMIDITY                         String * 5        01C3          451 
-TEMP                             Single            01C9          457 
-HUM                              Single            01CD          461 
-GTEMP                            Single            01D1          465 
-GHUM                             Single            01D5          469 
-HTEMP                            Single            01D9          473 
-HHUM                             Single            01DD          477 
+AUTH                             Bit [7]           01AC          428 
+POS                              Byte              01AD          429 
+HUMIDITY                         String * 5        01AE          430 
+TEMP                             Single            01B4          436 
+HUM                              Single            01B8          440 
+GTEMP                            Single            01BC          444 
+GHUM                             Single            01C0          448 
+HTEMP                            Single            01C4          452 
+HHUM                             Single            01C8          456 
 EGTEMP                           EEPROM Single     002A          42 
 EGHUM                            EEPROM Single     002E          46 
-LSEC                             Byte              01E2          482 
-ONTIME                           Dword             01E5          485 
-BYTEE                            Byte              01E9          489 
-CHECKSUMM                        Byte              01EA          490 
-Z                                Byte              01EB          491 
-T                                Byte              01EC          492 
-FIRSTT                           Bit [6]           01C1          449 
-WT                               Byte              01ED          493 
-I                                Byte              01EE          494 
-W                                Byte              01EF          495 
-TURN                             Byte              01F0          496 
-SS                               Byte              01F1          497 
+LSEC                             Byte              01CD          461 
+ONTIME                           Dword             01D0          464 
+BYTEE                            Byte              01D4          468 
+CHECKSUMM                        Byte              01D5          469 
+Z                                Byte              01D6          470 
+T                                Byte              01D7          471 
+FIRSTT                           Bit [6]           01AC          428 
+WT                               Byte              01D8          472 
+I                                Byte              01D9          473 
+W                                Byte              01DA          474 
+SS                               Byte              01DB          475 
 ESS                              EEPROM Byte       0032          50 
-ACTIVE                           Byte              01F2          498 
-EACTIVE                          EEPROM Byte       0033          51 
-ERROR                            Byte              01F3          499 
-S                                Word(24)          01F4          500 
-SADDRESS                         String * 20       0224          548 
-SCODE                            String * 4        0239          569 
-ADDRESS                          Long              023E          574 
-CODE                             Byte              0242          578 
-RA                               Long              0243          579 
-RNUMBER                          Byte              0247          583 
-RNUMBER_E                        EEPROM Byte       0034          52 
-OKREAD                           Bit [5]           01C1          449 
-ERRORS                           Bit [4]           01C1          449 
-KEYCHECK                         Bit [3]           01C1          449 
-X                                Byte              0248          584 
-FLAG                             Bit [2]           01C1          449 
-RAW                              Byte              0249          585 
-EEVAR                            EEPROM Long(50)   0035          53 
-RECIVE                           String * 1        024A          586 
-PACK                             String * 300      024C          588 
-F                                String(6) * 20    0379          889 
-MSG                              String * 50       03F7          1015 
-NUM                              String * 14       042A          1066 
+ERROR                            Byte              01DC          476 
+S                                Word(24)          01DD          477 
+SADDRESS                         String * 20       020D          525 
+SCODE                            String * 4        0222          546 
+ADDRESS                          Long              0227          551 
+CODE                             Byte              022B          555 
+RA                               Long              022C          556 
+RNUMBER                          Byte              0230          560 
+RNUMBER_E                        EEPROM Byte       0033          51 
+OKREAD                           Bit [5]           01AC          428 
+ERRORS                           Bit [4]           01AC          428 
+KEYCHECK                         Bit [3]           01AC          428 
+X                                Byte              0231          561 
+FLAG                             Bit [2]           01AC          428 
+RAW                              Byte              0232          562 
+EEVAR                            EEPROM Long(50)   0034          52 
+RECIVE                           String * 1        0233          563 
+PACK                             String * 300      0235          565 
+F                                String(6) * 20    0362          866 
+MSG                              String * 50       03E0          992 
+NUM                              String * 14       0413          1043 
 
 --------------------------------------------------------------------------------
 Constant                         Value
@@ -655,7 +651,7 @@ PINB0                            0
 _RESET                           0
 _DATE_FORMAT                     0
 _DATE_SEPARATOR                  92
-_GSTRBUF                         1792
+_GSTRBUF                         1236
 _DECIMALPOINT                    46
 _RTSCTS                          0
 _RTSCTS1                         0
@@ -687,9 +683,9 @@ _INPBIN_EXTENDED                 0
 _BIGSTRINGS                      0
 SEROUT_EXTPULL                   1
 _FPROTECT                        0
-_HWSTACK_LOW                     &H087F
-_SWSTACK_LOW                     &H0780
-_FRAME_HIGH                      &H0781
+_HWSTACK_LOW                     &H07FF
+_SWSTACK_LOW                     &H0600
+_FRAME_HIGH                      &H0601
 _HAVEMOVW                        1
 _XMEGA                           0
 _XTINY                           0
@@ -726,9 +722,9 @@ DIFT                             not used
 ERROR                            not used
 RAW                              not used
 
-Without $BIGSTRINGS string routines only work correct with a maximum length of 255  in line  184 
-Source string could be too big to fit into target string [F(4)>NUM]  in line  409 
-Source string could be too big to fit into target string [F(6)>USER1]  in line  490 
-Source string could be too big to fit into target string [F(6)>USER2]  in line  493 
-Source string could be too big to fit into target string [F(6)>USER3]  in line  496 
-Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  891 
+Without $BIGSTRINGS string routines only work correct with a maximum length of 255  in line  176 
+Source string could be too big to fit into target string [F(4)>NUM]  in line  431 
+Source string could be too big to fit into target string [F(6)>USER1]  in line  513 
+Source string could be too big to fit into target string [F(6)>USER2]  in line  516 
+Source string could be too big to fit into target string [F(6)>USER3]  in line  519 
+Source string could be too big to fit into target string [TEMPERATURE>___STRBUF]  in line  1042 
