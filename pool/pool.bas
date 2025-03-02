@@ -341,7 +341,7 @@ Main:
                           'Lcdat 6 , 1 , Z ; "*" ; Bytee ; "*" ; Checksumm ; "  "
                        Else
                          Humidity = Fusing(hum , "#.#") + "%"
-                         Temperature = Fusing(temp , "#.#") + "C"      'Chr(248) '"C"
+                         Temperature = Fusing(temp , "#.#") + "C"       'Chr(248) '"C"
                        End If
 
            End If
@@ -455,9 +455,9 @@ Main:
                                                Ss = 1
                                               Ess = 1
                                               Waitms 25
-                                              'Ontime = 86400
+                                              Ontime = 86400
                                               'Ontime = 43200
-                                              Ontime = 21600
+                                              'Ontime = 21600
                                               Set Firstt
                                               Msg = "—Ê‘‰" + Chr(10)
                                               Msg = Msg + "«” Œ—"
@@ -756,9 +756,9 @@ Main:
                If Ontime > 0 Then
                   Decr Ontime
                   If Ontime = 0 Then
-                     'Ontime = 86400
+                     Ontime = 86400
                      'Ontime = 43200
-                     Ontime = 21600
+                     'Ontime = 21600
                      Sms = "—Ê‘‰" + Chr(10)
                   I = Instr(user1 , "+98")
                   If I = 0 Then
@@ -786,12 +786,12 @@ Main:
 
             End If
 
-            'If Temp < 3 Then
-               'Sms = "œ„«Ì ∆«ÌÌ‰" + Chr(10)
-              ' Sms = Msg + "Œÿ—  —òÌœêÌ œ— ’Ê—  «‰Ã„«œ! "
-              ' Num = User1
-              ' Call Send_unicode(num , Sms)
-            'End If
+            If Temp < 3 Or Tmp1 < 3 Then
+               Sms = "œ„«Ì ∆«ÌÌ‰" + Chr(10)
+               Sms = Sms + "Œÿ— «‰Ã„«œ!"
+               Num = User1
+               Call Send_unicode(num , Sms)
+            End If
 
 
 
@@ -1085,7 +1085,7 @@ Sub Ds18b20
 
       Gosub Conversion
       Sens1 = Temperature
-      'Tmp1 = Val(sens1)
+      Tmp1 = Val(sens1)
       Tsensor = Val(sens1)
          'If Readsens < 0 Then Readsens = Readsens * -1
          'Sahih1 = 0
@@ -1119,7 +1119,7 @@ Function Dht_read(dht_hum As Single , Dht_temp As Single) As Byte
                         Dht_read = 0                        'DHT11 not response!!!
                         Exit Function
                      Else
-                         Dht_read = 11                                  'really DHT11
+                         Dht_read = 11                      'really DHT11
                      End If
          Else
             Waitus 80
@@ -1168,7 +1168,7 @@ Function Dht_read(dht_hum As Single , Dht_temp As Single) As Byte
                            Next
                         Next
                         Set Dht_io_set : Set Dht_put
-                        If Dht_read = 22 Then                              'CRC check
+                        If Dht_read = 22 Then               'CRC check
                            Byte_dht = Hum_msb + Hum_lsb
                            Byte_dht = Byte_dht + Temp_msb
                            Byte_dht = Byte_dht + Temp_lsb
@@ -1193,7 +1193,7 @@ Function Dht_read(dht_hum As Single , Dht_temp As Single) As Byte
                               Dht_hum = Hum_msb
                            End If
                         Else
-                            Dht_read = 0                                   'CRC errors!!!
+                            Dht_read = 0                    'CRC errors!!!
                         End If
             End If
          End If
